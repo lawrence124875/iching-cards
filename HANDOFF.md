@@ -1,7 +1,7 @@
 # HANDOFF — 易經卦卡 App（名稱未定）
 
 > 新對話接續時請先讀本檔。本檔記錄已確定的決策、內容規格與待討論事項。
-> 最後更新：2026-09-30（討論階段，尚未開始開發）
+> 最後更新：2026-10-01（開始量產解讀內容；App 程式尚未開發）
 
 ---
 
@@ -93,6 +93,21 @@ App 自動標出「本次重點」。
   - 證據薄弱的流行說法不收（如一萬小時定律、左右腦性格、權力姿勢）。
   - 版權：原文已進公有領域者（如維根斯坦德文原著）由我們自行翻譯中英文；不引用仍有版權的譯本。理論概念用自己的話寫。
 
+### 4.6 內容檔案（2026-10-01 決定）
+
+- 存放：私人 repo `lawrence124875/iching-content`（待使用者建立並加入權杖權限）。建置時由 GitHub Actions 以 Secrets 權杖抓取。**解讀內容一律不 commit 到本公開 repo**（git 歷史無法收回）。
+- 格式：直接寫 JSON，一卦一檔，各語言分資料夾：`zh-Hant/01-qian.json`、`en/01-qian.json`。
+- 順序：依卦序從乾卦開始；中文一批定稿後再寫英文。
+- 經文逐卦對照維基文庫《周易》原文（zh.wikisource.org）。
+- 結構：
+  - `id, name, fullName, symbol, pinyin, upper, lower`
+  - `text`：`judgment`（卦辭）、`tuan`（彖傳）、`daxiang`（大象傳）
+  - `readings[3]`：`title, image, source, forYou, action, question`
+  - `lines[6]`（乾坤為 7，含用九／用六，position 7）：`position, name, stage, text, xiaoxiang, image, source, forYou`
+  - `eastWest.quote`：`text, author, source, translationNote, note`
+  - `eastWest.psychology`：`name, origin, evidenceNote, note`
+- 進度：乾卦中文初稿完成（2026-10-01，待使用者審閱）。
+
 ### 4.4 內容份量
 
 - 卦解讀：64 × 3 = 192 段
@@ -183,7 +198,7 @@ Pure untouched nature: no people, no buildings, no houses, no lights, no roads, 
 2. 呼吸與音景：2026-09-30 決定**納入**（曾一度暫緩，後改回）。構想：八經卦對應八種自然音景（水＝流水、雷＝遠雷雨、風＝林風、火＝營火、山＝山林寂靜、澤＝湖畔、天、地待定），抽到的卦以上下經卦組合音景，搭配 2–3 分鐘引導呼吸。音源待定，只考慮不花錢且可商用的來源：程式合成（雨、風、流水等噪音類效果佳），或 CC0 授權自然錄音；每個音檔需記錄來源與授權。呼吸節奏待定。
 3. 商業模式（免費與付費內容劃分、廣告、訂閱）
 4. ~~牌面採有框版或滿版版~~ → 已決定有框版（見 6.3）
-5. 解讀內容的保護：repo 維持公開（使用者決定）。開始量產解讀前再決定是否把解讀內容檔另放私人 repo，由 GitHub Actions 以 Secrets 權杖在建置時抓取。
+5. ~~解讀內容的保護~~ → 2026-10-01 決定：解讀內容另放**私人 repo**（見 4.6），本 repo 不放任何解讀內容。
 
 ### 安全原則
 

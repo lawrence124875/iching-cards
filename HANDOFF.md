@@ -21,7 +21,7 @@
 | Google Play Console | 沿用現有開發者帳號。新 App 須重跑封閉測試（12 位以上、連續 14 天） |
 | AdMob / RevenueCat | 沿用現有帳號，新增 App |
 | 簽署金鑰 | 另建新的上傳金鑰，與智慧聽覺巡航分開；存 GitHub Secrets，本機備份 |
-| CI | 參考智慧聽覺巡航的 GitHub Actions 建置流程 |
+| CI | 參考智慧聽覺巡航的 GitHub Actions 建置流程；push 觸發須加 `paths-ignore`（`**.md`、`docs/**`、`store_assets/**`），只改文件的 commit 不建置，另保留 `workflow_dispatch` 手動建置 |
 
 ⚠️ applicationId（套件名稱）第一次上傳 Play 後無法更改，需在 App 名稱確定後再定。repo 名稱可日後更改。
 

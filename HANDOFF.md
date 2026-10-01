@@ -203,6 +203,7 @@ Pure untouched nature: no people, no buildings, no houses, no lights, no roads, 
 ### 安全原則
 
 repo 裡永遠不寫任何金鑰、密碼或權杖（含文件、commit 訊息、Issue）。簽署金鑰與 Firebase 設定檔一律存 GitHub Secrets。
+任何 APK／AAB／IPA 都不可上傳到公開 repo 的 Artifacts，一律發佈到私人 repo iching-content 的 Release（見 10.4）。
 
 ## 9. 程式架構原則（2026-10-01 決定，開發時必須遵守）
 
@@ -241,7 +242,7 @@ repo 裡永遠不寫任何金鑰、密碼或權杖（含文件、commit 訊息�
 
 ### 10.1 第一階段：手機可裝的最小版本（MVP，只做繁中）
 1. Flutter 專案骨架，依第 9 節架構原則搭好功能註冊表、內容來源介面、起卦策略介面。
-2. CI 自動建置 APK：建立新的上傳金鑰（存 Secrets）；建置時從私人 repo 抓內容；**APK 發佈到私人 repo 的 Release**（見 10.4）。
+2. CI 自動建置 APK：建立新的上傳金鑰（存 Secrets）；建置時以 `BUILDS_REPO_TOKEN` 從私人 repo 抓內容；**APK 發佈到私人 repo 的 Release**（見 10.4）。
 3. 核心流程：抽一卦 → 翻牌 → 解讀頁（三組隨機一組）→ 詳細頁（經文、六爻）。
 4. 擲錢起卦：變爻、之卦，套用朱熹規則（4.3）。
 5. 牌面與牌背：有框版；尚無圖的卦用佔位圖；尚未寫內容的卦顯示「內容撰寫中」。
@@ -252,17 +253,39 @@ repo 裡永遠不寫任何金鑰、密碼或權杖（含文件、commit 訊息�
 ### 10.3 第三階段：上架準備
 App 名稱與 applicationId、商業模式（廣告與付費內容）、隱私權政策（本 repo GitHub Pages）、商店資訊、封閉測試（9.2）。
 
-### 10.4 ⚠️ APK 發佈到私人 repo 的 Release（重要，使用者特別要求）
+### 10.4 ⚠️ 建置產物一律發佈到私人 repo 的 Release（永久原則，英文 App 與易經 App 共同適用）
 
-**問題**：公開 repo 的 Actions Artifacts 任何登入 GitHub 的人都能下載，APK 內含全部解讀內容，等於繞過私人 repo。
+**原則**：公開 repo 的 Actions Artifacts，任何登入 GitHub 的人都能下載。因此**任何 APK、AAB、IPA 都不可用 `actions/upload-artifact` 上傳到公開 repo**，一律用 `gh release create` 發佈到私人 repo 的 Release。
 
-**做法**：
-- iching-cards 的建置流程**不得**用 `actions/upload-artifact` 上傳含內容的 APK／AAB。
-- 建置完成後，以權杖在 **iching-content（私人）** 建立 Release，把 APK 附為 Release 資產；使用者在手機登入 GitHub，從 iching-content 的 Releases 下載安裝。
-- Release 標籤建議用 `apk-<版本>-<run 編號>`；只保留最近數個，舊的定期刪除，避免占空間。
-- CI 專用權杖：另建一把 fine-grained 權杖，只授權 iching-content、Contents 讀寫（用於 checkout 內容與建立 Release），期限可設較長；存為 iching-cards 的 Secret `CONTENT_TOKEN`。與對話中使用的權杖分開。
+- 易經 App 的發佈目標：私人 repo **`lawrence124875/iching-content` 的 Releases**。使用者以手機登入 GitHub，從那裡下載安裝。
+- 參考實作：english-learning-app 的 `.github/workflows/build_android.yml` 最後一步（2026-10-01 以 #211 驗證成功）。寫法：
+
+```yaml
+      - name: 發佈到私人 repo 的 Release
+        env:
+          GH_TOKEN: ${{ secrets.BUILDS_REPO_TOKEN }}
+        run: |
+          gh release create "android-release-run${{ github.run_number }}" \
+            build/app/outputs/flutter-apk/<含版本與run編號的檔名>.apk \
+            build/app/outputs/bundle/release/<含版本與run編號的檔名>.aab \
+            --repo lawrence124875/iching-content \
+            --title "<版本> (run ${{ github.run_number }})" --notes "自動建置"
+```
+
+- 檔名帶版本與 run 編號；舊 Release 定期刪除，只保留最近數個。
+- 內容抓取也用同一個 Secret：`actions/checkout` 以 `repository: lawrence124875/iching-content`、`token: ${{ secrets.BUILDS_REPO_TOKEN }}` 取得解讀內容（取代原先規劃的 `CONTENT_TOKEN`，不另建）。
 - 公開 repo 的 Actions 紀錄任何人都看得到：建置步驟不可 `cat`／`echo` 內容檔或列出內容，不可印出權杖。
-- 上傳 Play 的 AAB 同樣只放私人 Release（或使用者本機），不放公開 Artifacts。
+- 2026-10-01 檢查：iching-cards 尚無任何 workflow，兩個 repo 的 Artifacts 與 Actions 執行紀錄皆為 0；iching-content 已有 commit（Release 需要）。
+
+**權杖分工（共三個，2026-10-01 決定）**
+
+| 權杖 | 授權範圍 | 用途與存放 |
+|---|---|---|
+| 英文對話用 | english-learning-app | 每次貼在英文對話 |
+| 易經對話用 | iching-cards＋iching-content | 每次貼在易經對話；Contents、Workflows 讀寫，Actions 唯讀 |
+| CI 專用 `ci-private-releases` | english-app-builds＋iching-content，只有 Contents 讀寫 | **只存在 GitHub Secret，從不貼到對話**；兩個 App 的 CI 共用。英文 App 與 iching-cards 的 Secret 名稱都是 `BUILDS_REPO_TOKEN` |
+
+⚠️ `ci-private-releases` 到期時，english-learning-app 與 iching-cards **兩個 repo 的 Secret 都要更新**。
 
 ### 10.5 Gemini 牌面圖流程
 - **時機**：每寫完一卦內容，同時提供該卦的 Gemini 提示詞（依 6.4 範本），存入該卦 JSON 的 `art` 欄位（`art.prompt`、`art.status`），方便日後重產。

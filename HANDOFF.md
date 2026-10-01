@@ -1,7 +1,7 @@
 # HANDOFF — 易經卦卡 App（名稱未定）
 
 > 新對話接續時請先讀本檔。本檔記錄已確定的決策、內容規格與待討論事項。
-> 最後更新：2026-10-02（內容量產：03–12 中文初稿完成，下一批從 13 同人開始，見 10.6；多語言規劃見第 12 節）
+> 最後更新：2026-10-02（內容量產：03–17 中文初稿完成，下一批從 18 蠱開始，見 10.6；多語言規劃見第 12 節）
 
 ---
 
@@ -106,7 +106,7 @@ App 自動標出「本次重點」。
   - `lines[6]`（乾坤為 7，含用九／用六，position 7）：`position, name, stage, text, xiaoxiang, image, source, forYou`
   - `eastWest.quote`：`text, author, source, translationNote, note`
   - `eastWest.psychology`：`name, origin, evidenceNote, note`
-- 進度：乾、坤卦中文初稿完成（2026-10-01，待使用者審閱），兩卦 `art.prompt` 皆已填入 Gemini 提示詞。03 屯～12 否中文初稿完成（2026-10-02，待審閱）。最新進度以 iching-content README 為準。
+- 進度：乾、坤卦中文初稿完成（2026-10-01，待使用者審閱），兩卦 `art.prompt` 皆已填入 Gemini 提示詞。03 屯～17 隨中文初稿完成（2026-10-02，待審閱）。最新進度以 iching-content README 為準。
 
 ### 4.4 內容份量
 
@@ -310,7 +310,7 @@ App 名稱與 applicationId、商業模式（廣告與付費內容）、隱私�
 ### 10.6 下一步
 1. ~~設定上傳金鑰~~、~~首頁置中與桌面圖示~~（0.1.0+3，run #4 完成）。使用者實機試用中（APK：https://github.com/lawrence124875/iching-content/releases ）。
 2. 乾、坤卦：使用者看過實機後同意開始量產內容，格式沿用；之後有回饋再回頭修。
-3. **內容量產**（2026-10-02 起）：03～12 已完成，**下一個對話從 13 同人開始**。一個對話寫 4～5 卦（單一對話的長度上限，寫不完 62 卦），格式同 `01-qian.json`、`02-kun.json`。`art.prompt` 從 iching-content `prompts/art-prompts.md` 搬入（圖已定案，`art.status` 填「已定案」）。每批完成後更新 iching-content README 進度。流程：clone iching-content（sparse：zh-Hant、prompts、tools）→ 寫 `zh-Hant/NN-slug.json`（不含 `art`）→ `python3 tools/finalize_hexagram.py NN` 自動填入提示詞並檢查結構 → 每完成一卦就 commit＋push。經文與參考本不同處記在 iching-content README「待人工核對」。
+3. **內容量產**（2026-10-02 起）：03～17 已完成，**下一個對話從 18 蠱開始**。一個對話寫 4～5 卦（單一對話的長度上限，寫不完 62 卦），格式同 `01-qian.json`、`02-kun.json`。`art.prompt` 從 iching-content `prompts/art-prompts.md` 搬入（圖已定案，`art.status` 填「已定案」）。每批完成後更新 iching-content README 進度。流程：clone iching-content（sparse：zh-Hant、prompts、tools）→ 寫 `zh-Hant/NN-slug.json`（不含 `art`）→ `python3 tools/finalize_hexagram.py NN` 自動填入提示詞並檢查結構 → 每完成一卦就 commit＋push。經文與參考本不同處記在 iching-content README「待人工核對」。
 4. 程式待辦（有空檔或回饋時）：字體打包、牌面細節。
 
 ## 11. 程式現況（2026-10-01 骨架完成）

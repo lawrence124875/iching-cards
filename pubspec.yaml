@@ -1,0 +1,25 @@
+name: iching_cards
+description: "易經卦卡（暫定名稱）"
+publish_to: 'none'
+version: 0.1.0+1
+
+environment:
+  sdk: '>=3.4.0 <4.0.0'
+
+# 原則（HANDOFF §9.1）：只用同時支援 Android 與 iOS 的套件。MVP 階段刻意零外部套件。
+dependencies:
+  flutter:
+    sdk: flutter
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^5.0.0
+
+flutter:
+  uses-material-design: true
+  # 這兩個資料夾在公開 repo 只有 .gitkeep；內容由 CI 從私人 repo iching-content 匯入
+  #（scripts/import_content.sh），絕不 commit 到本 repo。
+  assets:
+    - assets/content/zh-Hant/
+    - assets/cards/

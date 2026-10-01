@@ -27,3 +27,16 @@ doc/api/
 
 .flutter-plugins
 .flutter-plugins-dependencies
+
+# ---- 易經卦卡 ----
+# 平台資料夾由 CI 以 flutter create 產生
+/android/
+/ios/
+# 解讀內容與牌面圖只在私人 repo；本公開 repo 只留 .gitkeep
+/assets/content/**/*.json
+/assets/cards/*.webp
+/_content/
+# 金鑰絕不 commit
+*.jks
+*.keystore
+key.properties

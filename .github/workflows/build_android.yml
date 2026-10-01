@@ -1,0 +1,119 @@
+name: Build Android APK
+
+on:
+  push:
+    branches: [main]
+    # 只改文件的 commit 不建置（避免 HANDOFF 更新也產生一個 Release）
+    paths-ignore:
+      - '**.md'
+      - 'docs/**'
+  workflow_dispatch: {}
+
+concurrency:
+  group: android-build
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      # 解讀內容與牌面圖放在私人 repo；只取需要的資料夾（不抓 images/raw 原圖）。
+      - name: 取得私人內容（iching-content）
+        uses: actions/checkout@v4
+        with:
+          repository: lawrence124875/iching-content
+          token: ${{ secrets.BUILDS_REPO_TOKEN }}
+          path: _content
+          sparse-checkout: |
+            zh-Hant
+            images/webp
+
+      - uses: subosito/flutter-action@v2
+        with:
+          channel: 'stable'
+          cache: true
+
+      - name: 匯入內容
+        run: bash scripts/import_content.sh _content
+
+      # 本 repo 只放跨平台程式（lib/、pubspec.yaml）；android/ 在這裡自動產生。
+      - name: 產生 Android 平台資料夾
+        run: |
+          if [ ! -d android ]; then
+            flutter create --platforms=android --project-name=iching_cards --org tw.bcc .
+          fi
+          rm -f test/widget_test.dart
+
+      - name: 套用 App 設定（名稱、簽署）
+        env:
+          ANDROID_KEYSTORE_BASE64: ${{ secrets.ANDROID_KEYSTORE_BASE64 }}
+          ANDROID_KEYSTORE_PASSWORD: ${{ secrets.ANDROID_KEYSTORE_PASSWORD }}
+          ANDROID_KEY_ALIAS: ${{ secrets.ANDROID_KEY_ALIAS }}
+          ANDROID_KEY_PASSWORD: ${{ secrets.ANDROID_KEY_PASSWORD }}
+        run: bash scripts/patch_android.sh
+
+      - name: 安裝套件
+        run: flutter pub get
+
+      # 錯誤轉成 annotation，Claude 可用 check-runs API 讀取（容器連不到日誌下載網址）。
+      - name: 靜態檢查
+        run: |
+          set +e
+          flutter analyze --no-fatal-infos --no-fatal-warnings > /tmp/analyze.log 2>&1
+          status=$?
+          cat /tmp/analyze.log
+          if [ $status -ne 0 ]; then
+            grep -E "error •|error -" /tmp/analyze.log | head -30 | while IFS= read -r line; do echo "::error::$line"; done
+          fi
+          exit $status
+
+      - name: 單元測試
+        run: |
+          set +e
+          flutter test > /tmp/test.log 2>&1
+          status=$?
+          cat /tmp/test.log
+          if [ $status -ne 0 ]; then
+            grep -E "\[E\]|Expected|Actual|Error" /tmp/test.log | head -30 | while IFS= read -r line; do echo "::error::$line"; done
+          fi
+          exit $status
+
+      - name: 建置 APK（release）
+        run: |
+          set +e
+          flutter build apk --release > /tmp/build.log 2>&1
+          status=$?
+          tail -n 40 /tmp/build.log
+          if [ $status -ne 0 ]; then
+            grep -E "\.dart:[0-9]+|Error:|error:|FAILURE|What went wrong" /tmp/build.log | head -30 | while IFS= read -r line; do echo "::error::$line"; done
+          fi
+          exit $status
+
+      # ⚠️ 永久原則（HANDOFF §10.4）：APK／AAB 不可用 upload-artifact 放在公開 repo，
+      # 一律發佈到私人 repo iching-content 的 Release。
+      - name: 發佈到私人 repo 的 Release
+        env:
+          GH_TOKEN: ${{ secrets.BUILDS_REPO_TOKEN }}
+        run: |
+          set -euo pipefail
+          ver=$(grep '^version:' pubspec.yaml | awk '{print $2}')
+          n=${{ github.run_number }}
+          f="iching_${ver}_run${n}.apk"
+          cp build/app/outputs/flutter-apk/app-release.apk "$f"
+          gh release create "iching-android-run${n}" "$f" \
+            --repo lawrence124875/iching-content \
+            --title "易經卦卡 ${ver}（run ${n}）" \
+            --notes "commit ${{ github.sha }}；簽署：${SIGNING}"
+
+      - name: 只保留最近 5 個建置 Release
+        env:
+          GH_TOKEN: ${{ secrets.BUILDS_REPO_TOKEN }}
+        run: |
+          set -euo pipefail
+          gh release list --repo lawrence124875/iching-content --limit 100 --json tagName,createdAt \
+            --jq '[.[] | select(.tagName | startswith("iching-android-run"))] | sort_by(.createdAt) | reverse | .[5:] | .[].tagName' |
+          while IFS= read -r tag; do
+            gh release delete "$tag" --repo lawrence124875/iching-content --yes --cleanup-tag
+          done

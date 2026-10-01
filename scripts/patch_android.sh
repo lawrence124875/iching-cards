@@ -1,10 +1,16 @@
 #!/usr/bin/env bash
-# CI 產生 android/ 後套用 App 設定：桌面名稱、固定直向、桌面圖示、上傳金鑰簽署。
+# CI 產生 android/ 後套用 App 設定：桌面名稱、套件名稱、固定直向、桌面圖示、上傳金鑰簽署。
 # 上傳金鑰的四個 Secrets 尚未設定時，改用除錯金鑰簽署（只能自己側載測試）。
 set -euo pipefail
 
 MANIFEST="android/app/src/main/AndroidManifest.xml"
-sed -i 's/android:label="[^"]*"/android:label="易經卦卡"/' "$MANIFEST"
+sed -i 's/android:label="[^"]*"/android:label="謙卦"/' "$MANIFEST"
+
+# 套件名稱（Google Play 身分，上傳後永遠不能改）：com.lclab.qiangua
+# 只改 applicationId；namespace 維持 flutter create 產生的值，MainActivity 不必搬移
+GRADLE="android/app/build.gradle.kts"
+sed -i 's/applicationId = "[^"]*"/applicationId = "com.lclab.qiangua"/' "$GRADLE"
+grep -q 'applicationId = "com.lclab.qiangua"' "$GRADLE" && echo "套件名稱：com.lclab.qiangua"
 # 固定直向：卦卡為 9:16 直式設計
 grep -q 'android:screenOrientation' "$MANIFEST" || \
   sed -i '0,/<activity/s//<activity android:screenOrientation="portrait"/' "$MANIFEST"

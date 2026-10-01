@@ -9,7 +9,7 @@ class IchingApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: '易經卦卡',
+      title: '謙卦',
       debugShowCheckedModeBanner: false,
       theme: buildTheme(),
       home: const HomePage(),

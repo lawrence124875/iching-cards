@@ -42,7 +42,7 @@ jobs:
       - name: 產生 Android 平台資料夾
         run: |
           if [ ! -d android ]; then
-            flutter create --platforms=android --project-name=iching_cards --org tw.bcc .
+            flutter create --platforms=android --project-name=iching_cards --org com.lclab .
           fi
           rm -f test/widget_test.dart
 

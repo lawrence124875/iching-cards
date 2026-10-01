@@ -294,6 +294,7 @@ App 名稱與 applicationId、商業模式（廣告與付費內容）、隱私�
 ### 10.5 Gemini 牌面圖流程
 - **時機**：每寫完一卦內容，同時提供該卦的 Gemini 提示詞（依 6.4 範本），存入該卦 JSON 的 `art` 欄位（`art.prompt`、`art.status`），方便日後重產。
 - **64 卦提示詞（2026-10-01 完成）**：iching-content `prompts/art-prompts.md`，含卦序、上下卦、大象與檔名對照。產圖改以 Google AI Studio 為優先（長寬比 9:16、2K），待使用者試產確認無可見浮水印與畫質。
+- **下載**：一律用電腦從 gemini.google.com 下載原圖（謙卦電腦下載為 1536×2752；手機下載只有 768×1376，不可用）。手機產的圖，可在電腦開同一對話下載。
 - **檔名**：`兩位數卦序-拼音.png`（例 `02-kun.png`），重產加 `-v2`；程式只認前兩碼卦序（乾／謙等拼音相同）。
 - **上傳**：使用者直接以 GitHub 網頁上傳到 iching-content 的 `images/raw/`（不經對話，圖片在對話中很耗 token）。
 - **轉檔**：Claude 以腳本統一轉成 1080×1920 WebP（每張約 300KB，64 張約 20MB），存 `images/webp/`。

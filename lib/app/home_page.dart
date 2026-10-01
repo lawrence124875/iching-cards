@@ -20,7 +20,8 @@ class HomePage extends StatelessWidget {
         child: LayoutBuilder(
           builder: (context, box) => SingleChildScrollView(
             child: ConstrainedBox(
-              constraints: BoxConstraints(minHeight: box.maxHeight),
+              // minWidth 撐滿寬度，Column 才會水平置中（否則會靠左收縮）
+              constraints: BoxConstraints(minHeight: box.maxHeight, minWidth: box.maxWidth),
               child: Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 28, vertical: 24),
                 child: Column(

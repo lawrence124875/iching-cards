@@ -327,11 +327,12 @@ App 名稱與 applicationId、商業模式（廣告與付費內容）、隱私�
 | `lib/reading/` | 主流程共用頁：解讀頁（牌面→本次重點→隨機一組解讀→東西相映→小行動與提問）、詳細頁（經文與各爻，重點爻自動展開） |
 | `lib/shared/widgets/` | 卦象（`HexagramGlyph`）、先天八卦環牌背、有框牌面（無圖時以卦象符號當佔位）、翻牌動畫（尊重系統「減少動態效果」） |
 | `test/iching_test.dart` | 卦序表、起卦、朱熹規則的單元測試，CI 每次都跑 |
-| `scripts/import_content.sh`、`patch_android.sh` | CI 用：匯入私人內容（只印數量）；設定桌面名稱與簽署 |
+| `scripts/import_content.sh`、`patch_android.sh` | CI 用：匯入私人內容（只印數量）；設定桌面名稱、桌面圖示與簽署 |
+| `branding/` | 桌面圖示：`draw_icon.py`（Pillow 繪製，改設計就改這支再重產）、`icon-1024.png`（上架用大圖）、`android/res/`（各密度 mipmap＋Android 8+ 自適應圖示，CI 複製進 `android/`）。設計：玄底、金框卦卡內畫謙卦 ䷎，九三陽爻用較亮的稻金 |
 
 ### 11.2 暫定設定
 - 套件名稱（applicationId）暫用 `flutter create` 產生的 `tw.bcc.iching_cards`；桌面名稱「易經卦卡」。封閉測試前定名後再改。
-- 版本 `0.1.0+1`。目前零外部套件（只用 Flutter SDK），字體用系統字體；思源宋體／黑體留待第二階段打包。
+- 版本 `0.1.0+3`（+3：首頁水平置中修正、桌面圖示）。目前零外部套件（只用 Flutter SDK），字體用系統字體；思源宋體／黑體留待第二階段打包。
 - 英文卦義為自撰暫定詞，英文版上線前再審。
 - `android/`、`ios/` 不進 repo，CI 以 `flutter create` 產生（同英文 App 做法）；`flutter create` 會產生的 `test/widget_test.dart` 在 CI 中刪除。
 - `assets/content/`、`assets/cards/` 在本 repo 只有 `.gitkeep`，`.gitignore` 擋住 json／webp，**內容永遠不進公開 repo**。

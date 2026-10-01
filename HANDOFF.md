@@ -95,7 +95,7 @@ App 自動標出「本次重點」。
 
 ### 4.6 內容檔案（2026-10-01 決定）
 
-- 存放：私人 repo `lawrence124875/iching-content`（待使用者建立並加入權杖權限）。建置時由 GitHub Actions 以 Secrets 權杖抓取。**解讀內容一律不 commit 到本公開 repo**（git 歷史無法收回）。
+- 存放：私人 repo `lawrence124875/iching-content`（2026-10-01 已建立，權杖已授權）。建置時由 GitHub Actions 以 Secrets 權杖抓取。**解讀內容一律不 commit 到本公開 repo**（git 歷史無法收回）。
 - 格式：直接寫 JSON，一卦一檔，各語言分資料夾：`zh-Hant/01-qian.json`、`en/01-qian.json`。
 - 順序：依卦序從乾卦開始；中文一批定稿後再寫英文。
 - 經文逐卦對照維基文庫《周易》原文（zh.wikisource.org）。

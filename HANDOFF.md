@@ -1,7 +1,7 @@
 # HANDOFF — 易經卦卡 App（名稱未定）
 
 > 新對話接續時請先讀本檔。本檔記錄已確定的決策、內容規格與待討論事項。
-> 最後更新：2026-10-01（開發路線圖已定，見第 10 節；乾卦中文初稿完成；App 程式尚未開發）
+> 最後更新：2026-10-01（開發路線圖已定，見第 10 節；乾、坤卦中文初稿完成；App 程式尚未開發）
 
 ---
 
@@ -106,7 +106,7 @@ App 自動標出「本次重點」。
   - `lines[6]`（乾坤為 7，含用九／用六，position 7）：`position, name, stage, text, xiaoxiang, image, source, forYou`
   - `eastWest.quote`：`text, author, source, translationNote, note`
   - `eastWest.psychology`：`name, origin, evidenceNote, note`
-- 進度：乾卦中文初稿完成（2026-10-01，待使用者審閱）。
+- 進度：乾、坤卦中文初稿完成（2026-10-01，待使用者審閱），兩卦 `art.prompt` 皆已填入 Gemini 提示詞。
 
 ### 4.4 內容份量
 
@@ -299,8 +299,8 @@ App 名稱與 applicationId、商業模式（廣告與付費內容）、隱私�
 - **授權待確認**：正式採用前確認所用 Gemini 版本的當下條款允許商業 App 使用，以及是否有可見浮水印；如有，不自行裁切或修除，先確認條款。
 
 ### 10.6 下一步
-新對話二選一：寫坤卦（附乾、坤提示詞），或開始搭程式骨架與 CI（`BUILDS_REPO_TOKEN` 已驗證可用）。
-乾卦中文初稿（iching-content `zh-Hant/01-qian.json`）尚待使用者審閱。
+新對話二選一：寫屯卦（第 3 卦，附提示詞），或開始搭程式骨架與 CI（`BUILDS_REPO_TOKEN` 已驗證可用）。
+乾、坤卦中文初稿（iching-content `zh-Hant/01-qian.json`、`02-kun.json`）尚待使用者審閱。
 
 ## 8. 範例內容：謙卦（第十五卦，地山謙 ䷎，Qiān · Modesty）
 

@@ -1,7 +1,7 @@
 # HANDOFF — 易經卦卡 App（名稱未定）
 
 > 新對話接續時請先讀本檔。本檔記錄已確定的決策、內容規格與待討論事項。
-> 最後更新：2026-10-01（開發路線圖已定，見第 10 節；乾、坤卦中文初稿完成；App 程式尚未開發）
+> 最後更新：2026-10-01（程式骨架與 CI 完成，run #1 成功發佈 APK，見第 11 節；乾、坤卦中文初稿待審閱）
 
 ---
 
@@ -21,7 +21,7 @@
 | Google Play Console | 沿用現有開發者帳號。新 App 須重跑封閉測試（12 位以上、連續 14 天） |
 | AdMob / RevenueCat | 沿用現有帳號，新增 App |
 | 簽署金鑰 | 另建新的上傳金鑰，與智慧聽覺巡航分開；存 GitHub Secrets，本機備份 |
-| CI | 參考智慧聽覺巡航的 GitHub Actions 建置流程；push 到 main 即建置（公開 repo 不限時數，使用者不介意文件變更也觸發）；保留 `workflow_dispatch` 手動建置 |
+| CI | `.github/workflows/build_android.yml`：push 到 main 即建置，**只改 .md 不觸發**（2026-10-01 改，避免每次更新 HANDOFF 都多一個 Release）；保留 `workflow_dispatch` 手動建置。詳見 11.3 |
 
 ⚠️ applicationId（套件名稱）第一次上傳 Play 後無法更改，需在 App 名稱確定後再定。repo 名稱可日後更改。
 
@@ -232,7 +232,7 @@ repo 裡永遠不寫任何金鑰、密碼或權杖（含文件、commit 訊息�
 
 ### 9.2 測試與上架流程
 
-1. **階段一：個人手機測試**：GitHub Actions 建置 APK（Artifacts 下載），使用者自行安裝到手機測試。
+1. **階段一：個人手機測試**：GitHub Actions 建置 APK，發佈到私人 repo iching-content 的 Release（不用 Artifacts，見 10.4），使用者以手機登入 GitHub 下載安裝。
 2. **階段二：大致確定後**上傳 Google Play **封閉測試**（AAB），並使用**付費外部測試服務**湊足 12 位測試者、連續 14 天。
 3. 通過後申請正式版。
 
@@ -241,6 +241,8 @@ repo 裡永遠不寫任何金鑰、密碼或權杖（含文件、commit 訊息�
 原則：「內容」與「程式」並行；App 名稱不必先定（applicationId 只在第一次上傳 Play 時鎖死，個人測試階段先用暫定 ID，封閉測試前定名再改；Firebase 屆時在同一專案新增 App 即可）。每個對話只做內容或程式其中一項，節省 token。
 
 ### 10.1 第一階段：手機可裝的最小版本（MVP，只做繁中）
+
+> 2026-10-01：1–5 項初版皆已完成並建置成功（run #1），待使用者實機試用回饋；上傳金鑰 Secrets 待使用者設定（11.4）。
 1. Flutter 專案骨架，依第 9 節架構原則搭好功能註冊表、內容來源介面、起卦策略介面。
 2. CI 自動建置 APK：建立新的上傳金鑰（存 Secrets）；建置時以 `BUILDS_REPO_TOKEN` 從私人 repo 抓內容；**APK 發佈到私人 repo 的 Release**（見 10.4）。
 3. 核心流程：抽一卦 → 翻牌 → 解讀頁（三組隨機一組）→ 詳細頁（經文、六爻）。
@@ -293,7 +295,8 @@ App 名稱與 applicationId、商業模式（廣告與付費內容）、隱私�
 
 ### 10.5 Gemini 牌面圖流程
 - **時機**：每寫完一卦內容，同時提供該卦的 Gemini 提示詞（依 6.4 範本），存入該卦 JSON 的 `art` 欄位（`art.prompt`、`art.status`），方便日後重產。
-- **64 張牌面原圖全部定案（2026-10-01）**：iching-content `images/raw/NN-slug.jpg`，皆 1536×2752、無可見浮水印；13、26、27、46、50 經重寫提示詞重產。下一步：轉 1080×1920 WebP 到 `images/webp/`（可在搭程式骨架時一併做）。
+- **64 張牌面原圖全部定案（2026-10-01）**：iching-content `images/raw/NN-slug.jpg`，皆 1536×2752、無可見浮水印；13、26、27、46、50 經重寫提示詞重產。
+- **WebP 已完成（2026-10-01）**：iching-content `images/webp/NN-slug.webp`，1080×1920（等比縮放後上下各裁約 7px）、quality 80，64 張共 12.4 MB。日後重產某卦：原圖放 raw/，再請 Claude 重轉該張。
 - **64 卦提示詞（2026-10-01 完成）**：iching-content `prompts/art-prompts.md`，含卦序、上下卦、大象與檔名對照。產圖改以 Google AI Studio 為優先（長寬比 9:16、2K），待使用者試產確認無可見浮水印與畫質。
 - **下載**：一律用電腦從 gemini.google.com 下載原圖（謙卦電腦下載為 1536×2752；手機下載只有 768×1376，不可用）。手機產的圖，可在電腦開同一對話下載。
 - **檔名**：`兩位數卦序-拼音`，副檔名照下載原樣（.jpg／.png），重產加 `-v2`；程式只認前兩碼卦序（乾／謙等拼音相同）。
@@ -305,8 +308,45 @@ App 名稱與 applicationId、商業模式（廣告與付費內容）、隱私�
 - **可見浮水印（背景）**：依 Nano Banana Pro 發表時的說明，免費與 Google AI Pro 方案的圖會保留右下角 Gemini 星芒浮水印，Ultra 與 Google AI Studio 則不加。使用者為 Pro 方案，需檢查已產出的圖是否帶星芒。如有，不自行裁切、修除或用牌框遮住，改評估以 Google AI Studio 產圖。所有圖另含不可見的 SynthID 浮水印，不影響使用。
 
 ### 10.6 下一步
-新對話二選一：寫屯卦（第 3 卦，附提示詞），或開始搭程式骨架與 CI（`BUILDS_REPO_TOKEN` 已驗證可用）。
-乾、坤卦中文初稿（iching-content `zh-Hant/01-qian.json`、`02-kun.json`）尚待使用者審閱。
+1. 使用者：設定上傳金鑰的 4 個 Secrets（11.4），之後到 iching-content Releases 下載最新 APK 實機試用，回饋版面與流程。
+2. 使用者：審閱乾、坤卦中文初稿（iching-content `zh-Hant/01-qian.json`、`02-kun.json`）。
+3. 之後的對話二選一：寫屯卦（第 3 卦）；或依試用回饋修程式（字體打包、牌面細節、首頁）。
+
+## 11. 程式現況（2026-10-01 骨架完成）
+
+### 11.1 目錄結構（依第 9 節架構原則）
+
+| 路徑 | 內容 |
+|---|---|
+| `lib/main.dart`、`lib/app/` | 進入點、`IchingApp`、謙卦主題（`theme.dart`）、首頁、`services.dart`（以 InheritedWidget 提供共用服務，換實作只改 `Services.standard()`） |
+| `lib/app/app_feature.dart`、`feature_registry.dart` | 首頁入口定義與**功能註冊表**；增減功能＝增減 `registeredFeatures` 一行 |
+| `lib/core/iching/` | `trigram.dart`（八經卦）、`hexagram_table.dart`（文王卦序表、64 卦卦名／拼音／暫定英文卦義）、`cast_result.dart`（6/7/8/9、本卦、之卦、變爻）、`divination_method.dart`（**起卦策略**：`SimpleDraw`、`ThreeCoins`）、`focus_rule.dart`（**變爻規則策略**：`ZhuXiFocusRule`） |
+| `lib/core/content/` | `ContentSource` 介面＋`AssetContentSource`（讀 `assets/content/zh-Hant/NN.json`、`assets/cards/NN.webp`）；`hexagram_content.dart` 寬鬆解析 JSON（缺欄位給空字串） |
+| `lib/core/events/event_bus.dart` | 事件匯流排；目前只有 `ReadingShown`，尚無訂閱者（留給紀錄、統計） |
+| `lib/features/draw/`、`lib/features/coin_cast/` | 兩個首頁功能，各自只對外公開一個 `AppFeature`；彼此不引用 |
+| `lib/reading/` | 主流程共用頁：解讀頁（牌面→本次重點→隨機一組解讀→東西相映→小行動與提問）、詳細頁（經文與各爻，重點爻自動展開） |
+| `lib/shared/widgets/` | 卦象（`HexagramGlyph`）、先天八卦環牌背、有框牌面（無圖時以卦象符號當佔位）、翻牌動畫（尊重系統「減少動態效果」） |
+| `test/iching_test.dart` | 卦序表、起卦、朱熹規則的單元測試，CI 每次都跑 |
+| `scripts/import_content.sh`、`patch_android.sh` | CI 用：匯入私人內容（只印數量）；設定桌面名稱與簽署 |
+
+### 11.2 暫定設定
+- 套件名稱（applicationId）暫用 `flutter create` 產生的 `tw.bcc.iching_cards`；桌面名稱「易經卦卡」。封閉測試前定名後再改。
+- 版本 `0.1.0+1`。目前零外部套件（只用 Flutter SDK），字體用系統字體；思源宋體／黑體留待第二階段打包。
+- 英文卦義為自撰暫定詞，英文版上線前再審。
+- `android/`、`ios/` 不進 repo，CI 以 `flutter create` 產生（同英文 App 做法）；`flutter create` 會產生的 `test/widget_test.dart` 在 CI 中刪除。
+- `assets/content/`、`assets/cards/` 在本 repo 只有 `.gitkeep`，`.gitignore` 擋住 json／webp，**內容永遠不進公開 repo**。
+
+### 11.3 CI 流程（build_android.yml）
+checkout 本 repo → 以 `BUILDS_REPO_TOKEN` sparse-checkout iching-content 的 `zh-Hant/` 與 `images/webp/`（不抓 raw 原圖）→ 匯入內容 → `flutter create` → 套用名稱與簽署 → `flutter analyze`（只有 error 會失敗）→ `flutter test` → `flutter build apk --release` → `gh release create iching-android-run<N>` 到 iching-content → 自動刪除舊建置 Release，**只保留最近 5 個**。
+- 失敗時錯誤行會轉成 annotation，Claude 以 `GET /repos/lawrence124875/iching-cards/check-runs/<id>/annotations` 讀取（容器無法下載完整日誌）。
+- APK 為通用版（含三種 CPU 架構），約 58 MB；上架時改建 AAB，由 Play 自動拆分。
+- run #1（2026-10-01）全部步驟成功，以除錯金鑰簽署。
+
+### 11.4 上傳金鑰（2026-10-01 已產生，待設定 Secrets）
+- 新建、與智慧聽覺巡航分開：PKCS12、別名 `upload`、RSA 2048、有效至 2054 年。憑證 SHA-256 指紋開頭 `80:9A:C2:C1`。
+- 檔案與密碼已交給使用者下載，由使用者備份到 Google 雲端硬碟；**Claude 與 repo 都不保留**。遺失＝上架後無法更新。
+- 使用者需在 iching-cards 的 Settings → Secrets → Actions 建立：`ANDROID_KEYSTORE_BASE64`、`ANDROID_KEYSTORE_PASSWORD`、`ANDROID_KEY_PASSWORD`、`ANDROID_KEY_ALIAS`。
+- 尚未設定時 CI 自動改用除錯金鑰並在 annotation 警告；除錯金鑰每次建置不同，裝新版前須先移除舊版。設定後的 Release 說明會顯示「簽署：上傳金鑰」。
 
 ## 8. 範例內容：謙卦（第十五卦，地山謙 ䷎，Qiān · Modesty）
 

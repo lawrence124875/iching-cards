@@ -17,11 +17,11 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
 
       # 解讀內容與牌面圖放在私人 repo；只取需要的資料夾（不抓 images/raw 原圖）。
       - name: 取得私人內容（iching-content）
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
         with:
           repository: lawrence124875/iching-content
           token: ${{ secrets.BUILDS_REPO_TOKEN }}

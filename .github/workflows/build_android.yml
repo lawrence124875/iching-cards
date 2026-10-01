@@ -104,16 +104,18 @@ jobs:
           cp build/app/outputs/flutter-apk/app-release.apk "$f"
           gh release create "iching-android-run${n}" "$f" \
             --repo lawrence124875/iching-content \
-            --title "易經卦卡 ${ver}（run ${n}）" \
+            --title "謙卦 ${ver}（run ${n}）" \
             --notes "commit ${{ github.sha }}；簽署：${SIGNING}"
 
+      # 依 run 編號排序：Release 的 createdAt 取自 iching-content 被標記的 commit，
+      # 內容沒變時每個 Release 都相同，用它排序會誤刪最新的一個（run 6 曾發生）。
       - name: 只保留最近 5 個建置 Release
         env:
           GH_TOKEN: ${{ secrets.BUILDS_REPO_TOKEN }}
         run: |
           set -euo pipefail
-          gh release list --repo lawrence124875/iching-content --limit 100 --json tagName,createdAt \
-            --jq '[.[] | select(.tagName | startswith("iching-android-run"))] | sort_by(.createdAt) | reverse | .[5:] | .[].tagName' |
+          gh release list --repo lawrence124875/iching-content --limit 100 --json tagName \
+            --jq '[.[] | select(.tagName | startswith("iching-android-run"))] | sort_by(.tagName | ltrimstr("iching-android-run") | tonumber) | reverse | .[5:] | .[].tagName' |
           while IFS= read -r tag; do
             gh release delete "$tag" --repo lawrence124875/iching-content --yes --cleanup-tag
           done

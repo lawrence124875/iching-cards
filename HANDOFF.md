@@ -342,7 +342,7 @@ App 名稱與 applicationId、商業模式（廣告與付費內容）、隱私�
 - `assets/content/`、`assets/cards/` 在本 repo 只有 `.gitkeep`，`.gitignore` 擋住 json／webp，**內容永遠不進公開 repo**。
 
 ### 11.3 CI 流程（build_android.yml）
-checkout 本 repo → 以 `BUILDS_REPO_TOKEN` sparse-checkout iching-content 的 `zh-Hant/` 與 `images/webp/`（不抓 raw 原圖）→ 匯入內容 → `flutter create` → 套用名稱與簽署 → `flutter analyze`（只有 error 會失敗）→ `flutter test` → `flutter build apk --release` → `gh release create iching-android-run<N>` 到 iching-content → 自動刪除舊建置 Release，**只保留最近 5 個**。
+checkout 本 repo → 以 `BUILDS_REPO_TOKEN` sparse-checkout iching-content 的 `zh-Hant/` 與 `images/webp/`（不抓 raw 原圖）→ 匯入內容 → `flutter create` → 套用名稱與簽署 → `flutter analyze`（只有 error 會失敗）→ `flutter test` → `flutter build apk --release` → `gh release create iching-android-run<N>` 到 iching-content → 自動刪除舊建置 Release，**只保留最近 5 個**（依 run 編號排序；createdAt 會相同，不可用來排序）。
 - 失敗時錯誤行會轉成 annotation，Claude 以 `GET /repos/lawrence124875/iching-cards/check-runs/<id>/annotations` 讀取（容器無法下載完整日誌）。
 - APK 為通用版（含三種 CPU 架構），約 58 MB；上架時改建 AAB，由 Play 自動拆分。
 - run #1（2026-10-01）全部步驟成功，以除錯金鑰簽署。

@@ -1,7 +1,7 @@
 # HANDOFF — 易經卦卡 App（名稱未定）
 
 > 新對話接續時請先讀本檔。本檔記錄已確定的決策、內容規格與待討論事項。
-> 最後更新：2026-10-01（程式骨架與 CI 完成，run #1 成功發佈 APK，見第 11 節；乾、坤卦中文初稿待審閱）
+> 最後更新：2026-10-01（程式骨架與 CI 完成，run #3 起以上傳金鑰簽署，見第 11 節；使用者實機試用中）
 
 ---
 
@@ -308,8 +308,8 @@ App 名稱與 applicationId、商業模式（廣告與付費內容）、隱私�
 - **可見浮水印（背景）**：依 Nano Banana Pro 發表時的說明，免費與 Google AI Pro 方案的圖會保留右下角 Gemini 星芒浮水印，Ultra 與 Google AI Studio 則不加。使用者為 Pro 方案，需檢查已產出的圖是否帶星芒。如有，不自行裁切、修除或用牌框遮住，改評估以 Google AI Studio 產圖。所有圖另含不可見的 SynthID 浮水印，不影響使用。
 
 ### 10.6 下一步
-1. 使用者：設定上傳金鑰的 4 個 Secrets（11.4），之後到 iching-content Releases 下載最新 APK 實機試用，回饋版面與流程。
-2. 使用者：審閱乾、坤卦中文初稿（iching-content `zh-Hant/01-qian.json`、`02-kun.json`）。
+1. ~~設定上傳金鑰~~（已完成）。使用者實機試用中（APK 網址：https://github.com/lawrence124875/iching-content/releases ），回饋版面與流程。
+2. 乾、坤卦初稿：使用者初步認為可以，要等看過手機實際介面再一起討論。
 3. 之後的對話二選一：寫屯卦（第 3 卦）；或依試用回饋修程式（字體打包、牌面細節、首頁）。
 
 ## 11. 程式現況（2026-10-01 骨架完成）
@@ -342,11 +342,12 @@ checkout 本 repo → 以 `BUILDS_REPO_TOKEN` sparse-checkout iching-content 的
 - APK 為通用版（含三種 CPU 架構），約 58 MB；上架時改建 AAB，由 Play 自動拆分。
 - run #1（2026-10-01）全部步驟成功，以除錯金鑰簽署。
 
-### 11.4 上傳金鑰（2026-10-01 已產生，待設定 Secrets）
+### 11.4 上傳金鑰（2026-10-01 已產生並設定完成）
 - 新建、與智慧聽覺巡航分開：PKCS12、別名 `upload`、RSA 2048、有效至 2054 年。憑證 SHA-256 指紋開頭 `80:9A:C2:C1`。
 - 檔案與密碼已交給使用者下載，由使用者備份到 Google 雲端硬碟；**Claude 與 repo 都不保留**。遺失＝上架後無法更新。
 - 使用者需在 iching-cards 的 Settings → Secrets → Actions 建立：`ANDROID_KEYSTORE_BASE64`、`ANDROID_KEYSTORE_PASSWORD`、`ANDROID_KEY_PASSWORD`、`ANDROID_KEY_ALIAS`。
-- 尚未設定時 CI 自動改用除錯金鑰並在 annotation 警告；除錯金鑰每次建置不同，裝新版前須先移除舊版。設定後的 Release 說明會顯示「簽署：上傳金鑰」。
+- ✅ 2026-10-01 使用者已建好 4 個 Secrets；run #3（0.1.0+2）起以上傳金鑰簽署，之後的 APK 可直接覆蓋安裝。
+- 若 Secrets 遺失，CI 會自動改用除錯金鑰並在 annotation 警告；除錯金鑰每次建置不同，裝新版前須先移除舊版。設定後的 Release 說明會顯示「簽署：上傳金鑰」。
 
 ## 8. 範例內容：謙卦（第十五卦，地山謙 ䷎，Qiān · Modesty）
 

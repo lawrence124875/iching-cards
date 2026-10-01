@@ -1,7 +1,7 @@
 # HANDOFF — 易經卦卡 App（名稱未定）
 
 > 新對話接續時請先讀本檔。本檔記錄已確定的決策、內容規格與待討論事項。
-> 最後更新：2026-10-01（開始量產解讀內容；App 程式尚未開發）
+> 最後更新：2026-10-01（開發路線圖已定，見第 10 節；乾卦中文初稿完成；App 程式尚未開發）
 
 ---
 
@@ -234,6 +234,45 @@ repo 裡永遠不寫任何金鑰、密碼或權杖（含文件、commit 訊息�
 1. **階段一：個人手機測試**：GitHub Actions 建置 APK（Artifacts 下載），使用者自行安裝到手機測試。
 2. **階段二：大致確定後**上傳 Google Play **封閉測試**（AAB），並使用**付費外部測試服務**湊足 12 位測試者、連續 14 天。
 3. 通過後申請正式版。
+
+## 10. 開發路線圖（2026-10-01 決定）
+
+原則：「內容」與「程式」並行；App 名稱不必先定（applicationId 只在第一次上傳 Play 時鎖死，個人測試階段先用暫定 ID，封閉測試前定名再改；Firebase 屆時在同一專案新增 App 即可）。每個對話只做內容或程式其中一項，節省 token。
+
+### 10.1 第一階段：手機可裝的最小版本（MVP，只做繁中）
+1. Flutter 專案骨架，依第 9 節架構原則搭好功能註冊表、內容來源介面、起卦策略介面。
+2. CI 自動建置 APK：建立新的上傳金鑰（存 Secrets）；建置時從私人 repo 抓內容；**APK 發佈到私人 repo 的 Release**（見 10.4）。
+3. 核心流程：抽一卦 → 翻牌 → 解讀頁（三組隨機一組）→ 詳細頁（經文、六爻）。
+4. 擲錢起卦：變爻、之卦，套用朱熹規則（4.3）。
+5. 牌面與牌背：有框版；尚無圖的卦用佔位圖；尚未寫內容的卦顯示「內容撰寫中」。
+
+### 10.2 第二階段：完整體驗
+呼吸音景、紀錄與收藏、Firebase（Analytics、Crashlytics、Remote Config）、英文版。
+
+### 10.3 第三階段：上架準備
+App 名稱與 applicationId、商業模式（廣告與付費內容）、隱私權政策（本 repo GitHub Pages）、商店資訊、封閉測試（9.2）。
+
+### 10.4 ⚠️ APK 發佈到私人 repo 的 Release（重要，使用者特別要求）
+
+**問題**：公開 repo 的 Actions Artifacts 任何登入 GitHub 的人都能下載，APK 內含全部解讀內容，等於繞過私人 repo。
+
+**做法**：
+- iching-cards 的建置流程**不得**用 `actions/upload-artifact` 上傳含內容的 APK／AAB。
+- 建置完成後，以權杖在 **iching-content（私人）** 建立 Release，把 APK 附為 Release 資產；使用者在手機登入 GitHub，從 iching-content 的 Releases 下載安裝。
+- Release 標籤建議用 `apk-<版本>-<run 編號>`；只保留最近數個，舊的定期刪除，避免占空間。
+- CI 專用權杖：另建一把 fine-grained 權杖，只授權 iching-content、Contents 讀寫（用於 checkout 內容與建立 Release），期限可設較長；存為 iching-cards 的 Secret `CONTENT_TOKEN`。與對話中使用的權杖分開。
+- 公開 repo 的 Actions 紀錄任何人都看得到：建置步驟不可 `cat`／`echo` 內容檔或列出內容，不可印出權杖。
+- 上傳 Play 的 AAB 同樣只放私人 Release（或使用者本機），不放公開 Artifacts。
+
+### 10.5 Gemini 牌面圖流程
+- **時機**：每寫完一卦內容，同時提供該卦的 Gemini 提示詞（依 6.4 範本），存入該卦 JSON 的 `art` 欄位（`art.prompt`、`art.status`），方便日後重產。
+- **上傳**：使用者直接以 GitHub 網頁上傳到 iching-content 的 `images/raw/`（不經對話，圖片在對話中很耗 token）。
+- **轉檔**：Claude 以腳本統一轉成 1080×1920 WebP（每張約 300KB，64 張約 20MB），存 `images/webp/`。
+- **原檔**：1536×2752 原檔由使用者自行備份在 Google 雲端硬碟，repo 只存轉檔後版本（避免 clone 變慢）。
+- **授權待確認**：正式採用前確認所用 Gemini 版本的當下條款允許商業 App 使用，以及是否有可見浮水印；如有，不自行裁切或修除，先確認條款。
+
+### 10.6 下一步
+新對話二選一：寫坤卦（附乾、坤提示詞），或開始搭程式骨架與 CI。
 
 ## 8. 範例內容：謙卦（第十五卦，地山謙 ䷎，Qiān · Modesty）
 

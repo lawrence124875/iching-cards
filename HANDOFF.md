@@ -334,7 +334,9 @@ App 名稱與 applicationId、商業模式（廣告與付費內容）、隱私�
 ### 11.2 暫定設定
 - **定名（2026-10-01）**：開發者 **LC Lab**；App 名 **謙卦**（英文 Qiangua）。桌面名稱「謙卦」；首頁大標「謙卦」、副標「易經六十四卦卡」；Google Play 標題預定「謙卦｜易經六十四卦卡」。2026-10-01 使用者已在 Google Play／App Store 搜尋，確認沒有名為「謙卦」的 App（商標可在上架前另查）。
 - **套件名稱 `com.lclab.qiangua`**（0.1.0+5 起；上傳 Play 後永遠不能改）。由 `patch_android.sh` 改 applicationId；`flutter create --org com.lclab`，namespace 維持產生值。舊版 `tw.bcc.iching_cards` 是不同 App，測試機需手動移除。
-- 版本 `0.1.0+5`（+3：首頁水平置中修正、桌面圖示；+4：固定直向；+5：定名謙卦、套件名稱 com.lclab.qiangua）。
+- 版本 `0.1.0+6`（+3：首頁水平置中修正、桌面圖示；+4：固定直向；+5：定名謙卦、套件名稱 com.lclab.qiangua；+6：擲錢頁收斂在一個畫面、點牌面圖滿版看象）。
+- **滿版看圖**（0.1.0+6，`shared/widgets/card_art_viewer.dart`）：`CardFace(zoomable: true)` 時點風景圖開啟；預設 cover 填滿螢幕、隱藏系統列，點兩下切換完整畫面（contain），兩指縮放，點一下返回。目前用於抽卡翻牌後與解讀頁。
+- **擲錢頁版面**（0.1.0+6）：不再捲動；六爻列固定保留（未擲顯示「—」），中段以 FittedBox 等比縮小以適應小螢幕或大字體，按鈕固定在底部。
 - **固定直向**：卦卡為 9:16 直式，`main.dart` 以 `SystemChrome` 鎖直向，Android 另由 `patch_android.sh` 在 AndroidManifest 加 `screenOrientation="portrait"`。iOS 上架時需在 Info.plist 只留 Portrait。平板若要支援橫向，再另做雙欄版面。
 - 目前零外部套件（只用 Flutter SDK），字體用系統字體；思源宋體／黑體留待第二階段打包。
 - 英文卦義為自撰暫定詞，英文版上線前再審。

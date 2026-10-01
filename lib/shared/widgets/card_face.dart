@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import '../../app/services.dart';
 import '../../app/theme.dart';
 import '../../core/iching/hexagram_table.dart';
+import 'card_art_viewer.dart';
 import 'hexagram_glyph.dart';
 
 const _numerals = ['', '一', '二', '三', '四', '五', '六', '七', '八', '九'];
@@ -16,9 +17,12 @@ String chineseOrdinal(int n) {
 
 /// 有框版牌面（HANDOFF §6.3）：風景照置於框內，四周放卦序、卦象、卦名、拼音、英文卦義與上下經卦。
 class CardFace extends StatelessWidget {
-  const CardFace({super.key, required this.info});
+  const CardFace({super.key, required this.info, this.zoomable = false});
 
   final HexagramInfo info;
+
+  /// 為 true 時，點風景圖會開啟滿版看圖（右下角顯示放大提示）。
+  final bool zoomable;
 
   @override
   Widget build(BuildContext context) {
@@ -46,7 +50,10 @@ class CardFace extends StatelessWidget {
             Expanded(
               child: DecoratedBox(
                 decoration: BoxDecoration(border: Border.all(color: QianColors.mountain, width: 0.8)),
-                child: Padding(padding: const EdgeInsets.all(3), child: _Art(info: info)),
+                child: Padding(
+                  padding: const EdgeInsets.all(3),
+                  child: zoomable ? _ZoomableArt(info: info) : _Art(info: info),
+                ),
               ),
             ),
             const SizedBox(height: 10),
@@ -57,6 +64,40 @@ class CardFace extends StatelessWidget {
             Text('上${info.upper.label}${info.upper.nature}　下${info.lower.label}${info.lower.nature}',
                 textAlign: TextAlign.center,
                 style: t.bodySmall?.copyWith(fontFamily: kSerif, color: QianColors.mountain)),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class _ZoomableArt extends StatelessWidget {
+  const _ZoomableArt({required this.info});
+
+  final HexagramInfo info;
+
+  @override
+  Widget build(BuildContext context) {
+    return Semantics(
+      button: true,
+      label: '放大看${info.name}卦牌面圖',
+      child: GestureDetector(
+        onTap: () => showCardArt(context, info),
+        child: Stack(
+          fit: StackFit.expand,
+          children: [
+            _Art(info: info),
+            const Positioned(
+              right: 6,
+              bottom: 6,
+              child: DecoratedBox(
+                decoration: BoxDecoration(color: Color(0x99000000), shape: BoxShape.circle),
+                child: Padding(
+                  padding: EdgeInsets.all(5),
+                  child: Icon(Icons.open_in_full, size: 15, color: QianColors.text),
+                ),
+              ),
+            ),
           ],
         ),
       ),

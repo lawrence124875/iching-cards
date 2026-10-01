@@ -67,7 +67,7 @@ class _ReadingPageState extends State<ReadingPage> {
               Center(
                 child: SizedBox(
                   width: 240,
-                  child: AspectRatio(aspectRatio: 0.62, child: CardFace(info: primary)),
+                  child: AspectRatio(aspectRatio: 0.62, child: CardFace(info: primary, zoomable: true)),
                 ),
               ),
               if (changed != null) ...[

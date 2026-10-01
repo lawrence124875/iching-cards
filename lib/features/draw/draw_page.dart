@@ -60,7 +60,7 @@ class _DrawPageState extends State<DrawPage> {
                           back: const CardBack(),
                           front: cast == null
                               ? const SizedBox.shrink()
-                              : CardFace(info: HexagramTable.byNumber(cast.primary)),
+                              : CardFace(info: HexagramTable.byNumber(cast.primary), zoomable: true),
                         ),
                       ),
                     ),

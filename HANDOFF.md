@@ -289,7 +289,7 @@ App 名稱與 applicationId、商業模式（廣告與付費內容）、隱私�
 
 **到期日（2026-10-01 記錄）**：易經對話用 `iching-cards` 2026-10-30（週五）；英文對話用 `english-app-claude` 2026-10-26（週一）；`ci-private-releases` 未設有效期。新對話若接近或已過到期日，主動提醒使用者到 https://github.com/settings/personal-access-tokens 重新生成。
 
-**待確認**：iching-cards 的 Secret `BUILDS_REPO_TOKEN` 是否已設好（原字串遺失，需重新生成並同時更新英文 App 的同名 Secret）。新對話開始時先問使用者；第一次 CI 建置也會驗證。
+**✅ 已驗證（2026-10-01）**：iching-cards 的 Secret `BUILDS_REPO_TOKEN` 已設好。以臨時 workflow（run 36804745907，驗證後已移除）確認：可 checkout iching-content、可在其上建立並刪除 Release。注意：workflow 的 `run:` 單行指令若含「: 」會造成 YAML 解析失敗（整個 run 沒有 job），一律改用 `run: |` 區塊寫法。
 
 ### 10.5 Gemini 牌面圖流程
 - **時機**：每寫完一卦內容，同時提供該卦的 Gemini 提示詞（依 6.4 範本），存入該卦 JSON 的 `art` 欄位（`art.prompt`、`art.status`），方便日後重產。
@@ -299,7 +299,7 @@ App 名稱與 applicationId、商業模式（廣告與付費內容）、隱私�
 - **授權待確認**：正式採用前確認所用 Gemini 版本的當下條款允許商業 App 使用，以及是否有可見浮水印；如有，不自行裁切或修除，先確認條款。
 
 ### 10.6 下一步
-新對話二選一：寫坤卦（附乾、坤提示詞），或開始搭程式骨架與 CI（先確認 10.4 的 `BUILDS_REPO_TOKEN` 已設好）。
+新對話二選一：寫坤卦（附乾、坤提示詞），或開始搭程式骨架與 CI（`BUILDS_REPO_TOKEN` 已驗證可用）。
 乾卦中文初稿（iching-content `zh-Hant/01-qian.json`）尚待使用者審閱。
 
 ## 8. 範例內容：謙卦（第十五卦，地山謙 ䷎，Qiān · Modesty）

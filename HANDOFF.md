@@ -284,7 +284,7 @@ App 名稱與 applicationId、商業模式（廣告與付費內容）、隱私�
 | 權杖 | 授權範圍 | 用途與存放 |
 |---|---|---|
 | 英文對話用 | english-learning-app | 每次貼在英文對話 |
-| 易經對話用 | iching-cards＋iching-content | 每次貼在易經對話；Contents、Workflows 讀寫，Actions 唯讀 |
+| 易經對話用 | iching-cards＋iching-content | 每次貼在易經對話；Contents、Workflows、Actions 讀寫（2026-10-02 Actions 改讀寫：Claude 可用 workflow_dispatch 觸發建置，例如內容 repo 更新後） |
 | CI 專用 `ci-private-releases` | english-app-builds＋iching-content，只有 Contents 讀寫 | **只存在 GitHub Secret，從不貼到對話**；兩個 App 的 CI 共用。英文 App 與 iching-cards 的 Secret 名稱都是 `BUILDS_REPO_TOKEN` |
 
 ⚠️ `ci-private-releases` 到期時，english-learning-app 與 iching-cards **兩個 repo 的 Secret 都要更新**。

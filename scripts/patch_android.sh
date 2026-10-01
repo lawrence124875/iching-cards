@@ -1,10 +1,14 @@
 #!/usr/bin/env bash
-# CI 產生 android/ 後套用 App 設定：桌面名稱、桌面圖示、上傳金鑰簽署。
+# CI 產生 android/ 後套用 App 設定：桌面名稱、固定直向、桌面圖示、上傳金鑰簽署。
 # 上傳金鑰的四個 Secrets 尚未設定時，改用除錯金鑰簽署（只能自己側載測試）。
 set -euo pipefail
 
 MANIFEST="android/app/src/main/AndroidManifest.xml"
 sed -i 's/android:label="[^"]*"/android:label="易經卦卡"/' "$MANIFEST"
+# 固定直向：卦卡為 9:16 直式設計
+grep -q 'android:screenOrientation' "$MANIFEST" || \
+  sed -i '0,/<activity/s//<activity android:screenOrientation="portrait"/' "$MANIFEST"
+grep -q 'android:screenOrientation="portrait"' "$MANIFEST" && echo "已固定直向"
 
 # 桌面圖示（謙卦卦卡）：覆蓋 flutter create 的預設圖示，含 Android 8+ 自適應圖示
 cp -r branding/android/res/. android/app/src/main/res/

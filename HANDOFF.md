@@ -308,9 +308,10 @@ App 名稱與 applicationId、商業模式（廣告與付費內容）、隱私�
 - **可見浮水印（背景）**：依 Nano Banana Pro 發表時的說明，免費與 Google AI Pro 方案的圖會保留右下角 Gemini 星芒浮水印，Ultra 與 Google AI Studio 則不加。使用者為 Pro 方案，需檢查已產出的圖是否帶星芒。如有，不自行裁切、修除或用牌框遮住，改評估以 Google AI Studio 產圖。所有圖另含不可見的 SynthID 浮水印，不影響使用。
 
 ### 10.6 下一步
-1. ~~設定上傳金鑰~~（已完成）。使用者實機試用中（APK 網址：https://github.com/lawrence124875/iching-content/releases ），回饋版面與流程。
-2. 乾、坤卦初稿：使用者初步認為可以，要等看過手機實際介面再一起討論。
-3. 之後的對話二選一：寫屯卦（第 3 卦）；或依試用回饋修程式（字體打包、牌面細節、首頁）。
+1. ~~設定上傳金鑰~~、~~首頁置中與桌面圖示~~（0.1.0+3，run #4 完成）。使用者實機試用中（APK：https://github.com/lawrence124875/iching-content/releases ）。
+2. 乾、坤卦：使用者看過實機後同意開始量產內容，格式沿用；之後有回饋再回頭修。
+3. **內容量產**：依卦序從 03 屯開始，一個對話寫 4～5 卦，格式同 `01-qian.json`、`02-kun.json`。`art.prompt` 從 iching-content `prompts/art-prompts.md` 搬入（圖已定案，`art.status` 填「已定案」）。每批完成後更新 iching-content README 進度。
+4. 程式待辦（有空檔或回饋時）：字體打包、牌面細節。
 
 ## 11. 程式現況（2026-10-01 骨架完成）
 

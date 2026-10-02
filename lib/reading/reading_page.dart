@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../app/feature_registry.dart';
 import '../app/services.dart';
 import '../app/theme.dart';
 import '../core/content/hexagram_content.dart';
@@ -116,6 +117,17 @@ class _ReadingPageState extends State<ReadingPage> {
                 Section(title: '今日小行動', child: Text(reading.action)),
                 Section(title: '反思提問', child: Text(reading.question)),
               ],
+              for (final action in registeredFeatures.map((f) => f.readingAction).whereType<ReadingAction>())
+                Padding(
+                  padding: const EdgeInsets.only(top: 32),
+                  child: Center(
+                    child: OutlinedButton.icon(
+                      onPressed: () => action.open(context, cast.primary),
+                      icon: Icon(action.icon),
+                      label: Text(action.label),
+                    ),
+                  ),
+                ),
               if (!widget.review && _services.journal != null) ...[
                 const SizedBox(height: 32),
                 Center(

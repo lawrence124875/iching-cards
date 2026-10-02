@@ -10,10 +10,10 @@ class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final t = Theme.of(context).textTheme;
-    final primary = registeredFeatures.where((f) => f.placement == FeaturePlacement.primary);
-    final secondary = registeredFeatures.where((f) => f.placement == FeaturePlacement.secondary);
+    final primary = registeredFeatures.where((f) => f.placement == FeaturePlacement.primary && f.builder != null);
+    final secondary = registeredFeatures.where((f) => f.placement == FeaturePlacement.secondary && f.builder != null);
 
-    void open(AppFeature f) => Navigator.of(context).push(MaterialPageRoute<void>(builder: f.builder));
+    void open(AppFeature f) => Navigator.of(context).push(MaterialPageRoute<void>(builder: f.builder!));
 
     return Scaffold(
       body: SafeArea(

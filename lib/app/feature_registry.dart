@@ -1,3 +1,4 @@
+import '../features/breath/breath_feature.dart';
 import '../features/coin_cast/coin_cast_feature.dart';
 import '../features/draw/draw_feature.dart';
 import '../features/journal/journal_feature.dart';
@@ -10,4 +11,5 @@ final List<AppFeature> registeredFeatures = [
   drawFeature,
   coinCastFeature,
   journalFeature,
+  breathFeature,
 ];

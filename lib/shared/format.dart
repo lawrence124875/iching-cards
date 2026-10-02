@@ -9,3 +9,7 @@ String methodLabel(String methodId) => switch (methodId) {
       'coins' => '三枚銅錢起卦',
       _ => '抽一卦',
     };
+
+/// 倒數時間：125 → 2:05
+String formatClock(int seconds) =>
+    '${seconds ~/ 60}:${(seconds % 60).toString().padLeft(2, '0')}';

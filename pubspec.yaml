@@ -1,7 +1,7 @@
 name: iching_cards
 description: "謙卦｜易經六十四卦卡（LC Lab）"
 publish_to: 'none'
-version: 0.1.0+7
+version: 0.1.0+8
 
 environment:
   sdk: '>=3.4.0 <4.0.0'
@@ -14,6 +14,8 @@ dependencies:
   path_provider: ^2.1.4 # 卦記存檔位置
   flutter_local_notifications: ^18.0.1 # 卦記回顧提醒
   timezone: ^0.9.4 # 通知排程時間（只用 UTC，不查時區名稱）
+  just_audio: ^0.10.4 # 呼吸音景：播放程式合成的 WAV
+  wakelock_plus: ^1.2.8 # 呼吸練習時保持螢幕亮著
 
 dev_dependencies:
   flutter_test:

@@ -106,6 +106,22 @@ void main() {
     final d = ByteData.sublistView(bytes);
     expect(d.getUint32(24, Endian.little), 8000);
     expect(d.getInt16(44, Endian.little).abs(), lessThan(10)); // 從無聲淡入
-    expect(spec.key, 'v1_kun_gen_1m_b');
+    expect(spec.key, 'v2_kun_gen_1m_b');
+    expect(d.getUint16(22, Endian.little), 1);
+  });
+
+  test('雙耳節拍：立體聲、左右聲道不同', () {
+    const spec = SessionSpec(upper: Trigram.qian, lower: Trigram.qian, minutes: 1, bells: false, binaural: true);
+    final bytes = const SessionRenderer(sampleRate: 8000).renderWav(spec);
+    final d = ByteData.sublistView(bytes);
+    final samples = (spec.timeline.totalSeconds * 8000).round();
+    expect(bytes.length, 44 + samples * 4);
+    expect(d.getUint16(22, Endian.little), 2);
+    expect(spec.key, 'v2_qian_qian_1m_q_bi');
+    var diff = 0;
+    for (var i = 8000 * 10; i < 8000 * 11; i++) {
+      diff += (d.getInt16(44 + i * 4, Endian.little) - d.getInt16(46 + i * 4, Endian.little)).abs();
+    }
+    expect(diff, greaterThan(0));
   });
 }

@@ -6,7 +6,8 @@ import '../../core/soundscape/session_renderer.dart';
 import 'breath_page.dart';
 import 'soundscape_labels.dart';
 
-/// 開始前的設定：時長 1／2／3／5 分鐘、是否要換氣鈴聲。
+/// 開始前的設定：時長 1／2／3／5 分鐘、換氣鈴聲、雙耳節拍（皆預設關閉）。
+/// 文案只描述做法，不寫任何療效（Google Play 健康宣稱政策，HANDOFF §14.2）。
 /// 選擇只在這次開啟 App 期間記住（不另存檔）。
 Future<void> showBreathSetup(BuildContext context, int hexagram) async {
   final spec = await showModalBottomSheet<SessionSpec>(
@@ -37,6 +38,8 @@ class _SetupSheetState extends State<_SetupSheet> {
 
   int _minutes = _lastMinutes;
   bool _bells = _lastBells;
+  static bool _lastBinaural = false;
+  bool _binaural = _lastBinaural;
 
   @override
   Widget build(BuildContext context) {
@@ -59,7 +62,7 @@ class _SetupSheetState extends State<_SetupSheet> {
             const SizedBox(height: 8),
             Text(sounds, style: t.bodyMedium),
             const SizedBox(height: 4),
-            Text('吸氣 4 秒、吐氣 6 秒（每分鐘 6 次）。音景會跟著呼吸起伏。', style: t.bodySmall),
+            Text('吸氣 4 秒、吐氣 6 秒（每分鐘 6 次）。音景會跟著呼吸起伏，長鳴與鈴聲以 432Hz 調音。', style: t.bodySmall),
             const SizedBox(height: 20),
             Text('時長', style: t.bodyMedium),
             const SizedBox(height: 8),
@@ -82,6 +85,13 @@ class _SetupSheetState extends State<_SetupSheet> {
               value: _bells,
               onChanged: (v) => setState(() => _bells = v),
             ),
+            SwitchListTile(
+              contentPadding: EdgeInsets.zero,
+              title: Text('雙耳節拍 7.83Hz', style: t.bodyMedium),
+              subtitle: Text('需戴耳機：左耳 216Hz、右耳 223.83Hz，兩耳相差 7.83Hz', style: t.bodySmall),
+              value: _binaural,
+              onChanged: (v) => setState(() => _binaural = v),
+            ),
             const SizedBox(height: 4),
             Text('建議戴耳機；手機喇叭較難聽出低沉的聲音。', style: t.bodySmall),
             const SizedBox(height: 20),
@@ -90,11 +100,13 @@ class _SetupSheetState extends State<_SetupSheet> {
                 onPressed: () {
                   _lastMinutes = _minutes;
                   _lastBells = _bells;
+                  _lastBinaural = _binaural;
                   Navigator.of(context).pop(SessionSpec(
                     upper: info.upper,
                     lower: info.lower,
                     minutes: _minutes,
                     bells: _bells,
+                    binaural: _binaural,
                   ));
                 },
                 child: const Text('開始'),

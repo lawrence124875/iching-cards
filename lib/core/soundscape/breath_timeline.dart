@@ -50,7 +50,7 @@ class SessionTimeline {
     this.pattern = const BreathPattern(),
     this.leadIn = 3,
     this.tail = 5,
-    this.depth = 0.4,
+    this.depth = 0.35,
   });
 
   final int minutes;

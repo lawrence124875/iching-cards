@@ -1,31 +1,32 @@
 import 'dart:async';
 
+import 'package:audio_service/audio_service.dart';
 import 'package:just_audio/just_audio.dart';
-import 'package:just_audio_background/just_audio_background.dart';
 
 import 'audio_playback.dart';
+import 'breath_audio_handler.dart';
 
-/// 以 just_audio 播放；搭配 just_audio_background（main.dart 初始化），
-/// 離開 App 或關閉螢幕仍會繼續播放，並在通知列與鎖定畫面顯示播放狀態與暫停／播放鍵。
+/// 以 just_audio 播放；背景播放與通知／鎖定畫面控制由 BreathAudioHandler（audio_service）處理。
+/// 背景服務初始化失敗時退回一般播放器：仍可在前景播放，只是沒有通知控制。
 class JustAudioPlayback implements AudioPlayback {
-  /// 延後建立：必須在 JustAudioBackground.init() 之後才建立播放器。
-  late final AudioPlayer _player = AudioPlayer();
-
-  /// main.dart 初始化背景播放的結果；失敗時仍可在前景播放，只是沒有通知控制。
-  static bool backgroundReady = false;
+  static BreathAudioHandler? _handler;
 
   static Future<void> initBackground() async {
     try {
-      await JustAudioBackground.init(
-        androidNotificationChannelId: 'com.lclab.qiangua.breath',
-        androidNotificationChannelName: '呼吸音景',
-        androidNotificationIcon: 'drawable/ic_stat_qian', // 單色謙卦卦象（branding/android/res）
+      _handler = await AudioService.init(
+        builder: BreathAudioHandler.new,
+        config: const AudioServiceConfig(
+          androidNotificationChannelId: 'com.lclab.qiangua.breath',
+          androidNotificationChannelName: '呼吸音景',
+          androidNotificationIcon: 'drawable/ic_stat_qian', // 單色謙卦卦象（branding/android/res）
+        ),
       ).timeout(const Duration(seconds: 5));
-      backgroundReady = true;
     } catch (_) {
-      backgroundReady = false;
+      _handler = null; // 例如上次的背景服務還沒釋放；不影響 App 啟動
     }
   }
+
+  late final AudioPlayer _player = _handler?.player ?? AudioPlayer();
 
   @override
   Future<Duration?> load(
@@ -34,17 +35,17 @@ class JustAudioPlayback implements AudioPlayback {
     required String title,
     String subtitle = '',
     String? artFilePath,
-  }) {
-    return _player.setAudioSource(AudioSource.file(
-      filePath,
-      tag: MediaItem(
-        id: id,
-        title: title,
-        artist: subtitle,
-        album: '謙卦',
-        artUri: artFilePath == null ? null : Uri.file(artFilePath),
-      ),
+  }) async {
+    final d = await _player.setFilePath(filePath);
+    _handler?.mediaItem.add(MediaItem(
+      id: id,
+      title: title,
+      artist: subtitle,
+      album: '謙卦',
+      duration: d,
+      artUri: artFilePath == null ? null : Uri.file(artFilePath),
     ));
+    return d;
   }
 
   @override
@@ -57,7 +58,14 @@ class JustAudioPlayback implements AudioPlayback {
   Future<void> pause() => _player.pause();
 
   @override
-  Future<void> stop() => _player.stop();
+  Future<void> stop() async {
+    final h = _handler;
+    if (h != null) {
+      await h.stopFromApp();
+    } else {
+      await _player.stop();
+    }
+  }
 
   @override
   Duration get position => _player.position;
@@ -68,4 +76,7 @@ class JustAudioPlayback implements AudioPlayback {
   @override
   Stream<void> get completed =>
       _player.processingStateStream.where((s) => s == ProcessingState.completed).map((_) {});
+
+  @override
+  Stream<void> get stoppedExternally => _handler?.externalStops ?? const Stream.empty();
 }

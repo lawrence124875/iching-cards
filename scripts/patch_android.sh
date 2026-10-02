@@ -83,7 +83,7 @@ if "proguard-rules.pro" not in g:
 PYEOF
 grep -q "proguard-rules.pro" "$GRADLE" && echo "已套用 ProGuard 規則（通知排程）" || { echo "::error::ProGuard 規則未套用"; exit 1; }
 
-# 呼吸音景背景播放與通知／鎖定畫面控制（just_audio_background → audio_service）：
+# 呼吸音景背景播放與通知／鎖定畫面控制（audio_service，見 lib/core/audio/breath_audio_handler.dart）：
 # 1) 前景服務權限；2) AudioService 與 MediaButtonReceiver；3) MainActivity 改繼承 AudioServiceActivity；
 # 4) launchMode=singleTask——AudioServiceActivity 共用同一個 FlutterEngine，點通知若另建第二個
 #    MainActivity，舊的被銷毀時會把引擎拆走，畫面卡住（智慧聽覺巡航 2026-09-29 的教訓）。

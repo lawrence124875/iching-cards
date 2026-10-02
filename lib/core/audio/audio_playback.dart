@@ -25,4 +25,7 @@ abstract class AudioPlayback {
 
   /// 播放到結尾。
   Stream<void> get completed;
+
+  /// 使用者在通知列或鎖定畫面按了「停止」（或從最近使用列表滑掉 App）。
+  Stream<void> get stoppedExternally;
 }

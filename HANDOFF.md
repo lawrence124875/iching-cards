@@ -1,7 +1,7 @@
 # HANDOFF — 易經卦卡 App（名稱未定）
 
 > 新對話接續時請先讀本檔。本檔記錄已確定的決策、內容規格與待討論事項。
-> 最後更新：2026-10-02（0.1.0+12：版面修正，見 14.3；0.1.0+11：卦記提醒準時模式，見 13 節末；0.1.0+10：音景柔和版、432Hz 調音、雙耳節拍，見 14.2；0.1.0+9：實機回饋修正與音景背景播放，見 14.1；**呼吸音景** 0.1.0+8，見第 14 節；卦記功能 0.1.0+7，見第 13 節；**64 卦中文初稿全部完成**，01–36 東西相映名人優先檢查也已完成（見 4.5），下一步由使用者審閱定稿；多語言規劃見第 12 節）
+> 最後更新：2026-10-02（0.1.0+13：鎖定畫面暫停／停止鍵、桌面圖示比例，見 14.4；0.1.0+12：版面修正，見 14.3；0.1.0+11：卦記提醒準時模式，見 13 節末；0.1.0+10：音景柔和版、432Hz 調音、雙耳節拍，見 14.2；0.1.0+9：實機回饋修正與音景背景播放，見 14.1；**呼吸音景** 0.1.0+8，見第 14 節；卦記功能 0.1.0+7，見第 13 節；**64 卦中文初稿全部完成**，01–36 東西相映名人優先檢查也已完成（見 4.5），下一步由使用者審閱定稿；多語言規劃見第 12 節）
 
 ---
 
@@ -354,11 +354,11 @@ App 名稱與 applicationId、商業模式（廣告與付費內容）、隱私�
 ### 11.2 暫定設定
 - **定名（2026-10-01）**：開發者 **LC Lab**；App 名 **謙卦**（英文 Qiangua）。桌面名稱「謙卦」；首頁大標「謙卦」、副標「易經六十四卦卡」；Google Play 標題預定「謙卦｜易經六十四卦卡」。2026-10-01 使用者已在 Google Play／App Store 搜尋，確認沒有名為「謙卦」的 App（商標可在上架前另查）。
 - **套件名稱 `com.lclab.qiangua`**（0.1.0+5 起；上傳 Play 後永遠不能改）。由 `patch_android.sh` 改 applicationId；`flutter create --org com.lclab`，namespace 維持產生值。舊版 `tw.bcc.iching_cards` 是不同 App，測試機需手動移除。
-- 版本 `0.1.0+12`（+12：卦記縮圖、底部被導覽列擋住、音景設定面板；+11：卦記提醒準時模式；+10：音景柔和版、432Hz、雙耳節拍，見 14.2；+9：實機回饋修正、音景背景播放與通知控制，見 14.1；+8：呼吸音景，見第 14 節；+7：卦記與回顧提醒，見第 13 節；+3：首頁水平置中修正、桌面圖示；+4：固定直向；+5：定名謙卦、套件名稱 com.lclab.qiangua；+6：擲錢頁收斂在一個畫面、點牌面圖滿版看象）。
+- 版本 `0.1.0+13`（+13：鎖定畫面控制改用 audio_service、桌面圖示留白；+12：卦記縮圖、底部被導覽列擋住、音景設定面板；+11：卦記提醒準時模式；+10：音景柔和版、432Hz、雙耳節拍，見 14.2；+9：實機回饋修正、音景背景播放與通知控制，見 14.1；+8：呼吸音景，見第 14 節；+7：卦記與回顧提醒，見第 13 節；+3：首頁水平置中修正、桌面圖示；+4：固定直向；+5：定名謙卦、套件名稱 com.lclab.qiangua；+6：擲錢頁收斂在一個畫面、點牌面圖滿版看象）。
 - **滿版看圖**（0.1.0+6，`shared/widgets/card_art_viewer.dart`）：`CardFace(zoomable: true)` 時點風景圖開啟；預設 cover 填滿螢幕、隱藏系統列，點兩下切換完整畫面（contain），兩指縮放，點一下返回。目前用於抽卡翻牌後與解讀頁。
 - **擲錢頁版面**（0.1.0+6）：不再捲動；六爻列固定保留（未擲顯示「—」），中段以 FittedBox 等比縮小以適應小螢幕或大字體，按鈕固定在底部。
 - **固定直向**：卦卡為 9:16 直式，`main.dart` 以 `SystemChrome` 鎖直向，Android 另由 `patch_android.sh` 在 AndroidManifest 加 `screenOrientation="portrait"`。iOS 上架時需在 Info.plist 只留 Portrait。平板若要支援橫向，再另做雙欄版面。
-- 外部套件（0.1.0+7 起）：`path_provider`、`flutter_local_notifications` ^18、`timezone` ^0.9（版本同智慧聽覺巡航）；0.1.0+8 加 `just_audio` ^0.10.4（播放音景）、`wakelock_plus` ^1.2.8（練習時螢幕不關）；0.1.0+9 加 `just_audio_background` ^0.0.1-beta.17（背景播放、通知與鎖定畫面控制，內部用 audio_service，與智慧聽覺巡航同一套）。字體用系統字體；思源宋體／黑體留待第二階段打包。
+- 外部套件（0.1.0+7 起）：`path_provider`、`flutter_local_notifications` ^18、`timezone` ^0.9（版本同智慧聽覺巡航）；0.1.0+8 加 `just_audio` ^0.10.4（播放音景）、`wakelock_plus` ^1.2.8（練習時螢幕不關）；0.1.0+9 曾加 `just_audio_background`，0.1.0+13 改為直接用 `audio_service` ^0.18.15（見 14.4）。字體用系統字體；思源宋體／黑體留待第二階段打包。
 - 英文卦義為自撰暫定詞，英文版上線前再審。
 - `android/`、`ios/` 不進 repo，CI 以 `flutter create` 產生（同英文 App 做法）；`flutter create` 會產生的 `test/widget_test.dart` 在 CI 中刪除。
 - `assets/content/`、`assets/cards/` 在本 repo 只有 `.gitkeep`，`.gitignore` 擋住 json／webp，**內容永遠不進公開 repo**。
@@ -486,6 +486,14 @@ checkout 本 repo → 以 `BUILDS_REPO_TOKEN` sparse-checkout iching-content 的
 - **卦記單筆頁**：110 寬的牌面縮圖原本直接排版，字擠成一團（英文換行、上下經卦壓到「想問的事」）。改為以 240 寬原尺寸排版後 `FittedBox` 等比縮小。「當時的解讀」改成小標＋下一行標題，不再斷成「宜日／中」。
 - **底部被系統導覽列擋住**：App 是 edge-to-edge（看圖頁離開時設 `SystemUiMode.edgeToEdge`），清單底部要自己讓出導覽列。解讀頁、經文詳細頁、卦記列表、卦記單筆頁的 ListView 底部 padding 加上 `MediaQuery.viewPaddingOf(context).bottom`；「記下這一卦」面板同樣處理。⚠️ 之後新增可捲動頁面或底部面板都要照做。
 - **呼吸音景設定面板**：內容超過螢幕高度時「開始」被截掉。改為可捲動並讓出導覽列；兩個開關改 dense、雙耳節拍說明縮短。
+
+### 14.4 0.1.0+13 鎖定畫面控制、桌面圖示（2026-10-02 實機截圖回饋）
+
+- **鎖定畫面與通知列沒有暫停、停止鍵**（Redmi／MIUI）：just_audio_background 只送出預設按鈕，MIUI 媒體卡片只顯示進度條。改為直接用 audio_service：`lib/core/audio/breath_audio_handler.dart`（`BreathAudioHandler`）包住 just_audio 播放器，明確指定按鈕「暫停／播放、停止」並設為精簡按鈕（`androidCompactActionIndices [0, 1]`），播放狀態隨播放器事件同步；`mediaItem` 帶 duration 顯示進度。
+  - 通知或鎖定畫面按「停止」→ `AudioPlayback.stoppedExternally` → 練習頁顯示「已結束・已從通知列停止」。App 自己停止（播完、離開頁面）走 `stopFromApp()`，不觸發此事件。
+  - 從最近使用列表滑掉 App → `onTaskRemoved` 停止並收掉卡片（智慧聽覺巡航的教訓）。
+  - `main.dart` 的 `JustAudioPlayback.initBackground()` 改為 `AudioService.init`（5 秒逾時；失敗退回一般播放器，只是沒有通知控制）。Android 設定沿用 14.1（AudioService、AudioServiceActivity、singleTask），不必改。
+- **桌面圖示比 icon-1024.png 擁擠**：自適應圖示的可見範圍約為前景畫布 66.7%，原本卦卡高度為畫布 60%，在桌面上佔滿可見高度約 89%。`draw_icon.py` 改為 52%（約 78%，與 icon-1024.png 比例相同），重新產生各密度 `ic_launcher_foreground.png`；傳統圖示外觀不變。MIUI 可能快取舊圖示，若沒變可重新開機或移除重裝。
 
 ## 8. 範例內容：謙卦（第十五卦，地山謙 ䷎，Qiān · Modesty）
 

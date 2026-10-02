@@ -46,6 +46,9 @@ class _BreathPageState extends State<BreathPage> with SingleTickerProviderStateM
   bool _silent = false;
   bool _paused = false;
   bool _everPlayed = false;
+
+  /// 從通知列或鎖定畫面按了「停止」。
+  bool _stoppedEarly = false;
   _Stage _stage = _Stage.preparing;
 
   String get _soundNames => _info.upper == _info.lower
@@ -88,6 +91,10 @@ class _BreathPageState extends State<BreathPage> with SingleTickerProviderStateM
       _loaded = true;
       _subs.add(p.playingChanges.listen(_onPlaying));
       _subs.add(p.completed.listen((_) => _finish(stopAudio: true)));
+      _subs.add(p.stoppedExternally.listen((_) {
+        _stoppedEarly = _stage == _Stage.running;
+        _finish(stopAudio: false);
+      }));
       if (!mounted) return;
       _start();
     } catch (_) {
@@ -153,7 +160,7 @@ class _BreathPageState extends State<BreathPage> with SingleTickerProviderStateM
     _ticker.stop();
     _clock.stop();
     _svc?.screenAwake.set(false);
-    _now.value = _tl.breathEnd;
+    if (!_stoppedEarly) _now.value = _tl.breathEnd;
     setState(() => _stage = _Stage.done);
   }
 
@@ -248,9 +255,13 @@ class _BreathPageState extends State<BreathPage> with SingleTickerProviderStateM
         );
       case _Stage.done:
         return Column(mainAxisSize: MainAxisSize.min, children: [
-          Text('完成', style: t.headlineSmall),
+          Text(_stoppedEarly ? '已結束' : '完成', style: t.headlineSmall),
           const SizedBox(height: 8),
-          Text('${widget.spec.minutes} 分鐘・${widget.spec.minutes * 6} 次呼吸', style: t.bodySmall),
+          Text(
+              _stoppedEarly
+                  ? '已從通知列停止'
+                  : '${widget.spec.minutes} 分鐘・${widget.spec.minutes * 6} 次呼吸',
+              style: t.bodySmall),
         ]);
       case _Stage.running:
         return Column(mainAxisSize: MainAxisSize.min, children: [

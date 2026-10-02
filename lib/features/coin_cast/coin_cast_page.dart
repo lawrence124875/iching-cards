@@ -6,6 +6,7 @@ import '../../core/iching/cast_result.dart';
 import '../../core/iching/divination_method.dart';
 import '../../reading/reading_page.dart';
 import '../../shared/widgets/hexagram_glyph.dart';
+import '../../shared/widgets/question_dialog.dart';
 
 const _lineNames = ['初', '二', '三', '四', '五', '上'];
 
@@ -21,6 +22,7 @@ class CoinCastPage extends StatefulWidget {
 class _CoinCastPageState extends State<CoinCastPage> {
   static const _method = ThreeCoins();
   final List<CoinToss> _tosses = [];
+  String _question = '';
 
   bool get _done => _tosses.length == 6;
 
@@ -57,6 +59,7 @@ class _CoinCastPageState extends State<CoinCastPage> {
                 textAlign: TextAlign.center,
                 style: t.bodySmall,
               ),
+              QuestionPrompt(question: _question, onChanged: (q) => setState(() => _question = q)),
               Expanded(
                 child: LayoutBuilder(
                   builder: (context, box) => Center(
@@ -91,7 +94,10 @@ class _CoinCastPageState extends State<CoinCastPage> {
               ] else ...[
                 FilledButton(
                   onPressed: () => Navigator.of(context).push(MaterialPageRoute<void>(
-                    builder: (_) => ReadingPage(cast: CastResult(methodId: _method.id, lines: lines)),
+                    builder: (_) => ReadingPage(
+                      cast: CastResult(methodId: _method.id, lines: lines),
+                      question: _question,
+                    ),
                   )),
                   child: const Text('看解讀'),
                 ),

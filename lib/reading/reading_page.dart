@@ -10,13 +10,24 @@ import '../core/iching/hexagram_table.dart';
 import '../shared/widgets/card_face.dart';
 import '../shared/widgets/hexagram_glyph.dart';
 import 'detail_page.dart';
+import 'save_reading_sheet.dart';
 import 'section.dart';
 
-/// 解讀頁：牌面 →（擲錢時）本次重點 → 隨機一組解讀 → 東西相映 → 小行動與提問。
+/// 解讀頁：牌面 →（擲錢時）本次重點 → 隨機一組解讀 → 東西相映 → 小行動與提問 →（記下這一卦）。
+/// [review] 為 true 時是從卦記回看：顯示當時那一組解讀（[readingIndex]），不發事件、不顯示儲存。
 class ReadingPage extends StatefulWidget {
-  const ReadingPage({super.key, required this.cast});
+  const ReadingPage({
+    super.key,
+    required this.cast,
+    this.question = '',
+    this.readingIndex,
+    this.review = false,
+  });
 
   final CastResult cast;
+  final String question;
+  final int? readingIndex;
+  final bool review;
 
   @override
   State<ReadingPage> createState() => _ReadingPageState();
@@ -29,11 +40,13 @@ class _ReadingPageState extends State<ReadingPage> {
     if (widget.cast.changed != null) _services.content.hexagram(widget.cast.changed!),
   ]);
   late final FocusResult _focus = _services.focusRule.focus(widget.cast);
-  late final int _readingSeed = _services.random.nextInt(1 << 30);
+  late final int _readingSeed = widget.readingIndex ?? _services.random.nextInt(1 << 30);
+  bool _saved = false;
 
   @override
   void initState() {
     super.initState();
+    if (widget.review) return;
     WidgetsBinding.instance.addPostFrameCallback((_) {
       _services.events.emit(ReadingShown(
         methodId: widget.cast.methodId,
@@ -64,6 +77,12 @@ class _ReadingPageState extends State<ReadingPage> {
           return ListView(
             padding: const EdgeInsets.fromLTRB(24, 8, 24, 40),
             children: [
+              if (widget.question.isNotEmpty)
+                Padding(
+                  padding: const EdgeInsets.only(bottom: 16),
+                  child: Text('問：${widget.question}',
+                      textAlign: TextAlign.center, style: Theme.of(context).textTheme.bodyMedium),
+                ),
               Center(
                 child: SizedBox(
                   width: 240,
@@ -97,6 +116,18 @@ class _ReadingPageState extends State<ReadingPage> {
                 Section(title: '今日小行動', child: Text(reading.action)),
                 Section(title: '反思提問', child: Text(reading.question)),
               ],
+              if (!widget.review && _services.journal != null) ...[
+                const SizedBox(height: 32),
+                Center(
+                  child: _saved
+                      ? Text('已記在「卦記」，日後可從首頁回來對照。', style: Theme.of(context).textTheme.bodySmall)
+                      : FilledButton.icon(
+                          onPressed: () => _save(pc),
+                          icon: const Icon(Icons.bookmark_add_outlined),
+                          label: const Text('記下這一卦'),
+                        ),
+                ),
+              ],
               const SizedBox(height: 32),
               OutlinedButton(
                 onPressed: () => _openDetail(context, cast.primary, cast.primary == _focusHexagram ? _focusLines : const {}),
@@ -114,6 +145,17 @@ class _ReadingPageState extends State<ReadingPage> {
         },
       ),
     );
+  }
+
+  Future<void> _save(HexagramContent? pc) async {
+    final index = (pc == null || pc.readings.isEmpty) ? null : _readingSeed % pc.readings.length;
+    final entry = await showSaveReadingSheet(
+      context,
+      cast: widget.cast,
+      question: widget.question,
+      readingIndex: index,
+    );
+    if (entry != null && mounted) setState(() => _saved = true);
   }
 
   int? get _focusHexagram {

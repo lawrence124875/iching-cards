@@ -9,6 +9,7 @@ import '../../reading/reading_page.dart';
 import '../../shared/widgets/card_back.dart';
 import '../../shared/widgets/card_face.dart';
 import '../../shared/widgets/flip_card.dart';
+import '../../shared/widgets/question_dialog.dart';
 
 /// 簡單抽卡：靜心 → 點牌翻開 → 看解讀。
 class DrawPage extends StatefulWidget {
@@ -21,6 +22,7 @@ class DrawPage extends StatefulWidget {
 class _DrawPageState extends State<DrawPage> {
   static const _method = SimpleDraw();
   CastResult? _cast;
+  String _question = '';
 
   void _draw() {
     if (_cast != null) return;
@@ -45,7 +47,8 @@ class _DrawPageState extends State<DrawPage> {
                 style: t.bodyMedium?.copyWith(color: QianColors.textSub),
                 textAlign: TextAlign.center,
               ),
-              const SizedBox(height: 20),
+              QuestionPrompt(question: _question, onChanged: (q) => setState(() => _question = q)),
+              const SizedBox(height: 8),
               Expanded(
                 child: Center(
                   child: AspectRatio(
@@ -73,7 +76,7 @@ class _DrawPageState extends State<DrawPage> {
               else ...[
                 FilledButton(
                   onPressed: () => Navigator.of(context).push(
-                    MaterialPageRoute<void>(builder: (_) => ReadingPage(cast: cast)),
+                    MaterialPageRoute<void>(builder: (_) => ReadingPage(cast: cast, question: _question)),
                   ),
                   child: const Text('看解讀'),
                 ),

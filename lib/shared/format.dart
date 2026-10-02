@@ -1,0 +1,11 @@
+/// 日期顯示（不引入 intl）：2026/10/02 20:05
+String formatDateTime(DateTime d) =>
+    '${formatDate(d)} ${d.hour.toString().padLeft(2, '0')}:${d.minute.toString().padLeft(2, '0')}';
+
+String formatDate(DateTime d) =>
+    '${d.year}/${d.month.toString().padLeft(2, '0')}/${d.day.toString().padLeft(2, '0')}';
+
+String methodLabel(String methodId) => switch (methodId) {
+      'coins' => '三枚銅錢起卦',
+      _ => '抽一卦',
+    };

@@ -16,6 +16,45 @@ grep -q 'android:screenOrientation' "$MANIFEST" || \
   sed -i '0,/<activity/s//<activity android:screenOrientation="portrait"/' "$MANIFEST"
 grep -q 'android:screenOrientation="portrait"' "$MANIFEST" && echo "已固定直向"
 
+# 卦記回顧提醒（flutter_local_notifications）：
+# 1) 通知與開機權限；2) 兩個 receiver——少了它們排程會「成功」但時間到永遠不會跳出，
+#    BootReceiver 讓重開機或更新後自動重新排程（智慧聽覺巡航 2026-09-27 的教訓）；
+# 3) core library desugaring。
+python3 - "$MANIFEST" "$GRADLE" << 'PYEOF'
+import re, sys
+manifest, gradle = sys.argv[1], sys.argv[2]
+m = open(manifest, encoding="utf-8").read()
+if "ScheduledNotificationReceiver" not in m:
+    perms = ('    <uses-permission android:name="android.permission.POST_NOTIFICATIONS"/>\n'
+             '    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>\n')
+    m = m.replace("<application", perms + "    <application", 1)
+    receivers = '''        <receiver android:exported="false"
+            android:name="com.dexterous.flutterlocalnotifications.ScheduledNotificationReceiver" />
+        <receiver android:exported="false"
+            android:name="com.dexterous.flutterlocalnotifications.ScheduledNotificationBootReceiver">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED"/>
+                <action android:name="android.intent.action.MY_PACKAGE_REPLACED"/>
+                <action android:name="android.intent.action.QUICKBOOT_POWERON" />
+                <action android:name="com.htc.intent.action.QUICKBOOT_POWERON"/>
+            </intent-filter>
+        </receiver>
+    </application>'''
+    m = m.replace("</application>", receivers, 1)
+    open(manifest, "w", encoding="utf-8").write(m)
+g = open(gradle, encoding="utf-8").read()
+if "isCoreLibraryDesugaringEnabled" not in g:
+    g = re.sub(r'(compileOptions\s*\{)', r'\1\n        isCoreLibraryDesugaringEnabled = true', g, count=1)
+if "coreLibraryDesugaring(" not in g:
+    g = g.rstrip() + '\n\ndependencies {\n    coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:2.1.4")\n}\n'
+open(gradle, "w", encoding="utf-8").write(g)
+PYEOF
+if grep -q ScheduledNotificationBootReceiver "$MANIFEST" && grep -q isCoreLibraryDesugaringEnabled "$GRADLE"; then
+  echo "已設定通知 receiver 與 desugaring"
+else
+  echo "::error::通知 receiver 或 desugaring 設定失敗（flutter create 範本可能改了）"; exit 1
+fi
+
 # 桌面圖示（謙卦卦卡）：覆蓋 flutter create 的預設圖示，含 Android 8+ 自適應圖示
 cp -r branding/android/res/. android/app/src/main/res/
 echo "已套用桌面圖示"

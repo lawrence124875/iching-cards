@@ -1,5 +1,6 @@
 import '../features/coin_cast/coin_cast_feature.dart';
 import '../features/draw/draw_feature.dart';
+import '../features/journal/journal_feature.dart';
 import 'app_feature.dart';
 
 export 'app_feature.dart';
@@ -8,4 +9,5 @@ export 'app_feature.dart';
 final List<AppFeature> registeredFeatures = [
   drawFeature,
   coinCastFeature,
+  journalFeature,
 ];

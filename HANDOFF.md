@@ -326,7 +326,12 @@ App 名稱與 applicationId、商業模式（廣告與付費內容）、隱私�
 1. ~~設定上傳金鑰~~、~~首頁置中與桌面圖示~~（0.1.0+3，run #4 完成）。使用者實機試用中（APK：https://github.com/lawrence124875/iching-content/releases ）。
 2. 乾、坤卦：使用者看過實機後同意開始量產內容，格式沿用；之後有回饋再回頭修。
 3. **內容量產**（2026-10-02 起）：**01～64 中文初稿全部完成**（2026-10-02，run 由 workflow_dispatch 觸發）。01–36 東西相映名人優先檢查已完成（2026-10-02，換 8 項，見 4.5）。經文版本差異（iching-content README）2026-10-02 使用者決定全部照王弼本採用，不再核對。**下一步**：使用者以手機逐卦審閱（另提供審閱用 Excel：64 卦東西相映、今日更動、經文差異，含「我的意見／狀態」欄，存於私人 repo iching-content `review/謙卦_64卦審閱表.xlsx`，不進本公開 repo），使用者回傳意見後修改；未提意見者視為定稿，再依第 12 節開始英文版。以下流程仍適用於修改既有卦：一個對話寫 4～5 卦（單一對話的長度上限，寫不完 62 卦），格式同 `01-qian.json`、`02-kun.json`。`art.prompt` 從 iching-content `prompts/art-prompts.md` 搬入（圖已定案，`art.status` 填「已定案」）。每批完成後更新 iching-content README 進度。流程：clone iching-content（sparse：zh-Hant、prompts、tools）→ 寫 `zh-Hant/NN-slug.json`（不含 `art`）→ `python3 tools/finalize_hexagram.py NN` 自動填入提示詞並檢查結構 → 每完成一卦就 commit＋push。參考經文（簡體，僅比對用、不進 repo）：`curl -sL https://raw.githubusercontent.com/NanBox/PiPiName/master/data/%E5%91%A8%E6%98%93.txt`（容器網路無法連維基文庫）。比對時以 opencc（`pip install opencc-python-reimplemented`）簡轉繁、切出 `NN.md` 給 `REF_DIR`；轉換造成的假差異（于／於、干／幹、斗／鬥、征凶／徵兇、為／爲）可忽略。卦辭不以「卦名：」開頭者（履、同人、艮）腳本會報錯，需人工比對。整批完成後以 workflow_dispatch 觸發建置（只改 .md 不會自動建置）。經文與參考本不同處記在 iching-content README「待人工核對」。
-4. 程式待辦（有空檔或回饋時）：字體打包、牌面細節。
+4. **審閱期間並行的工作（2026-10-02 使用者同意，依序各開一個新對話）**：
+   1. 【程式】呼吸音景（§7 第 2 項）：音源採程式合成（不用錄音檔，免授權追蹤）；呼吸節奏與時長由使用者決定後開工（見下方決定紀錄）。
+   2. 【程式】字體打包（思源宋體／黑體）＋ Firebase（Analytics、Crashlytics、Remote Config）。Firebase 需使用者先建專案、下載 `google-services.json`，以 base64 存成 Secret（不進 repo）。
+   3. 【內容】11 語術語表：64 卦名、八經卦、爻位、易學術語（象、當位、應、比、內外卦等）的固定譯法，存 iching-content（建議 `glossary/`）。
+   4. 【程式】介面翻譯：先建 Flutter 多語系架構（ARB），翻譯按鈕、選單等介面文字；依 §12，內容未完整翻譯的語言不開放。
+5. 程式待辦（有空檔或回饋時）：牌面細節。
 
 ## 11. 程式現況（2026-10-01 骨架完成）
 

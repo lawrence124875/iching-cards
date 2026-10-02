@@ -76,7 +76,8 @@ class _ReadingPageState extends State<ReadingPage> {
               : pc.readings[_readingSeed % pc.readings.length];
 
           return ListView(
-            padding: const EdgeInsets.fromLTRB(24, 8, 24, 40),
+            // 底部加上系統導覽列高度，最後的按鈕不會被擋住
+            padding: EdgeInsets.fromLTRB(24, 8, 24, 40 + MediaQuery.viewPaddingOf(context).bottom),
             children: [
               if (widget.question.isNotEmpty)
                 Padding(

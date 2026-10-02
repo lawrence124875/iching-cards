@@ -87,7 +87,8 @@ class _SaveSheetState extends State<_SaveSheet> {
       behavior: HitTestBehavior.opaque,
       onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
       child: SingleChildScrollView(
-      padding: EdgeInsets.fromLTRB(24, 20, 24, 20 + MediaQuery.of(context).viewInsets.bottom),
+      padding: EdgeInsets.fromLTRB(
+          24, 20, 24, 20 + MediaQuery.of(context).viewInsets.bottom + MediaQuery.viewPaddingOf(context).bottom),
       child: SafeArea(
         top: false,
         child: Column(

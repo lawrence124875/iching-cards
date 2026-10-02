@@ -150,7 +150,7 @@ class _JournalEntryPageState extends State<JournalEntryPage> {
         : null;
 
     return ListView(
-      padding: const EdgeInsets.fromLTRB(24, 8, 24, 40),
+      padding: EdgeInsets.fromLTRB(24, 8, 24, 40 + MediaQuery.viewPaddingOf(context).bottom),
       children: [
         Text('${formatDateTime(e.createdAt)}・${methodLabel(e.methodId)}',
             textAlign: TextAlign.center, style: t.bodySmall),
@@ -158,7 +158,14 @@ class _JournalEntryPageState extends State<JournalEntryPage> {
         Row(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            SizedBox(width: 110, child: AspectRatio(aspectRatio: 0.62, child: CardFace(info: p, zoomable: true))),
+            // 牌面按原尺寸排版後等比縮小，小縮圖裡的字才不會擠在一起
+            SizedBox(
+              width: 110,
+              height: 110 / 0.62,
+              child: FittedBox(
+                child: SizedBox(width: 240, height: 240 / 0.62, child: CardFace(info: p, zoomable: true)),
+              ),
+            ),
             const SizedBox(width: 20),
             Expanded(
               child: Column(
@@ -179,8 +186,10 @@ class _JournalEntryPageState extends State<JournalEntryPage> {
                     ]),
                   ],
                   if (reading != null) ...[
-                    const SizedBox(height: 12),
-                    Text('當時的解讀：${reading.title}', style: t.bodyMedium),
+                    const SizedBox(height: 16),
+                    Text('當時的解讀', style: t.bodySmall),
+                    const SizedBox(height: 2),
+                    Text(reading.title, style: t.titleMedium),
                   ],
                 ],
               ),

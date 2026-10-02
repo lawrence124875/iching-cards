@@ -39,7 +39,7 @@ class _List extends StatelessWidget {
           final entries = snap.data!;
           if (entries.isEmpty) return const _Empty();
           return ListView.separated(
-            padding: const EdgeInsets.fromLTRB(16, 8, 16, 32),
+            padding: EdgeInsets.fromLTRB(16, 8, 16, 32 + MediaQuery.viewPaddingOf(context).bottom),
             itemCount: entries.length,
             separatorBuilder: (_, __) => const Divider(height: 1, color: QianColors.inkCard),
             itemBuilder: (context, i) => _Tile(entry: entries[i]),

@@ -51,10 +51,10 @@ class _SetupSheetState extends State<_SetupSheet> {
         : '上卦 ${info.upper.label}・${info.upper.nature}：${soundscapeName(info.upper)}\n'
             '下卦 ${info.lower.label}・${info.lower.nature}：${soundscapeName(info.lower)}';
 
-    return SafeArea(
-      child: Padding(
-        padding: const EdgeInsets.fromLTRB(28, 24, 28, 20),
-        child: Column(
+    // 內容可捲動、底部讓出系統導覽列，「開始」不會被擋住（0.1.0+12）
+    return SingleChildScrollView(
+      padding: EdgeInsets.fromLTRB(28, 24, 28, 20 + MediaQuery.viewPaddingOf(context).bottom),
+      child: Column(
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -63,7 +63,7 @@ class _SetupSheetState extends State<_SetupSheet> {
             Text(sounds, style: t.bodyMedium),
             const SizedBox(height: 4),
             Text('吸氣 4 秒、吐氣 6 秒（每分鐘 6 次）。音景會跟著呼吸起伏，長鳴與鈴聲以 432Hz 調音。', style: t.bodySmall),
-            const SizedBox(height: 20),
+            const SizedBox(height: 16),
             Text('時長', style: t.bodyMedium),
             const SizedBox(height: 8),
             Wrap(
@@ -79,6 +79,7 @@ class _SetupSheetState extends State<_SetupSheet> {
             ),
             const SizedBox(height: 8),
             SwitchListTile(
+              dense: true,
               contentPadding: EdgeInsets.zero,
               title: Text('換氣時輕敲鈴聲', style: t.bodyMedium),
               subtitle: Text('閉上眼睛也能跟著吸吐', style: t.bodySmall),
@@ -86,15 +87,16 @@ class _SetupSheetState extends State<_SetupSheet> {
               onChanged: (v) => setState(() => _bells = v),
             ),
             SwitchListTile(
+              dense: true,
               contentPadding: EdgeInsets.zero,
               title: Text('雙耳節拍 7.83Hz', style: t.bodyMedium),
-              subtitle: Text('需戴耳機：左耳 216Hz、右耳 223.83Hz，兩耳相差 7.83Hz', style: t.bodySmall),
+              subtitle: Text('需戴耳機（左 216Hz、右 223.83Hz）', style: t.bodySmall),
               value: _binaural,
               onChanged: (v) => setState(() => _binaural = v),
             ),
             const SizedBox(height: 4),
             Text('建議戴耳機；手機喇叭較難聽出低沉的聲音。', style: t.bodySmall),
-            const SizedBox(height: 20),
+            const SizedBox(height: 16),
             Center(
               child: FilledButton(
                 onPressed: () {
@@ -113,7 +115,6 @@ class _SetupSheetState extends State<_SetupSheet> {
               ),
             ),
           ],
-        ),
       ),
     );
   }

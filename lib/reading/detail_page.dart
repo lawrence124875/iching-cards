@@ -36,7 +36,7 @@ class _DetailPageState extends State<DetailPage> {
           }
           final c = snap.data;
           return ListView(
-            padding: const EdgeInsets.fromLTRB(24, 8, 24, 40),
+            padding: EdgeInsets.fromLTRB(24, 8, 24, 40 + MediaQuery.viewPaddingOf(context).bottom),
             children: [
               Center(child: HexagramGlyph(lines: info.lines, width: 64)),
               const SizedBox(height: 12),

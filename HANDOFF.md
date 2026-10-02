@@ -502,6 +502,7 @@ checkout 本 repo → 以 `BUILDS_REPO_TOKEN` sparse-checkout iching-content 的
 - 下載 run #30 的 APK 檢查資源表：裡面**完全沒有** audio_service 的 `audio_service_pause／play_arrow／stop` 等按鈕圖示。audio_service 是用名稱字串查這些圖示，release 版資源壓縮（shrinkResources）判斷沒人用就刪掉，按鈕圖示變成 0，小米卡片就整排不顯示。
 - 修法：`branding/android/res/raw/keep.xml` 的 `tools:keep` 加上 `@drawable/audio_service_*`。
 - ⚠️ **智慧聽覺巡航要做同樣修正**（它的 raw/keep.xml 或 res/raw 加 `tools:keep="@drawable/audio_service_*"`），需在英文 App 對話處理（本對話的權杖只能寫 iching-cards）。
+- ✅ 2026-10-02 使用者實機確認（小米）：鎖屏與通知中心已出現暫停、停止鍵；測試提醒準時跳出，桌面圖示右上角也出現數字角標。卦記提醒問題（ProGuard＋準時模式）結案。
 - 卦記單筆頁「回顧提醒」下方新增暫時按鈕「測試：1 分鐘後提醒」，用來實機驗證提醒與桌面圖示角標。⚠️ **上架前移除**（程式中標 `TODO(上架前移除)`）。
 
 ## 8. 範例內容：謙卦（第十五卦，地山謙 ䷎，Qiān · Modesty）

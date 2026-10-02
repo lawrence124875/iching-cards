@@ -1,7 +1,7 @@
 # HANDOFF — 易經卦卡 App（名稱未定）
 
 > 新對話接續時請先讀本檔。本檔記錄已確定的決策、內容規格與待討論事項。
-> 最後更新：2026-10-02（0.1.0+10：音景柔和版、432Hz 調音、雙耳節拍，見 14.2；0.1.0+9：實機回饋修正與音景背景播放，見 14.1；**呼吸音景** 0.1.0+8，見第 14 節；卦記功能 0.1.0+7，見第 13 節；**64 卦中文初稿全部完成**，01–36 東西相映名人優先檢查也已完成（見 4.5），下一步由使用者審閱定稿；多語言規劃見第 12 節）
+> 最後更新：2026-10-02（0.1.0+11：卦記提醒準時模式，見 13 節末；0.1.0+10：音景柔和版、432Hz 調音、雙耳節拍，見 14.2；0.1.0+9：實機回饋修正與音景背景播放，見 14.1；**呼吸音景** 0.1.0+8，見第 14 節；卦記功能 0.1.0+7，見第 13 節；**64 卦中文初稿全部完成**，01–36 東西相映名人優先檢查也已完成（見 4.5），下一步由使用者審閱定稿；多語言規劃見第 12 節）
 
 ---
 
@@ -354,7 +354,7 @@ App 名稱與 applicationId、商業模式（廣告與付費內容）、隱私�
 ### 11.2 暫定設定
 - **定名（2026-10-01）**：開發者 **LC Lab**；App 名 **謙卦**（英文 Qiangua）。桌面名稱「謙卦」；首頁大標「謙卦」、副標「易經六十四卦卡」；Google Play 標題預定「謙卦｜易經六十四卦卡」。2026-10-01 使用者已在 Google Play／App Store 搜尋，確認沒有名為「謙卦」的 App（商標可在上架前另查）。
 - **套件名稱 `com.lclab.qiangua`**（0.1.0+5 起；上傳 Play 後永遠不能改）。由 `patch_android.sh` 改 applicationId；`flutter create --org com.lclab`，namespace 維持產生值。舊版 `tw.bcc.iching_cards` 是不同 App，測試機需手動移除。
-- 版本 `0.1.0+10`（+10：音景柔和版、432Hz、雙耳節拍，見 14.2；+9：實機回饋修正、音景背景播放與通知控制，見 14.1；+8：呼吸音景，見第 14 節；+7：卦記與回顧提醒，見第 13 節；+3：首頁水平置中修正、桌面圖示；+4：固定直向；+5：定名謙卦、套件名稱 com.lclab.qiangua；+6：擲錢頁收斂在一個畫面、點牌面圖滿版看象）。
+- 版本 `0.1.0+11`（+11：卦記提醒準時模式；+10：音景柔和版、432Hz、雙耳節拍，見 14.2；+9：實機回饋修正、音景背景播放與通知控制，見 14.1；+8：呼吸音景，見第 14 節；+7：卦記與回顧提醒，見第 13 節；+3：首頁水平置中修正、桌面圖示；+4：固定直向；+5：定名謙卦、套件名稱 com.lclab.qiangua；+6：擲錢頁收斂在一個畫面、點牌面圖滿版看象）。
 - **滿版看圖**（0.1.0+6，`shared/widgets/card_art_viewer.dart`）：`CardFace(zoomable: true)` 時點風景圖開啟；預設 cover 填滿螢幕、隱藏系統列，點兩下切換完整畫面（contain），兩指縮放，點一下返回。目前用於抽卡翻牌後與解讀頁。
 - **擲錢頁版面**（0.1.0+6）：不再捲動；六爻列固定保留（未擲顯示「—」），中段以 FittedBox 等比縮小以適應小螢幕或大字體，按鈕固定在底部。
 - **固定直向**：卦卡為 9:16 直式，`main.dart` 以 `SystemChrome` 鎖直向，Android 另由 `patch_android.sh` 在 AndroidManifest 加 `screenOrientation="portrait"`。iOS 上架時需在 Info.plist 只留 Portrait。平板若要支援橫向，再另做雙欄版面。
@@ -407,6 +407,12 @@ checkout 本 repo → 以 `BUILDS_REPO_TOKEN` sparse-checkout iching-content 的
 - `scripts/patch_android.sh`：加入 POST_NOTIFICATIONS／RECEIVE_BOOT_COMPLETED 權限、兩個通知 receiver（少了會排程成功卻永遠不跳）、core library desugaring；設定失敗會讓 CI 失敗。
 - `test/journal_test.dart`：JSON 來回、跨月回顧時間、payload、儲存。
 - iOS 上架時：需在 AppDelegate 設定通知代理（flutter_local_notifications 的 iOS 說明），其餘程式共用。
+
+**準時模式（2026-10-02 使用者決定比照智慧聽覺巡航，0.1.0+11）**
+- 使用者允許「鬧鐘與提醒」（精確鬧鐘）時用 `exactAllowWhileIdle` 準時跳出；不允許則退回 `inexactAllowWhileIdle`（省電時可能延後）。
+- **第一次**設定提醒時開一次系統設定頁請使用者允許（`requestExactAlarmsPermission`，返回後才排程）；之後不再主動開，旗標檔 `exact_alarm_asked` 存在 App 私有資料夾。拒絕後可自行到手機設定 → 應用程式 → 謙卦 → 鬧鐘與提醒 開啟。
+- Manifest 加 `SCHEDULE_EXACT_ALARM`（使用者可自行授予的權限；不用受 Play 嚴格審查的 `USE_EXACT_ALARM`）。Android 14 起新安裝預設不允許，所以需要上述引導。
+- 已排好的提醒不會自動改成準時，之後新設定或改期的才會。
 
 **待使用者實機回饋**：通知實際跳出時間（各廠牌省電機制可能延遲）、版面與文字。
 

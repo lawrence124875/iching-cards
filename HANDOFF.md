@@ -1,7 +1,7 @@
 # HANDOFF — 易經卦卡 App（名稱未定）
 
 > 新對話接續時請先讀本檔。本檔記錄已確定的決策、內容規格與待討論事項。
-> 最後更新：2026-10-02（內容量產：03–31 中文初稿完成，下一批從 32 恆開始，見 10.6；多語言規劃見第 12 節）
+> 最後更新：2026-10-02（新增卦記功能 0.1.0+7，見第 13 節；內容量產：03–31 中文初稿完成，下一批從 32 恆開始，見 10.6；多語言規劃見第 12 節）
 
 ---
 
@@ -334,11 +334,11 @@ App 名稱與 applicationId、商業模式（廣告與付費內容）、隱私�
 ### 11.2 暫定設定
 - **定名（2026-10-01）**：開發者 **LC Lab**；App 名 **謙卦**（英文 Qiangua）。桌面名稱「謙卦」；首頁大標「謙卦」、副標「易經六十四卦卡」；Google Play 標題預定「謙卦｜易經六十四卦卡」。2026-10-01 使用者已在 Google Play／App Store 搜尋，確認沒有名為「謙卦」的 App（商標可在上架前另查）。
 - **套件名稱 `com.lclab.qiangua`**（0.1.0+5 起；上傳 Play 後永遠不能改）。由 `patch_android.sh` 改 applicationId；`flutter create --org com.lclab`，namespace 維持產生值。舊版 `tw.bcc.iching_cards` 是不同 App，測試機需手動移除。
-- 版本 `0.1.0+6`（+3：首頁水平置中修正、桌面圖示；+4：固定直向；+5：定名謙卦、套件名稱 com.lclab.qiangua；+6：擲錢頁收斂在一個畫面、點牌面圖滿版看象）。
+- 版本 `0.1.0+7`（+7：卦記與回顧提醒，見第 13 節；+3：首頁水平置中修正、桌面圖示；+4：固定直向；+5：定名謙卦、套件名稱 com.lclab.qiangua；+6：擲錢頁收斂在一個畫面、點牌面圖滿版看象）。
 - **滿版看圖**（0.1.0+6，`shared/widgets/card_art_viewer.dart`）：`CardFace(zoomable: true)` 時點風景圖開啟；預設 cover 填滿螢幕、隱藏系統列，點兩下切換完整畫面（contain），兩指縮放，點一下返回。目前用於抽卡翻牌後與解讀頁。
 - **擲錢頁版面**（0.1.0+6）：不再捲動；六爻列固定保留（未擲顯示「—」），中段以 FittedBox 等比縮小以適應小螢幕或大字體，按鈕固定在底部。
 - **固定直向**：卦卡為 9:16 直式，`main.dart` 以 `SystemChrome` 鎖直向，Android 另由 `patch_android.sh` 在 AndroidManifest 加 `screenOrientation="portrait"`。iOS 上架時需在 Info.plist 只留 Portrait。平板若要支援橫向，再另做雙欄版面。
-- 目前零外部套件（只用 Flutter SDK），字體用系統字體；思源宋體／黑體留待第二階段打包。
+- 外部套件（0.1.0+7 起）：`path_provider`、`flutter_local_notifications` ^18、`timezone` ^0.9（版本同智慧聽覺巡航）。字體用系統字體；思源宋體／黑體留待第二階段打包。
 - 英文卦義為自撰暫定詞，英文版上線前再審。
 - `android/`、`ios/` 不進 repo，CI 以 `flutter create` 產生（同英文 App 做法）；`flutter create` 會產生的 `test/widget_test.dart` 在 CI 中刪除。
 - `assets/content/`、`assets/cards/` 在本 repo 只有 `.gitkeep`，`.gitignore` 擋住 json／webp，**內容永遠不進公開 repo**。
@@ -365,6 +365,30 @@ checkout 本 repo → 以 `BUILDS_REPO_TOKEN` sparse-checkout iching-content 的
 - **東西相映名句**：每種語言都從原著語言（拉丁、希臘、英、德等）直接翻譯，不經中文轉手；`translationNote` 註明。
 - **簡中**：卦名與經文鎖定不做自動繁簡轉換（例：「乾」會被誤轉為「干」）。
 - **上線原則**：內容沒有完整翻譯的語言不開放；介面翻譯可先做。
+
+## 13. 卦記（2026-10-02 加入，0.1.0+7，run #15 建置成功）
+
+使用者需求：抽完的卦可以存起來，註明當時問的事，日後回來對照實際發展，練習解象（事後回溯與學習）。
+
+**已決定**
+- 「想問的事」抽卦前、抽完都可以填：抽卦頁與擲錢頁有「寫下想問的事（可不填）」連結，帶進解讀頁；存檔時仍可修改。自由文字，不做問事分類（維持 §3 原則）。
+- 解讀頁最下方「記下這一卦」→ 底部面板：想問的事＋回顧提醒（不提醒／3／7／14／30 天／自訂 1–365 天，預設 7 天），提醒時間固定為該日晚上 8 點。
+- 每筆紀錄保存：時間、起卦方式、六爻數值（6–9，可還原本卦／之卦／變爻）、想問的事、**當時隨機顯示的解讀組別 `readingIndex`**（回看時顯示同一組）、提醒時間、多筆回顧（各自標日期）。
+- 首頁次要入口「卦記」：由新到舊列表；單筆頁可修改問題、「看當時的解讀」（ReadingPage review 模式：不發事件、不顯示儲存）、新增／修改回顧（清空文字＝刪除該則）、改期或取消提醒、刪除紀錄。
+- 點通知直接開啟該筆卦記（payload `journal:<id>`；App 關閉時由 launch details 處理）。
+- 隱私：只存在手機（App 私有資料夾 `journal.json`，Android 自動備份可能涵蓋但不保證）；通知內文**不放想問的事**（鎖定畫面可見）；日後接 Firebase 時不得記錄問題或回顧文字。移除 App 會一併刪除，之後可加匯出／匯入備份。
+
+**程式位置（依 §9 架構）**
+- `lib/core/journal/`：`JournalEntry`（含 JSON、`schemaVersion` 1）、`JournalStore` 介面（`MemoryJournalStore` 測試用）、`FileJournalStore`（暫存檔再改名，避免毀損）、`JournalReminders`（回顧時間、通知文字、payload）。
+- `lib/core/reminders/`：`ReminderService` 介面＋`LocalNotificationReminders`（UTC 時間點排程、`inexactAllowWhileIdle` 不需精確鬧鐘權限、所有呼叫不拋例外；排程時才請求通知權限）＋`NoopReminderService`。
+- `lib/features/journal/`：功能入口（註冊表一行）、列表頁、單筆頁。拔除＝移出註冊表並把 `Services.journal` 設為 null（解讀頁自動不顯示「記下這一卦」）。
+- `AppFeature.openPayload`：功能可處理通知帶來的 payload；`IchingApp` 以 navigatorKey 分派。
+- `lib/reading/save_reading_sheet.dart`、`lib/shared/widgets/question_dialog.dart`、`reminder_picker.dart`、`lib/shared/format.dart`。
+- `scripts/patch_android.sh`：加入 POST_NOTIFICATIONS／RECEIVE_BOOT_COMPLETED 權限、兩個通知 receiver（少了會排程成功卻永遠不跳）、core library desugaring；設定失敗會讓 CI 失敗。
+- `test/journal_test.dart`：JSON 來回、跨月回顧時間、payload、儲存。
+- iOS 上架時：需在 AppDelegate 設定通知代理（flutter_local_notifications 的 iOS 說明），其餘程式共用。
+
+**待使用者實機回饋**：通知實際跳出時間（各廠牌省電機制可能延遲）、版面與文字。
 
 ## 8. 範例內容：謙卦（第十五卦，地山謙 ䷎，Qiān · Modesty）
 

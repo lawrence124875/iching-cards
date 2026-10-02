@@ -36,7 +36,7 @@ class _DrawPageState extends State<DrawPage> {
     final t = Theme.of(context).textTheme;
     final cast = _cast;
     return Scaffold(
-      appBar: AppBar(title: const Text('抽一卦')),
+      appBar: AppBar(), // 首頁按鈕已寫「抽一卦」，這裡不再重複標題
       body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.fromLTRB(32, 8, 32, 24),
@@ -47,7 +47,11 @@ class _DrawPageState extends State<DrawPage> {
                 style: t.bodyMedium?.copyWith(color: QianColors.textSub),
                 textAlign: TextAlign.center,
               ),
-              QuestionPrompt(question: _question, onChanged: (q) => setState(() => _question = q)),
+              // 翻牌後就不再寫想問的事（存進卦記時仍可修改）
+              if (cast == null)
+                QuestionPrompt(question: _question, onChanged: (q) => setState(() => _question = q))
+              else if (_question.isNotEmpty)
+                QuestionPrompt(question: _question, onChanged: (_) {}, enabled: false),
               const SizedBox(height: 8),
               Expanded(
                 child: Center(

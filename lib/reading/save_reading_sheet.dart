@@ -59,9 +59,11 @@ class _SaveSheetState extends State<_SaveSheet> {
     );
     await store.save(entry);
     var reminderOk = true;
+    String? reminderError;
     if (entry.reminderAt != null) {
       reminderOk = await JournalReminders.apply(services.reminders, entry);
       if (!reminderOk) {
+        reminderError = services.reminders.lastError;
         entry = entry.copyWith(clearReminder: true);
         await store.save(entry);
       }
@@ -72,14 +74,19 @@ class _SaveSheetState extends State<_SaveSheet> {
     messenger.showSnackBar(SnackBar(
       content: Text(reminderOk
           ? '已記在「卦記」。'
-          : '已記在「卦記」，但提醒沒有設定成功（可能未允許通知），可到卦記裡重新設定。'),
+          : '已記在「卦記」，但提醒沒有設定成功。${reminderError ?? ''}'),
+      duration: Duration(seconds: reminderOk ? 3 : 8),
     ));
   }
 
   @override
   Widget build(BuildContext context) {
     final t = Theme.of(context).textTheme;
-    return Padding(
+    // 鍵盤升起時整張面板可捲動，「儲存」不會被擋住；點面板空白處收起鍵盤。
+    return GestureDetector(
+      behavior: HitTestBehavior.opaque,
+      onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
+      child: SingleChildScrollView(
       padding: EdgeInsets.fromLTRB(24, 20, 24, 20 + MediaQuery.of(context).viewInsets.bottom),
       child: SafeArea(
         top: false,
@@ -93,10 +100,13 @@ class _SaveSheetState extends State<_SaveSheet> {
             const SizedBox(height: 16),
             Text('想問的事', style: t.titleMedium),
             TextField(
+          onTapOutside: (_) => FocusManager.instance.primaryFocus?.unfocus(),
               controller: _controller,
               minLines: 1,
               maxLines: 4,
               maxLength: 200,
+              textInputAction: TextInputAction.done,
+              onSubmitted: (_) => FocusManager.instance.primaryFocus?.unfocus(),
               decoration: const InputDecoration(hintText: '可不填'),
             ),
             const SizedBox(height: 8),
@@ -113,6 +123,7 @@ class _SaveSheetState extends State<_SaveSheet> {
             ),
           ],
         ),
+      ),
       ),
     );
   }

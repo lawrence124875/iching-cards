@@ -1,3 +1,5 @@
+import 'dart:typed_data';
+
 import 'package:flutter/widgets.dart';
 
 import 'hexagram_content.dart';
@@ -10,4 +12,7 @@ abstract class ContentSource {
 
   /// 該卦的牌面圖；尚無圖時回傳 null（畫面顯示佔位圖）。
   Future<ImageProvider?> cardArt(int number);
+
+  /// 牌面圖原始位元組（例如給鎖定畫面的播放卡片用）；尚無圖時回傳 null。
+  Future<Uint8List?> cardArtBytes(int number);
 }

@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:typed_data';
 
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
@@ -43,5 +44,13 @@ class AssetContentSource implements ContentSource {
   Future<ImageProvider?> cardArt(int number) async {
     final path = 'assets/cards/${_code(number)}.webp';
     return (await _assetList()).contains(path) ? AssetImage(path, bundle: _bundle) : null;
+  }
+
+  @override
+  Future<Uint8List?> cardArtBytes(int number) async {
+    final path = 'assets/cards/${_code(number)}.webp';
+    if (!(await _assetList()).contains(path)) return null;
+    final data = await _bundle.load(path);
+    return data.buffer.asUint8List(data.offsetInBytes, data.lengthInBytes);
   }
 }

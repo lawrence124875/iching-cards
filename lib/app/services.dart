@@ -36,7 +36,7 @@ class Services {
         journal: FileJournalStore(),
         breath: BreathServices(
           files: CachedSoundscapeFiles(),
-          newPlayback: JustAudioPlayback.new,
+          playback: JustAudioPlayback(),
           screenAwake: WakelockScreenAwake(),
         ),
       );
@@ -56,12 +56,12 @@ class Services {
 
 /// 呼吸音景用到的服務（HANDOFF §14）。
 class BreathServices {
-  BreathServices({required this.files, required this.newPlayback, required this.screenAwake});
+  BreathServices({required this.files, required this.playback, required this.screenAwake});
 
   final SoundscapeFiles files;
 
-  /// 每次練習建立一個新的播放器，練習結束即釋放。
-  final AudioPlayback Function() newPlayback;
+  /// 全 App 共用一個播放器（背景播放套件只支援單一播放器）；練習結束時 stop()。
+  final AudioPlayback playback;
   final ScreenAwake screenAwake;
 }
 

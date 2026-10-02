@@ -55,6 +55,81 @@ else
   echo "::error::通知 receiver 或 desugaring 設定失敗（flutter create 範本可能改了）"; exit 1
 fi
 
+# 卦記提醒在 release 版失敗的修正（0.1.0+9）：flutter_local_notifications 用 Gson 的 TypeToken
+# 把已排程通知序列化保存；R8 壓縮若砍掉泛型資訊，zonedSchedule 會拋例外，
+# 結果是「已記在卦記，但提醒沒有設定成功」。智慧聽覺巡航也加了同樣的規則。
+PROGUARD="android/app/proguard-rules.pro"
+touch "$PROGUARD"
+if ! grep -q "flutterlocalnotifications" "$PROGUARD"; then
+  cat >> "$PROGUARD" << 'RULES'
+-keepattributes Signature
+-keepattributes *Annotation*
+-keep class com.dexterous.flutterlocalnotifications.** { *; }
+-dontwarn com.dexterous.flutterlocalnotifications.**
+-keep class com.google.gson.** { *; }
+-keep class * extends com.google.gson.reflect.TypeToken
+-keep,allowobfuscation,allowshrinking class com.google.gson.reflect.TypeToken
+-dontwarn com.google.gson.**
+RULES
+fi
+python3 - "$GRADLE" << 'PYEOF'
+import re, sys
+path = sys.argv[1]
+g = open(path, encoding="utf-8").read()
+if "proguard-rules.pro" not in g:
+    ins = '\n            proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")'
+    g = re.sub(r'(release\s*\{)', lambda mt: mt.group(1) + ins, g, count=1)
+    open(path, "w", encoding="utf-8").write(g)
+PYEOF
+grep -q "proguard-rules.pro" "$GRADLE" && echo "已套用 ProGuard 規則（通知排程）" || { echo "::error::ProGuard 規則未套用"; exit 1; }
+
+# 呼吸音景背景播放與通知／鎖定畫面控制（just_audio_background → audio_service）：
+# 1) 前景服務權限；2) AudioService 與 MediaButtonReceiver；3) MainActivity 改繼承 AudioServiceActivity；
+# 4) launchMode=singleTask——AudioServiceActivity 共用同一個 FlutterEngine，點通知若另建第二個
+#    MainActivity，舊的被銷毀時會把引擎拆走，畫面卡住（智慧聽覺巡航 2026-09-29 的教訓）。
+python3 - "$MANIFEST" << 'PYEOF'
+import re, sys
+path = sys.argv[1]
+m = open(path, encoding="utf-8").read()
+if "com.ryanheise.audioservice.AudioService" not in m:
+    perms = ('    <uses-permission android:name="android.permission.WAKE_LOCK"/>\n'
+             '    <uses-permission android:name="android.permission.FOREGROUND_SERVICE"/>\n'
+             '    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_MEDIA_PLAYBACK"/>\n')
+    m = m.replace("    <application", perms + "    <application", 1)
+    block = '''        <service android:name="com.ryanheise.audioservice.AudioService"
+            android:foregroundServiceType="mediaPlayback"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.media.browse.MediaBrowserService" />
+            </intent-filter>
+        </service>
+        <receiver android:name="com.ryanheise.audioservice.MediaButtonReceiver"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MEDIA_BUTTON" />
+            </intent-filter>
+        </receiver>
+    </application>'''
+    m = m.replace("    </application>", block, 1)
+tag = re.search(r'<activity\b[^>]*android:name="\.MainActivity"[^>]*>', m, re.S)
+if not tag:
+    raise SystemExit("找不到 MainActivity 的 <activity> 標籤")
+t = tag.group(0)
+if 'android:launchMode=' in t:
+    nt = re.sub(r'android:launchMode="[^"]*"', 'android:launchMode="singleTask"', t)
+else:
+    nt = t.replace('android:name=".MainActivity"', 'android:name=".MainActivity"\n            android:launchMode="singleTask"', 1)
+m = m.replace(t, nt, 1)
+open(path, "w", encoding="utf-8").write(m)
+PYEOF
+MAIN_ACTIVITY=$(find android/app/src/main -name "MainActivity.kt" | head -n 1)
+sed -i 's/import io.flutter.embedding.android.FlutterActivity/import com.ryanheise.audioservice.AudioServiceActivity/; s/class MainActivity *: *FlutterActivity()/class MainActivity : AudioServiceActivity()/' "$MAIN_ACTIVITY"
+if grep -q AudioServiceActivity "$MAIN_ACTIVITY" && grep -q 'com.ryanheise.audioservice.AudioService"' "$MANIFEST" && grep -q 'launchMode="singleTask"' "$MANIFEST"; then
+  echo "已設定背景播放（AudioService、AudioServiceActivity、singleTask）"
+else
+  echo "::error::背景播放設定失敗（flutter create 範本可能改了）"; exit 1
+fi
+
 # 桌面圖示（謙卦卦卡）：覆蓋 flutter create 的預設圖示，含 Android 8+ 自適應圖示
 cp -r branding/android/res/. android/app/src/main/res/
 echo "已套用桌面圖示"

@@ -1,7 +1,7 @@
 # HANDOFF — 易經卦卡 App（名稱未定）
 
 > 新對話接續時請先讀本檔。本檔記錄已確定的決策、內容規格與待討論事項。
-> 最後更新：2026-10-02（新增**呼吸音景** 0.1.0+8，見第 14 節；卦記功能 0.1.0+7，見第 13 節；**64 卦中文初稿全部完成**，01–36 東西相映名人優先檢查也已完成（見 4.5），下一步由使用者審閱定稿；多語言規劃見第 12 節）
+> 最後更新：2026-10-02（0.1.0+9：實機回饋修正與音景背景播放，見 14.1；**呼吸音景** 0.1.0+8，見第 14 節；卦記功能 0.1.0+7，見第 13 節；**64 卦中文初稿全部完成**，01–36 東西相映名人優先檢查也已完成（見 4.5），下一步由使用者審閱定稿；多語言規劃見第 12 節）
 
 ---
 
@@ -354,11 +354,11 @@ App 名稱與 applicationId、商業模式（廣告與付費內容）、隱私�
 ### 11.2 暫定設定
 - **定名（2026-10-01）**：開發者 **LC Lab**；App 名 **謙卦**（英文 Qiangua）。桌面名稱「謙卦」；首頁大標「謙卦」、副標「易經六十四卦卡」；Google Play 標題預定「謙卦｜易經六十四卦卡」。2026-10-01 使用者已在 Google Play／App Store 搜尋，確認沒有名為「謙卦」的 App（商標可在上架前另查）。
 - **套件名稱 `com.lclab.qiangua`**（0.1.0+5 起；上傳 Play 後永遠不能改）。由 `patch_android.sh` 改 applicationId；`flutter create --org com.lclab`，namespace 維持產生值。舊版 `tw.bcc.iching_cards` 是不同 App，測試機需手動移除。
-- 版本 `0.1.0+8`（+8：呼吸音景，見第 14 節；+7：卦記與回顧提醒，見第 13 節；+3：首頁水平置中修正、桌面圖示；+4：固定直向；+5：定名謙卦、套件名稱 com.lclab.qiangua；+6：擲錢頁收斂在一個畫面、點牌面圖滿版看象）。
+- 版本 `0.1.0+9`（+9：實機回饋修正、音景背景播放與通知控制，見 14.1；+8：呼吸音景，見第 14 節；+7：卦記與回顧提醒，見第 13 節；+3：首頁水平置中修正、桌面圖示；+4：固定直向；+5：定名謙卦、套件名稱 com.lclab.qiangua；+6：擲錢頁收斂在一個畫面、點牌面圖滿版看象）。
 - **滿版看圖**（0.1.0+6，`shared/widgets/card_art_viewer.dart`）：`CardFace(zoomable: true)` 時點風景圖開啟；預設 cover 填滿螢幕、隱藏系統列，點兩下切換完整畫面（contain），兩指縮放，點一下返回。目前用於抽卡翻牌後與解讀頁。
 - **擲錢頁版面**（0.1.0+6）：不再捲動；六爻列固定保留（未擲顯示「—」），中段以 FittedBox 等比縮小以適應小螢幕或大字體，按鈕固定在底部。
 - **固定直向**：卦卡為 9:16 直式，`main.dart` 以 `SystemChrome` 鎖直向，Android 另由 `patch_android.sh` 在 AndroidManifest 加 `screenOrientation="portrait"`。iOS 上架時需在 Info.plist 只留 Portrait。平板若要支援橫向，再另做雙欄版面。
-- 外部套件（0.1.0+7 起）：`path_provider`、`flutter_local_notifications` ^18、`timezone` ^0.9（版本同智慧聽覺巡航）；0.1.0+8 加 `just_audio` ^0.10.4（播放音景）、`wakelock_plus` ^1.2.8（練習時螢幕不關）。字體用系統字體；思源宋體／黑體留待第二階段打包。
+- 外部套件（0.1.0+7 起）：`path_provider`、`flutter_local_notifications` ^18、`timezone` ^0.9（版本同智慧聽覺巡航）；0.1.0+8 加 `just_audio` ^0.10.4（播放音景）、`wakelock_plus` ^1.2.8（練習時螢幕不關）；0.1.0+9 加 `just_audio_background` ^0.0.1-beta.17（背景播放、通知與鎖定畫面控制，內部用 audio_service，與智慧聽覺巡航同一套）。字體用系統字體；思源宋體／黑體留待第二階段打包。
 - 英文卦義為自撰暫定詞，英文版上線前再審。
 - `android/`、`ios/` 不進 repo，CI 以 `flutter create` 產生（同英文 App 做法）；`flutter create` 會產生的 `test/widget_test.dart` 在 CI 中刪除。
 - `assets/content/`、`assets/cards/` 在本 repo 只有 `.gitkeep`，`.gitignore` 擋住 json／webp，**內容永遠不進公開 repo**。
@@ -432,7 +432,7 @@ checkout 本 repo → 以 `BUILDS_REPO_TOKEN` sparse-checkout iching-content 的
 
 **聲音設計**
 - 每種經卦音景先合成一段可無縫循環的片段（上卦 31 秒、下卦 37 秒，互質不易聽出重複；尾端 3 秒等功率交叉淡化接回開頭），再鋪滿整段練習。亂數有固定種子，同一卦每次聽到相同的聲音。
-- 整段時間軸：準備 3 秒（淡入）→ 呼吸 N 分鐘 → 收尾 5 秒（淡出、結束鈴）。音景音量隨呼吸起伏（吐到底約 −4.4 dB），吸氣開始輕敲高音鈴（C5）、吐氣開始低音鈴（G4），可關閉。
+- 整段時間軸：準備 3 秒（淡入）→ 呼吸 N 分鐘 → 收尾 5 秒（淡出、結束鈴）。音景音量隨呼吸起伏（吐到底約 −4.4 dB），吸氣開始輕敲高音鈴（C5）、吐氣開始低音鈴（G4），可開關（0.1.0+9 起預設關閉）。
 - 輸出 22,050 Hz、16-bit 單聲道 WAV，在背景 isolate 合成（不卡畫面），存手機暫存資料夾；同一組設定直接沿用，換設定時刪掉舊檔只留一個（5 分鐘約 13 MB）。合成方式改版時把 `SessionSpec.key` 的 `v1` 往上加，舊快取自動失效。
 - 練習頁的呼吸圓、吸／吐字樣、倒數，**一律取自音檔播放位置**，畫面與聲音不會漂移；音檔無法播放時可改用「無聲引導」（以碼錶計時）。練習中保持螢幕亮著，可暫停／繼續／結束。
 - 調整某種音景＝改 `synth_bed_source.dart` 裡該經卦的一個函式；各音層以均方根（連續聲）或峰值（雷、鳥、劈啪等稀疏聲）校準到絕對音量。
@@ -446,6 +446,23 @@ checkout 本 repo → 以 `BUILDS_REPO_TOKEN` sparse-checkout iching-content 的
 - `test/soundscape_test.dart`：節奏與時間軸、音量曲線連續、鈴聲數量、八種音景數值與音量範圍、可重現、循環接縫、WAV 格式。
 
 **待使用者實機回饋**：各音景好不好聽（特別是天、地兩個提案）、音量平衡、鈴聲大小、第一次合成等待時間（5 分鐘的音檔最久）。
+
+### 14.1 0.1.0+9 實機回饋修正（2026-10-02）
+
+- **起卦頁標題**：抽一卦、三枚銅錢起卦兩頁上方不再顯示標題（首頁按鈕已寫），只留返回鍵。
+- **想問的事**：翻牌後（擲錢則是擲完六次後）不能再寫；已填的問題仍顯示。存進卦記時照舊可改。
+- **滿版看圖**：下方提示只留「點一下返回」（點兩下切換完整畫面仍可用，不另提示）。
+- **記下這一卦**：面板改為可捲動，鍵盤升起時「儲存」不會被擋住；點空白處收起鍵盤，鍵盤右下角為「完成」。App 內所有輸入框點外面都會收起鍵盤（`onTapOutside`）。
+- **卦記提醒設定失敗**：原因判斷為 release 版 R8 壓縮砍掉 Gson 泛型資訊，`zonedSchedule` 拋例外（智慧聽覺巡航早已加同樣規則）。`patch_android.sh` 加入 flutter_local_notifications／Gson 的 ProGuard 規則。另外：已允許通知就不再跳權限對話框；啟動時初始化失敗會在排程時重試；失敗時提示會帶上原因（未允許通知，或錯誤訊息），方便回報。⚠️ 待使用者實機確認是否修好；若仍失敗，請把提示裡的原因文字傳回來。
+- **通知小圖示**：新增單色謙卦卦象 `ic_stat_qian`（`branding/android/res/drawable-*`，`raw/keep.xml` 防止被資源壓縮移除），卦記提醒與音景播放通知共用。
+- **呼吸音景**：
+  - 換氣鈴聲預設**關閉**。
+  - 練習頁下方改為三個細金線圓形按鈕：看圖／暫停・繼續（較大）／結束，各附小字。
+  - 「看圖」開啟此卦滿版牌面圖，音景持續播放，畫面下方疊一個小呼吸圓（吸／吐），點一下返回練習頁。完成後也可「再看一次卦圖」。
+  - **背景播放**：離開 App 或關閉螢幕仍繼續播放；通知列與鎖定畫面顯示「卦名・呼吸音景」、音景名稱與時長、牌面圖，可暫停／播放，畫面同步。播完或離開練習頁即停止並移除通知。
+  - 實作：`AudioPlayback` 改為全 App 單一播放器（`Services.breath.playback`，套件只支援單一播放器），新增 `stop()`、`playingChanges`、`completed`；`main.dart` 先 `JustAudioPlayback.initBackground()`（失敗只是沒有通知控制）。`ContentSource.cardArtBytes()` 提供鎖定畫面用的圖（寫到暫存 `art_NN.webp`）。
+  - Android 設定（`patch_android.sh`）：前景服務權限、`AudioService` 與 `MediaButtonReceiver`、MainActivity 改繼承 `AudioServiceActivity`、`launchMode=singleTask`（AudioServiceActivity 共用引擎，點通知若另建第二個 Activity 畫面會卡住，智慧聽覺巡航 2026-09-29 的教訓）。
+  - iOS 上架時：Info.plist 加 `UIBackgroundModes` → `audio`。
 
 ## 8. 範例內容：謙卦（第十五卦，地山謙 ䷎，Qiān · Modesty）
 

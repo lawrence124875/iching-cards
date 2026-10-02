@@ -18,6 +18,7 @@ class ReminderPicker extends StatelessWidget {
       builder: (context) => AlertDialog(
         title: const Text('幾天後提醒？'),
         content: TextField(
+          onTapOutside: (_) => FocusManager.instance.primaryFocus?.unfocus(),
           controller: c,
           autofocus: true,
           keyboardType: TextInputType.number,

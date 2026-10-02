@@ -21,6 +21,13 @@ class LocalNotificationReminders implements ReminderService {
   final _taps = StreamController<String>.broadcast();
   String? _launchPayload;
   bool _ready = false;
+  String? _lastError;
+
+  /// 未允許通知時的固定訊息。
+  static const permissionDenied = '尚未允許「謙卦」發送通知，可到手機設定 → 應用程式 → 謙卦 → 通知 開啟';
+
+  @override
+  String? get lastError => _lastError;
 
   @override
   Future<void> init() async {
@@ -28,7 +35,7 @@ class LocalNotificationReminders implements ReminderService {
       tz_data.initializeTimeZones();
       await _plugin.initialize(
         const InitializationSettings(
-          android: AndroidInitializationSettings('@mipmap/ic_launcher'),
+          android: AndroidInitializationSettings('@drawable/ic_stat_qian'),
           iOS: DarwinInitializationSettings(
             requestAlertPermission: false,
             requestBadgePermission: false,
@@ -45,8 +52,10 @@ class LocalNotificationReminders implements ReminderService {
         _launchPayload = launch!.notificationResponse?.payload;
       }
       _ready = true;
-    } catch (_) {
+      _lastError = null;
+    } catch (e) {
       _ready = false;
+      _lastError = '通知初始化失敗：$e';
     }
   }
 
@@ -58,10 +67,11 @@ class LocalNotificationReminders implements ReminderService {
                 ?.requestPermissions(alert: true, sound: true) ??
             false;
       }
-      return await _plugin
-              .resolvePlatformSpecificImplementation<AndroidFlutterLocalNotificationsPlugin>()
-              ?.requestNotificationsPermission() ??
-          false;
+      final android = _plugin.resolvePlatformSpecificImplementation<AndroidFlutterLocalNotificationsPlugin>();
+      if (android == null) return false;
+      // 已允許就不再跳權限對話框
+      if (await android.areNotificationsEnabled() ?? false) return true;
+      return await android.requestNotificationsPermission() ?? false;
     } catch (_) {
       return false;
     }
@@ -75,8 +85,12 @@ class LocalNotificationReminders implements ReminderService {
     required String body,
     required String payload,
   }) async {
+    if (!_ready) await init(); // 啟動時失敗就再試一次
     if (!_ready) return false;
-    if (!await _requestPermission()) return false;
+    if (!await _requestPermission()) {
+      _lastError = permissionDenied;
+      return false;
+    }
     try {
       await _plugin.zonedSchedule(
         id,
@@ -97,8 +111,11 @@ class LocalNotificationReminders implements ReminderService {
         uiLocalNotificationDateInterpretation: UILocalNotificationDateInterpretation.absoluteTime,
         payload: payload,
       );
+      _lastError = null;
       return true;
-    } catch (_) {
+    } catch (e) {
+      // 例：release 版被 R8 砍掉 Gson 泛型資訊時會在這裡失敗（見 patch_android.sh 的 ProGuard 規則）
+      _lastError = '排程失敗：$e';
       return false;
     }
   }

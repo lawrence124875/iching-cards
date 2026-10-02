@@ -8,6 +8,7 @@ Future<String?> askQuestion(BuildContext context, {String initial = '', String t
     builder: (context) => AlertDialog(
       title: Text(title),
       content: TextField(
+          onTapOutside: (_) => FocusManager.instance.primaryFocus?.unfocus(),
         controller: controller,
         autofocus: true,
         minLines: 2,

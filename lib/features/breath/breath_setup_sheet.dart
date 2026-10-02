@@ -33,7 +33,7 @@ class _SetupSheet extends StatefulWidget {
 class _SetupSheetState extends State<_SetupSheet> {
   static const _choices = [1, 2, 3, 5];
   static int _lastMinutes = 3;
-  static bool _lastBells = true;
+  static bool _lastBells = false; // 預設關閉（2026-10-02 使用者決定）
 
   int _minutes = _lastMinutes;
   bool _bells = _lastBells;

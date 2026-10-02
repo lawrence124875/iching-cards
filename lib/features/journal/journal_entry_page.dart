@@ -90,7 +90,10 @@ class _JournalEntryPageState extends State<JournalEntryPage> {
     await _update(next);
     if (!ok && mounted) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('提醒沒有設定成功，請確認已允許「謙卦」發送通知。')),
+        SnackBar(
+          content: Text('提醒沒有設定成功。${_services.reminders.lastError ?? ''}'),
+          duration: const Duration(seconds: 8),
+        ),
       );
     }
   }

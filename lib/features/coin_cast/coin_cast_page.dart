@@ -48,7 +48,7 @@ class _CoinCastPageState extends State<CoinCastPage> {
     final changing = {for (var i = 0; i < lines.length; i++) if (lines[i].isChanging) i + 1};
 
     return Scaffold(
-      appBar: AppBar(title: const Text('三枚銅錢起卦')),
+      appBar: AppBar(), // 首頁連結已寫「三枚銅錢起卦」，這裡不再重複標題
       body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.fromLTRB(28, 4, 28, 16),
@@ -59,7 +59,12 @@ class _CoinCastPageState extends State<CoinCastPage> {
                 textAlign: TextAlign.center,
                 style: t.bodySmall,
               ),
-              QuestionPrompt(question: _question, onChanged: (q) => setState(() => _question = q)),
+              // 擲完六次就不再寫想問的事（存進卦記時仍可修改）
+              QuestionPrompt(
+                question: _question,
+                onChanged: (q) => setState(() => _question = q),
+                enabled: !_done,
+              ),
               Expanded(
                 child: LayoutBuilder(
                   builder: (context, box) => Center(

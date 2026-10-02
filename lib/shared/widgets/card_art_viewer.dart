@@ -7,14 +7,14 @@ import '../../app/services.dart';
 import '../../app/theme.dart';
 import '../../core/iching/hexagram_table.dart';
 
-/// 開啟滿版牌面圖，讓使用者專心看象。
-Future<void> showCardArt(BuildContext context, HexagramInfo info) {
+/// 開啟滿版牌面圖，讓使用者專心看象。[overlay] 會疊在畫面下方（例如呼吸練習的小呼吸圓），不攔截點擊。
+Future<void> showCardArt(BuildContext context, HexagramInfo info, {Widget? overlay}) {
   return Navigator.of(context).push(PageRouteBuilder<void>(
     opaque: false,
     barrierColor: Colors.black,
     transitionDuration: const Duration(milliseconds: 280),
     reverseTransitionDuration: const Duration(milliseconds: 220),
-    pageBuilder: (_, __, ___) => CardArtViewer(info: info),
+    pageBuilder: (_, __, ___) => CardArtViewer(info: info, overlay: overlay),
     transitionsBuilder: (_, anim, __, child) => FadeTransition(opacity: anim, child: child),
   ));
 }
@@ -22,9 +22,10 @@ Future<void> showCardArt(BuildContext context, HexagramInfo info) {
 /// 滿版看圖：預設填滿螢幕（BoxFit.cover）；點兩下切換「完整畫面」（contain）；
 /// 兩指可縮放；點一下返回。進入時隱藏系統列，離開時恢復。
 class CardArtViewer extends StatefulWidget {
-  const CardArtViewer({super.key, required this.info});
+  const CardArtViewer({super.key, required this.info, this.overlay});
 
   final HexagramInfo info;
+  final Widget? overlay;
 
   @override
   State<CardArtViewer> createState() => _CardArtViewerState();
@@ -94,6 +95,13 @@ class _CardArtViewerState extends State<CardArtViewer> {
                   );
                 },
               ),
+              if (widget.overlay != null)
+                Positioned(
+                  left: 0,
+                  right: 0,
+                  bottom: 88,
+                  child: IgnorePointer(child: Center(child: widget.overlay)),
+                ),
               Positioned(
                 left: 0,
                 right: 0,
@@ -102,20 +110,13 @@ class _CardArtViewerState extends State<CardArtViewer> {
                   child: AnimatedOpacity(
                     opacity: _hint ? 1 : 0,
                     duration: const Duration(milliseconds: 600),
-                    child: Column(
-                      children: [
-                        Text(widget.info.name,
-                            style: t.headlineSmall?.copyWith(
-                              shadows: const [Shadow(blurRadius: 8, color: Colors.black)],
-                            )),
-                        const SizedBox(height: 4),
-                        Text('點一下返回・點兩下看完整畫面',
-                            style: t.bodySmall?.copyWith(
-                              color: QianColors.text,
-                              shadows: const [Shadow(blurRadius: 6, color: Colors.black)],
-                            )),
-                      ],
-                    ),
+                    // 只留「點一下返回」（點兩下切換完整畫面仍可用，不另提示）
+                    child: Text('點一下返回',
+                        textAlign: TextAlign.center,
+                        style: t.bodySmall?.copyWith(
+                          color: QianColors.text,
+                          shadows: const [Shadow(blurRadius: 6, color: Colors.black)],
+                        )),
                   ),
                 ),
               ),

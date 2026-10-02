@@ -15,6 +15,9 @@ abstract class ReminderService {
 
   Future<void> cancel(int id);
 
+  /// 上一次 schedule 失敗的原因（給使用者看）；成功時為 null。
+  String? get lastError;
+
   /// App 開著時使用者點了通知。
   Stream<String> get taps;
 
@@ -39,6 +42,9 @@ class NoopReminderService implements ReminderService {
 
   @override
   Future<void> cancel(int id) async {}
+
+  @override
+  String? get lastError => '這個平台尚未支援提醒';
 
   @override
   Stream<String> get taps => const Stream.empty();

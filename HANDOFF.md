@@ -494,7 +494,7 @@ checkout 本 repo → 以 `BUILDS_REPO_TOKEN` sparse-checkout iching-content 的
   - 從最近使用列表滑掉 App → `onTaskRemoved` 停止並收掉卡片（智慧聽覺巡航的教訓）。
   - `main.dart` 的 `JustAudioPlayback.initBackground()` 改為 `AudioService.init`（5 秒逾時；失敗退回一般播放器，只是沒有通知控制）。Android 設定沿用 14.1（AudioService、AudioServiceActivity、singleTask），不必改。
 - **桌面圖示比 icon-1024.png 擁擠**：自適應圖示的可見範圍約為前景畫布 66.7%，原本卦卡高度為畫布 60%，在桌面上佔滿可見高度約 89%。`draw_icon.py` 改為 52%（約 78%，與 icon-1024.png 比例相同），重新產生各密度 `ic_launcher_foreground.png`；傳統圖示外觀不變。MIUI 可能快取舊圖示，若沒變可重新開機或移除重裝。
-- **0.1.0+14 再改：無框滿版**（使用者看預覽圖後選 A 版：卦象約佔可見範圍 62%；B 版 72% 在圓形桌面會切到四角，未採用）。`draw_icon.py` 改寫為一次產生各密度前景、傳統圖示與 `icon-1024.png`。
+- **0.1.0+14 再改：無框滿版**（使用者看預覽圖後選 A 版：卦象約佔可見範圍 62%；B 版 72% 在圓形桌面會切到四角，未採用）。之後又預覽「A＋細金邊」（圓角方形邊在圓形桌面會被切斷；圓形邊在方形桌面四角留白），使用者確認**維持 A 原樣、不加金邊**。`draw_icon.py` 改寫為一次產生各密度前景、傳統圖示與 `icon-1024.png`。
 
 ## 8. 範例內容：謙卦（第十五卦，地山謙 ䷎，Qiān · Modesty）
 

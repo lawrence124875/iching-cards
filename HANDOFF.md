@@ -1,7 +1,7 @@
 # HANDOFF — 易經卦卡 App（名稱未定）
 
 > 新對話接續時請先讀本檔。本檔記錄已確定的決策、內容規格與待討論事項。
-> 最後更新：2026-10-03（0.1.0+19（run #36）：**介面翻譯架構（ARB）**，繁中＋英文介面，英文暫不開放，見第 16 節；「寫下想問的事」連結字體縮小，見 15.2；0.1.0+18：置中提示語去標點、逗號處換行，見 15.1；run #33 字體使用者實機確認沒問題；0.1.0+17：打包思源黑體／宋體子集，見第 15 節；run #32（0.1.0+16）使用者實機確認可用；0.1.0+16：首頁一屏顯示完、免責聲明縮小貼底，見 14.7；0.1.0+15：鎖屏媒體按鈕圖示被資源壓縮移除的修正、測試提醒鈕，見 14.6；0.1.0+14：桌面圖示改無框滿版，見 14.4；0.1.0+13：鎖定畫面暫停／停止鍵、桌面圖示比例，見 14.4；0.1.0+12：版面修正，見 14.3；0.1.0+11：卦記提醒準時模式，見 13 節末；0.1.0+10：音景柔和版、432Hz 調音、雙耳節拍，見 14.2；0.1.0+9：實機回饋修正與音景背景播放，見 14.1；**呼吸音景** 0.1.0+8，見第 14 節；卦記功能 0.1.0+7，見第 13 節；**64 卦中文初稿全部完成**，01–36 東西相映名人優先檢查也已完成（見 4.5），下一步由使用者審閱定稿；多語言規劃見第 12 節）
+> 最後更新：2026-10-03（**11 語術語表初稿**完成，存 iching-content `glossary/`，待審閱，見第 17 節；Firebase 設定步驟已交給使用者，等 Secret 建好再開工；run #36 使用者實機回饋良好；0.1.0+19（run #36）：**介面翻譯架構（ARB）**，繁中＋英文介面，英文暫不開放，見第 16 節；「寫下想問的事」連結字體縮小，見 15.2；0.1.0+18：置中提示語去標點、逗號處換行，見 15.1；run #33 字體使用者實機確認沒問題；0.1.0+17：打包思源黑體／宋體子集，見第 15 節；run #32（0.1.0+16）使用者實機確認可用；0.1.0+16：首頁一屏顯示完、免責聲明縮小貼底，見 14.7；0.1.0+15：鎖屏媒體按鈕圖示被資源壓縮移除的修正、測試提醒鈕，見 14.6；0.1.0+14：桌面圖示改無框滿版，見 14.4；0.1.0+13：鎖定畫面暫停／停止鍵、桌面圖示比例，見 14.4；0.1.0+12：版面修正，見 14.3；0.1.0+11：卦記提醒準時模式，見 13 節末；0.1.0+10：音景柔和版、432Hz 調音、雙耳節拍，見 14.2；0.1.0+9：實機回饋修正與音景背景播放，見 14.1；**呼吸音景** 0.1.0+8，見第 14 節；卦記功能 0.1.0+7，見第 13 節；**64 卦中文初稿全部完成**，01–36 東西相映名人優先檢查也已完成（見 4.5），下一步由使用者審閱定稿；多語言規劃見第 12 節）
 
 ---
 
@@ -328,8 +328,8 @@ App 名稱與 applicationId、商業模式（廣告與付費內容）、隱私�
 3. **內容量產**（2026-10-02 起）：**01～64 中文初稿全部完成**（2026-10-02，run 由 workflow_dispatch 觸發）。01–36 東西相映名人優先檢查已完成（2026-10-02，換 8 項，見 4.5）。經文版本差異（iching-content README）2026-10-02 使用者決定全部照王弼本採用，不再核對。**下一步**：使用者以手機逐卦審閱（另提供審閱用 Excel：64 卦東西相映、今日更動、經文差異，含「我的意見／狀態」欄，存於私人 repo iching-content `review/謙卦_64卦審閱表.xlsx`，不進本公開 repo），使用者回傳意見後修改；未提意見者視為定稿，再依第 12 節開始英文版。以下流程仍適用於修改既有卦：一個對話寫 4～5 卦（單一對話的長度上限，寫不完 62 卦），格式同 `01-qian.json`、`02-kun.json`。`art.prompt` 從 iching-content `prompts/art-prompts.md` 搬入（圖已定案，`art.status` 填「已定案」）。每批完成後更新 iching-content README 進度。流程：clone iching-content（sparse：zh-Hant、prompts、tools）→ 寫 `zh-Hant/NN-slug.json`（不含 `art`）→ `python3 tools/finalize_hexagram.py NN` 自動填入提示詞並檢查結構 → 每完成一卦就 commit＋push。參考經文（簡體，僅比對用、不進 repo）：`curl -sL https://raw.githubusercontent.com/NanBox/PiPiName/master/data/%E5%91%A8%E6%98%93.txt`（容器網路無法連維基文庫）。比對時以 opencc（`pip install opencc-python-reimplemented`）簡轉繁、切出 `NN.md` 給 `REF_DIR`；轉換造成的假差異（于／於、干／幹、斗／鬥、征凶／徵兇、為／爲）可忽略。卦辭不以「卦名：」開頭者（履、同人、艮）腳本會報錯，需人工比對。整批完成後以 workflow_dispatch 觸發建置（只改 .md 不會自動建置）。經文與參考本不同處記在 iching-content README「待人工核對」。
 4. **審閱期間並行的工作（2026-10-02 使用者同意，依序各開一個新對話）**：
    1. ✅ 2026-10-02 完成（0.1.0+8，見第 14 節）【程式】呼吸音景（§7 第 2 項）：音源採程式合成（不用錄音檔，免授權追蹤）；**已決定（2026-10-02）**：呼吸節奏固定「吸 4 秒、吐 6 秒」（每分鐘 6 次）；時長由使用者選 1／2／3／5 分鐘。音景依抽到的卦以上下經卦組合（§7 第 2 項；天、地兩種音景仍待定，開工時提案）。
-   2. 【程式】✅ 字體打包 2026-10-03 完成（0.1.0+17，見第 15 節）。⏳ Firebase（Analytics、Crashlytics、Remote Config）：等使用者建好 Firebase 專案、加入 Android App（套件 `com.lclab.qiangua`）、下載 `google-services.json`，以 base64 存成 iching-cards 的 Secret `GOOGLE_SERVICES_JSON_BASE64`（不進 repo）後再開工。
-   3. 【內容】11 語術語表：64 卦名、八經卦、爻位、易學術語（象、當位、應、比、內外卦等）的固定譯法，存 iching-content（建議 `glossary/`）。
+   2. 【程式】✅ 字體打包 2026-10-03 完成（0.1.0+17，見第 15 節）。⏳ Firebase（Analytics、Crashlytics、Remote Config）：等使用者建好 Firebase 專案、加入 Android App（套件 `com.lclab.qiangua`）、下載 `google-services.json`，以 base64 存成 iching-cards 的 Secret `GOOGLE_SERVICES_JSON_BASE64`（不進 repo）後再開工。2026-10-03 已給使用者逐步說明（建專案時啟用 Google Analytics；SHA 指紋目前不必填；Windows 以 PowerShell `[Convert]::ToBase64String([IO.File]::ReadAllBytes("google-services.json")) | Set-Clipboard` 轉 base64）。
+   3. ✅ 2026-10-03 初稿完成（見第 17 節）【內容】11 語術語表：64 卦名、八經卦、爻位、易學術語的固定譯法，存 iching-content `glossary/`。⏳ 待使用者審閱 `review/謙卦_術語表審閱.xlsx`；定稿後改 `lib/l10n/terms.dart`（§16）。
    4. ✅ 2026-10-03 完成（0.1.0+19，run #36，見第 16 節）【程式】介面翻譯：Flutter 多語系架構（ARB），全部介面文字移到 ARB，已有繁中＋英文介面；依 §12，英文內容完成前不開放。
 5. 程式待辦（有空檔或回饋時）：牌面細節。
 
@@ -561,6 +561,14 @@ checkout 本 repo → 以 `BUILDS_REPO_TOKEN` sparse-checkout iching-content 的
 **測試版：看英文介面**
 - `workflow_dispatch` 新增輸入 `force_lang`：手動建置時填 `en`，該 APK 不論手機語言一律英文介面（內容仍為繁中），Release 標題註明「測試：介面 en」、檔名帶 `_ui-en`。留空＝正式版。程式中對應 `--dart-define=FORCE_LANG=en`。
 - 注意：測試版與正式版是同一個套件名稱，會互相覆蓋安裝（卦記資料保留）。
+
+## 17. 11 語術語表（2026-10-03 初稿）
+
+- 位置：私人 repo iching-content `glossary/glossary.json`（唯一來源）、說明 `glossary/README.md`、審閱表 `review/謙卦_術語表審閱.xlsx`；工具 `tools/glossary.py check|xlsx`（檢查 11 語齊全、卦序、簡中不得出現「干」、意譯卦名不重複）。
+- 內容：64 卦（`name` 內文稱呼、`title` 標題、`meaning` 卦義）、八經卦（名、象、卦德）、爻位（12 個爻名＋用九用六）、58 個術語（含 App 區塊名，英文與 ARB 一致）。
+- 卦名原則：中、日、韓、越用各自漢字讀法（日新字體附讀音；韓附漢字、純卦用「重」；越用漢越音、純卦用 Thuần）；英、印尼、西、葡、泰、阿用意譯＋帶聲調拼音（例 `Modesty (Qiān)`）。牌面大字一律漢字。
+- 英文卦義相對 `hexagram_table.dart` 暫定詞改 5 個：1 Creative Force、2 Receptivity、47 Confinement、51 Shock、57 Gentle Penetration（避免與經卦象同名）。
+- ⏳ 待使用者審閱；泰、阿需母語者校閱。定稿後 App 端：`terms.dart` 的 `hexName`／`hexFullName` 改依術語表（可在 CI 匯入 `glossary.json` 或產生 Dart 常數）、ARB 經卦名與 `lineName` select 對照修改；目前 ARB 的 `lineName` 用「Line 1…」（介面爻位），與術語表的傳統爻名（Nine at the beginning）是兩回事，詳細頁標題要用哪個待定。
 
 ## 8. 範例內容：謙卦（第十五卦，地山謙 ䷎，Qiān · Modesty）
 

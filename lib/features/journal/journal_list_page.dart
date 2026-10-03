@@ -104,7 +104,7 @@ class _Empty extends StatelessWidget {
       child: Padding(
         padding: const EdgeInsets.all(40),
         child: Text(
-          '還沒有卦記。\n\n抽卦後，在解讀頁最下方按「記下這一卦」，\n日後回來對照，看看象是怎麼應驗在事情上的。',
+          '還沒有卦記\n\n抽卦後\n在解讀頁最下方按「記下這一卦」\n日後回來對照\n看看象是怎麼應驗在事情上的',
           textAlign: TextAlign.center,
           style: t.bodyMedium?.copyWith(color: QianColors.textSub),
         ),

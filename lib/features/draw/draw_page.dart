@@ -43,7 +43,7 @@ class _DrawPageState extends State<DrawPage> {
           child: Column(
             children: [
               Text(
-                cast == null ? '心裡想著眼前的一件事，準備好了就點牌。' : '這是此刻的象。',
+                cast == null ? '心裡想著眼前的一件事\n準備好了就點牌' : '這是此刻的象',
                 style: t.bodyMedium?.copyWith(color: QianColors.textSub),
                 textAlign: TextAlign.center,
               ),

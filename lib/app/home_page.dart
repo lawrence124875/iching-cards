@@ -42,7 +42,7 @@ class HomePage extends StatelessWidget {
                             const SizedBox(height: 6),
                             Text('易經六十四卦卡', style: t.titleSmall?.copyWith(color: QianColors.earth, letterSpacing: 4)),
                             const SizedBox(height: 16),
-                            Text('易經不是用來算命，\n而是練習看象與做決定。',
+                            Text('易經不是用來算命\n而是練習看象與做決定',
                                 textAlign: TextAlign.center,
                                 style: t.bodyLarge?.copyWith(color: QianColors.textSub, fontSize: 15)),
                             const SizedBox(height: 32),

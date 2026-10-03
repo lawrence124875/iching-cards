@@ -89,7 +89,7 @@ class HexagramTable {
     'Decrease', 'Increase', 'Breakthrough', 'Encounter', 'Gathering',
     'Rising', 'Confinement', 'The Well', 'Transformation', 'The Cauldron',
     'Shock', 'Stillness', 'Gradual Progress', 'The Marrying Maiden', 'Abundance',
-    'The Traveler', 'Gentle Penetration', 'Joy', 'Dispersion', 'Limitation',
+    'The Traveler', 'Gentle Influence', 'Joy', 'Dispersion', 'Limitation',
     'Inner Truth', 'Small Excess', 'After Completion', 'Before Completion',
   ];
 

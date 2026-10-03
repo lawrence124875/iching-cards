@@ -1,5 +1,8 @@
 /// 一卦的解讀內容（對應 iching-content 的 JSON，HANDOFF §4.6）。
 /// 解析採寬鬆模式：缺欄位給空字串，多出的欄位忽略，日後新增欄位不會讓舊版壞掉。
+///
+/// 非中文語言（HANDOFF §22）：檔案裡的 judgment／tuan／daxiang／爻 text／xiaoxiang 是**譯文**，
+/// 漢字原文不重複存放，由內容來源把繁中檔接到 [original]（經文唯一來源＝zh-Hant）。
 class HexagramContent {
   HexagramContent({
     required this.number,
@@ -9,6 +12,7 @@ class HexagramContent {
     required this.readings,
     required this.lines,
     this.eastWest,
+    this.original,
   });
 
   final int number;
@@ -18,6 +22,21 @@ class HexagramContent {
   final List<ReadingContent> readings;
   final List<LineContent> lines;
   final EastWestContent? eastWest;
+
+  /// 經文漢字原文（繁中內容）；中文語言本身就是原文，為 null。
+  final HexagramContent? original;
+
+  /// 接上漢字原文，回傳新物件。
+  HexagramContent withOriginal(HexagramContent? o) => HexagramContent(
+        number: number,
+        judgment: judgment,
+        tuan: tuan,
+        daxiang: daxiang,
+        readings: readings,
+        lines: lines,
+        eastWest: eastWest,
+        original: o,
+      );
 
   LineContent? line(int position) {
     for (final l in lines) {

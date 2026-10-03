@@ -13,6 +13,7 @@ import '../shared/widgets/card_face.dart';
 import '../shared/widgets/hexagram_glyph.dart';
 import 'detail_page.dart';
 import 'save_reading_sheet.dart';
+import 'scripture.dart';
 import 'section.dart';
 
 /// 解讀頁：牌面 →（擲錢時）本次重點 → 隨機一組解讀 → 東西相映 → 小行動與提問 →（記下這一卦）。
@@ -265,14 +266,20 @@ class _FocusText extends StatelessWidget {
     final info = HexagramTable.byNumber(item.hexagram);
     final c = content;
     String text;
+    String original = '';
     String sub = '';
     if (c == null) {
       text = l.contentInProgress(l.hexName(info));
     } else if (item.kind == FocusKind.judgment) {
       text = c.judgment;
+      original = c.original?.judgment ?? '';
     } else {
       final line = c.line(item.position!);
-      text = line?.text ?? l.lineInProgress(l.hexName(info));
+      // 傳統爻名（§17）：中文爻辭本身含爻名；譯文不含時補上（§22）。
+      text = line == null
+          ? l.lineInProgress(l.hexName(info))
+          : l.lineHeading(info, line.position, line.text, contentName: line.name);
+      original = c.original?.line(item.position!)?.text ?? '';
       sub = line?.forYou ?? '';
     }
     return Container(
@@ -286,7 +293,7 @@ class _FocusText extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(text, style: t.bodyLarge),
+          Scripture(text: text, original: original, style: t.bodyLarge),
           if (sub.isNotEmpty) ...[const SizedBox(height: 6), Text(sub)],
         ],
       ),

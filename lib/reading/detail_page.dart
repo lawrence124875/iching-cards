@@ -6,6 +6,7 @@ import '../core/content/hexagram_content.dart';
 import '../core/iching/hexagram_table.dart';
 import '../l10n/l10n.dart';
 import '../shared/widgets/hexagram_glyph.dart';
+import 'scripture.dart';
 import 'section.dart';
 
 /// 詳細頁：卦辭、彖傳、大象傳與各爻（含用九／用六）。highlight 為本次重點爻位。
@@ -52,17 +53,27 @@ class _DetailPageState extends State<DetailPage> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(c.judgment, style: t.bodyLarge),
+                      Scripture(text: c.judgment, original: c.original?.judgment ?? '', style: t.bodyLarge),
                       const SizedBox(height: 10),
-                      Text(c.tuan, style: t.bodyLarge?.copyWith(fontSize: 15.5)),
+                      Scripture(
+                          text: c.tuan,
+                          original: c.original?.tuan ?? '',
+                          style: t.bodyLarge?.copyWith(fontSize: 15.5)),
                       const SizedBox(height: 10),
-                      Text(c.daxiang, style: t.bodyLarge?.copyWith(fontSize: 15.5)),
+                      Scripture(
+                          text: c.daxiang,
+                          original: c.original?.daxiang ?? '',
+                          style: t.bodyLarge?.copyWith(fontSize: 15.5)),
                     ],
                   ),
                 ),
                 const SizedBox(height: 16),
                 for (final line in c.lines)
-                  _LineTile(info: info, line: line, highlighted: widget.highlight.contains(line.position)),
+                  _LineTile(
+                      info: info,
+                      line: line,
+                      original: c.original?.line(line.position),
+                      highlighted: widget.highlight.contains(line.position)),
               ],
             ],
           );
@@ -73,11 +84,14 @@ class _DetailPageState extends State<DetailPage> {
 }
 
 class _LineTile extends StatelessWidget {
-  const _LineTile({required this.info, required this.line, required this.highlighted});
+  const _LineTile({required this.info, required this.line, required this.highlighted, this.original});
 
   final HexagramInfo info;
   final LineContent line;
   final bool highlighted;
+
+  /// 漢字原文（非中文語言，HANDOFF §22）；中文為 null。
+  final LineContent? original;
 
   @override
   Widget build(BuildContext context) {
@@ -104,6 +118,13 @@ class _LineTile extends StatelessWidget {
           childrenPadding: const EdgeInsets.fromLTRB(16, 0, 16, 16),
           expandedCrossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            // 非中文：標題是譯文，展開後先列漢字爻辭與《小象》原文，再列《小象》譯文。
+            if (original != null && original!.text.isNotEmpty)
+              Padding(
+                padding: const EdgeInsets.only(bottom: 6),
+                child: Text([original!.text, original!.xiaoxiang].where((s) => s.isNotEmpty).join('\n'),
+                    style: t.bodySmall?.copyWith(fontFamily: kSerif, color: QianColors.textSub)),
+              ),
             if (line.xiaoxiang.isNotEmpty) Text(line.xiaoxiang, style: t.bodySmall?.copyWith(fontFamily: kSerif)),
             Section(title: l.sectionImage, child: Text(line.image)),
             Section(title: l.sectionSource, child: Text(line.source)),

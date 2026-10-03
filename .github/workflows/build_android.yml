@@ -35,6 +35,7 @@ jobs:
           path: _content
           sparse-checkout: |
             zh-Hant
+            en
             images/webp
             glossary
 

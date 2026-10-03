@@ -26,8 +26,12 @@ class L10n {
   static AppLocalizations get current => lookupAppLocalizations(language.locale);
 
   /// 內容資料夾：該語言內容未完成時退回繁中（正式版不會發生，見 AppLanguages.enabled）。
+  /// 測試版 FORCE_LANG 指定的語言即使未完成也讀自己的資料夾（未寫的卦由內容來源退回繁中），
+  /// 方便邊寫邊看（HANDOFF §22）。
   static String get contentFolder =>
-      language.contentReady ? language.contentFolder : AppLanguages.zhHant.contentFolder;
+      language.contentReady || language == AppLanguages.forced
+          ? language.contentFolder
+          : AppLanguages.zhHant.contentFolder;
 }
 
 extension L10nContext on BuildContext {

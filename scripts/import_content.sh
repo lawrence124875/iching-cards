@@ -4,12 +4,19 @@
 set -euo pipefail
 src="${1:?用法：import_content.sh <iching-content 路徑>}"
 
-mkdir -p assets/content/zh-Hant assets/cards
-n_json=0
-for f in "$src"/zh-Hant/[0-9][0-9]-*.json; do
-  [ -e "$f" ] || continue
-  cp "$f" "assets/content/zh-Hant/$(basename "$f" | cut -c1-2).json"
-  n_json=$((n_json + 1))
+# 語言資料夾：新增語言時加在這裡，並同步 build_android.yml 的 sparse-checkout 與 pubspec.yaml assets。
+LANGS="zh-Hant en"
+mkdir -p assets/cards
+summary=""
+for lang in $LANGS; do
+  mkdir -p "assets/content/$lang"
+  n=0
+  for f in "$src/$lang"/[0-9][0-9]-*.json; do
+    [ -e "$f" ] || continue
+    cp "$f" "assets/content/$lang/$(basename "$f" | cut -c1-2).json"
+    n=$((n + 1))
+  done
+  summary="$summary $lang=$n"
 done
 
 # 牌面圖：先複製一般檔，再讓重產版（-v2、-v3…）覆蓋。
@@ -26,4 +33,4 @@ for pass in normal redo; do
   done
 done
 
-echo "已匯入解讀 ${n_json} 卦、牌面圖 ${n_img} 張"
+echo "已匯入解讀（${summary# }）、牌面圖 ${n_img} 張"

@@ -582,6 +582,13 @@ checkout 本 repo → 以 `BUILDS_REPO_TOKEN` sparse-checkout iching-content 的
   4. **Crashlytics** 依 App 分開顯示，不需特別處理。
   5. `google-services.json` 內含**兩個 App** 的設定；Gradle 外掛依 applicationId 自動挑 `com.lclab.qiangua` 那一筆。英文 App 的 Secret 是另一份（`FIREBASE_GOOGLE_SERVICES_JSON`，純文字），兩者互不影響；新下載的 json 也含英文 App，英文 App 不必更新。
   6. 免費方案的配額（Analytics、Crashlytics、Remote Config 都無上限或很寬）兩個 App 共用，目前不構成問題。
+  7. **Firestore 安全規則整個專案只有一份**（2026-10-03 英文 App 對話通知）：英文 App 用 `feedback` 集合，規則為 create-only（只能新增，不能讀、改、刪）。謙卦目前**沒有用 Firestore**；日後若要用：
+     - 集合名稱一律 `qg_` 開頭（例如 `qg_feedback`），不可用 `feedback`。
+     - 發布規則時必須**合併**，保留英文 App 的 `feedback` create 規則，**不可整份覆蓋**，否則英文 App 的意見回饋會失敗。
+     - 發布前先把**完整規則內容**給使用者確認。
+  8. **不可刪除專案中的英文 App，也不改動它的任何 Firebase 設定**（App 設定、SHA 指紋、Remote Config 參數、Firestore 的 `feedback` 規則）。
+  9. 查看 Crashlytics、Analytics 時先在主控台上方**篩選 App**（謙卦＝`com.lclab.qiangua`），以免看到英文 App 的資料。
+  10. 換 Secret 時，新下載的 google-services.json 會含兩個 client（`tw.bcc.englishapp`、`com.lclab.qiangua`）：`patch_firebase.sh` 會檢查含 `com.lclab.qiangua`，google-services 外掛再依 applicationId（`patch_android.sh` 設為 `com.lclab.qiangua`）自動選用謙卦那一筆，不會誤用英文 App 的設定（2026-10-03 已確認）。
 - Secret：iching-cards 的 `GOOGLE_SERVICES_JSON_BASE64`（google-services.json 整檔 base64，不進 repo；`.gitignore` 也擋 `google-services.json`）。更新方式：Firebase 主控台 → 專案設定 → 謙卦 App → 下載 google-services.json → PowerShell `[Convert]::ToBase64String([IO.File]::ReadAllBytes("google-services.json")) | Set-Clipboard` → 貼到 Secret。
 
 ### 18.2 CI（`scripts/patch_firebase.sh`，在 patch_android.sh 之後）

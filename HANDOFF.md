@@ -1,7 +1,7 @@
 # HANDOFF — 易經卦卡 App（名稱未定）
 
 > 新對話接續時請先讀本檔。本檔記錄已確定的決策、內容規格與待討論事項。
-> 最後更新：2026-10-03（**11 語術語表初稿**完成，存 iching-content `glossary/`，待審閱，見第 17 節；Firebase 設定步驟已交給使用者，等 Secret 建好再開工；run #36 使用者實機回饋良好；0.1.0+19（run #36）：**介面翻譯架構（ARB）**，繁中＋英文介面，英文暫不開放，見第 16 節；「寫下想問的事」連結字體縮小，見 15.2；0.1.0+18：置中提示語去標點、逗號處換行，見 15.1；run #33 字體使用者實機確認沒問題；0.1.0+17：打包思源黑體／宋體子集，見第 15 節；run #32（0.1.0+16）使用者實機確認可用；0.1.0+16：首頁一屏顯示完、免責聲明縮小貼底，見 14.7；0.1.0+15：鎖屏媒體按鈕圖示被資源壓縮移除的修正、測試提醒鈕，見 14.6；0.1.0+14：桌面圖示改無框滿版，見 14.4；0.1.0+13：鎖定畫面暫停／停止鍵、桌面圖示比例，見 14.4；0.1.0+12：版面修正，見 14.3；0.1.0+11：卦記提醒準時模式，見 13 節末；0.1.0+10：音景柔和版、432Hz 調音、雙耳節拍，見 14.2；0.1.0+9：實機回饋修正與音景背景播放，見 14.1；**呼吸音景** 0.1.0+8，見第 14 節；卦記功能 0.1.0+7，見第 13 節；**64 卦中文初稿全部完成**，01–36 東西相映名人優先檢查也已完成（見 4.5），下一步由使用者審閱定稿；多語言規劃見第 12 節）
+> 最後更新：2026-10-03（**Firebase 0.1.0+20**：改加進智慧聽覺巡航的 Firebase 專案（帳號專案數已滿），Analytics、Crashlytics、Remote Config，`qg_` 前綴＋App 條件，見第 18 節；**11 語術語表使用者審閱無意見、定稿**，App 端套用待做，見第 17 節；run #36 使用者實機回饋良好；0.1.0+19（run #36）：**介面翻譯架構（ARB）**，繁中＋英文介面，英文暫不開放，見第 16 節；「寫下想問的事」連結字體縮小，見 15.2；0.1.0+18：置中提示語去標點、逗號處換行，見 15.1；run #33 字體使用者實機確認沒問題；0.1.0+17：打包思源黑體／宋體子集，見第 15 節；run #32（0.1.0+16）使用者實機確認可用；0.1.0+16：首頁一屏顯示完、免責聲明縮小貼底，見 14.7；0.1.0+15：鎖屏媒體按鈕圖示被資源壓縮移除的修正、測試提醒鈕，見 14.6；0.1.0+14：桌面圖示改無框滿版，見 14.4；0.1.0+13：鎖定畫面暫停／停止鍵、桌面圖示比例，見 14.4；0.1.0+12：版面修正，見 14.3；0.1.0+11：卦記提醒準時模式，見 13 節末；0.1.0+10：音景柔和版、432Hz 調音、雙耳節拍，見 14.2；0.1.0+9：實機回饋修正與音景背景播放，見 14.1；**呼吸音景** 0.1.0+8，見第 14 節；卦記功能 0.1.0+7，見第 13 節；**64 卦中文初稿全部完成**，01–36 東西相映名人優先檢查也已完成（見 4.5），下一步由使用者審閱定稿；多語言規劃見第 12 節）
 
 ---
 
@@ -17,7 +17,7 @@
 | 項目 | 做法 |
 |---|---|
 | GitHub | 本 repo 專用（公開，GitHub Pages 放隱私權政策）。現有 fine-grained 權杖加入本 repo 即可 |
-| Firebase | 新開專案（同一 Google 帳號），Spark 免費方案，Analytics＋Crashlytics |
+| Firebase | ~~新開專案~~ → 2026-10-03 改為**加進智慧聽覺巡航的 Firebase 專案**（帳號專案數已滿），同專案第二個 Android App `com.lclab.qiangua`；Spark 免費方案，Analytics＋Crashlytics＋Remote Config。共用規則見第 18 節 |
 | Google Play Console | 沿用現有開發者帳號。新 App 須重跑封閉測試（12 位以上、連續 14 天） |
 | AdMob / RevenueCat | 沿用現有帳號，新增 App |
 | 簽署金鑰 | 另建新的上傳金鑰，與智慧聽覺巡航分開；存 GitHub Secrets，本機備份 |
@@ -328,10 +328,10 @@ App 名稱與 applicationId、商業模式（廣告與付費內容）、隱私�
 3. **內容量產**（2026-10-02 起）：**01～64 中文初稿全部完成**（2026-10-02，run 由 workflow_dispatch 觸發）。01–36 東西相映名人優先檢查已完成（2026-10-02，換 8 項，見 4.5）。經文版本差異（iching-content README）2026-10-02 使用者決定全部照王弼本採用，不再核對。**下一步**：使用者以手機逐卦審閱（另提供審閱用 Excel：64 卦東西相映、今日更動、經文差異，含「我的意見／狀態」欄，存於私人 repo iching-content `review/謙卦_64卦審閱表.xlsx`，不進本公開 repo），使用者回傳意見後修改；未提意見者視為定稿，再依第 12 節開始英文版。以下流程仍適用於修改既有卦：一個對話寫 4～5 卦（單一對話的長度上限，寫不完 62 卦），格式同 `01-qian.json`、`02-kun.json`。`art.prompt` 從 iching-content `prompts/art-prompts.md` 搬入（圖已定案，`art.status` 填「已定案」）。每批完成後更新 iching-content README 進度。流程：clone iching-content（sparse：zh-Hant、prompts、tools）→ 寫 `zh-Hant/NN-slug.json`（不含 `art`）→ `python3 tools/finalize_hexagram.py NN` 自動填入提示詞並檢查結構 → 每完成一卦就 commit＋push。參考經文（簡體，僅比對用、不進 repo）：`curl -sL https://raw.githubusercontent.com/NanBox/PiPiName/master/data/%E5%91%A8%E6%98%93.txt`（容器網路無法連維基文庫）。比對時以 opencc（`pip install opencc-python-reimplemented`）簡轉繁、切出 `NN.md` 給 `REF_DIR`；轉換造成的假差異（于／於、干／幹、斗／鬥、征凶／徵兇、為／爲）可忽略。卦辭不以「卦名：」開頭者（履、同人、艮）腳本會報錯，需人工比對。整批完成後以 workflow_dispatch 觸發建置（只改 .md 不會自動建置）。經文與參考本不同處記在 iching-content README「待人工核對」。
 4. **審閱期間並行的工作（2026-10-02 使用者同意，依序各開一個新對話）**：
    1. ✅ 2026-10-02 完成（0.1.0+8，見第 14 節）【程式】呼吸音景（§7 第 2 項）：音源採程式合成（不用錄音檔，免授權追蹤）；**已決定（2026-10-02）**：呼吸節奏固定「吸 4 秒、吐 6 秒」（每分鐘 6 次）；時長由使用者選 1／2／3／5 分鐘。音景依抽到的卦以上下經卦組合（§7 第 2 項；天、地兩種音景仍待定，開工時提案）。
-   2. 【程式】✅ 字體打包 2026-10-03 完成（0.1.0+17，見第 15 節）。⏳ Firebase（Analytics、Crashlytics、Remote Config）：等使用者建好 Firebase 專案、加入 Android App（套件 `com.lclab.qiangua`）、下載 `google-services.json`，以 base64 存成 iching-cards 的 Secret `GOOGLE_SERVICES_JSON_BASE64`（不進 repo）後再開工。2026-10-03 已給使用者逐步說明（建專案時啟用 Google Analytics；SHA 指紋目前不必填；Windows 以 PowerShell `[Convert]::ToBase64String([IO.File]::ReadAllBytes("google-services.json")) | Set-Clipboard` 轉 base64）。
-   3. ✅ 2026-10-03 初稿完成（見第 17 節）【內容】11 語術語表：64 卦名、八經卦、爻位、易學術語的固定譯法，存 iching-content `glossary/`。⏳ 待使用者審閱 `review/謙卦_術語表審閱.xlsx`；定稿後改 `lib/l10n/terms.dart`（§16）。
+   2. 【程式】✅ 字體打包 2026-10-03 完成（0.1.0+17，見第 15 節）。✅ Firebase（Analytics、Crashlytics、Remote Config）2026-10-03 完成（0.1.0+20，見第 18 節）：因帳號專案數已滿，**改加進智慧聽覺巡航的 Firebase 專案**（第二個 Android App `com.lclab.qiangua`），Secret `GOOGLE_SERVICES_JSON_BASE64` 由使用者建立，CI 每次檢查。⚠️ run #37（0.1.0+20）建置成功，但 **workflow 讀不到這個 Secret**（Release 說明「Firebase：未啟用」），待使用者檢查後以 workflow_dispatch 重建驗證（見 18.4）。
+   3. ✅ 2026-10-03 定稿（見第 17 節）【內容】11 語術語表：64 卦名、八經卦、爻位、易學術語的固定譯法，存 iching-content `glossary/`。使用者審閱無意見。⏳ **下一個程式工作**：App 端套用（改 `lib/l10n/terms.dart` 與 ARB，§16、§17）。
    4. ✅ 2026-10-03 完成（0.1.0+19，run #36，見第 16 節）【程式】介面翻譯：Flutter 多語系架構（ARB），全部介面文字移到 ARB，已有繁中＋英文介面；依 §12，英文內容完成前不開放。
-5. 程式待辦（有空檔或回饋時）：牌面細節。
+5. 程式待辦（有空檔或回饋時）：術語表套用到 App（§17，排第一）；牌面細節；上架前：隱私權政策與 Play「資料安全性」表單要寫明 Firebase 收集項目（§18）。
 
 ## 11. 程式現況（2026-10-01 骨架完成）
 
@@ -354,7 +354,7 @@ App 名稱與 applicationId、商業模式（廣告與付費內容）、隱私�
 ### 11.2 暫定設定
 - **定名（2026-10-01）**：開發者 **LC Lab**；App 名 **謙卦**（英文 Qiangua）。桌面名稱「謙卦」；首頁大標「謙卦」、副標「易經六十四卦卡」；Google Play 標題預定「謙卦｜易經六十四卦卡」。2026-10-01 使用者已在 Google Play／App Store 搜尋，確認沒有名為「謙卦」的 App（商標可在上架前另查）。
 - **套件名稱 `com.lclab.qiangua`**（0.1.0+5 起；上傳 Play 後永遠不能改）。由 `patch_android.sh` 改 applicationId；`flutter create --org com.lclab`，namespace 維持產生值。舊版 `tw.bcc.iching_cards` 是不同 App，測試機需手動移除。
-- 版本 `0.1.0+19`（+19：介面翻譯架構（ARB）、想問的事連結字體縮小，見第 16 節、15.2；+18：置中提示語去標點；+17：思源字體子集，見第 15 節；+16：首頁一屏顯示完；+15：鎖屏按鈕圖示保留、測試提醒鈕；+14：桌面圖示無框滿版；+13：鎖定畫面控制改用 audio_service、桌面圖示留白；+12：卦記縮圖、底部被導覽列擋住、音景設定面板；+11：卦記提醒準時模式；+10：音景柔和版、432Hz、雙耳節拍，見 14.2；+9：實機回饋修正、音景背景播放與通知控制，見 14.1；+8：呼吸音景，見第 14 節；+7：卦記與回顧提醒，見第 13 節；+3：首頁水平置中修正、桌面圖示；+4：固定直向；+5：定名謙卦、套件名稱 com.lclab.qiangua；+6：擲錢頁收斂在一個畫面、點牌面圖滿版看象）。
+- 版本 `0.1.0+20`（+20：Firebase，見第 18 節；+19：介面翻譯架構（ARB）、想問的事連結字體縮小，見第 16 節、15.2；+18：置中提示語去標點；+17：思源字體子集，見第 15 節；+16：首頁一屏顯示完；+15：鎖屏按鈕圖示保留、測試提醒鈕；+14：桌面圖示無框滿版；+13：鎖定畫面控制改用 audio_service、桌面圖示留白；+12：卦記縮圖、底部被導覽列擋住、音景設定面板；+11：卦記提醒準時模式；+10：音景柔和版、432Hz、雙耳節拍，見 14.2；+9：實機回饋修正、音景背景播放與通知控制，見 14.1；+8：呼吸音景，見第 14 節；+7：卦記與回顧提醒，見第 13 節；+3：首頁水平置中修正、桌面圖示；+4：固定直向；+5：定名謙卦、套件名稱 com.lclab.qiangua；+6：擲錢頁收斂在一個畫面、點牌面圖滿版看象）。
 - **滿版看圖**（0.1.0+6，`shared/widgets/card_art_viewer.dart`）：`CardFace(zoomable: true)` 時點風景圖開啟；預設 cover 填滿螢幕、隱藏系統列，點兩下切換完整畫面（contain），兩指縮放，點一下返回。目前用於抽卡翻牌後與解讀頁。
 - **擲錢頁版面**（0.1.0+6）：不再捲動；六爻列固定保留（未擲顯示「—」），中段以 FittedBox 等比縮小以適應小螢幕或大字體，按鈕固定在底部。
 - **固定直向**：卦卡為 9:16 直式，`main.dart` 以 `SystemChrome` 鎖直向，Android 另由 `patch_android.sh` 在 AndroidManifest 加 `screenOrientation="portrait"`。iOS 上架時需在 Info.plist 只留 Portrait。平板若要支援橫向，再另做雙欄版面。
@@ -568,7 +568,62 @@ checkout 本 repo → 以 `BUILDS_REPO_TOKEN` sparse-checkout iching-content 的
 - 內容：64 卦（`name` 內文稱呼、`title` 標題、`meaning` 卦義）、八經卦（名、象、卦德）、爻位（12 個爻名＋用九用六）、58 個術語（含 App 區塊名，英文與 ARB 一致）。
 - 卦名原則：中、日、韓、越用各自漢字讀法（日新字體附讀音；韓附漢字、純卦用「重」；越用漢越音、純卦用 Thuần）；英、印尼、西、葡、泰、阿用意譯＋帶聲調拼音（例 `Modesty (Qiān)`）。牌面大字一律漢字。
 - 英文卦義相對 `hexagram_table.dart` 暫定詞改 5 個：1 Creative Force、2 Receptivity、47 Confinement、51 Shock、57 Gentle Penetration（避免與經卦象同名）。
-- ⏳ 待使用者審閱；泰、阿需母語者校閱。定稿後 App 端：`terms.dart` 的 `hexName`／`hexFullName` 改依術語表（可在 CI 匯入 `glossary.json` 或產生 Dart 常數）、ARB 經卦名與 `lineName` select 對照修改；目前 ARB 的 `lineName` 用「Line 1…」（介面爻位），與術語表的傳統爻名（Nine at the beginning）是兩回事，詳細頁標題要用哪個待定。
+- ✅ **2026-10-03 使用者審閱完畢，無修改意見 → 定稿**（iching-content 兩份 README 已標註）。泰、阿仍需母語者校閱，在開放該語言前處理。
+- ⏳ App 端（下一個程式對話）：`terms.dart` 的 `hexName`／`hexFullName` 改依術語表（可在 CI 匯入 `glossary.json` 或產生 Dart 常數）、ARB 經卦名與 `lineName` select 對照修改；目前 ARB 的 `lineName` 用「Line 1…」（介面爻位），與術語表的傳統爻名（Nine at the beginning）是兩回事，詳細頁標題要用哪個待定。
+
+## 18. Firebase（2026-10-03，0.1.0+20）
+
+### 18.1 決定：與智慧聽覺巡航共用同一個 Firebase 專案
+- 原計畫新開專案，但使用者的 Google 帳號 Firebase 專案數已滿 → **改加進智慧聽覺巡航的 Firebase 專案**，成為同專案第二個 Android App，套件 `com.lclab.qiangua`（英文 App 是 `tw.bcc.englishapp`）。
+- 共用造成的規則（**永久**，兩個 App 都要遵守）：
+  1. **Remote Config 參數一律 `qg_` 開頭**（Qiangua）。Remote Config 範本是整個專案共用的，兩個 App 抓到的是同一份參數清單；前綴避免撞名。英文 App 日後新增參數**不可用 `qg_` 開頭**。
+  2. **Remote Config 的值只設在「App 條件」下**：在主控台 Remote Config → 條件，建立條件「謙卦 Android」＝ 應用程式 (App) ＝ `com.lclab.qiangua`。`qg_` 參數的「預設值」選「使用應用程式內的預設值」，只在「謙卦 Android」條件下填值。這樣英文 App 永遠拿不到有意義的值，也不會被誤關功能。
+  3. **Analytics 事件也一律 `qg_` 開頭**（本對話自行決定的延伸）。兩個 App 共用同一個 GA4 資源，主控台可依「應用程式」篩選，前綴讓報表與自訂維度不會混在一起。
+  4. **Crashlytics** 依 App 分開顯示，不需特別處理。
+  5. `google-services.json` 內含**兩個 App** 的設定；Gradle 外掛依 applicationId 自動挑 `com.lclab.qiangua` 那一筆。英文 App 的 Secret 是另一份（`FIREBASE_GOOGLE_SERVICES_JSON`，純文字），兩者互不影響；新下載的 json 也含英文 App，英文 App 不必更新。
+  6. 免費方案的配額（Analytics、Crashlytics、Remote Config 都無上限或很寬）兩個 App 共用，目前不構成問題。
+- Secret：iching-cards 的 `GOOGLE_SERVICES_JSON_BASE64`（google-services.json 整檔 base64，不進 repo；`.gitignore` 也擋 `google-services.json`）。更新方式：Firebase 主控台 → 專案設定 → 謙卦 App → 下載 google-services.json → PowerShell `[Convert]::ToBase64String([IO.File]::ReadAllBytes("google-services.json")) | Set-Clipboard` → 貼到 Secret。
+
+### 18.2 CI（`scripts/patch_firebase.sh`，在 patch_android.sh 之後）
+- 解 base64（先去除空白換行）→ 驗證是 JSON → **只印出 json 內的套件名稱** → 沒有 `com.lclab.qiangua` 就讓 CI 失敗（`::error::` 說明怎麼修）。
+- 加 Gradle 外掛：`com.google.gms.google-services` 4.4.2、`com.google.firebase.crashlytics` 3.0.2（版本同英文 App）；ProGuard 加 Firebase keep 規則（缺了 release 版 `Firebase.initializeApp` 會失敗，英文 App 的教訓）。
+- Secret 沒設：只發 warning，照樣建置（App 內 Firebase 初始化失敗→自動停用）。Release 說明會顯示「Firebase：已啟用／未啟用」。
+
+### 18.3 程式（依 §9：Firebase 只出現在一個檔案）
+- `lib/core/telemetry/`：介面 `Analytics`（`NoopAnalytics`）、`RemoteFlags`（`DefaultRemoteFlags`＝全開；`featureFlagKey(id)` → `qg_feature_<id>`）、`AnalyticsListener`（事件匯流排的旁觀者，事件→統計事件；`describe()` 可單獨測試）。
+- `lib/core/firebase/firebase_telemetry.dart`：**唯一 import Firebase 的檔案**。`FirebaseTelemetry.init(featureIds:)`：`Firebase.initializeApp`（8 秒逾時）→ Crashlytics（release 才收集；接 `FlutterError.onError` 與 `PlatformDispatcher.onError`）→ Remote Config。任何失敗都退回 Noop／預設值，不影響啟動。拔除 Firebase＝`main.dart` 不呼叫它並移除套件。
+- `main.dart`：最先初始化 Firebase（才接得到啟動中的當機）→ `Services.standard(analytics:, flags:)` → `AnalyticsListener`。
+- 套件：`firebase_core` ^3.6.0、`firebase_analytics` ^11.3.3、`firebase_crashlytics` ^4.1.3（同英文 App）、`firebase_remote_config` ^5.1.3。皆支援 iOS；做 iOS 時需 `GoogleService-Info.plist`（同專案再加 iOS App）。
+- 測試：`test/telemetry_test.dart`（事件名稱合規且 `qg_` 開頭、參數只有字串／數字、事件轉送、開關名稱與過濾）。
+
+**統計事件**（只有代碼與數字；⚠️ **絕不送「想問的事」、回顧或任何使用者輸入的文字**，§13）
+
+| 事件 | 參數 | 觸發處 |
+|---|---|---|
+| `qg_reading_shown` | method（`simple`／`coins` 等起卦方式 id）、hexagram（本卦 1–64）、has_changed（0/1） | 解讀頁（卦記回看不算） |
+| `qg_journal_saved` | has_reminder（0/1） | 解讀頁存卦記 |
+| `qg_breath_started` | hexagram、minutes、silent（無聲引導 0/1）、binaural（0/1） | 呼吸練習開始 |
+| `qg_breath_completed` | hexagram、minutes | 呼吸練習完整做完（從通知停止不算） |
+
+新增統計：在 `event_bus.dart` 加事件類別、功能裡 `emit`、`AnalyticsListener.describe` 加一行、測試會自動檢查名稱。
+
+**Remote Config 參數**（App 內預設全部 `true`；主控台不設就照預設）
+
+| 參數 | 型別 | 作用 |
+|---|---|---|
+| `qg_feature_draw` | 布林 | 首頁「抽一卦」 |
+| `qg_feature_coin_cast` | 布林 | 首頁「三枚銅錢起卦」 |
+| `qg_feature_journal` | 布林 | 首頁「卦記」與解讀頁「記下這一卦」（已存的卦記提醒通知仍可開啟） |
+| `qg_feature_breath` | 布林 | 解讀頁「以此卦靜心呼吸」 |
+
+- 讀法：**下次啟動生效**——啟動時套用上次抓到的值，背景再抓新值（12 小時一次）。改了主控台的值，使用者通常要重開 App 一到兩次才看到。
+- 參數名稱由功能 id 自動產生（`registeredFeatures` 的 `id`），新功能自動有開關。日後付費內容、A/B 測試的參數同樣 `qg_` 開頭並設在 App 條件下。
+
+### 18.4 待辦
+- ⚠️ **run #37（2026-10-03）：Secret 讀不到**。程式與 CI 都已通過（analyze、test、release 建置成功，沒有 Firebase 也能正常執行），但 workflow 收到的 `GOOGLE_SERVICES_JSON_BASE64` 是空的，所以這個 APK 不含 Firebase。請使用者到 iching-cards → Settings → Secrets and variables → **Actions** → 「Repository secrets」確認：名稱完全是 `GOOGLE_SERVICES_JSON_BASE64`、建在 iching-cards（不是 english-learning-app）、不是放在 Environment／Dependabot／Codespaces 分頁。改好後到 Actions → Build Android APK → Run workflow 手動重建；Release 說明應顯示「Firebase：已啟用」，若內容不對，CI 會以 annotation 說明（例如沒有 `com.lclab.qiangua`）。容器權杖無法列出 Secret 名稱（403），只能由建置結果判斷。
+- ⏳ 使用者實機確認：Firebase 主控台 → Analytics → **DebugView** 或「即時」報表（選謙卦 App）看得到 `qg_reading_shown` 等事件（一般報表要等 24 小時）；Crashlytics 頁面在第一次啟動回報後會從「等待中」變成正常。
+- 上架前：隱私權政策（GitHub Pages）與 Play「資料安全性」表單要寫明 Analytics（應用程式互動、裝置 ID）、Crashlytics（當機紀錄、診斷資料）；Firebase Analytics 會自動加入廣告 ID 權限（`AD_ID`），Play 的「廣告 ID」聲明要勾選（日後接 AdMob 也需要）。
+- 是否加「不分享使用統計」的開關：上架前與商業模式一起討論。
 
 ## 8. 範例內容：謙卦（第十五卦，地山謙 ䷎，Qiān · Modesty）
 

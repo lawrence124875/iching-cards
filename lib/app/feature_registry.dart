@@ -2,6 +2,7 @@ import '../features/breath/breath_feature.dart';
 import '../features/coin_cast/coin_cast_feature.dart';
 import '../features/draw/draw_feature.dart';
 import '../features/journal/journal_feature.dart';
+import '../core/telemetry/remote_flags.dart';
 import 'app_feature.dart';
 
 export 'app_feature.dart';
@@ -13,3 +14,8 @@ final List<AppFeature> registeredFeatures = [
   journalFeature,
   breathFeature,
 ];
+
+/// 目前開放的功能：註冊表中、且遠端開關（`qg_feature_<id>`，§18）沒有關掉的。
+/// 首頁與解讀頁的入口都由這裡決定；通知開啟（payload）仍走完整的註冊表。
+Iterable<AppFeature> activeFeatures(RemoteFlags flags) =>
+    registeredFeatures.where((f) => flags.featureEnabled(f.id));

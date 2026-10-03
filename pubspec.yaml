@@ -1,7 +1,7 @@
 name: iching_cards
 description: "謙卦｜易經六十四卦卡（LC Lab）"
 publish_to: 'none'
-version: 0.1.0+19
+version: 0.1.0+20
 
 environment:
   sdk: '>=3.4.0 <4.0.0'
@@ -20,6 +20,11 @@ dependencies:
   just_audio: ^0.10.4 # 呼吸音景：播放程式合成的 WAV
   wakelock_plus: ^1.2.8 # 呼吸練習時保持螢幕亮著
   audio_service: ^0.18.15 # 呼吸音景：背景播放、通知與鎖定畫面控制（版本同智慧聽覺巡航）
+  # Firebase（HANDOFF §18）：與智慧聽覺巡航共用同一專案；core／analytics／crashlytics 版本同英文 App
+  firebase_core: ^3.6.0
+  firebase_analytics: ^11.3.3
+  firebase_crashlytics: ^4.1.3
+  firebase_remote_config: ^5.1.3 # 遠端開關（參數 qg_ 開頭，只設在謙卦 App 條件下）
 
 dev_dependencies:
   flutter_test:

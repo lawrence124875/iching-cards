@@ -3,12 +3,18 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 
 import 'app/app.dart';
+import 'app/feature_registry.dart';
 import 'app/services.dart';
 import 'core/audio/just_audio_playback.dart';
+import 'core/firebase/firebase_telemetry.dart';
+import 'core/telemetry/analytics_listener.dart';
 import 'l10n/l10n.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  // Firebase（Analytics、Crashlytics、Remote Config，HANDOFF §18）放最前面，才接得到啟動中的當機；
+  // 失敗不影響 App（統計不送、遠端開關全照預設）。
+  final telemetry = await FirebaseTelemetry.init(featureIds: registeredFeatures.map((f) => f.id));
   _registerFontLicenses();
   // 卦卡為 9:16 直式設計，固定直向（HANDOFF §11.2）。
   // Android 另在 AndroidManifest 設定 screenOrientation，避免啟動瞬間閃成橫向。
@@ -17,7 +23,8 @@ Future<void> main() async {
   // 通知類別名稱跟著手機語言（L10n 在 MaterialApp 決定語言前先依手機設定判斷）
   final l = L10n.current;
   await JustAudioPlayback.initBackground(channelName: l.breathChannelName, album: l.appTitle);
-  final services = Services.standard();
+  final services = Services.standard(analytics: telemetry.analytics, flags: telemetry.flags);
+  AnalyticsListener(services.events, services.analytics); // 全 App 存活期間都在，不需 dispose
   await services.reminders.init(); // 不拋例外；失敗時提醒功能停用
   runApp(AppServices(services: services, child: const IchingApp()));
 }

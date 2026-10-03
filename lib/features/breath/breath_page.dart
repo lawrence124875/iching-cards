@@ -8,6 +8,7 @@ import 'package:path_provider/path_provider.dart';
 
 import '../../app/services.dart';
 import '../../app/theme.dart';
+import '../../core/events/event_bus.dart';
 import '../../core/iching/hexagram_table.dart';
 import '../../core/soundscape/breath_timeline.dart';
 import '../../core/soundscape/session_renderer.dart';
@@ -118,6 +119,12 @@ class _BreathPageState extends State<BreathPage> with SingleTickerProviderStateM
 
   void _start() {
     setState(() => _stage = _Stage.running);
+    _services?.events.emit(BreathStarted(
+      hexagram: widget.hexagram,
+      minutes: widget.spec.minutes,
+      silent: _silent,
+      binaural: widget.spec.binaural,
+    ));
     _svc?.screenAwake.set(true);
     if (_silent) {
       _clock.start();
@@ -161,7 +168,10 @@ class _BreathPageState extends State<BreathPage> with SingleTickerProviderStateM
     _ticker.stop();
     _clock.stop();
     _svc?.screenAwake.set(false);
-    if (!_stoppedEarly) _now.value = _tl.breathEnd;
+    if (!_stoppedEarly) {
+      _now.value = _tl.breathEnd;
+      _services?.events.emit(BreathCompleted(hexagram: widget.hexagram, minutes: widget.spec.minutes));
+    }
     setState(() => _stage = _Stage.done);
   }
 

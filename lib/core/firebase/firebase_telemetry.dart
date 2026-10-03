@@ -1,0 +1,98 @@
+import 'dart:async';
+import 'dart:ui';
+
+import 'package:firebase_analytics/firebase_analytics.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
+import 'package:firebase_remote_config/firebase_remote_config.dart';
+import 'package:flutter/foundation.dart';
+
+import '../telemetry/analytics.dart';
+import '../telemetry/remote_flags.dart';
+
+/// Firebase（Analytics、Crashlytics、Remote Config）只在這個檔案出現（HANDOFF §18）。
+/// 其他程式只認得 [Analytics] 與 [RemoteFlags] 介面；拔掉 Firebase＝main.dart 不呼叫 [init]。
+///
+/// Firebase 專案與智慧聽覺巡航共用（帳號專案數已滿）：本 App 是同專案的第二個 Android App
+/// `com.lclab.qiangua`。統計事件與 Remote Config 參數一律 `qg_` 開頭。
+class FirebaseTelemetry {
+  FirebaseTelemetry._(this.analytics, this.flags);
+
+  final Analytics analytics;
+  final RemoteFlags flags;
+
+  /// 初始化；任何失敗（沒有 google-services.json、沒網路、逾時）都退回替代實作，不影響 App 啟動。
+  /// [featureIds]：功能註冊表的 id，用來設定 Remote Config 的 App 內預設值（全部開啟）。
+  static Future<FirebaseTelemetry> init({required Iterable<String> featureIds}) async {
+    try {
+      await Firebase.initializeApp().timeout(const Duration(seconds: 8));
+    } catch (e) {
+      debugPrint('Firebase 初始化失敗，統計與遠端開關停用：$e');
+      return FirebaseTelemetry._(const NoopAnalytics(), const DefaultRemoteFlags()); // 統計不送、開關全照預設
+    }
+
+    // 當機回報：release 版才收集。
+    try {
+      final crash = FirebaseCrashlytics.instance;
+      await crash.setCrashlyticsCollectionEnabled(!kDebugMode);
+      FlutterError.onError = crash.recordFlutterFatalError;
+      PlatformDispatcher.instance.onError = (error, stack) {
+        crash.recordError(error, stack, fatal: true);
+        return true;
+      };
+    } catch (e) {
+      debugPrint('Crashlytics 設定失敗：$e');
+    }
+
+    final RemoteFlags flags = await _FirebaseRemoteFlags.init(featureIds);
+    return FirebaseTelemetry._(const _FirebaseAnalytics(), flags);
+  }
+}
+
+class _FirebaseAnalytics implements Analytics {
+  const _FirebaseAnalytics();
+
+  @override
+  Future<void> log(String name, [Map<String, Object> params = const {}]) async {
+    try {
+      await FirebaseAnalytics.instance.logEvent(name: name, parameters: params.isEmpty ? null : params);
+    } catch (_) {
+      // 統計失敗不影響使用
+    }
+  }
+}
+
+/// 「下次啟動才生效」的讀法：啟動時先套用上次抓到的值（不等網路），
+/// 再在背景抓新值，下次啟動生效。首頁不會因為網路慢而卡住或在使用中突然變動。
+class _FirebaseRemoteFlags implements RemoteFlags {
+  _FirebaseRemoteFlags(this._rc);
+
+  final FirebaseRemoteConfig? _rc;
+
+  static Future<RemoteFlags> init(Iterable<String> featureIds) async {
+    try {
+      final rc = FirebaseRemoteConfig.instance;
+      await rc.setConfigSettings(RemoteConfigSettings(
+        fetchTimeout: const Duration(seconds: 10),
+        // Spark 免費方案；開關不必即時，12 小時抓一次即可（官方預設值）
+        minimumFetchInterval: kDebugMode ? const Duration(minutes: 1) : const Duration(hours: 12),
+      ));
+      await rc.setDefaults({for (final id in featureIds) featureFlagKey(id): true});
+      await rc.activate();
+      unawaited(rc.fetch().catchError((Object e) => debugPrint('Remote Config 抓取失敗：$e')));
+      return _FirebaseRemoteFlags(rc);
+    } catch (e) {
+      debugPrint('Remote Config 初始化失敗，開關全照預設：$e');
+      return const DefaultRemoteFlags();
+    }
+  }
+
+  @override
+  bool featureEnabled(String featureId) {
+    try {
+      return _rc?.getBool(featureFlagKey(featureId)) ?? true;
+    } catch (_) {
+      return true;
+    }
+  }
+}

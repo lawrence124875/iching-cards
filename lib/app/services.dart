@@ -14,6 +14,8 @@ import '../core/iching/focus_rule.dart';
 import '../core/reminders/local_notification_reminders.dart';
 import '../core/reminders/reminder_service.dart';
 import '../core/soundscape/soundscape_files.dart';
+import '../core/telemetry/analytics.dart';
+import '../core/telemetry/remote_flags.dart';
 import '../l10n/l10n.dart';
 
 /// App 共用服務。換實作（內容來源、變爻規則…）只改 Services.standard()。
@@ -26,9 +28,16 @@ class Services {
     required this.reminders,
     this.journal,
     this.breath,
+    this.analytics = const NoopAnalytics(),
+    this.flags = const DefaultRemoteFlags(),
   });
 
-  factory Services.standard() => Services(
+  /// [analytics]、[flags]：main.dart 以 Firebase 初始化後傳入（§18）；不傳＝不統計、功能全開。
+  factory Services.standard({
+    Analytics analytics = const NoopAnalytics(),
+    RemoteFlags flags = const DefaultRemoteFlags(),
+  }) =>
+      Services(
         content: AssetContentSource(folder: () => L10n.contentFolder),
         events: EventBus(),
         focusRule: const ZhuXiFocusRule(),
@@ -43,6 +52,8 @@ class Services {
           playback: JustAudioPlayback(),
           screenAwake: WakelockScreenAwake(),
         ),
+        analytics: analytics,
+        flags: flags,
       );
 
   final ContentSource content;
@@ -56,6 +67,12 @@ class Services {
 
   /// 呼吸音景；為 null 時練習頁直接提供無聲引導。拔除功能請移出註冊表。
   final BreathServices? breath;
+
+  /// 使用統計（只由 AnalyticsListener 從事件匯流排轉送，畫面不直接呼叫）。
+  final Analytics analytics;
+
+  /// 遠端開關（Firebase Remote Config，§18）。
+  final RemoteFlags flags;
 }
 
 /// 呼吸音景用到的服務（HANDOFF §14）。

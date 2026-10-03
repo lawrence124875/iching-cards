@@ -120,7 +120,7 @@ class _ReadingPageState extends State<ReadingPage> {
                 Section(title: l.sectionAction, child: Text(reading.action)),
                 Section(title: l.sectionQuestion, child: Text(reading.question)),
               ],
-              for (final action in registeredFeatures.map((f) => f.readingAction).whereType<ReadingAction>())
+              for (final action in activeFeatures(_services.flags).map((f) => f.readingAction).whereType<ReadingAction>())
                 Padding(
                   padding: const EdgeInsets.only(top: 32),
                   child: Center(
@@ -131,7 +131,7 @@ class _ReadingPageState extends State<ReadingPage> {
                     ),
                   ),
                 ),
-              if (!widget.review && _services.journal != null) ...[
+              if (!widget.review && _services.journal != null && _services.flags.featureEnabled('journal')) ...[
                 const SizedBox(height: 32),
                 Center(
                   child: _saved
@@ -170,7 +170,9 @@ class _ReadingPageState extends State<ReadingPage> {
       question: widget.question,
       readingIndex: index,
     );
-    if (entry != null && mounted) setState(() => _saved = true);
+    if (entry == null) return;
+    _services.events.emit(JournalSaved(hasReminder: entry.reminderAt != null));
+    if (mounted) setState(() => _saved = true);
   }
 
   int? get _focusHexagram {

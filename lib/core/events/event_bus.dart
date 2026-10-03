@@ -14,6 +14,31 @@ class ReadingShown extends AppEvent {
   final int? changed;
 }
 
+/// 存了一筆卦記（不帶任何文字內容）。
+class JournalSaved extends AppEvent {
+  const JournalSaved({required this.hasReminder});
+
+  final bool hasReminder;
+}
+
+/// 開始一次呼吸練習。
+class BreathStarted extends AppEvent {
+  const BreathStarted({required this.hexagram, required this.minutes, required this.silent, required this.binaural});
+
+  final int hexagram;
+  final int minutes;
+  final bool silent;
+  final bool binaural;
+}
+
+/// 呼吸練習完整做完（從通知列提早停止的不算）。
+class BreathCompleted extends AppEvent {
+  const BreathCompleted({required this.hexagram, required this.minutes});
+
+  final int hexagram;
+  final int minutes;
+}
+
 class EventBus {
   final _controller = StreamController<AppEvent>.broadcast();
 

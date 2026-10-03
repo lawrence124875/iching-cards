@@ -81,6 +81,13 @@ jobs:
           ANDROID_KEY_PASSWORD: ${{ secrets.ANDROID_KEY_PASSWORD }}
         run: bash scripts/patch_android.sh
 
+      # Firebase（HANDOFF §18）：與智慧聽覺巡航共用專案。先檢查 Secret 能解碼且含 com.lclab.qiangua
+      # （只印套件名稱），再加 Gradle 外掛。需在 patch_android.sh 之後（沿用其 proguard-rules.pro）。
+      - name: 套用 Firebase 設定
+        env:
+          GOOGLE_SERVICES_JSON_BASE64: ${{ secrets.GOOGLE_SERVICES_JSON_BASE64 }}
+        run: bash scripts/patch_firebase.sh
+
       - name: 安裝套件
         run: flutter pub get
 
@@ -135,7 +142,7 @@ jobs:
           gh release create "iching-android-run${n}" "$f" \
             --repo lawrence124875/iching-content \
             --title "謙卦 ${ver}（run ${n}）${FORCE_LANG:+［測試：介面 $FORCE_LANG］}" \
-            --notes "commit ${{ github.sha }}；簽署：${SIGNING}"
+            --notes "commit ${{ github.sha }}；簽署：${SIGNING}；Firebase：${FIREBASE}"
 
       # 依 run 編號排序：Release 的 createdAt 取自 iching-content 被標記的 commit，
       # 內容沒變時每個 Release 都相同，用它排序會誤刪最新的一個（run 6 曾發生）。

@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import '../shared/widgets/card_back.dart';
 import '../l10n/l10n.dart';
 import 'feature_registry.dart';
+import 'services.dart';
 import 'theme.dart';
 
 class HomePage extends StatelessWidget {
@@ -12,8 +13,9 @@ class HomePage extends StatelessWidget {
   Widget build(BuildContext context) {
     final t = Theme.of(context).textTheme;
     final l = context.l10n;
-    final primary = registeredFeatures.where((f) => f.placement == FeaturePlacement.primary && f.builder != null);
-    final secondary = registeredFeatures.where((f) => f.placement == FeaturePlacement.secondary && f.builder != null);
+    final features = activeFeatures(AppServices.of(context).flags).toList();
+    final primary = features.where((f) => f.placement == FeaturePlacement.primary && f.builder != null);
+    final secondary = features.where((f) => f.placement == FeaturePlacement.secondary && f.builder != null);
 
     void open(AppFeature f) => Navigator.of(context).push(MaterialPageRoute<void>(builder: f.builder!));
 

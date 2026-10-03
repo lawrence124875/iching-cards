@@ -45,3 +45,7 @@ key.properties
 /_fonts_src/
 # 介面翻譯由 ARB 自動產生（l10n.yaml）
 /lib/l10n/app_localizations*.dart
+
+# Firebase 設定檔由 CI 從 Secret 產生，不進 repo（HANDOFF §18）
+google-services.json
+GoogleService-Info.plist

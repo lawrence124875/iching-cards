@@ -208,16 +208,17 @@ class _BreathPageState extends State<BreathPage> with SingleTickerProviderStateM
   @override
   Widget build(BuildContext context) {
     final t = Theme.of(context).textTheme;
+    final l = context.l10n;
     final state = _stage == _Stage.done ? const BreathState(BreathPhase.done, 1) : _tl.at(_now.value);
 
     return Scaffold(
-      appBar: AppBar(title: Text(_info.fullName)),
+      appBar: AppBar(title: Text(l.hexFullName(_info))),
       body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.fromLTRB(28, 0, 28, 20),
           child: Column(
             children: [
-              Text(_soundNames, style: t.bodySmall?.copyWith(letterSpacing: 3)),
+              Text(_soundNames(l), style: t.bodySmall?.copyWith(letterSpacing: 3)),
               Expanded(
                 child: Center(
                   child: AspectRatio(

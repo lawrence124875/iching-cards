@@ -88,16 +88,6 @@ class _JournalEntryPageState extends State<JournalEntryPage> {
         : e.copyWith(reminderAt: JournalReminders.reviewTime(DateTime.now(), days)));
   }
 
-  // TODO(上架前移除)：實機測試用，1 分鐘後跳出提醒，順便看桌面圖示角標。見 HANDOFF 14.6。
-  Future<void> _testReminder() async {
-    await _applyReminder(_entry!.copyWith(reminderAt: DateTime.now().add(const Duration(minutes: 1))));
-    if (mounted) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(context.l10n.journalTestReminderSet)),
-      );
-    }
-  }
-
   Future<void> _applyReminder(JournalEntry next) async {
     final l = context.l10n;
     final ok = await JournalReminders.apply(_services.reminders, next, l.reviewMessage);
@@ -283,8 +273,6 @@ class _JournalEntryPageState extends State<JournalEntryPage> {
               ),
               const SizedBox(height: 8),
               ReminderPicker(days: pendingDays, onChanged: _changeReminder),
-              // TODO(上架前移除)：測試提醒
-              TextButton(onPressed: _testReminder, child: Text(l.journalTestReminder)),
             ],
           ),
         ),

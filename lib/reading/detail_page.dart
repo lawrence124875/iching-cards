@@ -62,7 +62,7 @@ class _DetailPageState extends State<DetailPage> {
                 ),
                 const SizedBox(height: 16),
                 for (final line in c.lines)
-                  _LineTile(line: line, highlighted: widget.highlight.contains(line.position)),
+                  _LineTile(info: info, line: line, highlighted: widget.highlight.contains(line.position)),
               ],
             ],
           );
@@ -73,8 +73,9 @@ class _DetailPageState extends State<DetailPage> {
 }
 
 class _LineTile extends StatelessWidget {
-  const _LineTile({required this.line, required this.highlighted});
+  const _LineTile({required this.info, required this.line, required this.highlighted});
 
+  final HexagramInfo info;
   final LineContent line;
   final bool highlighted;
 
@@ -96,7 +97,8 @@ class _LineTile extends StatelessWidget {
           initiallyExpanded: highlighted,
           iconColor: QianColors.earth,
           collapsedIconColor: QianColors.mountain,
-          title: Text(line.text, style: t.bodyLarge?.copyWith(fontSize: 16)),
+          // 傳統爻名（§17）：中文經文本身以「初六：」開頭，原樣顯示；其他語言自動補上爻名。
+          title: Text(l.lineHeading(info, line.position, line.text, contentName: line.name), style: t.bodyLarge?.copyWith(fontSize: 16)),
           subtitle: Text([line.stage, if (highlighted) l.sectionFocus].where((s) => s.isNotEmpty).join(l.separator),
               style: t.bodySmall),
           childrenPadding: const EdgeInsets.fromLTRB(16, 0, 16, 16),

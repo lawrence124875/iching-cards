@@ -54,6 +54,17 @@
       }
     }
   },
+  "lineTitle": "{name}: {text}",
+  "@lineTitle": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      },
+      "text": {
+        "type": "String"
+      }
+    }
+  },
   "lineValue": "{kind, select, oldYin{old yin} youngYang{young yang} youngYin{young yin} oldYang{old yang} other{-}}",
   "@lineValue": {
     "placeholders": {
@@ -200,22 +211,6 @@
     }
   },
   "tapToReturn": "Tap to go back",
-  "trigramName": "{key, select, qian{Qian} dui{Dui} li{Li} zhen{Zhen} xun{Xun} kan{Kan} gen{Gen} kun{Kun} other{-}}",
-  "@trigramName": {
-    "placeholders": {
-      "key": {
-        "type": "String"
-      }
-    }
-  },
-  "trigramNature": "{key, select, qian{Heaven} dui{Lake} li{Fire} zhen{Thunder} xun{Wind} kan{Water} gen{Mountain} kun{Earth} other{-}}",
-  "@trigramNature": {
-    "placeholders": {
-      "key": {
-        "type": "String"
-      }
-    }
-  },
   "journalEmpty": "No entries yet\n\nAfter drawing a card\ntap “Save This Reading” at the end of the reading\nThen come back later\nto see how the image played out",
   "journalNoQuestion": "(No question written)",
   "journalReviewCount": "{count, plural, =1{1 note} other{{count} notes}}",
@@ -285,8 +280,6 @@
     }
   },
   "journalReminderNone": "No reminder set. Choose a number of days from today:",
-  "journalTestReminder": "Test: remind me in 1 minute",
-  "journalTestReminderSet": "Reminder set for 1 minute from now. You can turn off the screen or go to the home screen.",
   "reminderFailed": "The reminder could not be set. {reason}",
   "@reminderFailed": {
     "placeholders": {

@@ -5,23 +5,64 @@ import '../core/iching/trigram.dart';
 import '../core/reminders/reminder_service.dart';
 import '../core/soundscape/breath_timeline.dart';
 import 'app_localizations.dart';
+import 'glossary.dart';
 
-/// 易學名稱與 core 層代碼 → 介面文字（HANDOFF §16）。core 不放介面文字，只回傳代碼（enum）。
+/// 易學名稱與 core 層代碼 → 介面文字（HANDOFF §16、§17）。core 不放介面文字，只回傳代碼（enum）。
 ///
-/// 卦名：中文介面用漢字卦名；其他語言暫用拼音與暫定英文卦義。
-/// ⚠️ 11 語術語表（§10.6 第 4 項之 3）完成後，卦名改為依術語表顯示，只需改這裡。
+/// 卦名、經卦名與象、傳統爻名一律依 11 語術語表（[Glossary]，來源 iching-content/glossary）。
 /// 牌面上的大字卦名屬於牌面設計，各語言都保留漢字（見 CardFace）。
+///
+/// 爻名兩套（2026-10-03 決定，§17）：
+/// - **介面爻位**（[linePosition]：初爻…上爻／Line 1…6）：擲錢頁逐爻擲出時用，只講位置，新手一看就懂。
+/// - **傳統爻名**（[traditionalLineName]：初九、六二…／Nine at the beginning…）：詳細頁經文用，
+///   同時標出陰陽與位置，是易學通例，也與經文「初六：」寫法一致。
 extension IchingTerms on AppLocalizations {
   bool get isChinese => localeName.startsWith('zh');
 
-  String hexName(HexagramInfo h) => isChinese ? h.name : h.pinyin;
+  /// 介面語言對應的術語表代碼（AppLocalizations.localeName：zh、zh_Hans、en、pt_BR…）。
+  String get glossaryCode {
+    final parts = localeName.split(RegExp('[_-]'));
+    final lang = parts.first;
+    if (lang == 'zh') return parts.contains('Hans') ? 'zh-Hans' : 'zh-Hant';
+    if (lang == 'pt') return 'pt-BR';
+    return lang;
+  }
 
-  /// 例：地山謙；英文：Qiān · Modesty。
-  String hexFullName(HexagramInfo h) => isChinese ? h.fullName : '${h.pinyin} · ${h.english}';
+  Glossary get glossary => Glossary.of(glossaryCode);
 
-  String trigramLabel(Trigram t) => trigramName(t.name);
-  String trigramImage(Trigram t) => trigramNature(t.name);
+  /// 內文稱呼：謙／Modesty。
+  String hexName(HexagramInfo h) => glossary.hexagram(h.number).name;
+
+  /// 完整標題：地山謙／Modesty (Qiān)。
+  String hexFullName(HexagramInfo h) => glossary.hexagram(h.number).title;
+
+  /// 牌面漢字卦名下方的小字：拼音 · 卦義。中文介面沿用英文卦義（牌面設計），其他語言用該語言卦義。
+  String cardSubtitle(HexagramInfo h) {
+    final g = isChinese ? Glossary.of('en') : glossary;
+    final meaning = g.hexagram(h.number).meaning;
+    return meaning.isEmpty ? h.pinyin : '${h.pinyin}  ·  $meaning';
+  }
+
+  String trigramLabel(Trigram t) => glossary.trigram(t.name).name;
+  String trigramImage(Trigram t) => glossary.trigram(t.name).image;
   String soundscape(Trigram t) => soundscapeName(t.name);
+
+  /// 傳統爻名：position 1–6 依該爻陰陽（初九／初六…）；7＝用九（六爻皆陽）或用六。
+  String traditionalLineName(HexagramInfo h, int position) {
+    final lines = glossary.lines;
+    if (position >= 1 && position <= 6) {
+      return (h.lines[position - 1] ? lines.yang : lines.yin)[position - 1];
+    }
+    return h.lines.every((y) => y) ? lines.allYang : lines.allYin;
+  }
+
+  /// 詳細頁各爻的標題：爻辭已以爻名開頭（中文經文「初六：……」）就原樣顯示，否則加上傳統爻名。
+  String lineHeading(HexagramInfo h, int position, String text, {String contentName = ''}) {
+    final name = traditionalLineName(h, position);
+    if (text.isEmpty) return name;
+    if (text.startsWith(name) || (contentName.isNotEmpty && text.startsWith(contentName))) return text;
+    return lineTitle(name, text);
+  }
 
   /// 1＝初爻 … 6＝上爻。
   String linePosition(int position) =>

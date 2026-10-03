@@ -63,9 +63,21 @@
   "coinsRestart": "重新起卦",
   "lineName": "{position, select, first{初爻} second{二爻} third{三爻} fourth{四爻} fifth{五爻} top{上爻} other{爻}}",
   "@lineName": {
-    "description": "爻位名稱（由下而上）；易學術語，日後以術語表為準",
+    "description": "介面爻位（由下而上），用於擲錢頁逐爻顯示；詳細頁改用術語表的傳統爻名（初九、六二…），見 HANDOFF §17",
     "placeholders": {
       "position": {
+        "type": "String"
+      }
+    }
+  },
+  "lineTitle": "{name}：{text}",
+  "@lineTitle": {
+    "description": "詳細頁各爻標題：傳統爻名＋爻辭；只在爻辭本身沒有以爻名開頭時使用（中文經文已含「初六：」）",
+    "placeholders": {
+      "name": {
+        "type": "String"
+      },
+      "text": {
         "type": "String"
       }
     }
@@ -219,24 +231,6 @@
     }
   },
   "tapToReturn": "點一下返回",
-  "trigramName": "{key, select, qian{乾} dui{兌} li{離} zhen{震} xun{巽} kan{坎} gen{艮} kun{坤} other{-}}",
-  "@trigramName": {
-    "description": "八經卦名；易學術語，日後以術語表為準",
-    "placeholders": {
-      "key": {
-        "type": "String"
-      }
-    }
-  },
-  "trigramNature": "{key, select, qian{天} dui{澤} li{火} zhen{雷} xun{風} kan{水} gen{山} kun{地} other{-}}",
-  "@trigramNature": {
-    "description": "八經卦之象；易學術語，日後以術語表為準",
-    "placeholders": {
-      "key": {
-        "type": "String"
-      }
-    }
-  },
   "journalEmpty": "還沒有卦記\n\n抽卦後\n在解讀頁最下方按「記下這一卦」\n日後回來對照\n看看象是怎麼應驗在事情上的",
   "@journalEmpty": {
     "description": "置中提示語：不加標點"
@@ -310,11 +304,6 @@
     }
   },
   "journalReminderNone": "目前沒有提醒。選一個天數，從今天起算：",
-  "journalTestReminder": "測試：1 分鐘後提醒",
-  "@journalTestReminder": {
-    "description": "上架前移除（HANDOFF §14.6）"
-  },
-  "journalTestReminderSet": "已排定 1 分鐘後提醒。可以先關掉螢幕或回桌面等候。",
   "reminderFailed": "提醒沒有設定成功。{reason}",
   "@reminderFailed": {
     "placeholders": {

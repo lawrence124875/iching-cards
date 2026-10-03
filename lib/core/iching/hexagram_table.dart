@@ -18,7 +18,8 @@ class HexagramInfo {
   final String name;
   final String pinyin;
 
-  /// 暫定英文卦義（自撰簡短詞，英文版上線前再審）。
+  /// 英文卦義（與術語表 en.meaning 一致，2026-10-03 定稿）。介面一律用術語表（IchingTerms），
+  /// 這裡只是原始資料與測試對照；glossary_test 會檢查兩者一致。
   final String english;
   final Trigram upper;
   final Trigram lower;
@@ -77,7 +78,7 @@ class HexagramTable {
   ];
 
   static const _english = [
-    'Heaven', 'Earth', 'Sprouting', 'Youthful Learning', 'Waiting',
+    'Creative Force', 'Receptivity', 'Sprouting', 'Youthful Learning', 'Waiting',
     'Dispute', 'The Army', 'Union', 'Small Restraint', 'Treading',
     'Peace', 'Standstill', 'Fellowship', 'Great Possession', 'Modesty',
     'Enthusiasm', 'Following', 'Repairing', 'Approach', 'Contemplation',
@@ -86,9 +87,9 @@ class HexagramTable {
     'Influence', 'Constancy', 'Retreat', 'Great Strength', 'Advance',
     'Light Hidden', 'Family', 'Divergence', 'Obstruction', 'Release',
     'Decrease', 'Increase', 'Breakthrough', 'Encounter', 'Gathering',
-    'Rising', 'Exhaustion', 'The Well', 'Transformation', 'The Cauldron',
-    'Thunder', 'Stillness', 'Gradual Progress', 'The Marrying Maiden', 'Abundance',
-    'The Traveler', 'Wind', 'Joy', 'Dispersion', 'Limitation',
+    'Rising', 'Confinement', 'The Well', 'Transformation', 'The Cauldron',
+    'Shock', 'Stillness', 'Gradual Progress', 'The Marrying Maiden', 'Abundance',
+    'The Traveler', 'Gentle Penetration', 'Joy', 'Dispersion', 'Limitation',
     'Inner Truth', 'Small Excess', 'After Completion', 'Before Completion',
   ];
 

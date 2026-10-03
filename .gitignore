@@ -49,3 +49,5 @@ key.properties
 # Firebase 設定檔由 CI 從 Secret 產生，不進 repo（HANDOFF §18）
 google-services.json
 GoogleService-Info.plist
+# 術語表由 CI 從私人 repo 產生（scripts/gen_glossary.py，HANDOFF §17）
+/lib/l10n/glossary_data.g.dart

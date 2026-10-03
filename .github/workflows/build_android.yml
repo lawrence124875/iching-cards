@@ -36,6 +36,7 @@ jobs:
           sparse-checkout: |
             zh-Hant
             images/webp
+            glossary
 
       - uses: subosito/flutter-action@v2
         with:
@@ -44,6 +45,11 @@ jobs:
 
       - name: 匯入內容
         run: bash scripts/import_content.sh _content
+
+      # 11 語術語表（HANDOFF §17）→ lib/l10n/glossary_data.g.dart（不進 repo）。在字型子集之前，
+      # 讓術語表用到的字也進子集。
+      - name: 產生術語表
+        run: python3 scripts/gen_glossary.py _content/glossary/glossary.json lib/l10n/glossary_data.g.dart
 
       # 思源黑體／宋體（Google Fonts，OFL）固定在某個 commit，避免上游更新改變字形。
       # 換版本：改 NOTO_COMMIT（並同步改 cache key）。
@@ -127,6 +133,20 @@ jobs:
           fi
           exit $status
 
+      # 上架用 AAB（HANDOFF §19.2 第 1 項）：Play 依裝置自動拆分，使用者下載較小。
+      # 強制介面語言的測試版不建 AAB（不會上傳 Play）。
+      - name: 建置 AAB（release）
+        if: ${{ inputs.force_lang == '' }}
+        run: |
+          set +e
+          flutter build appbundle --release > /tmp/bundle.log 2>&1
+          status=$?
+          tail -n 20 /tmp/bundle.log
+          if [ $status -ne 0 ]; then
+            grep -E "\.dart:[0-9]+|Error:|error:|FAILURE|What went wrong" /tmp/bundle.log | head -30 | while IFS= read -r line; do echo "::error::$line"; done
+          fi
+          exit $status
+
       # ⚠️ 永久原則（HANDOFF §10.4）：APK／AAB 不可用 upload-artifact 放在公開 repo，
       # 一律發佈到私人 repo iching-content 的 Release。
       - name: 發佈到私人 repo 的 Release
@@ -139,7 +159,13 @@ jobs:
           n=${{ github.run_number }}
           f="iching_${ver}_run${n}${FORCE_LANG:+_ui-$FORCE_LANG}.apk"
           cp build/app/outputs/flutter-apk/app-release.apk "$f"
-          gh release create "iching-android-run${n}" "$f" \
+          files=("$f")
+          aab=build/app/outputs/bundle/release/app-release.aab
+          if [ -z "${FORCE_LANG}" ] && [ -f "$aab" ]; then
+            cp "$aab" "iching_${ver}_run${n}.aab"
+            files+=("iching_${ver}_run${n}.aab")
+          fi
+          gh release create "iching-android-run${n}" "${files[@]}" \
             --repo lawrence124875/iching-content \
             --title "謙卦 ${ver}（run ${n}）${FORCE_LANG:+［測試：介面 $FORCE_LANG］}" \
             --notes "commit ${{ github.sha }}；簽署：${SIGNING}；Firebase：${FIREBASE}"

@@ -1,7 +1,7 @@
 name: iching_cards
 description: "謙卦｜易經六十四卦卡（LC Lab）"
 publish_to: 'none'
-version: 0.1.0+18
+version: 0.1.0+19
 
 environment:
   sdk: '>=3.4.0 <4.0.0'
@@ -11,6 +11,9 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+  flutter_localizations: # 介面翻譯（ARB，HANDOFF §16）
+    sdk: flutter
+  intl: any # 版本由 flutter_localizations 決定
   path_provider: ^2.1.4 # 卦記存檔位置
   flutter_local_notifications: ^18.0.1 # 卦記回顧提醒
   timezone: ^0.9.4 # 通知排程時間（只用 UTC，不查時區名稱）
@@ -25,6 +28,7 @@ dev_dependencies:
 
 flutter:
   uses-material-design: true
+  generate: true # 由 lib/l10n/*.arb 產生 AppLocalizations（l10n.yaml）
   # 這兩個資料夾在公開 repo 只有 .gitkeep；內容由 CI 從私人 repo iching-content 匯入
   #（scripts/import_content.sh），絕不 commit 到本 repo。
   assets:

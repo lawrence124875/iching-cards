@@ -6,6 +6,7 @@ import '../../core/content/hexagram_content.dart';
 import '../../core/iching/hexagram_table.dart';
 import '../../core/journal/journal_entry.dart';
 import '../../core/journal/journal_reminders.dart';
+import '../../l10n/l10n.dart';
 import '../../reading/reading_page.dart';
 import '../../reading/section.dart';
 import '../../shared/format.dart';
@@ -65,7 +66,7 @@ class _JournalEntryPageState extends State<JournalEntryPage> {
     final text = await askQuestion(
       context,
       initial: old?.text ?? '',
-      title: index == null ? '後來發生了什麼？' : '修改回顧',
+      title: index == null ? context.l10n.journalReviewDialogTitle : context.l10n.journalEditReview,
     );
     if (text == null) return;
     final list = [...e.followUps];
@@ -92,19 +93,20 @@ class _JournalEntryPageState extends State<JournalEntryPage> {
     await _applyReminder(_entry!.copyWith(reminderAt: DateTime.now().add(const Duration(minutes: 1))));
     if (mounted) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('已排定 1 分鐘後提醒。可以先關掉螢幕或回桌面等候。')),
+        SnackBar(content: Text(context.l10n.journalTestReminderSet)),
       );
     }
   }
 
   Future<void> _applyReminder(JournalEntry next) async {
-    final ok = await JournalReminders.apply(_services.reminders, next);
+    final l = context.l10n;
+    final ok = await JournalReminders.apply(_services.reminders, next, l.reviewMessage);
     if (!ok) next = next.copyWith(clearReminder: true);
     await _update(next);
     if (!ok && mounted) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: Text('提醒沒有設定成功。${_services.reminders.lastError ?? ''}'),
+          content: Text(l.reminderFailed(l.reminderFailureText(_services.reminders.lastFailure))),
           duration: const Duration(seconds: 8),
         ),
       );
@@ -112,14 +114,15 @@ class _JournalEntryPageState extends State<JournalEntryPage> {
   }
 
   Future<void> _delete() async {
+    final l = context.l10n;
     final yes = await showDialog<bool>(
       context: context,
       builder: (context) => AlertDialog(
-        title: const Text('刪除這筆卦記？'),
-        content: const Text('刪除後無法復原。'),
+        title: Text(l.journalDeleteTitle),
+        content: Text(l.journalDeleteBody),
         actions: [
-          TextButton(onPressed: () => Navigator.pop(context, false), child: const Text('取消')),
-          TextButton(onPressed: () => Navigator.pop(context, true), child: const Text('刪除')),
+          TextButton(onPressed: () => Navigator.pop(context, false), child: Text(l.cancel)),
+          TextButton(onPressed: () => Navigator.pop(context, true), child: Text(l.delete)),
         ],
       ),
     );
@@ -132,23 +135,25 @@ class _JournalEntryPageState extends State<JournalEntryPage> {
   @override
   Widget build(BuildContext context) {
     final e = _entry;
+    final l = context.l10n;
     return Scaffold(
       appBar: AppBar(
-        title: const Text('卦記'),
+        title: Text(l.featureJournal),
         actions: [
-          if (e != null) IconButton(onPressed: _delete, icon: const Icon(Icons.delete_outline), tooltip: '刪除'),
+          if (e != null) IconButton(onPressed: _delete, icon: const Icon(Icons.delete_outline), tooltip: l.delete),
         ],
       ),
       body: !_ready
           ? const Center(child: CircularProgressIndicator())
           : e == null
-              ? const Center(child: Text('找不到這筆卦記，可能已經刪除。'))
+              ? Center(child: Text(l.journalNotFound))
               : _body(context, e),
     );
   }
 
   Widget _body(BuildContext context, JournalEntry e) {
     final t = Theme.of(context).textTheme;
+    final l = context.l10n;
     final cast = e.cast;
     final p = HexagramTable.byNumber(cast.primary);
     final c = cast.changed == null ? null : HexagramTable.byNumber(cast.changed!);
@@ -165,7 +170,7 @@ class _JournalEntryPageState extends State<JournalEntryPage> {
     return ListView(
       padding: EdgeInsets.fromLTRB(24, 8, 24, 40 + MediaQuery.viewPaddingOf(context).bottom),
       children: [
-        Text('${formatDateTime(e.createdAt)}・${methodLabel(e.methodId)}',
+        Text('${formatDateTime(e.createdAt)}${l.separator}${l.methodName(e.methodId)}',
             textAlign: TextAlign.center, style: t.bodySmall),
         const SizedBox(height: 16),
         Row(
@@ -184,7 +189,7 @@ class _JournalEntryPageState extends State<JournalEntryPage> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(p.fullName, style: t.headlineSmall),
+                  Text(l.hexFullName(p), style: t.headlineSmall),
                   if (c != null) ...[
                     const SizedBox(height: 8),
                     Row(children: [
@@ -195,12 +200,12 @@ class _JournalEntryPageState extends State<JournalEntryPage> {
                       ),
                       HexagramGlyph(lines: c.lines, width: 28),
                       const SizedBox(width: 8),
-                      Text('之卦 ${c.name}', style: t.bodyMedium),
+                      Flexible(child: Text(l.journalChangedTo(l.hexName(c)), style: t.bodyMedium)),
                     ]),
                   ],
                   if (reading != null) ...[
                     const SizedBox(height: 16),
-                    Text('當時的解讀', style: t.bodySmall),
+                    Text(l.journalReadingThen, style: t.bodySmall),
                     const SizedBox(height: 2),
                     Text(reading.title, style: t.titleMedium),
                   ],
@@ -210,12 +215,12 @@ class _JournalEntryPageState extends State<JournalEntryPage> {
           ],
         ),
         Section(
-          title: '想問的事',
+          title: l.questionTitle,
           child: InkWell(
             onTap: _editQuestion,
             child: Row(children: [
               Expanded(
-                child: Text(e.question.isEmpty ? '（未填寫，點這裡補上）' : e.question,
+                child: Text(e.question.isEmpty ? l.journalQuestionEmpty : e.question,
                     style: e.question.isEmpty ? t.bodyMedium?.copyWith(color: QianColors.textSub) : null),
               ),
               const Icon(Icons.edit_outlined, size: 18, color: QianColors.textSub),
@@ -227,14 +232,14 @@ class _JournalEntryPageState extends State<JournalEntryPage> {
           onPressed: () => Navigator.of(context).push(MaterialPageRoute<void>(
             builder: (_) => ReadingPage(cast: cast, question: e.question, readingIndex: e.readingIndex, review: true),
           )),
-          child: const Text('看當時的解讀'),
+          child: Text(l.journalViewReading),
         ),
         Section(
-          title: '回顧',
+          title: l.journalReviews,
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text('後來發生了什麼？現在回頭看，這個象對應到事情的哪裡？', style: t.bodySmall),
+              Text(l.journalReviewPrompt, style: t.bodySmall),
               for (var i = 0; i < e.followUps.length; i++)
                 InkWell(
                   onTap: () => _editFollowUp(i),
@@ -259,25 +264,27 @@ class _JournalEntryPageState extends State<JournalEntryPage> {
                 child: TextButton.icon(
                   onPressed: () => _editFollowUp(),
                   icon: const Icon(Icons.add),
-                  label: const Text('寫下後來的發展'),
+                  label: Text(l.journalAddReview),
                 ),
               ),
             ],
           ),
         ),
         Section(
-          title: '回顧提醒',
+          title: l.journalReminderSection,
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                pending ? '${formatDate(e.reminderAt!)} 晚上 ${JournalReminders.reviewHour} 點會提醒你' : '目前沒有提醒。選一個天數，從今天起算：',
+                pending
+                    ? l.journalReminderPending(formatDate(e.reminderAt!), hour12(JournalReminders.reviewHour))
+                    : l.journalReminderNone,
                 style: t.bodySmall,
               ),
               const SizedBox(height: 8),
               ReminderPicker(days: pendingDays, onChanged: _changeReminder),
               // TODO(上架前移除)：測試提醒
-              TextButton(onPressed: _testReminder, child: const Text('測試：1 分鐘後提醒')),
+              TextButton(onPressed: _testReminder, child: Text(l.journalTestReminder)),
             ],
           ),
         ),

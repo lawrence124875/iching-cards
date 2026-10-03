@@ -13,7 +13,7 @@ import '../../core/soundscape/breath_timeline.dart';
 import '../../core/soundscape/session_renderer.dart';
 import '../../shared/format.dart';
 import '../../shared/widgets/card_art_viewer.dart';
-import 'soundscape_labels.dart';
+import '../../l10n/l10n.dart';
 
 enum _Stage { preparing, failed, running, done }
 
@@ -51,9 +51,9 @@ class _BreathPageState extends State<BreathPage> with SingleTickerProviderStateM
   bool _stoppedEarly = false;
   _Stage _stage = _Stage.preparing;
 
-  String get _soundNames => _info.upper == _info.lower
-      ? soundscapeName(_info.upper)
-      : '${soundscapeName(_info.upper)}・${soundscapeName(_info.lower)}';
+  String _soundNames(AppLocalizations l) => _info.upper == _info.lower
+      ? l.soundscape(_info.upper)
+      : '${l.soundscape(_info.upper)}${l.separator}${l.soundscape(_info.lower)}';
 
   @override
   void initState() {
@@ -81,11 +81,12 @@ class _BreathPageState extends State<BreathPage> with SingleTickerProviderStateM
       final art = await _artFile();
       if (!mounted) return;
       final p = svc.playback;
+      final l = context.l10n;
       await p.load(
         path,
         id: 'breath-${widget.spec.key}',
-        title: '${_info.fullName}・呼吸音景',
-        subtitle: '$_soundNames｜${widget.spec.minutes} 分鐘',
+        title: l.breathMediaTitle(l.hexFullName(_info)),
+        subtitle: l.breathMediaSubtitle(_soundNames(l), l.minutes(widget.spec.minutes)),
         artFilePath: art,
       );
       _loaded = true;
@@ -240,85 +241,80 @@ class _BreathPageState extends State<BreathPage> with SingleTickerProviderStateM
   }
 
   Widget _centre(TextTheme t, BreathState s) {
+    final l = context.l10n;
     switch (_stage) {
       case _Stage.preparing:
         return Column(mainAxisSize: MainAxisSize.min, children: [
           const SizedBox(width: 28, height: 28, child: CircularProgressIndicator(strokeWidth: 2)),
           const SizedBox(height: 16),
-          Text('正在生成音景', style: t.bodyMedium),
-          Text('第一次約需數秒', style: t.bodySmall),
+          Text(l.breathPreparing, style: t.bodyMedium),
+          Text(l.breathPreparingSub, style: t.bodySmall),
         ]);
       case _Stage.failed:
         return Padding(
           padding: const EdgeInsets.all(24),
-          child: Text('這台手機暫時無法播放音景，\n可以改用無聲引導。', textAlign: TextAlign.center, style: t.bodyMedium),
+          child: Text(l.breathFailed, textAlign: TextAlign.center, style: t.bodyMedium),
         );
       case _Stage.done:
         return Column(mainAxisSize: MainAxisSize.min, children: [
-          Text(_stoppedEarly ? '已結束' : '完成', style: t.headlineSmall),
+          Text(_stoppedEarly ? l.breathEnded : l.breathDone, style: t.headlineSmall),
           const SizedBox(height: 8),
           Text(
               _stoppedEarly
-                  ? '已從通知列停止'
-                  : '${widget.spec.minutes} 分鐘・${widget.spec.minutes * 6} 次呼吸',
+                  ? l.breathStoppedFromNotification
+                  : l.breathSummary(widget.spec.minutes, widget.spec.minutes * 6),
               style: t.bodySmall),
         ]);
       case _Stage.running:
         return Column(mainAxisSize: MainAxisSize.min, children: [
-          Text(breathLabel(s.phase), style: t.displaySmall?.copyWith(letterSpacing: 0)),
+          Text(l.phase(s.phase), style: t.displaySmall?.copyWith(letterSpacing: 0)),
           const SizedBox(height: 4),
-          Text(_paused ? '暫停中' : '${math.max(1, s.secondsLeftInPhase.ceil())}', style: t.bodySmall),
+          Text(_paused ? l.breathPaused : '${math.max(1, s.secondsLeftInPhase.ceil())}', style: t.bodySmall),
         ]);
     }
   }
 
   Widget _bottom(TextTheme t) {
+    final l = context.l10n;
     switch (_stage) {
       case _Stage.preparing:
         return const SizedBox.shrink();
       case _Stage.failed:
         return Column(children: [
-          FilledButton(onPressed: _startSilent, child: const Text('改用無聲引導')),
-          TextButton(onPressed: () => Navigator.of(context).pop(), child: const Text('返回')),
+          FilledButton(onPressed: _startSilent, child: Text(l.breathUseSilent)),
+          TextButton(onPressed: () => Navigator.of(context).pop(), child: Text(l.back)),
         ]);
       case _Stage.done:
         return Column(mainAxisAlignment: MainAxisAlignment.center, children: [
-          FilledButton(onPressed: () => Navigator.of(context).pop(), child: const Text('回到解讀')),
-          TextButton(onPressed: _showArt, child: const Text('再看一次卦圖')),
+          FilledButton(onPressed: () => Navigator.of(context).pop(), child: Text(l.breathBackToReading)),
+          TextButton(onPressed: _showArt, child: Text(l.breathViewArtAgain)),
         ]);
       case _Stage.running:
         final left = math.max(0.0, _tl.breathEnd - _now.value);
         return Column(children: [
-          Text('剩下 ${formatClock(left.ceil())}${_silent ? '・無聲' : ''}',
+          Text('${l.breathRemaining(formatClock(left.ceil()))}${_silent ? l.breathSilentMark : ''}',
               style: t.bodySmall?.copyWith(letterSpacing: 2)),
           const SizedBox(height: 14),
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              _RoundButton(icon: Icons.landscape_outlined, label: '看圖', onTap: _showArt),
+              _RoundButton(icon: Icons.landscape_outlined, label: l.breathViewArt, onTap: _showArt),
               const SizedBox(width: 36),
               _RoundButton(
                 icon: _paused ? Icons.play_arrow_rounded : Icons.pause_rounded,
-                label: _paused ? '繼續' : '暫停',
+                label: _paused ? l.breathResume : l.breathPause,
                 onTap: _togglePause,
                 primary: true,
               ),
               const SizedBox(width: 36),
-              _RoundButton(icon: Icons.close_rounded, label: '結束', onTap: () => Navigator.of(context).pop()),
+              _RoundButton(icon: Icons.close_rounded, label: l.breathEnd, onTap: () => Navigator.of(context).pop()),
             ],
           ),
         ]);
     }
   }
 }
-
-String breathLabel(BreathPhase p) => switch (p) {
-      BreathPhase.prepare => '準備',
-      BreathPhase.inhale => '吸',
-      BreathPhase.exhale => '吐',
-      BreathPhase.done => '完成',
-    };
 
 /// 細金線圓形按鈕＋下方小字；主按鈕（暫停／繼續）較大、線條較亮。
 class _RoundButton extends StatelessWidget {
@@ -382,7 +378,7 @@ class _MiniBreath extends StatelessWidget {
         ),
         child: Center(
           child: Text(
-            breathLabel(state.phase),
+            context.l10n.phase(state.phase),
             style: Theme.of(context).textTheme.titleMedium?.copyWith(
               color: QianColors.text,
               shadows: const [Shadow(blurRadius: 6, color: Colors.black)],

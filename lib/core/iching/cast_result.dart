@@ -1,16 +1,15 @@
 import 'hexagram_table.dart';
 
-/// 一爻的數值：6 老陰（變）、7 少陽、8 少陰、9 老陽（變）。
+/// 一爻的數值：6 老陰（變）、7 少陽、8 少陰、9 老陽（變）。名稱在 l10n（lineValue）。
 enum LineValue {
-  oldYin(6, '老陰'),
-  youngYang(7, '少陽'),
-  youngYin(8, '少陰'),
-  oldYang(9, '老陽');
+  oldYin(6),
+  youngYang(7),
+  youngYin(8),
+  oldYang(9);
 
-  const LineValue(this.value, this.label);
+  const LineValue(this.value);
 
   final int value;
-  final String label;
 
   bool get isYang => this == youngYang || this == oldYang;
   bool get isChanging => this == oldYin || this == oldYang;

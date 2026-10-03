@@ -1,7 +1,9 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 
+import '../l10n/l10n.dart';
 import 'feature_registry.dart';
 import 'home_page.dart';
 import 'services.dart';
@@ -49,8 +51,22 @@ class _IchingAppState extends State<IchingApp> {
   Widget build(BuildContext context) {
     return MaterialApp(
       navigatorKey: _navigatorKey,
-      title: '謙卦',
+      onGenerateTitle: (context) => context.l10n.appTitle,
       debugShowCheckedModeBanner: false,
+      // 介面語言（HANDOFF §16）：只開放內容已完整翻譯的語言（AppLanguages.enabled），
+      // 依手機語言設定選擇；同步給 L10n.language，讓通知等沒有 context 的地方用同一語言。
+      supportedLocales: [for (final l in AppLanguages.enabled) l.locale],
+      localizationsDelegates: const [
+        AppLocalizations.delegate,
+        GlobalMaterialLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate,
+        GlobalCupertinoLocalizations.delegate,
+      ],
+      localeListResolutionCallback: (locales, _) {
+        final lang = AppLanguages.resolve(locales ?? const []);
+        L10n.language = lang;
+        return lang.locale;
+      },
       theme: buildTheme(),
       home: const HomePage(),
     );

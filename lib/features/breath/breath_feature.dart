@@ -7,10 +7,10 @@ import 'breath_setup_sheet.dart';
 /// 只從解讀頁進入（解讀頁顯示所有功能的 readingAction）；拔除＝移出註冊表一行。
 final breathFeature = AppFeature(
   id: 'breath',
-  label: '呼吸音景',
+  label: (l) => l.featureBreath,
   placement: FeaturePlacement.none,
   readingAction: ReadingAction(
-    label: '以此卦靜心呼吸',
+    label: (l) => l.readingActionBreath,
     icon: Icons.air,
     open: (context, hexagram) => showBreathSetup(context, hexagram),
   ),

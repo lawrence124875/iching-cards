@@ -1,0 +1,548 @@
+{
+  "@@locale": "zh",
+  "appTitle": "謙卦",
+  "@appTitle": {
+    "description": "App 名稱（桌面名稱另由 patch_android.sh 設定）"
+  },
+  "appSubtitle": "易經六十四卦卡",
+  "homeMotto": "易經不是用來算命\n而是練習看象與做決定",
+  "@homeMotto": {
+    "description": "置中提示語：不加標點，逗號處換行（HANDOFF §15.1）"
+  },
+  "homeDisclaimer": "內容僅供自我探索與娛樂參考",
+  "cancel": "取消",
+  "ok": "好",
+  "delete": "刪除",
+  "back": "返回",
+  "save": "儲存",
+  "viewReading": "看解讀",
+  "separator": "・",
+  "@separator": {
+    "description": "並列項目的分隔符號"
+  },
+  "listSeparator": "、",
+  "featureDraw": "抽一卦",
+  "featureCoins": "用三枚銅錢起卦",
+  "featureJournal": "卦記",
+  "featureBreath": "呼吸音景",
+  "readingActionBreath": "以此卦靜心呼吸",
+  "methodDraw": "抽一卦",
+  "methodCoins": "三枚銅錢起卦",
+  "questionTitle": "想問的事",
+  "questionHint": "用一兩句話寫下心裡想著的事（可不填）",
+  "questionPromptLink": "寫下想問的事（可不填）",
+  "questionShown": "問：{question}",
+  "@questionShown": {
+    "placeholders": {
+      "question": {
+        "type": "String"
+      }
+    }
+  },
+  "optionalHint": "可不填",
+  "drawPromptBefore": "心裡想著眼前的一件事\n準備好了就點牌",
+  "@drawPromptBefore": {
+    "description": "置中提示語：不加標點"
+  },
+  "drawPromptAfter": "這是此刻的象",
+  "@drawPromptAfter": {
+    "description": "置中提示語：不加標點"
+  },
+  "drawFlip": "翻牌",
+  "drawAgain": "重新抽",
+  "coinsInstructions": "陽面 3、陰面 2，三枚相加得一爻；由下往上擲六次，6 與 9 為變爻。",
+  "coinsToss": "擲第 {n} 次",
+  "@coinsToss": {
+    "placeholders": {
+      "n": {
+        "type": "int"
+      }
+    }
+  },
+  "coinsTossAll": "一次擲完",
+  "coinsRestart": "重新起卦",
+  "lineName": "{position, select, first{初爻} second{二爻} third{三爻} fourth{四爻} fifth{五爻} top{上爻} other{爻}}",
+  "@lineName": {
+    "description": "爻位名稱（由下而上）；易學術語，日後以術語表為準",
+    "placeholders": {
+      "position": {
+        "type": "String"
+      }
+    }
+  },
+  "lineValue": "{kind, select, oldYin{老陰} youngYang{少陽} youngYin{少陰} oldYang{老陽} other{-}}",
+  "@lineValue": {
+    "description": "易學術語，日後以術語表為準",
+    "placeholders": {
+      "kind": {
+        "type": "String"
+      }
+    }
+  },
+  "coinLineValue": "{value}　{kind}",
+  "@coinLineValue": {
+    "placeholders": {
+      "value": {
+        "type": "int"
+      },
+      "kind": {
+        "type": "String"
+      }
+    }
+  },
+  "coinChangingMark": "（變）",
+  "sectionReading": "解讀",
+  "sectionImage": "象的畫面",
+  "sectionSource": "象從哪裡來",
+  "sectionForYou": "給現在的你",
+  "sectionAction": "今日小行動",
+  "sectionQuestion": "反思提問",
+  "sectionEastWest": "東西相映",
+  "sectionFocus": "本次重點",
+  "sectionText": "經文",
+  "sectionJudgment": "卦辭",
+  "readingNotWritten": "這一卦的解讀還在撰寫中。可以先看看牌面的景象，想想它讓你聯想到什麼。",
+  "hexagramContentInProgress": "這一卦的內容撰寫中。",
+  "contentInProgress": "{name}卦的內容撰寫中。",
+  "@contentInProgress": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "lineInProgress": "{name}卦這一爻的內容撰寫中。",
+  "@lineInProgress": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "savedToJournalHint": "已記在「卦記」，日後可從首頁回來對照。",
+  "saveThisReading": "記下這一卦",
+  "detailButton": "{name}卦的經文與六爻",
+  "@detailButton": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "detailButtonChanged": "之卦：{name}卦的經文與六爻",
+  "@detailButtonChanged": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "primaryHexagram": "本卦",
+  "changedHexagram": "之卦",
+  "quoteMarks": "「{text}」",
+  "@quoteMarks": {
+    "placeholders": {
+      "text": {
+        "type": "String"
+      }
+    }
+  },
+  "quoteAttribution": "{author}，{source}",
+  "@quoteAttribution": {
+    "placeholders": {
+      "author": {
+        "type": "String"
+      },
+      "source": {
+        "type": "String"
+      }
+    }
+  },
+  "focusExplanation": "{reason, select, none{沒有變爻，看本卦卦辭。} one{一個變爻，看這一爻的爻辭。} two{兩個變爻，看這兩爻的爻辭，以上面那一爻為主。} three{三個變爻，看本卦與之卦的卦辭。} four{四個變爻，看之卦裡兩個沒有變的爻，以下面那一爻為主。} five{五個變爻，看之卦裡唯一沒有變的那一爻。} allQian{六爻皆變，乾卦看「用九」。} allKun{六爻皆變，坤卦看「用六」。} other{六爻皆變，看之卦卦辭。}}",
+  "@focusExplanation": {
+    "description": "變爻取用規則（朱熹，HANDOFF §4.3）的說明；reason 為 FocusCase 的名稱",
+    "placeholders": {
+      "reason": {
+        "type": "String"
+      }
+    }
+  },
+  "glyphLabel": "卦象",
+  "glyphLabelChanging": "卦象，變爻：{lines}",
+  "@glyphLabelChanging": {
+    "placeholders": {
+      "lines": {
+        "type": "String"
+      }
+    }
+  },
+  "cardOrdinal": "第{ordinal}卦",
+  "@cardOrdinal": {
+    "description": "牌面左上角卦序；中文介面傳中文數字（十五），其他語言傳阿拉伯數字（IchingTerms.cardNumber）",
+    "placeholders": {
+      "ordinal": {
+        "type": "String"
+      }
+    }
+  },
+  "cardTrigrams": "上{upperName}{upperNature}　下{lowerName}{lowerNature}",
+  "@cardTrigrams": {
+    "placeholders": {
+      "upperName": {
+        "type": "String"
+      },
+      "upperNature": {
+        "type": "String"
+      },
+      "lowerName": {
+        "type": "String"
+      },
+      "lowerNature": {
+        "type": "String"
+      }
+    }
+  },
+  "cardZoomLabel": "放大看{name}卦牌面圖",
+  "@cardZoomLabel": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "artViewerLabel": "{name}卦牌面圖，點一下返回",
+  "@artViewerLabel": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "tapToReturn": "點一下返回",
+  "trigramName": "{key, select, qian{乾} dui{兌} li{離} zhen{震} xun{巽} kan{坎} gen{艮} kun{坤} other{-}}",
+  "@trigramName": {
+    "description": "八經卦名；易學術語，日後以術語表為準",
+    "placeholders": {
+      "key": {
+        "type": "String"
+      }
+    }
+  },
+  "trigramNature": "{key, select, qian{天} dui{澤} li{火} zhen{雷} xun{風} kan{水} gen{山} kun{地} other{-}}",
+  "@trigramNature": {
+    "description": "八經卦之象；易學術語，日後以術語表為準",
+    "placeholders": {
+      "key": {
+        "type": "String"
+      }
+    }
+  },
+  "journalEmpty": "還沒有卦記\n\n抽卦後\n在解讀頁最下方按「記下這一卦」\n日後回來對照\n看看象是怎麼應驗在事情上的",
+  "@journalEmpty": {
+    "description": "置中提示語：不加標點"
+  },
+  "journalNoQuestion": "（未寫想問的事）",
+  "journalReviewCount": "{count, plural, other{回顧 {count} 次}}",
+  "@journalReviewCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "journalReminderOn": "{date} 提醒",
+  "@journalReminderOn": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "journalTitleSingle": "{name}卦",
+  "@journalTitleSingle": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "journalTitleChange": "{from} → {to}",
+  "@journalTitleChange": {
+    "placeholders": {
+      "from": {
+        "type": "String"
+      },
+      "to": {
+        "type": "String"
+      }
+    }
+  },
+  "journalNotFound": "找不到這筆卦記，可能已經刪除。",
+  "journalDeleteTitle": "刪除這筆卦記？",
+  "journalDeleteBody": "刪除後無法復原。",
+  "journalChangedTo": "之卦 {name}",
+  "@journalChangedTo": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "journalReadingThen": "當時的解讀",
+  "journalQuestionEmpty": "（未填寫，點這裡補上）",
+  "journalViewReading": "看當時的解讀",
+  "journalReviews": "回顧",
+  "journalReviewPrompt": "後來發生了什麼？現在回頭看，這個象對應到事情的哪裡？",
+  "journalAddReview": "寫下後來的發展",
+  "journalReviewDialogTitle": "後來發生了什麼？",
+  "journalEditReview": "修改回顧",
+  "journalReminderSection": "回顧提醒",
+  "journalReminderPending": "{date} 晚上 {hour} 點會提醒你",
+  "@journalReminderPending": {
+    "description": "hour 為 12 小時制（晚上 8 點＝8）",
+    "placeholders": {
+      "date": {
+        "type": "String"
+      },
+      "hour": {
+        "type": "int"
+      }
+    }
+  },
+  "journalReminderNone": "目前沒有提醒。選一個天數，從今天起算：",
+  "journalTestReminder": "測試：1 分鐘後提醒",
+  "@journalTestReminder": {
+    "description": "上架前移除（HANDOFF §14.6）"
+  },
+  "journalTestReminderSet": "已排定 1 分鐘後提醒。可以先關掉螢幕或回桌面等候。",
+  "reminderFailed": "提醒沒有設定成功。{reason}",
+  "@reminderFailed": {
+    "placeholders": {
+      "reason": {
+        "type": "String"
+      }
+    }
+  },
+  "saveSheetNote": "只存在這支手機裡。日後回來對照，練習看象。",
+  "saveSheetRemind": "提醒我回來回顧",
+  "saveSheetRemindIn": "{days, plural, other{{days} 天後晚上 {hour} 點提醒}}",
+  "@saveSheetRemindIn": {
+    "placeholders": {
+      "days": {
+        "type": "int"
+      },
+      "hour": {
+        "type": "int"
+      }
+    }
+  },
+  "savedOk": "已記在「卦記」。",
+  "savedReminderFailed": "已記在「卦記」，但提醒沒有設定成功。{reason}",
+  "@savedReminderFailed": {
+    "placeholders": {
+      "reason": {
+        "type": "String"
+      }
+    }
+  },
+  "reminderPickerTitle": "幾天後提醒？",
+  "daysSuffix": "天",
+  "daysHint": "1～365",
+  "reminderOff": "不提醒",
+  "reminderDays": "{days, plural, other{{days} 天}}",
+  "@reminderDays": {
+    "placeholders": {
+      "days": {
+        "type": "int"
+      }
+    }
+  },
+  "reminderCustom": "自訂",
+  "reminderPermissionDenied": "尚未允許「謙卦」發送通知，可到手機設定 → 應用程式 → 謙卦 → 通知 開啟",
+  "reminderInitFailed": "通知初始化失敗：{detail}",
+  "@reminderInitFailed": {
+    "placeholders": {
+      "detail": {
+        "type": "String"
+      }
+    }
+  },
+  "reminderScheduleFailed": "排程失敗：{detail}",
+  "@reminderScheduleFailed": {
+    "placeholders": {
+      "detail": {
+        "type": "String"
+      }
+    }
+  },
+  "reminderUnsupported": "這個平台尚未支援提醒",
+  "reminderChannelName": "卦記回顧提醒",
+  "@reminderChannelName": {
+    "description": "Android 通知類別名稱（系統設定中可見）"
+  },
+  "reminderChannelDescription": "提醒你回來回顧之前記下的卦",
+  "reviewNotificationTitle": "回顧一卦：{name}",
+  "@reviewNotificationTitle": {
+    "description": "通知內文不可放「想問的事」（鎖定畫面可見）",
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "reviewNotificationBody": "{days, plural, other{{days} 天前抽到{name}卦。回頭看看，這個象後來怎麼對上了？}}",
+  "@reviewNotificationBody": {
+    "placeholders": {
+      "days": {
+        "type": "int"
+      },
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "breathChannelName": "呼吸音景",
+  "@breathChannelName": {
+    "description": "Android 通知類別名稱"
+  },
+  "breathSetupTitle": "呼吸音景・{name}",
+  "@breathSetupTitle": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "breathSoundSingle": "{trigram}・{nature}：{sound}",
+  "@breathSoundSingle": {
+    "placeholders": {
+      "trigram": {
+        "type": "String"
+      },
+      "nature": {
+        "type": "String"
+      },
+      "sound": {
+        "type": "String"
+      }
+    }
+  },
+  "breathSoundUpper": "上卦 {trigram}・{nature}：{sound}",
+  "@breathSoundUpper": {
+    "placeholders": {
+      "trigram": {
+        "type": "String"
+      },
+      "nature": {
+        "type": "String"
+      },
+      "sound": {
+        "type": "String"
+      }
+    }
+  },
+  "breathSoundLower": "下卦 {trigram}・{nature}：{sound}",
+  "@breathSoundLower": {
+    "placeholders": {
+      "trigram": {
+        "type": "String"
+      },
+      "nature": {
+        "type": "String"
+      },
+      "sound": {
+        "type": "String"
+      }
+    }
+  },
+  "breathSetupNote": "吸氣 4 秒、吐氣 6 秒（每分鐘 6 次）。音景會跟著呼吸起伏，長鳴與鈴聲以 432Hz 調音。",
+  "@breathSetupNote": {
+    "description": "只描述做法，不寫療效（Google Play 健康宣稱政策，HANDOFF §14.2）"
+  },
+  "breathDuration": "時長",
+  "minutes": "{m, plural, other{{m} 分鐘}}",
+  "@minutes": {
+    "placeholders": {
+      "m": {
+        "type": "int"
+      }
+    }
+  },
+  "breathBells": "換氣時輕敲鈴聲",
+  "breathBellsSub": "閉上眼睛也能跟著吸吐",
+  "breathBinaural": "雙耳節拍 7.83Hz",
+  "breathBinauralSub": "需戴耳機（左 216Hz、右 223.83Hz）",
+  "breathHeadphones": "建議戴耳機；手機喇叭較難聽出低沉的聲音。",
+  "breathStart": "開始",
+  "breathMediaTitle": "{name}・呼吸音景",
+  "@breathMediaTitle": {
+    "description": "通知列與鎖定畫面的標題",
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "breathMediaSubtitle": "{sounds}｜{duration}",
+  "@breathMediaSubtitle": {
+    "placeholders": {
+      "sounds": {
+        "type": "String"
+      },
+      "duration": {
+        "type": "String"
+      }
+    }
+  },
+  "breathPreparing": "正在生成音景",
+  "breathPreparingSub": "第一次約需數秒",
+  "breathFailed": "這台手機暫時無法播放音景，\n可以改用無聲引導。",
+  "breathEnded": "已結束",
+  "breathDone": "完成",
+  "breathStoppedFromNotification": "已從通知列停止",
+  "breathSummary": "{minutes} 分鐘・{breaths} 次呼吸",
+  "@breathSummary": {
+    "placeholders": {
+      "minutes": {
+        "type": "int"
+      },
+      "breaths": {
+        "type": "int"
+      }
+    }
+  },
+  "breathPaused": "暫停中",
+  "breathUseSilent": "改用無聲引導",
+  "breathBackToReading": "回到解讀",
+  "breathViewArtAgain": "再看一次卦圖",
+  "breathRemaining": "剩下 {time}",
+  "@breathRemaining": {
+    "placeholders": {
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "breathSilentMark": "・無聲",
+  "breathViewArt": "看圖",
+  "breathResume": "繼續",
+  "breathPause": "暫停",
+  "breathEnd": "結束",
+  "breathPhase": "{phase, select, prepare{準備} inhale{吸} exhale{吐} done{完成} other{-}}",
+  "@breathPhase": {
+    "placeholders": {
+      "phase": {
+        "type": "String"
+      }
+    }
+  },
+  "soundscapeName": "{key, select, qian{高空清風} kun{夜野蟲鳴} zhen{遠雷春雨} xun{林間風聲} kan{山澗流水} li{營火} gen{山林寂靜} dui{湖畔水波} other{-}}",
+  "@soundscapeName": {
+    "description": "八經卦音景名稱（HANDOFF §14）",
+    "placeholders": {
+      "key": {
+        "type": "String"
+      }
+    }
+  }
+}

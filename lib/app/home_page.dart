@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../shared/widgets/card_back.dart';
+import '../l10n/l10n.dart';
 import 'feature_registry.dart';
 import 'theme.dart';
 
@@ -10,6 +11,7 @@ class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final t = Theme.of(context).textTheme;
+    final l = context.l10n;
     final primary = registeredFeatures.where((f) => f.placement == FeaturePlacement.primary && f.builder != null);
     final secondary = registeredFeatures.where((f) => f.placement == FeaturePlacement.secondary && f.builder != null);
 
@@ -38,21 +40,21 @@ class HomePage extends StatelessWidget {
                               child: AspectRatio(aspectRatio: 0.62, child: CardBack()),
                             ),
                             const SizedBox(height: 32),
-                            Text('謙卦', style: t.displaySmall),
+                            Text(l.appTitle, style: t.displaySmall),
                             const SizedBox(height: 6),
-                            Text('易經六十四卦卡', style: t.titleSmall?.copyWith(color: QianColors.earth, letterSpacing: 4)),
+                            Text(l.appSubtitle, style: t.titleSmall?.copyWith(color: QianColors.earth, letterSpacing: 4)),
                             const SizedBox(height: 16),
-                            Text('易經不是用來算命\n而是練習看象與做決定',
+                            Text(l.homeMotto,
                                 textAlign: TextAlign.center,
                                 style: t.bodyLarge?.copyWith(color: QianColors.textSub, fontSize: 15)),
                             const SizedBox(height: 32),
                             for (final f in primary)
                               Padding(
                                 padding: const EdgeInsets.only(bottom: 8),
-                                child: FilledButton(onPressed: () => open(f), child: Text(f.label)),
+                                child: FilledButton(onPressed: () => open(f), child: Text(f.label(l))),
                               ),
                             for (final f in secondary)
-                              TextButton(onPressed: () => open(f), child: Text(f.label)),
+                              TextButton(onPressed: () => open(f), child: Text(f.label(l))),
                           ],
                         ),
                       ),
@@ -63,7 +65,7 @@ class HomePage extends StatelessWidget {
               Padding(
                 padding: const EdgeInsets.only(bottom: 12),
                 child: Text(
-                  '內容僅供自我探索與娛樂參考',
+                  l.homeDisclaimer,
                   style: t.bodySmall?.copyWith(fontSize: 11, color: QianColors.textSub.withValues(alpha: 0.75)),
                 ),
               ),

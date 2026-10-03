@@ -10,14 +10,17 @@ import 'breath_audio_handler.dart';
 /// 背景服務初始化失敗時退回一般播放器：仍可在前景播放，只是沒有通知控制。
 class JustAudioPlayback implements AudioPlayback {
   static BreathAudioHandler? _handler;
+  static String _album = '';
 
-  static Future<void> initBackground() async {
+  /// [channelName]：通知類別名稱；[album]：鎖定畫面卡片上的 App 名稱（皆由 l10n 提供）。
+  static Future<void> initBackground({required String channelName, required String album}) async {
+    _album = album;
     try {
       _handler = await AudioService.init(
         builder: BreathAudioHandler.new,
-        config: const AudioServiceConfig(
+        config: AudioServiceConfig(
           androidNotificationChannelId: 'com.lclab.qiangua.breath',
-          androidNotificationChannelName: '呼吸音景',
+          androidNotificationChannelName: channelName,
           androidNotificationIcon: 'drawable/ic_stat_qian', // 單色謙卦卦象（branding/android/res）
         ),
       ).timeout(const Duration(seconds: 5));
@@ -41,7 +44,7 @@ class JustAudioPlayback implements AudioPlayback {
       id: id,
       title: title,
       artist: subtitle,
-      album: '謙卦',
+      album: _album,
       duration: d,
       artUri: artFilePath == null ? null : Uri.file(artFilePath),
     ));

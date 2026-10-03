@@ -5,6 +5,7 @@ import '../../app/theme.dart';
 import '../../core/iching/hexagram_table.dart';
 import '../../core/journal/journal_entry.dart';
 import '../../core/journal/journal_store.dart';
+import '../../l10n/l10n.dart';
 import '../../shared/format.dart';
 import '../../shared/widgets/hexagram_glyph.dart';
 import 'journal_entry_page.dart';
@@ -17,7 +18,7 @@ class JournalListPage extends StatelessWidget {
   Widget build(BuildContext context) {
     final store = AppServices.of(context).journal;
     return Scaffold(
-      appBar: AppBar(title: const Text('卦記')),
+      appBar: AppBar(title: Text(context.l10n.featureJournal)),
       body: store == null ? const _Empty() : _List(store: store),
     );
   }
@@ -58,6 +59,7 @@ class _Tile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final t = Theme.of(context).textTheme;
+    final l = context.l10n;
     final cast = entry.cast;
     final p = HexagramTable.byNumber(cast.primary);
     final c = cast.changed == null ? null : HexagramTable.byNumber(cast.changed!);
@@ -66,12 +68,13 @@ class _Tile extends StatelessWidget {
     return ListTile(
       contentPadding: const EdgeInsets.symmetric(vertical: 8, horizontal: 4),
       leading: HexagramGlyph(lines: p.lines, changing: cast.changingPositions.toSet(), width: 32),
-      title: Text(c == null ? '${p.name}卦' : '${p.name} → ${c.name}', style: t.titleMedium),
+      title: Text(c == null ? l.journalTitleSingle(l.hexName(p)) : l.journalTitleChange(l.hexName(p), l.hexName(c)),
+          style: t.titleMedium),
       subtitle: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            entry.question.isEmpty ? '（未寫想問的事）' : entry.question,
+            entry.question.isEmpty ? l.journalNoQuestion : entry.question,
             maxLines: 2,
             overflow: TextOverflow.ellipsis,
             style: t.bodyMedium?.copyWith(color: entry.question.isEmpty ? QianColors.textSub : null),
@@ -80,9 +83,9 @@ class _Tile extends StatelessWidget {
           Text(
             [
               formatDate(entry.createdAt),
-              if (reviews > 0) '回顧 $reviews 次',
-              if (pending) '${formatDate(entry.reminderAt!)} 提醒',
-            ].join('・'),
+              if (reviews > 0) l.journalReviewCount(reviews),
+              if (pending) l.journalReminderOn(formatDate(entry.reminderAt!)),
+            ].join(l.separator),
             style: t.bodySmall,
           ),
         ],
@@ -104,7 +107,7 @@ class _Empty extends StatelessWidget {
       child: Padding(
         padding: const EdgeInsets.all(40),
         child: Text(
-          '還沒有卦記\n\n抽卦後\n在解讀頁最下方按「記下這一卦」\n日後回來對照\n看看象是怎麼應驗在事情上的',
+          context.l10n.journalEmpty,
           textAlign: TextAlign.center,
           style: t.bodyMedium?.copyWith(color: QianColors.textSub),
         ),

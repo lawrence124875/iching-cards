@@ -7,7 +7,14 @@ on:
     paths-ignore:
       - '**.md'
       - 'docs/**'
-  workflow_dispatch: {}
+  workflow_dispatch:
+    inputs:
+      force_lang:
+        # 測試用（HANDOFF §16）：不論手機語言，強制使用某語言的介面（例如 en），內容仍為繁中。
+        # 留空＝正式版（依手機語言，只開放內容已完成的語言）。
+        description: '測試用：強制介面語言（例如 en），留空為正式版'
+        required: false
+        default: ''
 
 concurrency:
   group: android-build
@@ -101,9 +108,11 @@ jobs:
           exit $status
 
       - name: 建置 APK（release）
+        env:
+          FORCE_LANG: ${{ inputs.force_lang }}
         run: |
           set +e
-          flutter build apk --release > /tmp/build.log 2>&1
+          flutter build apk --release ${FORCE_LANG:+--dart-define=FORCE_LANG=$FORCE_LANG} > /tmp/build.log 2>&1
           status=$?
           tail -n 40 /tmp/build.log
           if [ $status -ne 0 ]; then
@@ -116,15 +125,16 @@ jobs:
       - name: 發佈到私人 repo 的 Release
         env:
           GH_TOKEN: ${{ secrets.BUILDS_REPO_TOKEN }}
+          FORCE_LANG: ${{ inputs.force_lang }}
         run: |
           set -euo pipefail
           ver=$(grep '^version:' pubspec.yaml | awk '{print $2}')
           n=${{ github.run_number }}
-          f="iching_${ver}_run${n}.apk"
+          f="iching_${ver}_run${n}${FORCE_LANG:+_ui-$FORCE_LANG}.apk"
           cp build/app/outputs/flutter-apk/app-release.apk "$f"
           gh release create "iching-android-run${n}" "$f" \
             --repo lawrence124875/iching-content \
-            --title "謙卦 ${ver}（run ${n}）" \
+            --title "謙卦 ${ver}（run ${n}）${FORCE_LANG:+［測試：介面 $FORCE_LANG］}" \
             --notes "commit ${{ github.sha }}；簽署：${SIGNING}"
 
       # 依 run 編號排序：Release 的 createdAt 取自 iching-content 被標記的 commit，

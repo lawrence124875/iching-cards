@@ -3,7 +3,7 @@
 
 HANDOFF §6.2、§15。完整字型每個 12–17 MB，只保留需要的字：
   1. Big5 常用字（第一字面 5,401 字）——使用者輸入「想問的事」、回顧時用得到
-  2. 實際用到的字：assets/content/**/*.json（解讀內容）＋ lib/**/*.dart（介面文字）
+  2. 實際用到的字：assets/content/**/*.json（解讀內容）＋ lib/**/*.dart、lib/l10n/*.arb（介面文字）
   3. 英數、標點、全形符號
 不在子集中的字（罕用字）會由系統字體自動補上，不會變成方框。
 
@@ -45,7 +45,7 @@ def big5_common() -> set[str]:
 
 def used_chars(root: pathlib.Path) -> set[str]:
     chars = set()
-    for pattern in ("assets/content/**/*.json", "lib/**/*.dart"):
+    for pattern in ("assets/content/**/*.json", "lib/**/*.dart", "lib/**/*.arb"):
         for f in root.glob(pattern):
             chars.update(f.read_text(encoding="utf-8"))
     return chars

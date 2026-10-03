@@ -1,8 +1,10 @@
-import '../iching/hexagram_table.dart';
 import '../reminders/reminder_service.dart';
 import 'journal_entry.dart';
 
-/// 卦記與提醒的接合：回顧時間、通知文字、payload。
+/// 通知標題與內文：由介面層提供（l10n 的 reviewMessage），core 不放介面文字。
+typedef ReviewMessage = ({String title, String body}) Function(int hexagram, int days);
+
+/// 卦記與提醒的接合：回顧時間、payload、排程。
 class JournalReminders {
   JournalReminders._();
 
@@ -21,19 +23,19 @@ class JournalReminders {
 
   /// 依 entry.reminderAt 重新排程（先取消舊的）。沒有提醒或時間已過則只取消。
   /// 通知內文不放「想問的事」：鎖定畫面上任何人都看得到。
-  static Future<bool> apply(ReminderService reminders, JournalEntry e) async {
+  static Future<bool> apply(ReminderService reminders, JournalEntry e, ReviewMessage message) async {
     await reminders.cancel(e.notificationId);
     final at = e.reminderAt;
     if (at == null || !at.isAfter(DateTime.now())) return true;
-    final name = HexagramTable.byNumber(e.cast.primary).name;
     final days = DateTime(at.year, at.month, at.day)
         .difference(DateTime(e.createdAt.year, e.createdAt.month, e.createdAt.day))
         .inDays;
+    final m = message(e.cast.primary, days);
     return reminders.schedule(
       id: e.notificationId,
       at: at,
-      title: '回顧一卦：$name',
-      body: '$days 天前抽到$name卦。回頭看看，這個象後來怎麼對上了？',
+      title: m.title,
+      body: m.body,
       payload: payloadFor(e),
     );
   }

@@ -1,0 +1,508 @@
+{
+  "@@locale": "en",
+  "appTitle": "Qiangua",
+  "appSubtitle": "I Ching · 64 Hexagram Cards",
+  "homeMotto": "The I Ching is not for telling fortunes\nbut for learning to read images and decide",
+  "homeDisclaimer": "For self-reflection and entertainment only",
+  "cancel": "Cancel",
+  "ok": "OK",
+  "delete": "Delete",
+  "back": "Back",
+  "save": "Save",
+  "viewReading": "See the Reading",
+  "separator": " · ",
+  "listSeparator": ", ",
+  "featureDraw": "Draw a Card",
+  "featureCoins": "Cast with Three Coins",
+  "featureJournal": "Journal",
+  "featureBreath": "Breathing Soundscape",
+  "readingActionBreath": "Breathe with This Hexagram",
+  "methodDraw": "Card draw",
+  "methodCoins": "Three-coin cast",
+  "questionTitle": "Your Question",
+  "questionHint": "In a sentence or two, what is on your mind? (optional)",
+  "questionPromptLink": "Write down your question (optional)",
+  "questionShown": "Q: {question}",
+  "@questionShown": {
+    "placeholders": {
+      "question": {
+        "type": "String"
+      }
+    }
+  },
+  "optionalHint": "Optional",
+  "drawPromptBefore": "Hold one matter in mind\nTap the card when you are ready",
+  "drawPromptAfter": "This is the image of this moment",
+  "drawFlip": "Reveal",
+  "drawAgain": "Draw Again",
+  "coinsInstructions": "Heads count 3 and tails 2; three coins add up to one line. Toss six times from the bottom up. 6 and 9 are changing lines.",
+  "coinsToss": "Toss {n} of 6",
+  "@coinsToss": {
+    "placeholders": {
+      "n": {
+        "type": "int"
+      }
+    }
+  },
+  "coinsTossAll": "Toss All at Once",
+  "coinsRestart": "Start Over",
+  "lineName": "{position, select, first{Line 1} second{Line 2} third{Line 3} fourth{Line 4} fifth{Line 5} top{Line 6} other{Line}}",
+  "@lineName": {
+    "placeholders": {
+      "position": {
+        "type": "String"
+      }
+    }
+  },
+  "lineValue": "{kind, select, oldYin{old yin} youngYang{young yang} youngYin{young yin} oldYang{old yang} other{-}}",
+  "@lineValue": {
+    "placeholders": {
+      "kind": {
+        "type": "String"
+      }
+    }
+  },
+  "coinLineValue": "{value}  {kind}",
+  "@coinLineValue": {
+    "placeholders": {
+      "value": {
+        "type": "int"
+      },
+      "kind": {
+        "type": "String"
+      }
+    }
+  },
+  "coinChangingMark": " (changing)",
+  "sectionReading": "Reading",
+  "sectionImage": "The Image",
+  "sectionSource": "Where the Image Comes From",
+  "sectionForYou": "For You Now",
+  "sectionAction": "A Small Step for Today",
+  "sectionQuestion": "A Question to Reflect On",
+  "sectionEastWest": "East Meets West",
+  "sectionFocus": "Focus of This Reading",
+  "sectionText": "The Text",
+  "sectionJudgment": "The Judgment",
+  "readingNotWritten": "The reading for this hexagram is still being written. For now, look at the scene on the card and notice what it brings to mind.",
+  "hexagramContentInProgress": "The content for this hexagram is still being written.",
+  "contentInProgress": "The content for {name} is still being written.",
+  "@contentInProgress": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "lineInProgress": "This line of {name} is still being written.",
+  "@lineInProgress": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "savedToJournalHint": "Saved to your Journal. Come back from the home screen to compare later.",
+  "saveThisReading": "Save This Reading",
+  "detailButton": "{name}: Text and Six Lines",
+  "@detailButton": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "detailButtonChanged": "Resulting {name}: Text and Six Lines",
+  "@detailButtonChanged": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "primaryHexagram": "Primary",
+  "changedHexagram": "Resulting",
+  "quoteMarks": "“{text}”",
+  "@quoteMarks": {
+    "placeholders": {
+      "text": {
+        "type": "String"
+      }
+    }
+  },
+  "quoteAttribution": "{author}, {source}",
+  "@quoteAttribution": {
+    "placeholders": {
+      "author": {
+        "type": "String"
+      },
+      "source": {
+        "type": "String"
+      }
+    }
+  },
+  "focusExplanation": "{reason, select, none{No changing lines: read the judgment of the primary hexagram.} one{One changing line: read that line.} two{Two changing lines: read both, with the upper one as the main focus.} three{Three changing lines: read the judgments of both the primary and the resulting hexagram.} four{Four changing lines: read the two unchanged lines of the resulting hexagram, with the lower one as the main focus.} five{Five changing lines: read the one unchanged line of the resulting hexagram.} allQian{All six lines change: for Qian, read “All Nines”.} allKun{All six lines change: for Kun, read “All Sixes”.} other{All six lines change: read the judgment of the resulting hexagram.}}",
+  "@focusExplanation": {
+    "placeholders": {
+      "reason": {
+        "type": "String"
+      }
+    }
+  },
+  "glyphLabel": "Hexagram figure",
+  "glyphLabelChanging": "Hexagram figure, changing lines: {lines}",
+  "@glyphLabelChanging": {
+    "placeholders": {
+      "lines": {
+        "type": "String"
+      }
+    }
+  },
+  "cardOrdinal": "No. {ordinal}",
+  "@cardOrdinal": {
+    "placeholders": {
+      "ordinal": {
+        "type": "String"
+      }
+    }
+  },
+  "cardTrigrams": "{upperNature} over {lowerNature}",
+  "@cardTrigrams": {
+    "placeholders": {
+      "upperName": {
+        "type": "String"
+      },
+      "upperNature": {
+        "type": "String"
+      },
+      "lowerName": {
+        "type": "String"
+      },
+      "lowerNature": {
+        "type": "String"
+      }
+    }
+  },
+  "cardZoomLabel": "Enlarge the card art for {name}",
+  "@cardZoomLabel": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "artViewerLabel": "Card art for {name}. Tap to go back",
+  "@artViewerLabel": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "tapToReturn": "Tap to go back",
+  "trigramName": "{key, select, qian{Qian} dui{Dui} li{Li} zhen{Zhen} xun{Xun} kan{Kan} gen{Gen} kun{Kun} other{-}}",
+  "@trigramName": {
+    "placeholders": {
+      "key": {
+        "type": "String"
+      }
+    }
+  },
+  "trigramNature": "{key, select, qian{Heaven} dui{Lake} li{Fire} zhen{Thunder} xun{Wind} kan{Water} gen{Mountain} kun{Earth} other{-}}",
+  "@trigramNature": {
+    "placeholders": {
+      "key": {
+        "type": "String"
+      }
+    }
+  },
+  "journalEmpty": "No entries yet\n\nAfter drawing a card\ntap “Save This Reading” at the end of the reading\nThen come back later\nto see how the image played out",
+  "journalNoQuestion": "(No question written)",
+  "journalReviewCount": "{count, plural, =1{1 note} other{{count} notes}}",
+  "@journalReviewCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "journalReminderOn": "Reminder {date}",
+  "@journalReminderOn": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "journalTitleSingle": "{name}",
+  "@journalTitleSingle": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "journalTitleChange": "{from} → {to}",
+  "@journalTitleChange": {
+    "placeholders": {
+      "from": {
+        "type": "String"
+      },
+      "to": {
+        "type": "String"
+      }
+    }
+  },
+  "journalNotFound": "This entry could not be found. It may have been deleted.",
+  "journalDeleteTitle": "Delete this entry?",
+  "journalDeleteBody": "This cannot be undone.",
+  "journalChangedTo": "Resulting: {name}",
+  "@journalChangedTo": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "journalReadingThen": "Reading at the time",
+  "journalQuestionEmpty": "(Not filled in. Tap to add)",
+  "journalViewReading": "View the Reading from Then",
+  "journalReviews": "Looking Back",
+  "journalReviewPrompt": "What happened afterwards? Looking back, where does the image meet what happened?",
+  "journalAddReview": "Write What Happened",
+  "journalReviewDialogTitle": "What happened afterwards?",
+  "journalEditReview": "Edit This Note",
+  "journalReminderSection": "Review Reminder",
+  "journalReminderPending": "You will be reminded on {date} at {hour} p.m.",
+  "@journalReminderPending": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      },
+      "hour": {
+        "type": "int"
+      }
+    }
+  },
+  "journalReminderNone": "No reminder set. Choose a number of days from today:",
+  "journalTestReminder": "Test: remind me in 1 minute",
+  "journalTestReminderSet": "Reminder set for 1 minute from now. You can turn off the screen or go to the home screen.",
+  "reminderFailed": "The reminder could not be set. {reason}",
+  "@reminderFailed": {
+    "placeholders": {
+      "reason": {
+        "type": "String"
+      }
+    }
+  },
+  "saveSheetNote": "Stored only on this phone. Come back later to compare and practise reading the image.",
+  "saveSheetRemind": "Remind Me to Look Back",
+  "saveSheetRemindIn": "{days, plural, =1{Reminder tomorrow at {hour} p.m.} other{Reminder in {days} days at {hour} p.m.}}",
+  "@saveSheetRemindIn": {
+    "placeholders": {
+      "days": {
+        "type": "int"
+      },
+      "hour": {
+        "type": "int"
+      }
+    }
+  },
+  "savedOk": "Saved to your Journal.",
+  "savedReminderFailed": "Saved to your Journal, but the reminder could not be set. {reason}",
+  "@savedReminderFailed": {
+    "placeholders": {
+      "reason": {
+        "type": "String"
+      }
+    }
+  },
+  "reminderPickerTitle": "Remind me in how many days?",
+  "daysSuffix": "days",
+  "daysHint": "1–365",
+  "reminderOff": "No reminder",
+  "reminderDays": "{days, plural, =1{1 day} other{{days} days}}",
+  "@reminderDays": {
+    "placeholders": {
+      "days": {
+        "type": "int"
+      }
+    }
+  },
+  "reminderCustom": "Custom",
+  "reminderPermissionDenied": "Notifications are off for Qiangua. You can turn them on in Settings → Apps → Qiangua → Notifications.",
+  "reminderInitFailed": "Notifications could not start: {detail}",
+  "@reminderInitFailed": {
+    "placeholders": {
+      "detail": {
+        "type": "String"
+      }
+    }
+  },
+  "reminderScheduleFailed": "Scheduling failed: {detail}",
+  "@reminderScheduleFailed": {
+    "placeholders": {
+      "detail": {
+        "type": "String"
+      }
+    }
+  },
+  "reminderUnsupported": "Reminders are not supported on this platform yet",
+  "reminderChannelName": "Journal review reminders",
+  "reminderChannelDescription": "Reminds you to look back at readings you saved",
+  "reviewNotificationTitle": "Look back: {name}",
+  "@reviewNotificationTitle": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "reviewNotificationBody": "{days, plural, =1{Yesterday you drew {name}. Look back: how did the image play out?} other{{days} days ago you drew {name}. Look back: how did the image play out?}}",
+  "@reviewNotificationBody": {
+    "placeholders": {
+      "days": {
+        "type": "int"
+      },
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "breathChannelName": "Breathing soundscape",
+  "breathSetupTitle": "Breathing Soundscape · {name}",
+  "@breathSetupTitle": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "breathSoundSingle": "{nature} ({trigram}): {sound}",
+  "@breathSoundSingle": {
+    "placeholders": {
+      "trigram": {
+        "type": "String"
+      },
+      "nature": {
+        "type": "String"
+      },
+      "sound": {
+        "type": "String"
+      }
+    }
+  },
+  "breathSoundUpper": "Upper: {nature} ({trigram}), {sound}",
+  "@breathSoundUpper": {
+    "placeholders": {
+      "trigram": {
+        "type": "String"
+      },
+      "nature": {
+        "type": "String"
+      },
+      "sound": {
+        "type": "String"
+      }
+    }
+  },
+  "breathSoundLower": "Lower: {nature} ({trigram}), {sound}",
+  "@breathSoundLower": {
+    "placeholders": {
+      "trigram": {
+        "type": "String"
+      },
+      "nature": {
+        "type": "String"
+      },
+      "sound": {
+        "type": "String"
+      }
+    }
+  },
+  "breathSetupNote": "Breathe in for 4 seconds and out for 6 (6 breaths a minute). The soundscape rises and falls with your breath; tones and bells are tuned to 432 Hz.",
+  "breathDuration": "Length",
+  "minutes": "{m, plural, =1{1 minute} other{{m} minutes}}",
+  "@minutes": {
+    "placeholders": {
+      "m": {
+        "type": "int"
+      }
+    }
+  },
+  "breathBells": "Soft bell when the breath turns",
+  "breathBellsSub": "Follow along with your eyes closed",
+  "breathBinaural": "Binaural beat 7.83 Hz",
+  "breathBinauralSub": "Headphones required (left 216 Hz, right 223.83 Hz)",
+  "breathHeadphones": "Headphones recommended; phone speakers struggle with low sounds.",
+  "breathStart": "Start",
+  "breathMediaTitle": "{name} · Breathing Soundscape",
+  "@breathMediaTitle": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "breathMediaSubtitle": "{sounds} | {duration}",
+  "@breathMediaSubtitle": {
+    "placeholders": {
+      "sounds": {
+        "type": "String"
+      },
+      "duration": {
+        "type": "String"
+      }
+    }
+  },
+  "breathPreparing": "Creating the soundscape",
+  "breathPreparingSub": "The first time takes a few seconds",
+  "breathFailed": "This phone cannot play the soundscape right now.\nYou can use silent guidance instead.",
+  "breathEnded": "Ended",
+  "breathDone": "Done",
+  "breathStoppedFromNotification": "Stopped from the notification",
+  "breathSummary": "{minutes} min · {breaths} breaths",
+  "@breathSummary": {
+    "placeholders": {
+      "minutes": {
+        "type": "int"
+      },
+      "breaths": {
+        "type": "int"
+      }
+    }
+  },
+  "breathPaused": "Paused",
+  "breathUseSilent": "Use Silent Guidance",
+  "breathBackToReading": "Back to the Reading",
+  "breathViewArtAgain": "View the Card Again",
+  "breathRemaining": "{time} left",
+  "@breathRemaining": {
+    "placeholders": {
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "breathSilentMark": " · silent",
+  "breathViewArt": "Card",
+  "breathResume": "Resume",
+  "breathPause": "Pause",
+  "breathEnd": "End",
+  "breathPhase": "{phase, select, prepare{Ready} inhale{In} exhale{Out} done{Done} other{-}}",
+  "@breathPhase": {
+    "placeholders": {
+      "phase": {
+        "type": "String"
+      }
+    }
+  },
+  "soundscapeName": "{key, select, qian{High Clear Wind} kun{Night Field Crickets} zhen{Distant Thunder, Spring Rain} xun{Wind in the Trees} kan{Mountain Stream} li{Campfire} gen{Mountain Stillness} dui{Lakeside Ripples} other{-}}",
+  "@soundscapeName": {
+    "placeholders": {
+      "key": {
+        "type": "String"
+      }
+    }
+  }
+}

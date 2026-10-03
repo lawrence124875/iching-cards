@@ -5,6 +5,7 @@ import '../app/theme.dart';
 import '../core/iching/cast_result.dart';
 import '../core/journal/journal_entry.dart';
 import '../core/journal/journal_reminders.dart';
+import '../l10n/l10n.dart';
 import '../shared/widgets/reminder_picker.dart';
 
 /// 「記下這一卦」：填寫（或修改）想問的事、選擇幾天後提醒回顧。
@@ -46,6 +47,7 @@ class _SaveSheetState extends State<_SaveSheet> {
 
   Future<void> _save() async {
     final services = AppServices.of(context);
+    final l = context.l10n;
     final store = services.journal;
     if (store == null || _saving) return;
     setState(() => _saving = true);
@@ -61,9 +63,9 @@ class _SaveSheetState extends State<_SaveSheet> {
     var reminderOk = true;
     String? reminderError;
     if (entry.reminderAt != null) {
-      reminderOk = await JournalReminders.apply(services.reminders, entry);
+      reminderOk = await JournalReminders.apply(services.reminders, entry, l.reviewMessage);
       if (!reminderOk) {
-        reminderError = services.reminders.lastError;
+        reminderError = l.reminderFailureText(services.reminders.lastFailure);
         entry = entry.copyWith(clearReminder: true);
         await store.save(entry);
       }
@@ -72,9 +74,7 @@ class _SaveSheetState extends State<_SaveSheet> {
     final messenger = ScaffoldMessenger.of(context);
     Navigator.pop(context, entry);
     messenger.showSnackBar(SnackBar(
-      content: Text(reminderOk
-          ? '已記在「卦記」。'
-          : '已記在「卦記」，但提醒沒有設定成功。${reminderError ?? ''}'),
+      content: Text(reminderOk ? l.savedOk : l.savedReminderFailed(reminderError ?? '')),
       duration: Duration(seconds: reminderOk ? 3 : 8),
     ));
   }
@@ -82,6 +82,7 @@ class _SaveSheetState extends State<_SaveSheet> {
   @override
   Widget build(BuildContext context) {
     final t = Theme.of(context).textTheme;
+    final l = context.l10n;
     // 鍵盤升起時整張面板可捲動，「儲存」不會被擋住；點面板空白處收起鍵盤。
     return GestureDetector(
       behavior: HitTestBehavior.opaque,
@@ -95,11 +96,11 @@ class _SaveSheetState extends State<_SaveSheet> {
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text('記下這一卦', style: t.headlineSmall),
+            Text(l.saveThisReading, style: t.headlineSmall),
             const SizedBox(height: 4),
-            Text('只存在這支手機裡。日後回來對照，練習看象。', style: t.bodySmall),
+            Text(l.saveSheetNote, style: t.bodySmall),
             const SizedBox(height: 16),
-            Text('想問的事', style: t.titleMedium),
+            Text(l.questionTitle, style: t.titleMedium),
             TextField(
           onTapOutside: (_) => FocusManager.instance.primaryFocus?.unfocus(),
               controller: _controller,
@@ -108,19 +109,19 @@ class _SaveSheetState extends State<_SaveSheet> {
               maxLength: 200,
               textInputAction: TextInputAction.done,
               onSubmitted: (_) => FocusManager.instance.primaryFocus?.unfocus(),
-              decoration: const InputDecoration(hintText: '可不填'),
+              decoration: InputDecoration(hintText: l.optionalHint),
             ),
             const SizedBox(height: 8),
-            Text('提醒我回來回顧', style: t.titleMedium),
+            Text(l.saveSheetRemind, style: t.titleMedium),
             const SizedBox(height: 8),
             ReminderPicker(days: _days, onChanged: (d) => setState(() => _days = d)),
             if (_days != null) ...[
               const SizedBox(height: 6),
-              Text('${_days!} 天後晚上 ${JournalReminders.reviewHour} 點提醒', style: t.bodySmall),
+              Text(l.saveSheetRemindIn(_days!, hour12(JournalReminders.reviewHour)), style: t.bodySmall),
             ],
             const SizedBox(height: 20),
             Center(
-              child: FilledButton(onPressed: _saving ? null : _save, child: const Text('儲存')),
+              child: FilledButton(onPressed: _saving ? null : _save, child: Text(l.save)),
             ),
           ],
         ),

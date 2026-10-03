@@ -3,7 +3,7 @@ import 'draw_page.dart';
 
 final drawFeature = AppFeature(
   id: 'draw',
-  label: '抽一卦',
+  label: (l) => l.featureDraw,
   placement: FeaturePlacement.primary,
   builder: (_) => const DrawPage(),
 );

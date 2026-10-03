@@ -1,4 +1,5 @@
 /// 八經卦。lines 由下而上，true＝陽爻。
+/// label／nature 是漢字原始資料（組卦名「地山謙」用）；介面顯示一律經過 l10n（IchingTerms.trigramLabel／trigramImage）。
 enum Trigram {
   qian('乾', '天', [true, true, true]),
   dui('兌', '澤', [true, true, false]),

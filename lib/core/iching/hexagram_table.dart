@@ -13,6 +13,8 @@ class HexagramInfo {
   });
 
   final int number;
+
+  /// 漢字卦名（原始資料）。介面顯示請用 l10n 的 IchingTerms.hexName／hexFullName（依語言）。
   final String name;
   final String pinyin;
 

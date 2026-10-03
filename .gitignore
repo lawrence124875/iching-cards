@@ -43,3 +43,5 @@ key.properties
 # 字型子集由 CI 產生（scripts/build_fonts.py）
 /assets/fonts/*.ttf
 /_fonts_src/
+# 介面翻譯由 ARB 自動產生（l10n.yaml）
+/lib/l10n/app_localizations*.dart

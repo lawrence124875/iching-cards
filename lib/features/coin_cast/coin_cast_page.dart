@@ -4,11 +4,10 @@ import '../../app/services.dart';
 import '../../app/theme.dart';
 import '../../core/iching/cast_result.dart';
 import '../../core/iching/divination_method.dart';
+import '../../l10n/l10n.dart';
 import '../../reading/reading_page.dart';
 import '../../shared/widgets/hexagram_glyph.dart';
 import '../../shared/widgets/question_dialog.dart';
-
-const _lineNames = ['初', '二', '三', '四', '五', '上'];
 
 /// 擲錢起卦：三枚銅錢擲六次，由初爻往上；含變爻與之卦。
 /// 版面固定在一個畫面內：說明 → 卦象＋六爻表（空間不足時等比縮小）→ 底部按鈕。
@@ -43,6 +42,7 @@ class _CoinCastPageState extends State<CoinCastPage> {
   @override
   Widget build(BuildContext context) {
     final t = Theme.of(context).textTheme;
+    final l = context.l10n;
     final lines = [for (final x in _tosses) x.line];
     final padded = [...lines.map((l) => l.isYang), ...List.filled(6 - lines.length, false)];
     final changing = {for (var i = 0; i < lines.length; i++) if (lines[i].isChanging) i + 1};
@@ -55,7 +55,7 @@ class _CoinCastPageState extends State<CoinCastPage> {
           child: Column(
             children: [
               Text(
-                '陽面 3、陰面 2，三枚相加得一爻；由下往上擲六次，6 與 9 為變爻。',
+                l.coinsInstructions,
                 textAlign: TextAlign.center,
                 style: t.bodySmall,
               ),
@@ -84,7 +84,7 @@ class _CoinCastPageState extends State<CoinCastPage> {
                             ),
                             const SizedBox(height: 20),
                             // 六列固定保留，未擲的爻顯示「—」，畫面不會隨擲錢跳動。
-                            for (var i = 5; i >= 0; i--) _row(t, i, i < lines.length ? _tosses[i] : null),
+                            for (var i = 5; i >= 0; i--) _row(t, l, i, i < lines.length ? _tosses[i] : null),
                             const SizedBox(height: 8),
                           ],
                         ),
@@ -94,8 +94,8 @@ class _CoinCastPageState extends State<CoinCastPage> {
                 ),
               ),
               if (!_done) ...[
-                FilledButton(onPressed: _toss, child: Text('擲第 ${_tosses.length + 1} 次')),
-                TextButton(onPressed: _tossAll, child: const Text('一次擲完')),
+                FilledButton(onPressed: _toss, child: Text(l.coinsToss(_tosses.length + 1))),
+                TextButton(onPressed: _tossAll, child: Text(l.coinsTossAll)),
               ] else ...[
                 FilledButton(
                   onPressed: () => Navigator.of(context).push(MaterialPageRoute<void>(
@@ -104,9 +104,9 @@ class _CoinCastPageState extends State<CoinCastPage> {
                       question: _question,
                     ),
                   )),
-                  child: const Text('看解讀'),
+                  child: Text(l.viewReading),
                 ),
-                TextButton(onPressed: () => setState(_tosses.clear), child: const Text('重新起卦')),
+                TextButton(onPressed: () => setState(_tosses.clear), child: Text(l.coinsRestart)),
               ],
             ],
           ),
@@ -115,7 +115,7 @@ class _CoinCastPageState extends State<CoinCastPage> {
     );
   }
 
-  Widget _row(TextTheme t, int i, CoinToss? toss) {
+  Widget _row(TextTheme t, AppLocalizations l, int i, CoinToss? toss) {
     final line = toss?.line;
     final next = i == _tosses.length;
     return SizedBox(
@@ -123,8 +123,8 @@ class _CoinCastPageState extends State<CoinCastPage> {
       child: Row(
         children: [
           SizedBox(
-            width: 44,
-            child: Text('${_lineNames[i]}爻',
+            width: l.isChinese ? 44 : 60, // 英文「Line 1」較寬
+            child: Text(l.linePosition(i + 1),
                 style: t.titleMedium?.copyWith(
                   color: line == null && !next ? QianColors.textSub.withValues(alpha: 0.5) : null,
                 )),
@@ -132,7 +132,9 @@ class _CoinCastPageState extends State<CoinCastPage> {
           Text(toss == null ? '' : toss.coins.join(' + '), style: t.bodySmall),
           const Spacer(),
           Text(
-            line == null ? '—' : '${line.value}　${line.label}${line.isChanging ? '（變）' : ''}',
+            line == null
+                ? '—'
+                : '${l.coinLineValue(line.value, l.lineKind(line))}${line.isChanging ? l.coinChangingMark : ''}',
             style: t.bodyMedium?.copyWith(
               color: line == null
                   ? QianColors.textSub.withValues(alpha: 0.5)

@@ -5,6 +5,7 @@ import 'package:flutter/services.dart';
 import 'app/app.dart';
 import 'app/services.dart';
 import 'core/audio/just_audio_playback.dart';
+import 'l10n/l10n.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -13,7 +14,9 @@ Future<void> main() async {
   // Android 另在 AndroidManifest 設定 screenOrientation，避免啟動瞬間閃成橫向。
   await SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
   // 呼吸音景的背景播放與通知控制；失敗不影響其他功能
-  await JustAudioPlayback.initBackground();
+  // 通知類別名稱跟著手機語言（L10n 在 MaterialApp 決定語言前先依手機設定判斷）
+  final l = L10n.current;
+  await JustAudioPlayback.initBackground(channelName: l.breathChannelName, album: l.appTitle);
   final services = Services.standard();
   await services.reminders.init(); // 不拋例外；失敗時提醒功能停用
   runApp(AppServices(services: services, child: const IchingApp()));

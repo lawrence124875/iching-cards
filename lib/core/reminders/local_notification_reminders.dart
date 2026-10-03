@@ -18,19 +18,22 @@ import 'reminder_service.dart';
 /// - Android 需要 AndroidManifest 的兩個 receiver 與 core library desugaring
 ///  （scripts/patch_android.sh 處理），少了 receiver 排程會成功但永遠不會跳出。
 class LocalNotificationReminders implements ReminderService {
+  /// [channelName]、[channelDescription]：通知類別在系統設定中顯示的文字（由 l10n 提供，跟著 App 語言）。
+  LocalNotificationReminders({required this.channelName, required this.channelDescription});
+
   static const _channelId = 'com.lclab.qiangua.review';
+
+  final String Function() channelName;
+  final String Function() channelDescription;
 
   final _plugin = FlutterLocalNotificationsPlugin();
   final _taps = StreamController<String>.broadcast();
   String? _launchPayload;
   bool _ready = false;
-  String? _lastError;
-
-  /// 未允許通知時的固定訊息。
-  static const permissionDenied = '尚未允許「謙卦」發送通知，可到手機設定 → 應用程式 → 謙卦 → 通知 開啟';
+  ReminderFailure? _lastFailure;
 
   @override
-  String? get lastError => _lastError;
+  ReminderFailure? get lastFailure => _lastFailure;
 
   @override
   Future<void> init() async {
@@ -55,10 +58,10 @@ class LocalNotificationReminders implements ReminderService {
         _launchPayload = launch!.notificationResponse?.payload;
       }
       _ready = true;
-      _lastError = null;
+      _lastFailure = null;
     } catch (e) {
       _ready = false;
-      _lastError = '通知初始化失敗：$e';
+      _lastFailure = ReminderFailure(ReminderFailureKind.initFailed, '$e');
     }
   }
 
@@ -115,7 +118,7 @@ class LocalNotificationReminders implements ReminderService {
     if (!_ready) await init(); // 啟動時失敗就再試一次
     if (!_ready) return false;
     if (!await _requestPermission()) {
-      _lastError = permissionDenied;
+      _lastFailure = const ReminderFailure(ReminderFailureKind.permissionDenied);
       return false;
     }
     final mode = await _scheduleMode();
@@ -126,25 +129,25 @@ class LocalNotificationReminders implements ReminderService {
         title,
         body,
         tz.TZDateTime.from(at, tz.UTC),
-        const NotificationDetails(
+        NotificationDetails(
           android: AndroidNotificationDetails(
             _channelId,
-            '卦記回顧提醒',
-            channelDescription: '提醒你回來回顧之前記下的卦',
+            channelName(),
+            channelDescription: channelDescription(),
             importance: Importance.high,
             priority: Priority.high,
           ),
-          iOS: DarwinNotificationDetails(presentAlert: true, presentBanner: true, presentSound: true),
+          iOS: const DarwinNotificationDetails(presentAlert: true, presentBanner: true, presentSound: true),
         ),
         androidScheduleMode: mode,
         uiLocalNotificationDateInterpretation: UILocalNotificationDateInterpretation.absoluteTime,
         payload: payload,
       );
-      _lastError = null;
+      _lastFailure = null;
       return true;
     } catch (e) {
       // 例：release 版被 R8 砍掉 Gson 泛型資訊時會在這裡失敗（見 patch_android.sh 的 ProGuard 規則）
-      _lastError = '排程失敗：$e';
+      _lastFailure = ReminderFailure(ReminderFailureKind.scheduleFailed, '$e');
       return false;
     }
   }

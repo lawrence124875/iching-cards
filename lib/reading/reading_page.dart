@@ -8,6 +8,7 @@ import '../core/events/event_bus.dart';
 import '../core/iching/cast_result.dart';
 import '../core/iching/focus_rule.dart';
 import '../core/iching/hexagram_table.dart';
+import '../l10n/l10n.dart';
 import '../shared/widgets/card_face.dart';
 import '../shared/widgets/hexagram_glyph.dart';
 import 'detail_page.dart';
@@ -62,9 +63,10 @@ class _ReadingPageState extends State<ReadingPage> {
     final cast = widget.cast;
     final primary = HexagramTable.byNumber(cast.primary);
     final changed = cast.changed == null ? null : HexagramTable.byNumber(cast.changed!);
+    final l = context.l10n;
 
     return Scaffold(
-      appBar: AppBar(title: Text(primary.fullName)),
+      appBar: AppBar(title: Text(l.hexFullName(primary))),
       body: FutureBuilder<List<HexagramContent?>>(
         future: _content,
         builder: (context, snap) {
@@ -82,7 +84,7 @@ class _ReadingPageState extends State<ReadingPage> {
               if (widget.question.isNotEmpty)
                 Padding(
                   padding: const EdgeInsets.only(bottom: 16),
-                  child: Text('問：${widget.question}',
+                  child: Text(l.questionShown(widget.question),
                       textAlign: TextAlign.center, style: Theme.of(context).textTheme.bodyMedium),
                 ),
               Center(
@@ -104,19 +106,19 @@ class _ReadingPageState extends State<ReadingPage> {
               ],
               const SizedBox(height: 8),
               if (reading == null)
-                const Section(title: '解讀', child: Text('這一卦的解讀還在撰寫中。可以先看看牌面的景象，想想它讓你聯想到什麼。'))
+                Section(title: l.sectionReading, child: Text(l.readingNotWritten))
               else ...[
                 Padding(
                   padding: const EdgeInsets.only(top: 24),
                   child: Text(reading.title,
                       textAlign: TextAlign.center, style: Theme.of(context).textTheme.headlineSmall),
                 ),
-                Section(title: '象的畫面', child: Text(reading.image, style: Theme.of(context).textTheme.bodyLarge)),
-                Section(title: '象從哪裡來', child: Text(reading.source)),
-                Section(title: '給現在的你', child: Text(reading.forYou)),
+                Section(title: l.sectionImage, child: Text(reading.image, style: Theme.of(context).textTheme.bodyLarge)),
+                Section(title: l.sectionSource, child: Text(reading.source)),
+                Section(title: l.sectionForYou, child: Text(reading.forYou)),
                 if (pc?.eastWest != null) _EastWest(ew: pc!.eastWest!),
-                Section(title: '今日小行動', child: Text(reading.action)),
-                Section(title: '反思提問', child: Text(reading.question)),
+                Section(title: l.sectionAction, child: Text(reading.action)),
+                Section(title: l.sectionQuestion, child: Text(reading.question)),
               ],
               for (final action in registeredFeatures.map((f) => f.readingAction).whereType<ReadingAction>())
                 Padding(
@@ -125,7 +127,7 @@ class _ReadingPageState extends State<ReadingPage> {
                     child: OutlinedButton.icon(
                       onPressed: () => action.open(context, cast.primary),
                       icon: Icon(action.icon),
-                      label: Text(action.label),
+                      label: Text(action.label(l)),
                     ),
                   ),
                 ),
@@ -133,24 +135,24 @@ class _ReadingPageState extends State<ReadingPage> {
                 const SizedBox(height: 32),
                 Center(
                   child: _saved
-                      ? Text('已記在「卦記」，日後可從首頁回來對照。', style: Theme.of(context).textTheme.bodySmall)
+                      ? Text(l.savedToJournalHint, style: Theme.of(context).textTheme.bodySmall)
                       : FilledButton.icon(
                           onPressed: () => _save(pc),
                           icon: const Icon(Icons.bookmark_add_outlined),
-                          label: const Text('記下這一卦'),
+                          label: Text(l.saveThisReading),
                         ),
                 ),
               ],
               const SizedBox(height: 32),
               OutlinedButton(
                 onPressed: () => _openDetail(context, cast.primary, cast.primary == _focusHexagram ? _focusLines : const {}),
-                child: Text('${primary.name}卦的經文與六爻'),
+                child: Text(l.detailButton(l.hexName(primary))),
               ),
               if (changed != null) ...[
                 const SizedBox(height: 8),
                 OutlinedButton(
                   onPressed: () => _openDetail(context, changed.number, changed.number == _focusHexagram ? _focusLines : const {}),
-                  child: Text('之卦：${changed.name}卦的經文與六爻'),
+                  child: Text(l.detailButtonChanged(l.hexName(changed))),
                 ),
               ],
             ],
@@ -197,6 +199,7 @@ class _ChangeRow extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final t = Theme.of(context).textTheme;
+    final l = context.l10n;
     final p = HexagramTable.byNumber(cast.primary);
     Widget side(String label, HexagramInfo info, Set<int> changing) => Column(
           children: [
@@ -204,18 +207,18 @@ class _ChangeRow extends StatelessWidget {
             const SizedBox(height: 6),
             HexagramGlyph(lines: info.lines, changing: changing, width: 40),
             const SizedBox(height: 6),
-            Text(info.name, style: t.titleMedium),
+            Text(l.hexName(info), style: t.titleMedium),
           ],
         );
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        side('本卦', p, cast.changingPositions.toSet()),
+        side(l.primaryHexagram, p, cast.changingPositions.toSet()),
         const Padding(
           padding: EdgeInsets.symmetric(horizontal: 28),
           child: Icon(Icons.east, color: QianColors.mountain),
         ),
-        side('之卦', changed, const {}),
+        side(l.changedHexagram, changed, const {}),
       ],
     );
   }
@@ -230,12 +233,13 @@ class _FocusBlock extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final t = Theme.of(context).textTheme;
+    final l = context.l10n;
     return Section(
-      title: '本次重點',
+      title: l.sectionFocus,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(focus.explanation, style: t.bodySmall),
+          Text(l.focusText(focus.reason), style: t.bodySmall),
           for (final item in focus.items) ...[
             const SizedBox(height: 12),
             _FocusText(item: item, content: contentOf(item.hexagram)),
@@ -255,17 +259,18 @@ class _FocusText extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final t = Theme.of(context).textTheme;
+    final l = context.l10n;
     final info = HexagramTable.byNumber(item.hexagram);
     final c = content;
     String text;
     String sub = '';
     if (c == null) {
-      text = '${info.name}卦的內容撰寫中。';
+      text = l.contentInProgress(l.hexName(info));
     } else if (item.kind == FocusKind.judgment) {
       text = c.judgment;
     } else {
       final line = c.line(item.position!);
-      text = line?.text ?? '${info.name}卦這一爻的內容撰寫中。';
+      text = line?.text ?? l.lineInProgress(l.hexName(info));
       sub = line?.forYou ?? '';
     }
     return Container(
@@ -295,15 +300,16 @@ class _EastWest extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final t = Theme.of(context).textTheme;
+    final l = context.l10n;
     return Section(
-      title: '東西相映',
+      title: l.sectionEastWest,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           if (ew.hasQuote) ...[
-            Text('「${ew.quoteText}」', style: t.bodyLarge),
+            Text(l.quoteMarks(ew.quoteText), style: t.bodyLarge),
             const SizedBox(height: 4),
-            Text('${ew.quoteAuthor}，${ew.quoteSource}', style: t.bodySmall),
+            Text(l.quoteAttribution(ew.quoteAuthor, ew.quoteSource), style: t.bodySmall),
             if (ew.quoteTranslationNote.isNotEmpty) Text(ew.quoteTranslationNote, style: t.bodySmall),
             const SizedBox(height: 8),
             Text(ew.quoteNote),

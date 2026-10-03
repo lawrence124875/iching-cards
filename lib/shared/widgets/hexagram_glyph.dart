@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../app/theme.dart';
+import '../../l10n/l10n.dart';
 
 /// 畫六爻（由下而上）。changing 為變爻位置（1–6），以稻金色並加圓點標示。
 class HexagramGlyph extends StatelessWidget {
@@ -23,9 +24,10 @@ class HexagramGlyph extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final changeNote = changing.isEmpty ? '' : '，變爻：${changing.join('、')}';
+    final l = context.l10n;
+    final sorted = changing.toList()..sort();
     return Semantics(
-      label: '卦象$changeNote',
+      label: changing.isEmpty ? l.glyphLabel : l.glyphLabelChanging(sorted.join(l.listSeparator)),
       child: CustomPaint(
         size: Size(width * 1.25, width * 0.9),
         painter: _GlyphPainter(lines, changing, color, visibleCount),

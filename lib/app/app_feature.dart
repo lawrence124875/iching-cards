@@ -1,5 +1,10 @@
 import 'package:flutter/widgets.dart';
 
+import '../l10n/l10n.dart';
+
+/// 介面文字：依目前語言取 ARB 字串（例如 `(l) => l.featureDraw`）。
+typedef LocalizedText = String Function(AppLocalizations l);
+
 /// 處理通知等外部開啟（payload）；認得就導覽並回傳 true。
 typedef PayloadHandler = bool Function(NavigatorState navigator, String payload);
 
@@ -10,7 +15,7 @@ enum FeaturePlacement { primary, secondary, none }
 class ReadingAction {
   const ReadingAction({required this.label, required this.icon, required this.open});
 
-  final String label;
+  final LocalizedText label;
   final IconData icon;
   final void Function(BuildContext context, int hexagram) open;
 }
@@ -27,7 +32,7 @@ class AppFeature {
   });
 
   final String id;
-  final String label;
+  final LocalizedText label;
   final FeaturePlacement placement;
   /// 首頁入口開啟的頁面；placement 為 none 時可不提供。
   final WidgetBuilder? builder;

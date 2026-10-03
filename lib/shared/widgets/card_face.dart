@@ -3,19 +3,12 @@ import 'package:flutter/material.dart';
 import '../../app/services.dart';
 import '../../app/theme.dart';
 import '../../core/iching/hexagram_table.dart';
+import '../../l10n/l10n.dart';
 import 'card_art_viewer.dart';
 import 'hexagram_glyph.dart';
 
-const _numerals = ['', '一', '二', '三', '四', '五', '六', '七', '八', '九'];
-
-/// 卦序的中文數字（1–64）。
-String chineseOrdinal(int n) {
-  if (n < 10) return _numerals[n];
-  final tens = n ~/ 10, ones = n % 10;
-  return '${tens == 1 ? '' : _numerals[tens]}十${_numerals[ones]}';
-}
-
 /// 有框版牌面（HANDOFF §6.3）：風景照置於框內，四周放卦序、卦象、卦名、拼音、英文卦義與上下經卦。
+/// 多語系：牌面中央的大字卦名屬於牌面設計，各語言都保留漢字；卦序與上下經卦依介面語言（HANDOFF §16）。
 class CardFace extends StatelessWidget {
   const CardFace({super.key, required this.info, this.zoomable = false});
 
@@ -27,6 +20,7 @@ class CardFace extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final t = Theme.of(context).textTheme;
+    final l = context.l10n;
     return DecoratedBox(
       decoration: BoxDecoration(
         color: QianColors.inkCard,
@@ -40,7 +34,7 @@ class CardFace extends StatelessWidget {
           children: [
             Row(
               children: [
-                Text('第${chineseOrdinal(info.number)}卦',
+                Text(l.cardNumber(info.number),
                     style: t.bodySmall?.copyWith(fontFamily: kSerif, letterSpacing: 2)),
                 const Spacer(),
                 HexagramGlyph(lines: info.lines, width: 20),
@@ -61,7 +55,9 @@ class CardFace extends StatelessWidget {
             Text('${info.pinyin}  ·  ${info.english}',
                 textAlign: TextAlign.center, style: t.bodySmall),
             const SizedBox(height: 2),
-            Text('上${info.upper.label}${info.upper.nature}　下${info.lower.label}${info.lower.nature}',
+            Text(
+                l.cardTrigrams(l.trigramLabel(info.upper), l.trigramImage(info.upper), l.trigramLabel(info.lower),
+                    l.trigramImage(info.lower)),
                 textAlign: TextAlign.center,
                 style: t.bodySmall?.copyWith(fontFamily: kSerif, color: QianColors.mountain)),
           ],
@@ -80,7 +76,7 @@ class _ZoomableArt extends StatelessWidget {
   Widget build(BuildContext context) {
     return Semantics(
       button: true,
-      label: '放大看${info.name}卦牌面圖',
+      label: context.l10n.cardZoomLabel(context.l10n.hexName(info)),
       child: GestureDetector(
         onTap: () => showCardArt(context, info),
         child: Stack(

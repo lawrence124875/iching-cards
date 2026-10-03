@@ -4,6 +4,7 @@ import '../app/services.dart';
 import '../app/theme.dart';
 import '../core/content/hexagram_content.dart';
 import '../core/iching/hexagram_table.dart';
+import '../l10n/l10n.dart';
 import '../shared/widgets/hexagram_glyph.dart';
 import 'section.dart';
 
@@ -26,8 +27,9 @@ class _DetailPageState extends State<DetailPage> {
   Widget build(BuildContext context) {
     final info = HexagramTable.byNumber(widget.number);
     final t = Theme.of(context).textTheme;
+    final l = context.l10n;
     return Scaffold(
-      appBar: AppBar(title: Text(info.fullName)),
+      appBar: AppBar(title: Text(l.hexFullName(info))),
       body: FutureBuilder<HexagramContent?>(
         future: _content,
         builder: (context, snap) {
@@ -40,13 +42,13 @@ class _DetailPageState extends State<DetailPage> {
             children: [
               Center(child: HexagramGlyph(lines: info.lines, width: 64)),
               const SizedBox(height: 12),
-              Text('${info.symbol}  ${info.fullName}',
+              Text('${info.symbol}  ${l.hexFullName(info)}',
                   textAlign: TextAlign.center, style: t.headlineSmall),
               if (c == null)
-                const Section(title: '經文', child: Text('這一卦的內容撰寫中。'))
+                Section(title: l.sectionText, child: Text(l.hexagramContentInProgress))
               else ...[
                 Section(
-                  title: '卦辭',
+                  title: l.sectionJudgment,
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
@@ -79,6 +81,7 @@ class _LineTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final t = Theme.of(context).textTheme;
+    final l = context.l10n;
     return Container(
       margin: const EdgeInsets.only(top: 10),
       decoration: BoxDecoration(
@@ -94,15 +97,15 @@ class _LineTile extends StatelessWidget {
           iconColor: QianColors.earth,
           collapsedIconColor: QianColors.mountain,
           title: Text(line.text, style: t.bodyLarge?.copyWith(fontSize: 16)),
-          subtitle: Text([line.stage, if (highlighted) '本次重點'].where((s) => s.isNotEmpty).join('・'),
+          subtitle: Text([line.stage, if (highlighted) l.sectionFocus].where((s) => s.isNotEmpty).join(l.separator),
               style: t.bodySmall),
           childrenPadding: const EdgeInsets.fromLTRB(16, 0, 16, 16),
           expandedCrossAxisAlignment: CrossAxisAlignment.start,
           children: [
             if (line.xiaoxiang.isNotEmpty) Text(line.xiaoxiang, style: t.bodySmall?.copyWith(fontFamily: kSerif)),
-            Section(title: '象的畫面', child: Text(line.image)),
-            Section(title: '象從哪裡來', child: Text(line.source)),
-            Section(title: '給現在的你', child: Text(line.forYou)),
+            Section(title: l.sectionImage, child: Text(line.image)),
+            Section(title: l.sectionSource, child: Text(line.source)),
+            Section(title: l.sectionForYou, child: Text(line.forYou)),
           ],
         ),
       ),

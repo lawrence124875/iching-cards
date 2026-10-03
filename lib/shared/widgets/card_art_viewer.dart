@@ -5,6 +5,7 @@ import 'package:flutter/services.dart';
 
 import '../../app/services.dart';
 import '../../app/theme.dart';
+import '../../l10n/l10n.dart';
 import '../../core/iching/hexagram_table.dart';
 
 /// 開啟滿版牌面圖，讓使用者專心看象。[overlay] 會疊在畫面下方（例如呼吸練習的小呼吸圓），不攔截點擊。
@@ -66,7 +67,7 @@ class _CardArtViewerState extends State<CardArtViewer> {
     return Scaffold(
       backgroundColor: Colors.black,
       body: Semantics(
-        label: '${widget.info.name}卦牌面圖，點一下返回',
+        label: context.l10n.artViewerLabel(context.l10n.hexName(widget.info)),
         child: GestureDetector(
           behavior: HitTestBehavior.opaque,
           onTap: () => Navigator.of(context).pop(),
@@ -111,7 +112,7 @@ class _CardArtViewerState extends State<CardArtViewer> {
                     opacity: _hint ? 1 : 0,
                     duration: const Duration(milliseconds: 600),
                     // 只留「點一下返回」（點兩下切換完整畫面仍可用，不另提示）
-                    child: Text('點一下返回',
+                    child: Text(context.l10n.tapToReturn,
                         textAlign: TextAlign.center,
                         style: t.bodySmall?.copyWith(
                           color: QianColors.text,

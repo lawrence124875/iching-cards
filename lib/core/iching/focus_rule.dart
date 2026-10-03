@@ -17,11 +17,14 @@ class FocusItem {
   final bool primary;
 }
 
+/// 為什麼看這些（介面文字由 l10n 的 focusExplanation 依此產生；core 不放介面文字）。
+enum FocusCase { none, one, two, three, four, five, allQian, allKun, all }
+
 class FocusResult {
-  const FocusResult(this.items, this.explanation);
+  const FocusResult(this.items, this.reason);
 
   final List<FocusItem> items;
-  final String explanation;
+  final FocusCase reason;
 }
 
 /// 變爻取用規則（策略模式）。
@@ -45,38 +48,38 @@ class ZhuXiFocusRule implements FocusRule {
 
     switch (pos.length) {
       case 0:
-        return FocusResult([FocusItem.judgment(p, primary: true)], '沒有變爻，看本卦卦辭。');
+        return FocusResult([FocusItem.judgment(p, primary: true)], FocusCase.none);
       case 1:
-        return FocusResult([FocusItem.line(p, pos[0], primary: true)], '一個變爻，看這一爻的爻辭。');
+        return FocusResult([FocusItem.line(p, pos[0], primary: true)], FocusCase.one);
       case 2:
         return FocusResult(
           [FocusItem.line(p, pos[0]), FocusItem.line(p, pos[1], primary: true)],
-          '兩個變爻，看這兩爻的爻辭，以上面那一爻為主。',
+          FocusCase.two,
         );
       case 3:
         return FocusResult(
           [FocusItem.judgment(p, primary: true), FocusItem.judgment(cast.changed!, primary: true)],
-          '三個變爻，看本卦與之卦的卦辭。',
+          FocusCase.three,
         );
       case 4:
         final c = cast.changed!;
         return FocusResult(
           [FocusItem.line(c, unchanged[0], primary: true), FocusItem.line(c, unchanged[1])],
-          '四個變爻，看之卦裡兩個沒有變的爻，以下面那一爻為主。',
+          FocusCase.four,
         );
       case 5:
         return FocusResult(
           [FocusItem.line(cast.changed!, unchanged[0], primary: true)],
-          '五個變爻，看之卦裡唯一沒有變的那一爻。',
+          FocusCase.five,
         );
       default:
         if (p == 1) {
-          return FocusResult([FocusItem.line(1, 7, primary: true)], '六爻皆變，乾卦看「用九」。');
+          return FocusResult([FocusItem.line(1, 7, primary: true)], FocusCase.allQian);
         }
         if (p == 2) {
-          return FocusResult([FocusItem.line(2, 7, primary: true)], '六爻皆變，坤卦看「用六」。');
+          return FocusResult([FocusItem.line(2, 7, primary: true)], FocusCase.allKun);
         }
-        return FocusResult([FocusItem.judgment(cast.changed!, primary: true)], '六爻皆變，看之卦卦辭。');
+        return FocusResult([FocusItem.judgment(cast.changed!, primary: true)], FocusCase.all);
     }
   }
 }

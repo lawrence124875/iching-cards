@@ -14,6 +14,7 @@ import '../core/iching/focus_rule.dart';
 import '../core/reminders/local_notification_reminders.dart';
 import '../core/reminders/reminder_service.dart';
 import '../core/soundscape/soundscape_files.dart';
+import '../l10n/l10n.dart';
 
 /// App 共用服務。換實作（內容來源、變爻規則…）只改 Services.standard()。
 class Services {
@@ -28,11 +29,14 @@ class Services {
   });
 
   factory Services.standard() => Services(
-        content: AssetContentSource(locale: 'zh-Hant'),
+        content: AssetContentSource(folder: () => L10n.contentFolder),
         events: EventBus(),
         focusRule: const ZhuXiFocusRule(),
         random: Random.secure(),
-        reminders: LocalNotificationReminders(),
+        reminders: LocalNotificationReminders(
+          channelName: () => L10n.current.reminderChannelName,
+          channelDescription: () => L10n.current.reminderChannelDescription,
+        ),
         journal: FileJournalStore(),
         breath: BreathServices(
           files: CachedSoundscapeFiles(),

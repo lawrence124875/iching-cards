@@ -5,6 +5,7 @@ import '../../app/theme.dart';
 import '../../core/iching/cast_result.dart';
 import '../../core/iching/divination_method.dart';
 import '../../core/iching/hexagram_table.dart';
+import '../../l10n/l10n.dart';
 import '../../reading/reading_page.dart';
 import '../../shared/widgets/card_back.dart';
 import '../../shared/widgets/card_face.dart';
@@ -35,6 +36,7 @@ class _DrawPageState extends State<DrawPage> {
   Widget build(BuildContext context) {
     final t = Theme.of(context).textTheme;
     final cast = _cast;
+    final l = context.l10n;
     return Scaffold(
       appBar: AppBar(), // 首頁按鈕已寫「抽一卦」，這裡不再重複標題
       body: SafeArea(
@@ -43,7 +45,7 @@ class _DrawPageState extends State<DrawPage> {
           child: Column(
             children: [
               Text(
-                cast == null ? '心裡想著眼前的一件事\n準備好了就點牌' : '這是此刻的象',
+                cast == null ? l.drawPromptBefore : l.drawPromptAfter,
                 style: t.bodyMedium?.copyWith(color: QianColors.textSub),
                 textAlign: TextAlign.center,
               ),
@@ -61,7 +63,7 @@ class _DrawPageState extends State<DrawPage> {
                       onTap: _draw,
                       child: Semantics(
                         button: cast == null,
-                        label: cast == null ? '翻牌' : null,
+                        label: cast == null ? l.drawFlip : null,
                         child: FlipCard(
                           flipped: cast != null,
                           back: const CardBack(),
@@ -76,15 +78,15 @@ class _DrawPageState extends State<DrawPage> {
               ),
               const SizedBox(height: 24),
               if (cast == null)
-                FilledButton(onPressed: _draw, child: const Text('翻牌'))
+                FilledButton(onPressed: _draw, child: Text(l.drawFlip))
               else ...[
                 FilledButton(
                   onPressed: () => Navigator.of(context).push(
                     MaterialPageRoute<void>(builder: (_) => ReadingPage(cast: cast, question: _question)),
                   ),
-                  child: const Text('看解讀'),
+                  child: Text(l.viewReading),
                 ),
-                TextButton(onPressed: _reset, child: const Text('重新抽')),
+                TextButton(onPressed: _reset, child: Text(l.drawAgain)),
               ],
             ],
           ),

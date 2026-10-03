@@ -15,8 +15,9 @@ class QianColors {
 }
 
 /// 字體：卦名、經文、標題用宋體；白話解讀與介面用黑體（HANDOFF §6.2）。
-/// MVP 先用系統字體；思源宋體／黑體於第二階段再打包。
-const kSerif = 'serif';
+/// 0.1.0+17 起打包思源宋體／黑體子集（HANDOFF §15）；子集外的罕用字由系統字體補上。
+const kSerif = 'NotoSerifTC';
+const kSans = 'NotoSansTC';
 
 ThemeData buildTheme() {
   final scheme = ColorScheme.fromSeed(
@@ -32,6 +33,7 @@ ThemeData buildTheme() {
 
   return ThemeData(
     useMaterial3: true,
+    fontFamily: kSans,
     colorScheme: scheme,
     scaffoldBackgroundColor: QianColors.ink,
     dividerColor: QianColors.mountain,

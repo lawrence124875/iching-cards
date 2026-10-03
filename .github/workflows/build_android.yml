@@ -38,6 +38,26 @@ jobs:
       - name: 匯入內容
         run: bash scripts/import_content.sh _content
 
+      # 思源黑體／宋體（Google Fonts，OFL）固定在某個 commit，避免上游更新改變字形。
+      # 換版本：改 NOTO_COMMIT（並同步改 cache key）。
+      - name: 快取字型原檔
+        uses: actions/cache@v4
+        with:
+          path: _fonts_src
+          key: noto-tc-9710da1e
+
+      - name: 產生字型子集
+        env:
+          NOTO_COMMIT: 9710da1eacb3be272583c3224dcb70f9da6eadbb
+        run: |
+          set -euo pipefail
+          mkdir -p _fonts_src
+          base="https://raw.githubusercontent.com/google/fonts/${NOTO_COMMIT}/ofl"
+          [ -s "_fonts_src/NotoSansTC[wght].ttf" ] || curl -fsSL -o "_fonts_src/NotoSansTC[wght].ttf" "${base}/notosanstc/NotoSansTC%5Bwght%5D.ttf"
+          [ -s "_fonts_src/NotoSerifTC[wght].ttf" ] || curl -fsSL -o "_fonts_src/NotoSerifTC[wght].ttf" "${base}/notoseriftc/NotoSerifTC%5Bwght%5D.ttf"
+          pip install --quiet fonttools==4.62.1
+          python3 scripts/build_fonts.py _fonts_src assets/fonts
+
       # 本 repo 只放跨平台程式（lib/、pubspec.yaml）；android/ 在這裡自動產生。
       - name: 產生 Android 平台資料夾
         run: |

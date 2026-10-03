@@ -1,7 +1,7 @@
 # HANDOFF — 易經卦卡 App（名稱未定）
 
 > 新對話接續時請先讀本檔。本檔記錄已確定的決策、內容規格與待討論事項。
-> 最後更新：2026-10-02（0.1.0+16：首頁一屏顯示完、免責聲明縮小貼底，見 14.7；0.1.0+15：鎖屏媒體按鈕圖示被資源壓縮移除的修正、測試提醒鈕，見 14.6；0.1.0+14：桌面圖示改無框滿版，見 14.4；0.1.0+13：鎖定畫面暫停／停止鍵、桌面圖示比例，見 14.4；0.1.0+12：版面修正，見 14.3；0.1.0+11：卦記提醒準時模式，見 13 節末；0.1.0+10：音景柔和版、432Hz 調音、雙耳節拍，見 14.2；0.1.0+9：實機回饋修正與音景背景播放，見 14.1；**呼吸音景** 0.1.0+8，見第 14 節；卦記功能 0.1.0+7，見第 13 節；**64 卦中文初稿全部完成**，01–36 東西相映名人優先檢查也已完成（見 4.5），下一步由使用者審閱定稿；多語言規劃見第 12 節）
+> 最後更新：2026-10-03（0.1.0+17：打包思源黑體／宋體子集，見第 15 節；run #32（0.1.0+16）使用者實機確認可用；0.1.0+16：首頁一屏顯示完、免責聲明縮小貼底，見 14.7；0.1.0+15：鎖屏媒體按鈕圖示被資源壓縮移除的修正、測試提醒鈕，見 14.6；0.1.0+14：桌面圖示改無框滿版，見 14.4；0.1.0+13：鎖定畫面暫停／停止鍵、桌面圖示比例，見 14.4；0.1.0+12：版面修正，見 14.3；0.1.0+11：卦記提醒準時模式，見 13 節末；0.1.0+10：音景柔和版、432Hz 調音、雙耳節拍，見 14.2；0.1.0+9：實機回饋修正與音景背景播放，見 14.1；**呼吸音景** 0.1.0+8，見第 14 節；卦記功能 0.1.0+7，見第 13 節；**64 卦中文初稿全部完成**，01–36 東西相映名人優先檢查也已完成（見 4.5），下一步由使用者審閱定稿；多語言規劃見第 12 節）
 
 ---
 
@@ -328,7 +328,7 @@ App 名稱與 applicationId、商業模式（廣告與付費內容）、隱私�
 3. **內容量產**（2026-10-02 起）：**01～64 中文初稿全部完成**（2026-10-02，run 由 workflow_dispatch 觸發）。01–36 東西相映名人優先檢查已完成（2026-10-02，換 8 項，見 4.5）。經文版本差異（iching-content README）2026-10-02 使用者決定全部照王弼本採用，不再核對。**下一步**：使用者以手機逐卦審閱（另提供審閱用 Excel：64 卦東西相映、今日更動、經文差異，含「我的意見／狀態」欄，存於私人 repo iching-content `review/謙卦_64卦審閱表.xlsx`，不進本公開 repo），使用者回傳意見後修改；未提意見者視為定稿，再依第 12 節開始英文版。以下流程仍適用於修改既有卦：一個對話寫 4～5 卦（單一對話的長度上限，寫不完 62 卦），格式同 `01-qian.json`、`02-kun.json`。`art.prompt` 從 iching-content `prompts/art-prompts.md` 搬入（圖已定案，`art.status` 填「已定案」）。每批完成後更新 iching-content README 進度。流程：clone iching-content（sparse：zh-Hant、prompts、tools）→ 寫 `zh-Hant/NN-slug.json`（不含 `art`）→ `python3 tools/finalize_hexagram.py NN` 自動填入提示詞並檢查結構 → 每完成一卦就 commit＋push。參考經文（簡體，僅比對用、不進 repo）：`curl -sL https://raw.githubusercontent.com/NanBox/PiPiName/master/data/%E5%91%A8%E6%98%93.txt`（容器網路無法連維基文庫）。比對時以 opencc（`pip install opencc-python-reimplemented`）簡轉繁、切出 `NN.md` 給 `REF_DIR`；轉換造成的假差異（于／於、干／幹、斗／鬥、征凶／徵兇、為／爲）可忽略。卦辭不以「卦名：」開頭者（履、同人、艮）腳本會報錯，需人工比對。整批完成後以 workflow_dispatch 觸發建置（只改 .md 不會自動建置）。經文與參考本不同處記在 iching-content README「待人工核對」。
 4. **審閱期間並行的工作（2026-10-02 使用者同意，依序各開一個新對話）**：
    1. ✅ 2026-10-02 完成（0.1.0+8，見第 14 節）【程式】呼吸音景（§7 第 2 項）：音源採程式合成（不用錄音檔，免授權追蹤）；**已決定（2026-10-02）**：呼吸節奏固定「吸 4 秒、吐 6 秒」（每分鐘 6 次）；時長由使用者選 1／2／3／5 分鐘。音景依抽到的卦以上下經卦組合（§7 第 2 項；天、地兩種音景仍待定，開工時提案）。
-   2. 【程式】字體打包（思源宋體／黑體）＋ Firebase（Analytics、Crashlytics、Remote Config）。Firebase 需使用者先建專案、下載 `google-services.json`，以 base64 存成 Secret（不進 repo）。
+   2. 【程式】✅ 字體打包 2026-10-03 完成（0.1.0+17，見第 15 節）。⏳ Firebase（Analytics、Crashlytics、Remote Config）：等使用者建好 Firebase 專案、加入 Android App（套件 `com.lclab.qiangua`）、下載 `google-services.json`，以 base64 存成 iching-cards 的 Secret `GOOGLE_SERVICES_JSON_BASE64`（不進 repo）後再開工。
    3. 【內容】11 語術語表：64 卦名、八經卦、爻位、易學術語（象、當位、應、比、內外卦等）的固定譯法，存 iching-content（建議 `glossary/`）。
    4. 【程式】介面翻譯：先建 Flutter 多語系架構（ARB），翻譯按鈕、選單等介面文字；依 §12，內容未完整翻譯的語言不開放。
 5. 程式待辦（有空檔或回饋時）：牌面細節。
@@ -354,11 +354,11 @@ App 名稱與 applicationId、商業模式（廣告與付費內容）、隱私�
 ### 11.2 暫定設定
 - **定名（2026-10-01）**：開發者 **LC Lab**；App 名 **謙卦**（英文 Qiangua）。桌面名稱「謙卦」；首頁大標「謙卦」、副標「易經六十四卦卡」；Google Play 標題預定「謙卦｜易經六十四卦卡」。2026-10-01 使用者已在 Google Play／App Store 搜尋，確認沒有名為「謙卦」的 App（商標可在上架前另查）。
 - **套件名稱 `com.lclab.qiangua`**（0.1.0+5 起；上傳 Play 後永遠不能改）。由 `patch_android.sh` 改 applicationId；`flutter create --org com.lclab`，namespace 維持產生值。舊版 `tw.bcc.iching_cards` 是不同 App，測試機需手動移除。
-- 版本 `0.1.0+16`（+16：首頁一屏顯示完；+15：鎖屏按鈕圖示保留、測試提醒鈕；+14：桌面圖示無框滿版；+13：鎖定畫面控制改用 audio_service、桌面圖示留白；+12：卦記縮圖、底部被導覽列擋住、音景設定面板；+11：卦記提醒準時模式；+10：音景柔和版、432Hz、雙耳節拍，見 14.2；+9：實機回饋修正、音景背景播放與通知控制，見 14.1；+8：呼吸音景，見第 14 節；+7：卦記與回顧提醒，見第 13 節；+3：首頁水平置中修正、桌面圖示；+4：固定直向；+5：定名謙卦、套件名稱 com.lclab.qiangua；+6：擲錢頁收斂在一個畫面、點牌面圖滿版看象）。
+- 版本 `0.1.0+17`（+17：思源字體子集，見第 15 節；+16：首頁一屏顯示完；+15：鎖屏按鈕圖示保留、測試提醒鈕；+14：桌面圖示無框滿版；+13：鎖定畫面控制改用 audio_service、桌面圖示留白；+12：卦記縮圖、底部被導覽列擋住、音景設定面板；+11：卦記提醒準時模式；+10：音景柔和版、432Hz、雙耳節拍，見 14.2；+9：實機回饋修正、音景背景播放與通知控制，見 14.1；+8：呼吸音景，見第 14 節；+7：卦記與回顧提醒，見第 13 節；+3：首頁水平置中修正、桌面圖示；+4：固定直向；+5：定名謙卦、套件名稱 com.lclab.qiangua；+6：擲錢頁收斂在一個畫面、點牌面圖滿版看象）。
 - **滿版看圖**（0.1.0+6，`shared/widgets/card_art_viewer.dart`）：`CardFace(zoomable: true)` 時點風景圖開啟；預設 cover 填滿螢幕、隱藏系統列，點兩下切換完整畫面（contain），兩指縮放，點一下返回。目前用於抽卡翻牌後與解讀頁。
 - **擲錢頁版面**（0.1.0+6）：不再捲動；六爻列固定保留（未擲顯示「—」），中段以 FittedBox 等比縮小以適應小螢幕或大字體，按鈕固定在底部。
 - **固定直向**：卦卡為 9:16 直式，`main.dart` 以 `SystemChrome` 鎖直向，Android 另由 `patch_android.sh` 在 AndroidManifest 加 `screenOrientation="portrait"`。iOS 上架時需在 Info.plist 只留 Portrait。平板若要支援橫向，再另做雙欄版面。
-- 外部套件（0.1.0+7 起）：`path_provider`、`flutter_local_notifications` ^18、`timezone` ^0.9（版本同智慧聽覺巡航）；0.1.0+8 加 `just_audio` ^0.10.4（播放音景）、`wakelock_plus` ^1.2.8（練習時螢幕不關）；0.1.0+9 曾加 `just_audio_background`，0.1.0+13 改為直接用 `audio_service` ^0.18.15（見 14.4）。字體用系統字體；思源宋體／黑體留待第二階段打包。
+- 外部套件（0.1.0+7 起）：`path_provider`、`flutter_local_notifications` ^18、`timezone` ^0.9（版本同智慧聽覺巡航）；0.1.0+8 加 `just_audio` ^0.10.4（播放音景）、`wakelock_plus` ^1.2.8（練習時螢幕不關）；0.1.0+9 曾加 `just_audio_background`，0.1.0+13 改為直接用 `audio_service` ^0.18.15（見 14.4）。字體 0.1.0+17 起打包思源黑體／宋體子集（第 15 節）。
 - 英文卦義為自撰暫定詞，英文版上線前再審。
 - `android/`、`ios/` 不進 repo，CI 以 `flutter create` 產生（同英文 App 做法）；`flutter create` 會產生的 `test/widget_test.dart` 在 CI 中刪除。
 - `assets/content/`、`assets/cards/` 在本 repo 只有 `.gitkeep`，`.gitignore` 擋住 json／webp，**內容永遠不進公開 repo**。
@@ -509,6 +509,16 @@ checkout 本 repo → 以 `BUILDS_REPO_TOKEN` sparse-checkout iching-content 的
 
 - 使用者回報：小米上首頁要往下滑才看得到「內容僅供自我探索與娛樂參考」（非刻意設計，是內容高度超過螢幕）。
 - 修法：首頁不再捲動。主內容（牌背、標題、按鈕）放進 `FittedBox(scaleDown)`，螢幕矮或系統字體放大時等比縮小；免責聲明移出主內容，固定貼在畫面底部，字級 13→11、顏色略淡。
+
+## 15. 字體打包（2026-10-03，0.1.0+17）
+
+- 字型：Google Fonts 的 Noto Sans TC（思源黑體）、Noto Serif TC（思源宋體）可變字型，SIL OFL 1.1，可商用、可隨 App 散布。CI 從 google/fonts 固定 commit `9710da1e` 下載（`actions/cache` 快取），更新字型＝改 workflow 的 `NOTO_COMMIT` 與 cache key。
+- **子集**：`scripts/build_fonts.py` 在 CI 匯入內容之後執行，只留 Big5 常用字（5,401 字，給使用者輸入的「想問的事」與回顧）＋內容 JSON 與 `lib/` 實際用到的字＋英數標點，約 6,200 字。完整字型 12–17 MB，子集後黑體每個字重約 2.0 MB、宋體約 2.8 MB。子集外的罕用字由系統字體自動補上（不會變方框）。Actions 紀錄只印字數與檔案大小，不印字元。
+- 字重：黑體 400、500（Material 按鈕與小標用 500）；宋體 400。程式目前沒有指定粗體；日後要用，在 `build_fonts.py` 的 `WEIGHTS` 加 700 並同步改 `pubspec.yaml`。
+- 字型檔不進 repo（`.gitignore` 擋 `assets/fonts/*.ttf`），只有授權全文 `assets/licenses/*-OFL.txt` 進 repo，並在 `main.dart` 以 `LicenseRegistry` 登記（OFL 要求附授權）。
+- `theme.dart`：`kSans = 'NotoSansTC'` 為全 App 預設字族；`kSerif = 'NotoSerifTC'` 用於卦名、經文、標題。
+- ⚠️ **多語言時**：日、韓、泰、阿拉伯文等不在這兩個字型內，需要時再加對應的 Noto 字型（同樣子集化），或交給系統字體。簡中可另加 Noto Sans SC／Serif SC。
+- 待使用者實機確認：字形、行距、首頁一屏是否仍顯示完（思源字型行高較高）。
 
 ## 8. 範例內容：謙卦（第十五卦，地山謙 ䷎，Qiān · Modesty）
 

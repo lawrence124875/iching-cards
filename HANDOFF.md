@@ -1,7 +1,7 @@
 # HANDOFF — 易經卦卡 App（名稱未定）
 
 > 新對話接續時請先讀本檔。本檔記錄已確定的決策、內容規格與待討論事項。
-> 最後更新：2026-10-03（**使用者審閱全部無意見→中文內容定稿；授權 Claude 全力執行後續開發，執行計畫見第 19 節**；**Firebase 0.1.0+20**：改加進智慧聽覺巡航的 Firebase 專案（帳號專案數已滿），Analytics、Crashlytics、Remote Config，`qg_` 前綴＋App 條件，見第 18 節；**11 語術語表使用者審閱無意見、定稿**，App 端套用待做，見第 17 節；run #36 使用者實機回饋良好；0.1.0+19（run #36）：**介面翻譯架構（ARB）**，繁中＋英文介面，英文暫不開放，見第 16 節；「寫下想問的事」連結字體縮小，見 15.2；0.1.0+18：置中提示語去標點、逗號處換行，見 15.1；run #33 字體使用者實機確認沒問題；0.1.0+17：打包思源黑體／宋體子集，見第 15 節；run #32（0.1.0+16）使用者實機確認可用；0.1.0+16：首頁一屏顯示完、免責聲明縮小貼底，見 14.7；0.1.0+15：鎖屏媒體按鈕圖示被資源壓縮移除的修正、測試提醒鈕，見 14.6；0.1.0+14：桌面圖示改無框滿版，見 14.4；0.1.0+13：鎖定畫面暫停／停止鍵、桌面圖示比例，見 14.4；0.1.0+12：版面修正，見 14.3；0.1.0+11：卦記提醒準時模式，見 13 節末；0.1.0+10：音景柔和版、432Hz 調音、雙耳節拍，見 14.2；0.1.0+9：實機回饋修正與音景背景播放，見 14.1；**呼吸音景** 0.1.0+8，見第 14 節；卦記功能 0.1.0+7，見第 13 節；**64 卦中文初稿全部完成**，01–36 東西相映名人優先檢查也已完成（見 4.5），下一步由使用者審閱定稿；多語言規劃見第 12 節）
+> 最後更新：2026-10-03（**0.1.0+21：術語表套用到 App、移除測試提醒鈕、CI 加建 AAB（§17、§19.2 第 1 項完成）；上架準備（隱私權政策 docs/、商店文案、主題圖片、Play Console 逐題答案）見第 20 節，等使用者開 GitHub Pages 並建立 Play 應用程式**；**使用者審閱全部無意見→中文內容定稿；授權 Claude 全力執行後續開發，執行計畫見第 19 節**；**Firebase 0.1.0+20**：改加進智慧聽覺巡航的 Firebase 專案（帳號專案數已滿），Analytics、Crashlytics、Remote Config，`qg_` 前綴＋App 條件，見第 18 節；**11 語術語表使用者審閱無意見、定稿**，App 端套用待做，見第 17 節；run #36 使用者實機回饋良好；0.1.0+19（run #36）：**介面翻譯架構（ARB）**，繁中＋英文介面，英文暫不開放，見第 16 節；「寫下想問的事」連結字體縮小，見 15.2；0.1.0+18：置中提示語去標點、逗號處換行，見 15.1；run #33 字體使用者實機確認沒問題；0.1.0+17：打包思源黑體／宋體子集，見第 15 節；run #32（0.1.0+16）使用者實機確認可用；0.1.0+16：首頁一屏顯示完、免責聲明縮小貼底，見 14.7；0.1.0+15：鎖屏媒體按鈕圖示被資源壓縮移除的修正、測試提醒鈕，見 14.6；0.1.0+14：桌面圖示改無框滿版，見 14.4；0.1.0+13：鎖定畫面暫停／停止鍵、桌面圖示比例，見 14.4；0.1.0+12：版面修正，見 14.3；0.1.0+11：卦記提醒準時模式，見 13 節末；0.1.0+10：音景柔和版、432Hz 調音、雙耳節拍，見 14.2；0.1.0+9：實機回饋修正與音景背景播放，見 14.1；**呼吸音景** 0.1.0+8，見第 14 節；卦記功能 0.1.0+7，見第 13 節；**64 卦中文初稿全部完成**，01–36 東西相映名人優先檢查也已完成（見 4.5），下一步由使用者審閱定稿；多語言規劃見第 12 節）
 
 ---
 
@@ -331,7 +331,7 @@ App 名稱與 applicationId、商業模式（廣告與付費內容）、隱私�
    2. 【程式】✅ 字體打包 2026-10-03 完成（0.1.0+17，見第 15 節）。✅ Firebase（Analytics、Crashlytics、Remote Config）2026-10-03 完成（0.1.0+20，見第 18 節）：因帳號專案數已滿，**改加進智慧聽覺巡航的 Firebase 專案**（第二個 Android App `com.lclab.qiangua`），Secret `GOOGLE_SERVICES_JSON_BASE64` 由使用者建立，CI 每次檢查。✅ run #38（workflow_dispatch）驗證通過：Secret 可解碼、含 `com.lclab.qiangua`，Release 說明「Firebase：已啟用」。
    3. ✅ 2026-10-03 定稿（見第 17 節）【內容】11 語術語表：64 卦名、八經卦、爻位、易學術語的固定譯法，存 iching-content `glossary/`。使用者審閱無意見。⏳ **下一個程式工作**：App 端套用（改 `lib/l10n/terms.dart` 與 ARB，§16、§17）。
    4. ✅ 2026-10-03 完成（0.1.0+19，run #36，見第 16 節）【程式】介面翻譯：Flutter 多語系架構（ARB），全部介面文字移到 ARB，已有繁中＋英文介面；依 §12，英文內容完成前不開放。
-5. 程式待辦（有空檔或回饋時）：術語表套用到 App（§17，排第一）；牌面細節；上架前：隱私權政策與 Play「資料安全性」表單要寫明 Firebase 收集項目（§18）。
+5. 程式待辦（有空檔或回饋時）：~~術語表套用到 App~~（0.1.0+21 完成）；牌面細節；上架前：隱私權政策與 Play「資料安全性」表單要寫明 Firebase 收集項目（§18）。
 
 ## 11. 程式現況（2026-10-01 骨架完成）
 
@@ -354,7 +354,7 @@ App 名稱與 applicationId、商業模式（廣告與付費內容）、隱私�
 ### 11.2 暫定設定
 - **定名（2026-10-01）**：開發者 **LC Lab**；App 名 **謙卦**（英文 Qiangua）。桌面名稱「謙卦」；首頁大標「謙卦」、副標「易經六十四卦卡」；Google Play 標題預定「謙卦｜易經六十四卦卡」。2026-10-01 使用者已在 Google Play／App Store 搜尋，確認沒有名為「謙卦」的 App（商標可在上架前另查）。
 - **套件名稱 `com.lclab.qiangua`**（0.1.0+5 起；上傳 Play 後永遠不能改）。由 `patch_android.sh` 改 applicationId；`flutter create --org com.lclab`，namespace 維持產生值。舊版 `tw.bcc.iching_cards` 是不同 App，測試機需手動移除。
-- 版本 `0.1.0+20`（+20：Firebase，見第 18 節；+19：介面翻譯架構（ARB）、想問的事連結字體縮小，見第 16 節、15.2；+18：置中提示語去標點；+17：思源字體子集，見第 15 節；+16：首頁一屏顯示完；+15：鎖屏按鈕圖示保留、測試提醒鈕；+14：桌面圖示無框滿版；+13：鎖定畫面控制改用 audio_service、桌面圖示留白；+12：卦記縮圖、底部被導覽列擋住、音景設定面板；+11：卦記提醒準時模式；+10：音景柔和版、432Hz、雙耳節拍，見 14.2；+9：實機回饋修正、音景背景播放與通知控制，見 14.1；+8：呼吸音景，見第 14 節；+7：卦記與回顧提醒，見第 13 節；+3：首頁水平置中修正、桌面圖示；+4：固定直向；+5：定名謙卦、套件名稱 com.lclab.qiangua；+6：擲錢頁收斂在一個畫面、點牌面圖滿版看象）。
+- 版本 `0.1.0+21`（+21：術語表套用（§17）、移除測試提醒鈕、CI 加建 AAB；+20：Firebase，見第 18 節；+19：介面翻譯架構（ARB）、想問的事連結字體縮小，見第 16 節、15.2；+18：置中提示語去標點；+17：思源字體子集，見第 15 節；+16：首頁一屏顯示完；+15：鎖屏按鈕圖示保留、測試提醒鈕；+14：桌面圖示無框滿版；+13：鎖定畫面控制改用 audio_service、桌面圖示留白；+12：卦記縮圖、底部被導覽列擋住、音景設定面板；+11：卦記提醒準時模式；+10：音景柔和版、432Hz、雙耳節拍，見 14.2；+9：實機回饋修正、音景背景播放與通知控制，見 14.1；+8：呼吸音景，見第 14 節；+7：卦記與回顧提醒，見第 13 節；+3：首頁水平置中修正、桌面圖示；+4：固定直向；+5：定名謙卦、套件名稱 com.lclab.qiangua；+6：擲錢頁收斂在一個畫面、點牌面圖滿版看象）。
 - **滿版看圖**（0.1.0+6，`shared/widgets/card_art_viewer.dart`）：`CardFace(zoomable: true)` 時點風景圖開啟；預設 cover 填滿螢幕、隱藏系統列，點兩下切換完整畫面（contain），兩指縮放，點一下返回。目前用於抽卡翻牌後與解讀頁。
 - **擲錢頁版面**（0.1.0+6）：不再捲動；六爻列固定保留（未擲顯示「—」），中段以 FittedBox 等比縮小以適應小螢幕或大字體，按鈕固定在底部。
 - **固定直向**：卦卡為 9:16 直式，`main.dart` 以 `SystemChrome` 鎖直向，Android 另由 `patch_android.sh` 在 AndroidManifest 加 `screenOrientation="portrait"`。iOS 上架時需在 Info.plist 只留 Portrait。平板若要支援橫向，再另做雙欄版面。
@@ -364,9 +364,9 @@ App 名稱與 applicationId、商業模式（廣告與付費內容）、隱私�
 - `assets/content/`、`assets/cards/` 在本 repo 只有 `.gitkeep`，`.gitignore` 擋住 json／webp，**內容永遠不進公開 repo**。
 
 ### 11.3 CI 流程（build_android.yml）
-checkout 本 repo → 以 `BUILDS_REPO_TOKEN` sparse-checkout iching-content 的 `zh-Hant/` 與 `images/webp/`（不抓 raw 原圖）→ 匯入內容 → `flutter create` → 套用名稱與簽署 → `flutter analyze`（只有 error 會失敗）→ `flutter test` → `flutter build apk --release` → `gh release create iching-android-run<N>` 到 iching-content → 自動刪除舊建置 Release，**只保留最近 5 個**（依 run 編號排序；createdAt 會相同，不可用來排序）。
+checkout 本 repo → 以 `BUILDS_REPO_TOKEN` sparse-checkout iching-content 的 `zh-Hant/`、`images/webp/`、`glossary/`（不抓 raw 原圖）→ 匯入內容 → 產生術語表（`scripts/gen_glossary.py`，§17）→ `flutter create` → 套用名稱與簽署 → `flutter analyze`（只有 error 會失敗）→ `flutter test` → `flutter build apk --release` → `flutter build appbundle --release`（0.1.0+21 起；`force_lang` 測試版不建）→ `gh release create iching-android-run<N>`（APK＋AAB）到 iching-content → 自動刪除舊建置 Release，**只保留最近 5 個**（依 run 編號排序；createdAt 會相同，不可用來排序）。
 - 失敗時錯誤行會轉成 annotation，Claude 以 `GET /repos/lawrence124875/iching-cards/check-runs/<id>/annotations` 讀取（容器無法下載完整日誌）。
-- APK 為通用版（含三種 CPU 架構），約 58 MB；上架時改建 AAB，由 Play 自動拆分。
+- APK 為通用版（含三種 CPU 架構），約 58 MB，給手機直接安裝；同一個 Release 另附 AAB（`iching_<版本>_run<N>.aab`），上傳 Play 用，Play 會依裝置拆分。
 - run #1（2026-10-01）全部步驟成功，以除錯金鑰簽署。
 
 ### 11.4 上傳金鑰（2026-10-01 已產生並設定完成）
@@ -503,7 +503,7 @@ checkout 本 repo → 以 `BUILDS_REPO_TOKEN` sparse-checkout iching-content 的
 - 修法：`branding/android/res/raw/keep.xml` 的 `tools:keep` 加上 `@drawable/audio_service_*`。
 - ⚠️ **智慧聽覺巡航要做同樣修正**（它的 raw/keep.xml 或 res/raw 加 `tools:keep="@drawable/audio_service_*"`），需在英文 App 對話處理（本對話的權杖只能寫 iching-cards）。
 - ✅ 2026-10-02 使用者實機確認（小米）：鎖屏與通知中心已出現暫停、停止鍵；測試提醒準時跳出，桌面圖示右上角也出現數字角標。卦記提醒問題（ProGuard＋準時模式）結案。
-- 卦記單筆頁「回顧提醒」下方新增暫時按鈕「測試：1 分鐘後提醒」，用來實機驗證提醒與桌面圖示角標。⚠️ **上架前移除**（程式中標 `TODO(上架前移除)`）。
+- 卦記單筆頁「回顧提醒」下方曾有暫時按鈕「測試：1 分鐘後提醒」，用來實機驗證提醒與桌面圖示角標。✅ 0.1.0+21 已移除（含 ARB 的 `journalTestReminder*`）。
 
 ### 14.7 0.1.0+16 首頁一屏顯示完（2026-10-02）
 
@@ -569,7 +569,17 @@ checkout 本 repo → 以 `BUILDS_REPO_TOKEN` sparse-checkout iching-content 的
 - 卦名原則：中、日、韓、越用各自漢字讀法（日新字體附讀音；韓附漢字、純卦用「重」；越用漢越音、純卦用 Thuần）；英、印尼、西、葡、泰、阿用意譯＋帶聲調拼音（例 `Modesty (Qiān)`）。牌面大字一律漢字。
 - 英文卦義相對 `hexagram_table.dart` 暫定詞改 5 個：1 Creative Force、2 Receptivity、47 Confinement、51 Shock、57 Gentle Penetration（避免與經卦象同名）。
 - ✅ **2026-10-03 使用者審閱完畢，無修改意見 → 定稿**（iching-content 兩份 README 已標註）。泰、阿仍需母語者校閱，在開放該語言前處理。
-- ⏳ App 端（下一個程式對話）：`terms.dart` 的 `hexName`／`hexFullName` 改依術語表（可在 CI 匯入 `glossary.json` 或產生 Dart 常數）、ARB 經卦名與 `lineName` select 對照修改；目前 ARB 的 `lineName` 用「Line 1…」（介面爻位），與術語表的傳統爻名（Nine at the beginning）是兩回事，詳細頁標題要用哪個待定。
+- ✅ **App 端套用（2026-10-03，0.1.0+21）**：
+  - **資料流**：CI sparse-checkout iching-content `glossary/` → `scripts/gen_glossary.py` 產生 `lib/l10n/glossary_data.g.dart`（`part of glossary.dart`，**不進 repo**，`.gitignore` 擋住；與內容同樣只在 CI 產生）。只取介面要用的欄位：64 卦 name／title／meaning（日文讀音）、經卦 name／image、12 個傳統爻名＋用九用六。腳本會檢查 64 卦、8 經卦、11 語齊全，缺就讓 CI 失敗；Actions 紀錄只印數量。
+  - `lib/l10n/glossary.dart`：`Glossary.of(代碼)`；`terms.dart`：`glossaryCode`（localeName → 術語表代碼：zh→zh-Hant、zh_Hans→zh-Hans、pt→pt-BR）、`hexName`（name）、`hexFullName`（title，例 地山謙／Modesty (Qiān)）、`cardSubtitle`（牌面小字「拼音 · 卦義」：中文介面沿用英文卦義＝原牌面設計，其他語言用該語卦義）、`trigramLabel`／`trigramImage`、`traditionalLineName`、`lineHeading`。
+  - ARB 刪除 `trigramName`、`trigramNature`（改由術語表提供），新增 `lineTitle`（「{name}：{text}」）。
+  - `hexagram_table.dart` 的英文卦義改成與術語表一致（5 個），`test/glossary_test.dart` 檢查繁中卦名、完整卦名、英文卦義與 App 卦序表一致、11 語齊全、爻名與標題組合。
+  - **改譯法**：只改 iching-content `glossary/glossary.json` → `tools/glossary.py check` → 到 iching-cards Actions 手動 Run workflow 重建（改 iching-content 不會自動觸發建置）。
+- **爻名決定（2026-10-03，使用者授權 Claude 決定）**：兩套並用、各司其職。
+  - **詳細頁（經文）用傳統爻名**：初九、六二、上六、用九／Nine at the beginning、Six in the second place…。理由：① 易學通例，經文本身就寫「初六：謙謙君子」，中文版顯示不變；② 爻名同時帶陰陽與位置，看久了自然學會（App 的目標之一是學讀象）；③ Legge、Wilhelm 等譯本的英文、德文都用這種說法，各語讀者查資料對得上。中文經文已以爻名開頭時原樣顯示；其他語言的爻辭若沒有爻名開頭，自動補「傳統爻名：」（`lineHeading`）。
+  - **擲錢頁用介面爻位**：初爻…上爻／Line 1…6（ARB `lineName`）。理由：擲錢是由下往上一爻一爻擲出，擲之前還不知道陰陽，只能講位置；新手也一看就懂。
+  - 解讀頁「本次重點」引用爻辭，同詳細頁（中文經文本身含爻名）。
+  - ⚠️ 日後寫各語言內容時：爻辭欄位 `text` 可以不含爻名（App 會補），若含，必須與術語表傳統爻名**完全相同**，否則會重複出現。
 
 ## 18. Firebase（2026-10-03，0.1.0+20）
 
@@ -644,8 +654,8 @@ checkout 本 repo → 以 `BUILDS_REPO_TOKEN` sparse-checkout iching-content 的
 - **Claude 自行依序執行以下所有工作項目**，需要使用者動手、下載測試或做決定時，在對話中明確列出。
 
 ### 19.2 執行順序（每個對話做一項或一批，完成後更新本節勾選）
-1. ⏳【程式】術語表套用到 App（§17）；同時：上架前清理（移除 `TODO(上架前移除)` 的測試提醒鈕）、CI 加建 **AAB**（也發佈到 iching-content Release，§10.4）。
-2. ⏳【上架準備，繁中先上】**先用繁中版跑封閉測試**，讓 14 天的計時盡早開始，翻譯同時進行（§12 上線原則：未完整翻譯的語言不開放，繁中可單獨上架）：隱私權政策（本 repo GitHub Pages，寫明 Firebase Analytics／Crashlytics 收集項目）、Play 商店資訊文案（繁中）、截圖規劃、Data safety 與內容分級填答說明、廣告 ID 聲明（§18.4）。
+1. ✅ 2026-10-03（0.1.0+21）【程式】術語表套用到 App（§17）；移除測試提醒鈕；CI 加建 **AAB**（與 APK 同一個 iching-content Release，§10.4）。
+2. 🔶 2026-10-03 Claude 部分完成，等使用者操作（見第 20 節）【上架準備，繁中先上】**先用繁中版跑封閉測試**，讓 14 天的計時盡早開始，翻譯同時進行（§12 上線原則：未完整翻譯的語言不開放，繁中可單獨上架）：隱私權政策（本 repo GitHub Pages，寫明 Firebase Analytics／Crashlytics 收集項目）、Play 商店資訊文案（繁中）、截圖規劃、Data safety 與內容分級填答說明、廣告 ID 聲明（§18.4）。
 3. ⏳【決定】商業模式提案（免費／付費內容、廣告、訂閱；§7 第 3 項）：Claude 提出方案，**由使用者選擇**；選定前封閉測試先以全免費版進行。
 4. ⏳【內容】英文版 64 卦（重新為英文讀者撰寫，非逐句翻譯；§12），每對話數卦，完成後 `en.contentReady = true`、CI 匯入 `en/`。
 5. ⏳【內容】其餘 9 語分批（簡中 → 日 → 韓 → 越 → 西 → 葡 → 印尼 → 泰 → 阿），各語字型（§15）與 ARB 介面同步。
@@ -657,6 +667,24 @@ checkout 本 repo → 以 `BUILDS_REPO_TOKEN` sparse-checkout iching-content 的
 - 每次新版：從 iching-content Releases 下載 APK 覆蓋安裝試用，有問題回報。
 - 階段 2：在 Play Console 建立新 App「謙卦」、上傳 Claude 產生的 AAB、貼上商店文案與隱私權政策網址、填 Data safety／內容分級（Claude 提供逐題答案）、安排付費外部測試服務湊 12 位測試者連續 14 天。
 - 階段 3：選定商業模式；若有廣告或付費，在 AdMob、RevenueCat 新增 App。
+
+## 20. 上架準備（2026-10-03，§19.2 第 2 項）
+
+**Claude 已完成**
+- **隱私權政策**：本 repo `docs/privacy.html`（繁中＋英文，同一頁；謙卦玄底配色，淺色模式自動切換）、`docs/index.html`（簡單首頁）。網址（開 Pages 後）：`https://lawrence124875.github.io/iching-cards/privacy.html`，資料刪除段落 `#data-deletion`。內容依 0.1.0+21 實際行為：卦記與想問的事只在本機；Firebase Analytics（`qg_` 事件與參數，§18）、Crashlytics、Remote Config；廣告 ID 權限（目前無廣告）；通知／準時鬧鐘／前景服務的用途；不適合 13 歲以下；非專業建議。⚠️ 加廣告、付費、Firestore、新統計事件或新權限時**必須先改這頁**。`docs/**` 不觸發建置。
+- **商店素材**（私人 repo iching-content `store/`，含牌面圖所以不放公開 repo）：
+  - `listing-zh-Hant.md`：名稱「謙卦｜易經六十四卦卡」、簡短說明、完整說明、類別建議（生活品味）、網址。
+  - `feature-graphic-1024x500.png`：主題圖片（謙卦大字＋謙、艮、泰三張牌面）；`icon-512.png`：商店圖示。重產：Pillow 腳本寫法見本節末。
+  - `PLAY_CONSOLE.md`：建立 App、Play 應用程式簽署、封閉測試、**應用程式內容逐題答案**（廣告：否；內容分級問卷；目標年齡只勾 18+；健康應用程式；廣告 ID：是／分析；**資料安全性**：應用程式互動、當機記錄、診斷資訊、裝置或其他 ID，全部收集＝是、分享＝否、必要、用途數據分析；前景服務媒體播放的說明文字與錄影要求；準確鬧鐘）與**截圖規劃**（6 張）。
+- Pages 無法由 Claude 開啟（權杖無 Pages 權限，API 403）。
+
+**等使用者做**（順序）
+1. iching-cards → Settings → Pages → Deploy from a branch → `main` ／ `/docs` → Save，確認隱私權政策網址打得開。
+2. 安裝 run #39（0.1.0+21）APK 試用：詳細頁爻名、牌面小字（乾＝Creative Force、坤＝Receptivity）、卦記單筆頁已無測試鈕。
+3. 依 iching-content `store/PLAY_CONSOLE.md` 在 Play Console 建立「謙卦」、上傳同一 Release 的 AAB 到**封閉測試**、填應用程式內容、貼商店文案與圖、手機截 6 張圖、錄前景服務影片、安排外部測試服務（12 人、14 天）。
+4. 送審有問題（例如拒絕原因、Console 要求的額外問題）貼回對話。
+
+**重產主題圖片**：Python＋Pillow，字型用 google/fonts 固定 commit（§15）的 NotoSerifTC／NotoSansTC 可變字型；1024×500 玄底 `#1C1B22`，左側「謙卦」112px 稻金 `#D8B56A`、「易經六十四卦卡」30px、「抽一卦　看見此刻的象」22px 灰穗；右側三張有框牌面（164×292，地黃框）取 `images/webp/15、52、11`，置中裁切（cover）。
 
 ## 8. 範例內容：謙卦（第十五卦，地山謙 ䷎，Qiān · Modesty）
 

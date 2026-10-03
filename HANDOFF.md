@@ -676,10 +676,10 @@ checkout 本 repo → 以 `BUILDS_REPO_TOKEN` sparse-checkout iching-content 的
   - `listing-zh-Hant.md`：名稱「謙卦｜易經六十四卦卡」、簡短說明、完整說明、類別建議（生活品味）、網址。
   - `feature-graphic-1024x500.png`：主題圖片（謙卦大字＋謙、艮、泰三張牌面）；`icon-512.png`：商店圖示。重產：Pillow 腳本寫法見本節末。
   - `PLAY_CONSOLE.md`：建立 App、Play 應用程式簽署、封閉測試、**應用程式內容逐題答案**（廣告：否；內容分級問卷；目標年齡只勾 18+；健康應用程式；廣告 ID：是／分析；**資料安全性**：應用程式互動、當機記錄、診斷資訊、裝置或其他 ID，全部收集＝是、分享＝否、必要、用途數據分析；前景服務媒體播放的說明文字與錄影要求；準確鬧鐘）與**截圖規劃**（6 張）。
-- Pages 無法由 Claude 開啟（權杖無 Pages 權限，API 403）。
+- Pages 無法由 Claude 開啟（權杖無 Pages 權限，API 403）；✅ 2026-10-03 使用者已開啟，網址可用。
 
 **等使用者做**（順序）
-1. iching-cards → Settings → Pages → Deploy from a branch → `main` ／ `/docs` → Save，確認隱私權政策網址打得開。
+1. ✅ 2026-10-03 已完成：GitHub Pages 開啟（`main`／`/docs`），使用者確認隱私權政策網址可正常顯示。
 2. 安裝 run #39（0.1.0+21）APK 試用：詳細頁爻名、牌面小字（乾＝Creative Force、坤＝Receptivity）、卦記單筆頁已無測試鈕。
 3. 依 iching-content `store/PLAY_CONSOLE.md` 在 Play Console 建立「謙卦」、上傳同一 Release 的 AAB 到**封閉測試**、填應用程式內容、貼商店文案與圖、手機截 6 張圖、錄前景服務影片、安排外部測試服務（12 人、14 天）。
 4. 送審有問題（例如拒絕原因、Console 要求的額外問題）貼回對話。

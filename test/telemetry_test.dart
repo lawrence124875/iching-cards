@@ -18,6 +18,9 @@ class _Off implements RemoteFlags {
 
   @override
   bool featureEnabled(String featureId) => !off.contains(featureId);
+
+  @override
+  int intValue(String key, int fallback) => fallback;
 }
 
 void main() {
@@ -26,6 +29,9 @@ void main() {
     const JournalSaved(hasReminder: true),
     const BreathStarted(hexagram: 15, minutes: 3, silent: false, binaural: true),
     const BreathCompleted(hexagram: 15, minutes: 3),
+    const PaywallShown(source: 'cast_limit'),
+    const RewardedEarned(source: 'cast'),
+    const Subscribed(period: 'yearly'),
   ];
 
   test('統計事件一律 qg_ 開頭、名稱合規、參數只有字串或數字', () {
@@ -53,6 +59,9 @@ void main() {
       'qg_journal_saved',
       'qg_breath_started',
       'qg_breath_completed',
+      'qg_paywall_shown',
+      'qg_rewarded_earned',
+      'qg_subscribed',
     ]);
     expect(rec.logged.first.$2, {'method': 'coins', 'hexagram': 15, 'has_changed': 1});
     await listener.dispose();

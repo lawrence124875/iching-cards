@@ -533,5 +533,51 @@
         "type": "String"
       }
     }
-  }
+  },
+  "premiumTitle": "謙卦會員",
+  "premiumSubtitle": "沒有廣告，所有功能不限次數",
+  "premiumBenefitNoAds": "沒有任何廣告",
+  "premiumBenefitCasts": "抽卦、擲錢不限次數",
+  "premiumBenefitJournal": "卦記不限則數",
+  "premiumBenefitBreath": "呼吸 3／5 分鐘與雙耳節拍",
+  "premiumFreeNote": "卦辭、爻辭、三組解讀與東西相映，永遠免費。",
+  "planMonthly": "月訂",
+  "planYearly": "年訂",
+  "premiumSubscribe": "訂閱",
+  "premiumRestore": "恢復購買",
+  "premiumManage": "管理訂閱",
+  "premiumActive": "你已是謙卦會員，謝謝支持。",
+  "premiumUnavailable": "訂閱尚未開放，敬請期待。",
+  "premiumLoadFailed": "暫時讀不到訂閱方案，請確認網路後再試。",
+  "premiumTerms": "訂閱會自動續訂，可隨時在 Google Play 的「付款和訂閱」中取消；取消後，會員資格保留到本期結束。",
+  "premiumThanks": "訂閱成功，謝謝支持！",
+  "premiumPurchaseFailed": "購買沒有完成，不會收取費用。",
+  "premiumRestoreNone": "沒有找到可以恢復的訂閱。",
+  "castLimitTitle": "今天的 {count} 次免費起卦已用完",
+  "@castLimitTitle": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "castLimitBody": "看一支短廣告，可以再起一卦；或成為會員，不限次數、沒有廣告。",
+  "castLimitBodyExhausted": "今天的次數都用完了。不妨靜下來，再想想剛才的象，明天再來；或成為會員，不限次數。",
+  "castWatchAd": "看廣告再起一卦",
+  "castAdNotReady": "廣告暫時無法載入，請稍後再試。",
+  "castComeTomorrow": "明天再來",
+  "journalLimitTitle": "卦記已達免費版上限 {count} 則",
+  "@journalLimitTitle": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "journalLimitBody": "已記下的卦記都會保留。成為會員即可繼續新增，不限則數。",
+  "premiumBadge": "會員",
+  "menuPremium": "謙卦會員",
+  "menuAdPrivacy": "廣告隱私設定",
+  "menuPrivacyPolicy": "隱私權政策",
+  "notNow": "先不要"
 }

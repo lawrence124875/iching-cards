@@ -497,5 +497,37 @@
         "type": "String"
       }
     }
-  }
+  },
+  "premiumTitle": "Qiangua Premium",
+  "premiumSubtitle": "No ads, and every feature without limits",
+  "premiumBenefitNoAds": "No ads at all",
+  "premiumBenefitCasts": "Unlimited card draws and coin casts",
+  "premiumBenefitJournal": "Unlimited journal entries",
+  "premiumBenefitBreath": "3- and 5-minute breathing and binaural beats",
+  "premiumFreeNote": "The classic texts, line readings, all three interpretations, and East Meets West are always free.",
+  "planMonthly": "Monthly",
+  "planYearly": "Yearly",
+  "premiumSubscribe": "Subscribe",
+  "premiumRestore": "Restore purchases",
+  "premiumManage": "Manage subscription",
+  "premiumActive": "You’re a Qiangua Premium member. Thank you for your support.",
+  "premiumUnavailable": "Subscriptions aren’t available yet.",
+  "premiumLoadFailed": "Couldn’t load subscription plans. Please check your connection and try again.",
+  "premiumTerms": "Subscriptions renew automatically. Cancel anytime in Google Play under Payments & subscriptions; you keep Premium until the end of the current period.",
+  "premiumThanks": "You’re subscribed. Thank you for your support!",
+  "premiumPurchaseFailed": "The purchase wasn’t completed. You haven’t been charged.",
+  "premiumRestoreNone": "No subscription found to restore.",
+  "castLimitTitle": "You’ve used today’s {count} free casts",
+  "castLimitBody": "Watch a short ad for one more cast, or go Premium for unlimited casts and no ads.",
+  "castLimitBodyExhausted": "That’s all for today. Sit a while with the image you drew and come back tomorrow, or go Premium for unlimited casts.",
+  "castWatchAd": "Watch an ad for one more cast",
+  "castAdNotReady": "The ad couldn’t load right now. Please try again later.",
+  "castComeTomorrow": "Come back tomorrow",
+  "journalLimitTitle": "You’ve reached the free limit of {count} journal entries",
+  "journalLimitBody": "Everything you’ve saved stays. Go Premium to keep adding entries without limit.",
+  "premiumBadge": "Premium",
+  "menuPremium": "Qiangua Premium",
+  "menuAdPrivacy": "Ad privacy settings",
+  "menuPrivacyPolicy": "Privacy policy",
+  "notNow": "Not now"
 }

@@ -8,6 +8,7 @@ import 'package:firebase_remote_config/firebase_remote_config.dart';
 import 'package:flutter/foundation.dart';
 
 import '../telemetry/analytics.dart';
+import '../monetization/free_limits.dart';
 import '../telemetry/remote_flags.dart';
 
 /// Firebase（Analytics、Crashlytics、Remote Config）只在這個檔案出現（HANDOFF §18）。
@@ -77,13 +78,28 @@ class _FirebaseRemoteFlags implements RemoteFlags {
         // Spark 免費方案；開關不必即時，12 小時抓一次即可（官方預設值）
         minimumFetchInterval: kDebugMode ? const Duration(minutes: 1) : const Duration(hours: 12),
       ));
-      await rc.setDefaults({for (final id in featureIds) featureFlagKey(id): true});
+      await rc.setDefaults({
+        for (final id in featureIds) featureFlagKey(id): true,
+        ...FreeLimits.remoteDefaults,
+      });
       await rc.activate();
       unawaited(rc.fetch().catchError((Object e) => debugPrint('Remote Config 抓取失敗：$e')));
       return _FirebaseRemoteFlags(rc);
     } catch (e) {
       debugPrint('Remote Config 初始化失敗，開關全照預設：$e');
       return const DefaultRemoteFlags();
+    }
+  }
+
+  @override
+  int intValue(String key, int fallback) {
+    try {
+      final rc = _rc;
+      if (rc == null) return fallback;
+      final v = rc.getValue(key);
+      return v.source == ValueSource.valueStatic ? fallback : v.asInt();
+    } catch (_) {
+      return fallback;
     }
   }
 

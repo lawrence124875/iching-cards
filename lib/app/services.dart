@@ -9,6 +9,10 @@ import '../core/content/asset_content_source.dart';
 import '../core/content/content_source.dart';
 import '../core/events/event_bus.dart';
 import '../core/journal/file_journal_store.dart';
+import '../core/monetization/ad_service.dart';
+import '../core/monetization/cast_quota.dart';
+import '../core/monetization/free_limits.dart';
+import '../core/monetization/premium_service.dart';
 import '../core/journal/journal_store.dart';
 import '../core/iching/focus_rule.dart';
 import '../core/reminders/local_notification_reminders.dart';
@@ -30,12 +34,22 @@ class Services {
     this.breath,
     this.analytics = const NoopAnalytics(),
     this.flags = const DefaultRemoteFlags(),
-  });
+    PremiumService? premium,
+    AdService? ads,
+    FreeLimits? limits,
+    CastQuota? quota,
+  })  : premium = premium ?? FreePremium(),
+        ads = ads ?? NoAds(),
+        limits = limits ?? const FreeLimits(),
+        quota = quota ?? CastQuota(limits: limits ?? const FreeLimits(), storage: MemoryQuotaStorage());
 
   /// [analytics]、[flags]：main.dart 以 Firebase 初始化後傳入（§18）；不傳＝不統計、功能全開。
   factory Services.standard({
     Analytics analytics = const NoopAnalytics(),
     RemoteFlags flags = const DefaultRemoteFlags(),
+    PremiumService? premium,
+    AdService? ads,
+    FreeLimits limits = const FreeLimits(),
   }) =>
       Services(
         content: AssetContentSource(folder: () => L10n.contentFolder),
@@ -54,6 +68,10 @@ class Services {
         ),
         analytics: analytics,
         flags: flags,
+        premium: premium,
+        ads: ads,
+        limits: limits,
+        quota: CastQuota(limits: limits),
       );
 
   final ContentSource content;
@@ -73,6 +91,20 @@ class Services {
 
   /// 遠端開關（Firebase Remote Config，§18）。
   final RemoteFlags flags;
+
+  /// 訂閱（§23）。不傳＝永遠免費版、不能購買。
+  final PremiumService premium;
+
+  /// 廣告（§23）。不傳＝沒有廣告。訂閱戶由 main.dart 關掉（ads.enabled = false）。
+  final AdService ads;
+
+  /// 免費版限制（§23.1，可由 Remote Config 調整）。
+  final FreeLimits limits;
+
+  /// 每日起卦次數。
+  final CastQuota quota;
+
+  bool get isPremium => premium.isPremium.value;
 }
 
 /// 呼吸音景用到的服務（HANDOFF §14）。

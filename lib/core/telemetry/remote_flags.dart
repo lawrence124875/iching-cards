@@ -5,6 +5,9 @@
 /// 並且在 Firebase 主控台只設定在「謙卦 App」條件下（見 §18）。
 abstract class RemoteFlags {
   bool featureEnabled(String featureId);
+
+  /// 整數參數（免費版限制等，HANDOFF §23）；讀不到回傳 [fallback]。
+  int intValue(String key, int fallback);
 }
 
 /// 參數名稱（主控台建立參數時照這個寫）。
@@ -16,4 +19,7 @@ class DefaultRemoteFlags implements RemoteFlags {
 
   @override
   bool featureEnabled(String featureId) => true;
+
+  @override
+  int intValue(String key, int fallback) => fallback;
 }

@@ -39,6 +39,27 @@ class BreathCompleted extends AppEvent {
   final int minutes;
 }
 
+/// 打開訂閱頁（source：cast_limit、journal_limit、breath、menu）。
+class PaywallShown extends AppEvent {
+  const PaywallShown({required this.source});
+
+  final String source;
+}
+
+/// 看完一支獎勵廣告並拿到獎勵（source：cast）。
+class RewardedEarned extends AppEvent {
+  const RewardedEarned({required this.source});
+
+  final String source;
+}
+
+/// 購買或恢復訂閱成功（period：monthly、yearly、restore）。
+class Subscribed extends AppEvent {
+  const Subscribed({required this.period});
+
+  final String period;
+}
+
 class EventBus {
   final _controller = StreamController<AppEvent>.broadcast();
 

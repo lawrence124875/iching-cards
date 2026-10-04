@@ -10,6 +10,7 @@ import '../../reading/reading_page.dart';
 import '../../shared/widgets/card_back.dart';
 import '../../shared/widgets/card_face.dart';
 import '../../shared/widgets/flip_card.dart';
+import '../../shared/premium/cast_gate.dart';
 import '../../shared/widgets/question_dialog.dart';
 
 /// 簡單抽卡：靜心 → 點牌翻開 → 看解讀。
@@ -25,9 +26,23 @@ class _DrawPageState extends State<DrawPage> {
   CastResult? _cast;
   String _question = '';
 
-  void _draw() {
-    if (_cast != null) return;
+  bool _checking = false;
+
+  Future<void> _draw() async {
+    if (_cast != null || _checking) return;
+    _checking = true;
+    final ok = await ensureCanCast(context); // 免費版每日次數（§23）
+    _checking = false;
+    if (!ok || !mounted) return;
     setState(() => _cast = _method.cast(AppServices.of(context).random));
+  }
+
+  Future<void> _openReading(CastResult cast) async {
+    final ads = AppServices.of(context).ads;
+    await Navigator.of(context).push(
+      MaterialPageRoute<void>(builder: (_) => ReadingPage(cast: cast, question: _question)),
+    );
+    ads.readingClosed(); // 看完解讀回來：依限頻規則可能跳插頁（不在閱讀中跳出）
   }
 
   void _reset() => setState(() => _cast = null);
@@ -81,9 +96,7 @@ class _DrawPageState extends State<DrawPage> {
                 FilledButton(onPressed: _draw, child: Text(l.drawFlip))
               else ...[
                 FilledButton(
-                  onPressed: () => Navigator.of(context).push(
-                    MaterialPageRoute<void>(builder: (_) => ReadingPage(cast: cast, question: _question)),
-                  ),
+                  onPressed: () => _openReading(cast),
                   child: Text(l.viewReading),
                 ),
                 TextButton(onPressed: _reset, child: Text(l.drawAgain)),

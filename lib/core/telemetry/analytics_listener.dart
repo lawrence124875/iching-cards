@@ -25,6 +25,9 @@ class AnalyticsListener {
             {'hexagram': b.hexagram, 'minutes': b.minutes, 'silent': b.silent ? 1 : 0, 'binaural': b.binaural ? 1 : 0},
           ),
         BreathCompleted b => ('qg_breath_completed', {'hexagram': b.hexagram, 'minutes': b.minutes}),
+        PaywallShown p => ('qg_paywall_shown', {'source': p.source}),
+        RewardedEarned r => ('qg_rewarded_earned', {'source': r.source}),
+        Subscribed s => ('qg_subscribed', {'period': s.period}),
         _ => null,
       };
 

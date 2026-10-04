@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 
+import '../../app/services.dart';
+import '../../shared/premium/paywall_page.dart';
+
 import '../../app/theme.dart';
 import '../../core/iching/hexagram_table.dart';
 import '../../core/soundscape/session_renderer.dart';
@@ -41,6 +44,27 @@ class _SetupSheetState extends State<_SetupSheet> {
   static bool _lastBinaural = false;
   bool _binaural = _lastBinaural;
 
+  // 免費版（§23）：只有 1／2 分鐘、沒有雙耳節拍；其餘點了開訂閱頁
+  late final Services _s = AppServices.of(context);
+  bool _locked(int minutes) => !_s.isPremium && !_s.limits.freeBreathMinutes.contains(minutes);
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (!mounted || _s.isPremium) return;
+      setState(() {
+        if (_locked(_minutes)) _minutes = 2;
+        _binaural = false;
+      });
+    });
+  }
+
+  /// 點了會員功能：開訂閱頁，訂閱成功就套用。
+  Future<void> _unlock(VoidCallback apply) async {
+    if (await openPaywall(context, source: 'breath') && mounted) setState(apply);
+  }
+
   @override
   Widget build(BuildContext context) {
     final t = Theme.of(context).textTheme;
@@ -72,9 +96,10 @@ class _SetupSheetState extends State<_SetupSheet> {
               children: [
                 for (final m in _choices)
                   ChoiceChip(
+                    avatar: _locked(m) ? const Icon(Icons.lock_outline, size: 16) : null,
                     label: Text(l.minutes(m)),
                     selected: _minutes == m,
-                    onSelected: (_) => setState(() => _minutes = m),
+                    onSelected: (_) => _locked(m) ? _unlock(() => _minutes = m) : setState(() => _minutes = m),
                   ),
               ],
             ),
@@ -90,10 +115,16 @@ class _SetupSheetState extends State<_SetupSheet> {
             SwitchListTile(
               dense: true,
               contentPadding: EdgeInsets.zero,
-              title: Text(l.breathBinaural, style: t.bodyMedium),
+              title: Row(children: [
+                Flexible(child: Text(l.breathBinaural, style: t.bodyMedium)),
+                if (!_s.isPremium) ...[
+                  const SizedBox(width: 6),
+                  const Icon(Icons.lock_outline, size: 16),
+                ],
+              ]),
               subtitle: Text(l.breathBinauralSub, style: t.bodySmall),
               value: _binaural,
-              onChanged: (v) => setState(() => _binaural = v),
+              onChanged: (v) => (v && !_s.isPremium) ? _unlock(() => _binaural = true) : setState(() => _binaural = v),
             ),
             const SizedBox(height: 4),
             Text(l.breathHeadphones, style: t.bodySmall),

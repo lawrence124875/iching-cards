@@ -12,6 +12,7 @@ import '../l10n/l10n.dart';
 import '../shared/widgets/card_face.dart';
 import '../shared/widgets/hexagram_glyph.dart';
 import 'detail_page.dart';
+import '../shared/premium/paywall_page.dart';
 import 'save_reading_sheet.dart';
 import 'scripture.dart';
 import 'section.dart';
@@ -164,6 +165,12 @@ class _ReadingPageState extends State<ReadingPage> {
   }
 
   Future<void> _save(HexagramContent? pc) async {
+    // 免費版卦記上限（§23）：已存的不刪，只是不能再新增
+    final journal = _services.journal;
+    if (!_services.isPremium && journal != null && (await journal.all()).length >= _services.limits.journalMax) {
+      if (!mounted || !await _journalLimit()) return;
+      if (!mounted) return;
+    }
     final index = (pc == null || pc.readings.isEmpty) ? null : _readingSeed % pc.readings.length;
     final entry = await showSaveReadingSheet(
       context,
@@ -174,6 +181,24 @@ class _ReadingPageState extends State<ReadingPage> {
     if (entry == null) return;
     _services.events.emit(JournalSaved(hasReminder: entry.reminderAt != null));
     if (mounted) setState(() => _saved = true);
+  }
+
+  /// 顯示卦記上限說明；成為會員回傳 true。
+  Future<bool> _journalLimit() async {
+    final l = context.l10n;
+    final go = await showDialog<bool>(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        title: Text(l.journalLimitTitle(_services.limits.journalMax)),
+        content: Text(l.journalLimitBody),
+        actions: [
+          TextButton(onPressed: () => Navigator.pop(ctx, false), child: Text(l.notNow)),
+          FilledButton(onPressed: () => Navigator.pop(ctx, true), child: Text(l.menuPremium)),
+        ],
+      ),
+    );
+    if (go != true || !mounted) return false;
+    return openPaywall(context, source: 'journal_limit');
   }
 
   int? get _focusHexagram {

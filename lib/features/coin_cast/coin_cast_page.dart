@@ -6,6 +6,7 @@ import '../../core/iching/cast_result.dart';
 import '../../core/iching/divination_method.dart';
 import '../../l10n/l10n.dart';
 import '../../reading/reading_page.dart';
+import '../../shared/premium/cast_gate.dart';
 import '../../shared/widgets/hexagram_glyph.dart';
 import '../../shared/widgets/question_dialog.dart';
 
@@ -25,12 +26,33 @@ class _CoinCastPageState extends State<CoinCastPage> {
 
   bool get _done => _tosses.length == 6;
 
-  void _toss() {
-    if (_done) return;
+  bool _checking = false;
+
+  /// 每一卦（六擲）只在第一擲前檢查一次免費次數（§23）。
+  Future<bool> _allowed() async {
+    if (_tosses.isNotEmpty) return true;
+    if (_checking) return false;
+    _checking = true;
+    final ok = await ensureCanCast(context);
+    _checking = false;
+    return ok && mounted;
+  }
+
+  Future<void> _toss() async {
+    if (_done || !await _allowed()) return;
     setState(() => _tosses.add(_method.tossOnce(AppServices.of(context).random)));
   }
 
-  void _tossAll() {
+  Future<void> _openReading(List<LineValue> lines) async {
+    final ads = AppServices.of(context).ads;
+    await Navigator.of(context).push(MaterialPageRoute<void>(
+      builder: (_) => ReadingPage(cast: CastResult(methodId: _method.id, lines: lines), question: _question),
+    ));
+    ads.readingClosed(); // 看完解讀回來：依限頻規則可能跳插頁
+  }
+
+  Future<void> _tossAll() async {
+    if (!await _allowed()) return;
     final r = AppServices.of(context).random;
     setState(() {
       while (_tosses.length < 6) {
@@ -98,12 +120,7 @@ class _CoinCastPageState extends State<CoinCastPage> {
                 TextButton(onPressed: _tossAll, child: Text(l.coinsTossAll)),
               ] else ...[
                 FilledButton(
-                  onPressed: () => Navigator.of(context).push(MaterialPageRoute<void>(
-                    builder: (_) => ReadingPage(
-                      cast: CastResult(methodId: _method.id, lines: lines),
-                      question: _question,
-                    ),
-                  )),
+                  onPressed: () => _openReading(lines),
                   child: Text(l.viewReading),
                 ),
                 TextButton(onPressed: () => setState(_tosses.clear), child: Text(l.coinsRestart)),

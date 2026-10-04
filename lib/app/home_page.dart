@@ -1,4 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:url_launcher/url_launcher.dart';
+
+import '../shared/premium/ad_banner.dart';
+import '../shared/premium/paywall_page.dart';
 
 import '../shared/widgets/card_back.dart';
 import '../l10n/l10n.dart';
@@ -22,8 +26,10 @@ class HomePage extends StatelessWidget {
     // 0.1.0+16：整頁一定一屏顯示完（不捲動）。主內容放在 FittedBox 裡，螢幕矮或系統字體放大時
     // 等比縮小；免責聲明固定貼在底部，不會被擠到畫面外。
     return Scaffold(
+      bottomNavigationBar: const AdBanner(), // 免費版底部橫幅（§23）
       body: SafeArea(
-        child: LayoutBuilder(
+        child: Stack(children: [
+          LayoutBuilder(
           builder: (context, box) => Column(
             children: [
               Expanded(
@@ -74,7 +80,44 @@ class HomePage extends StatelessWidget {
             ],
           ),
         ),
+          const Positioned(top: 4, right: 4, child: _HomeMenu()),
+        ]),
       ),
     );
   }
 }
+
+enum _MenuItem { premium, adPrivacy, privacyPolicy }
+
+/// 首頁右上角選單：謙卦會員、廣告隱私設定（需要同意的地區才出現）、隱私權政策。
+class _HomeMenu extends StatelessWidget {
+  const _HomeMenu();
+
+  @override
+  Widget build(BuildContext context) {
+    final l = context.l10n;
+    final s = AppServices.of(context);
+    return PopupMenuButton<_MenuItem>(
+      icon: const Icon(Icons.more_vert, color: QianColors.textSub),
+      onSelected: (item) {
+        switch (item) {
+          case _MenuItem.premium:
+            openPaywall(context, source: 'menu');
+          case _MenuItem.adPrivacy:
+            s.ads.showPrivacyOptions();
+          case _MenuItem.privacyPolicy:
+            launchUrl(Uri.parse(privacyPolicyUrl), mode: LaunchMode.externalApplication);
+        }
+      },
+      itemBuilder: (_) => [
+        PopupMenuItem(value: _MenuItem.premium, child: Text(l.menuPremium)),
+        if (s.ads.privacyOptionsRequired && !s.isPremium)
+          PopupMenuItem(value: _MenuItem.adPrivacy, child: Text(l.menuAdPrivacy)),
+        PopupMenuItem(value: _MenuItem.privacyPolicy, child: Text(l.menuPrivacyPolicy)),
+      ],
+    );
+  }
+}
+
+/// 隱私權政策（本 repo GitHub Pages，§20）。
+const privacyPolicyUrl = 'https://lawrence124875.github.io/iching-cards/privacy.html';

@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../../shared/premium/ad_banner.dart';
+
 import '../../app/services.dart';
 import '../../app/theme.dart';
 import '../../core/iching/hexagram_table.dart';
@@ -20,6 +22,7 @@ class JournalListPage extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(title: Text(context.l10n.featureJournal)),
       body: store == null ? const _Empty() : _List(store: store),
+      bottomNavigationBar: const AdBanner(),
     );
   }
 }

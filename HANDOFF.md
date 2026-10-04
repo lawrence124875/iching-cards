@@ -657,7 +657,7 @@ checkout 本 repo → 以 `BUILDS_REPO_TOKEN` sparse-checkout iching-content 的
 1. ✅ 2026-10-03（0.1.0+21）【程式】術語表套用到 App（§17）；移除測試提醒鈕；CI 加建 **AAB**（與 APK 同一個 iching-content Release，§10.4）。
 2. 🔶 2026-10-03 Claude 部分完成，等使用者操作（見第 20 節）【上架準備，繁中先上】**先用繁中版跑封閉測試**，讓 14 天的計時盡早開始，翻譯同時進行（§12 上線原則：未完整翻譯的語言不開放，繁中可單獨上架）：隱私權政策（本 repo GitHub Pages，寫明 Firebase Analytics／Crashlytics 收集項目）、Play 商店資訊文案（繁中）、截圖規劃、Data safety 與內容分級填答說明、廣告 ID 聲明（§18.4）。
 3. ✅ 2026-10-03 使用者定案（§21.1：廣告＋月訂／年訂）【決定】商業模式（免費／付費內容、廣告、訂閱；§7 第 3 項）：選定前封閉測試先以全免費版進行。
-4. 🔶 進行中（2026-10-03 起；01 乾～52 艮完成，下一卦 53 漸；英文測試 APK run #47（含至 37）成功、run #48（含至 41）、run #49（含至 45）、run #50（含至 49）、run #51（含至 52）2026-10-05 建置成功；進度表在 iching-content `en/README.md` §5）【內容】英文版 64 卦（重新為英文讀者撰寫，非逐句翻譯；§12），每對話數卦，完成後 `en.contentReady = true`、CI 匯入 `en/`。
+4. ✅ 2026-10-05 完成【內容】英文版 64 卦（重新為英文讀者撰寫，非逐句翻譯；§12）：`check_translation.py en` 64 卦 OK、約 15.1 萬字；`en.contentReady = true`（0.2.0+24，run #53 正式版）；回譯抽查與名句來源記在 iching-content `en/README.md` §5。英文商店資訊、主題圖片已完成，截圖等使用者實機截圖（§21.2）。
 5. ⏳【內容】其餘 9 語分批（簡中 → 日 → 韓 → 越 → 西 → 葡 → 印尼 → 泰 → 阿），各語字型（§15）與 ARB 介面同步。
 6. 🔶 2026-10-04 程式完成（0.2.0+23，§23），等使用者建 AdMob／RevenueCat／Play 訂閱與 Secrets；正式版申請。
 7. 之後：iOS（§9.1，需另決定 Apple 年費）。
@@ -666,7 +666,9 @@ checkout 本 repo → 以 `BUILDS_REPO_TOKEN` sparse-checkout iching-content 的
 - 2026-10-05：寫 38 睽～45 萃（每卦 `check_translation.py` 通過後單獨 push）。檢查器禁用詞實際擋下兩處並已改寫：39 蹇「跛足」lame→limping；43 夬「談話治療」英文慣稱 talking cure 含 cure→名稱 Talk therapy、引安娜・O「chimney sweeping」。**寫作時注意**：check 腳本禁用詞含 lame、cure、sin、hell、devil、guaranteed、destined 等（見腳本 BANNED），常見誤觸：lame foot、talking cure、cure-all。
 - 2026-10-05（第二批）：寫 46 升～52 艮，每卦 `check_translation.py` 通過後單獨 push；46–49 後觸發 run #50（✅ 成功，含至 49），52 後觸發 run #51（✅ 成功，含至 52）。全語檢查 `check_translation.py en` 52 卦 OK、共約 12.1 萬字。保守處理：47 劓刖、52 列其夤不寫刑罰／身體細節；50 得妾以其子不用 concubine、享上帝＝heaven above；47 致命遂志譯 gives their whole life to（不譯捨命）；52 維根斯坦第 7 條自譯、避開 Pears/McGuinness 有版權譯句。
 - 同一對話：使用者說之後有空會建立 AdMob App、RevenueCat 專案、Play 訂閱並截圖，由 Claude 逐欄回覆（依 §23.3）；本對話尚未收到截圖。
-- 下一步：從 53 漸續寫（還剩 53–64 共 12 卦，約 2～3 個對話）；全部完成後把 `en.contentReady` 設 true（§22），再寫英文商店資訊與截圖（§21.2）。
+- 2026-10-05（第三批）：寫 53 漸～64 未濟，全語檢查 64 卦 OK（約 15.1 萬字），`en.contentReady = true`、版本 0.2.0+24。保守處理：54 士刲羊无血＝no blood is shed、須不用 concubine；55 折其右肱照經文不寫傷勢；59 渙其血＝dispersing the hurt；61 議獄緩死＝slow to impose the gravest penalty；63 東鄰殺牛＝offers up an ox；58 柏拉圖〈第七書信〉note 註明真偽爭議。
+- 2026-10-05（第四個對話）：run #52（force_lang=en）✅、run #53（正式版 0.2.0+24，push 觸發）✅（Release 含 APK＋AAB）；之後手動觸發 force_lang=en run #54（建置中，結果見下一則）。en/README §5 補 53–64 回譯抽查與名句來源。§21.2 英文商店資訊：iching-content `store/listing-en.md`（名稱 Qiangua: I Ching Oracle Cards 29 字、簡短說明 80 字、完整說明 3421 字，依英文搜尋詞重寫；另附加上廣告／訂閱後要補的段落）、`store/feature-graphic-en-1024x500.png`（右側三牌右緣留 64px；`store/feature_graphic_en.py` 重製，字型 Cormorant Garamond）、`store/screenshots-en/make.py`（8 張，順序與要截的畫面寫在腳本 ITEMS；等使用者貼英文介面截圖）。
+- 下一步：使用者貼英文截圖 → 執行 make.py；使用者貼 AdMob／RevenueCat／Play 訂閱截圖 → 依 §23.3 逐欄回覆；之後 §19.2 第 5 項（簡中起）。
 
 ### 19.3 需要使用者做的事（Claude 會在對應階段提醒）
 - Firebase：確認 Analytics 即時報表看得到 `qg_reading_shown`、Crashlytics 不再「等待中」（§18.4，記得先篩選謙卦 App）。
@@ -722,7 +724,7 @@ checkout 本 repo → 以 `BUILDS_REPO_TOKEN` sparse-checkout iching-content 的
 - 已完成並列入「發布總覽」待送審：封閉測試版本、商店資訊、商店設定、應用程式內容全部聲明。使用者下一步：快速檢查跑完後按「送審 14 項變更」；確認「測試一」名單 ≥12 個 Gmail。
 - 審查通過後：取得封閉測試加入連結，請測試人員接受邀請並安裝；14 天計時開始。
 - 下一版（含 AdMob＋訂閱）送審前必改：iching-content `store/PLAY_CONSOLE.md` §5（6 項）＋商店完整說明補「含廣告、可訂閱」＋AI 素材聲明若新增素材再標。
-- 英文商店資訊、截圖：等英文內容完成，依當地搜尋習慣另寫（不是直譯），截圖可用 `store/screenshots-zh-Hant/make.py` 改標題重製。
+- 英文商店資訊（2026-10-05）：✅ `store/listing-en.md`、✅ `store/feature-graphic-en-1024x500.png`；截圖 ⏳ 等使用者以英文介面（手機語言英文，或 force_lang=en 測試版）依 `store/screenshots-en/make.py` 的 ITEMS 順序截 8 張貼回。上傳位置：Play Console 主要商店資訊 → 管理翻譯 → 新增 English (United States)，英文圖像要在該語言的圖像區另外上傳（未上傳會顯示繁中圖）。
 
 ## 23. 廣告與訂閱（2026-10-04，0.2.0+23，run #44 建置成功）
 

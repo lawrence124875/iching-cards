@@ -657,14 +657,16 @@ checkout 本 repo → 以 `BUILDS_REPO_TOKEN` sparse-checkout iching-content 的
 1. ✅ 2026-10-03（0.1.0+21）【程式】術語表套用到 App（§17）；移除測試提醒鈕；CI 加建 **AAB**（與 APK 同一個 iching-content Release，§10.4）。
 2. 🔶 2026-10-03 Claude 部分完成，等使用者操作（見第 20 節）【上架準備，繁中先上】**先用繁中版跑封閉測試**，讓 14 天的計時盡早開始，翻譯同時進行（§12 上線原則：未完整翻譯的語言不開放，繁中可單獨上架）：隱私權政策（本 repo GitHub Pages，寫明 Firebase Analytics／Crashlytics 收集項目）、Play 商店資訊文案（繁中）、截圖規劃、Data safety 與內容分級填答說明、廣告 ID 聲明（§18.4）。
 3. ✅ 2026-10-03 使用者定案（§21.1：廣告＋月訂／年訂）【決定】商業模式（免費／付費內容、廣告、訂閱；§7 第 3 項）：選定前封閉測試先以全免費版進行。
-4. 🔶 進行中（2026-10-03 起；01 乾～45 萃完成，下一卦 46 升；英文測試 APK run #47（含至 37）成功、run #48（含至 41）、run #49（含至 45）2026-10-05 建置成功；進度表在 iching-content `en/README.md` §5）【內容】英文版 64 卦（重新為英文讀者撰寫，非逐句翻譯；§12），每對話數卦，完成後 `en.contentReady = true`、CI 匯入 `en/`。
+4. 🔶 進行中（2026-10-03 起；01 乾～52 艮完成，下一卦 53 漸；英文測試 APK run #47（含至 37）成功、run #48（含至 41）、run #49（含至 45）、run #50（含至 49）2026-10-05 建置成功，run #51（含至 52）見 §19.4；進度表在 iching-content `en/README.md` §5）【內容】英文版 64 卦（重新為英文讀者撰寫，非逐句翻譯；§12），每對話數卦，完成後 `en.contentReady = true`、CI 匯入 `en/`。
 5. ⏳【內容】其餘 9 語分批（簡中 → 日 → 韓 → 越 → 西 → 葡 → 印尼 → 泰 → 阿），各語字型（§15）與 ARB 介面同步。
 6. 🔶 2026-10-04 程式完成（0.2.0+23，§23），等使用者建 AdMob／RevenueCat／Play 訂閱與 Secrets；正式版申請。
 7. 之後：iOS（§9.1，需另決定 Apple 年費）。
 
 ### 19.4 對話紀錄（英文內容批次）
 - 2026-10-05：寫 38 睽～45 萃（每卦 `check_translation.py` 通過後單獨 push）。檢查器禁用詞實際擋下兩處並已改寫：39 蹇「跛足」lame→limping；43 夬「談話治療」英文慣稱 talking cure 含 cure→名稱 Talk therapy、引安娜・O「chimney sweeping」。**寫作時注意**：check 腳本禁用詞含 lame、cure、sin、hell、devil、guaranteed、destined 等（見腳本 BANNED），常見誤觸：lame foot、talking cure、cure-all。
-- 下一步：從 46 升續寫；用到 save 腳本時記得腳本失敗要中止，不可在檢查未過時 commit。
+- 2026-10-05（第二批）：寫 46 升～52 艮，每卦 `check_translation.py` 通過後單獨 push；46–49 後觸發 run #50（✅ 成功，含至 49），52 後觸發 run #51（含至 52）。全語檢查 `check_translation.py en` 52 卦 OK、共約 12.1 萬字。保守處理：47 劓刖、52 列其夤不寫刑罰／身體細節；50 得妾以其子不用 concubine、享上帝＝heaven above；47 致命遂志譯 gives their whole life to（不譯捨命）；52 維根斯坦第 7 條自譯、避開 Pears/McGuinness 有版權譯句。
+- 同一對話：使用者說之後有空會建立 AdMob App、RevenueCat 專案、Play 訂閱並截圖，由 Claude 逐欄回覆（依 §23.3）；本對話尚未收到截圖。
+- 下一步：從 53 漸續寫（還剩 53–64 共 12 卦，約 2～3 個對話）；全部完成後把 `en.contentReady` 設 true（§22），再寫英文商店資訊與截圖（§21.2）。
 
 ### 19.3 需要使用者做的事（Claude 會在對應階段提醒）
 - Firebase：確認 Analytics 即時報表看得到 `qg_reading_shown`、Crashlytics 不再「等待中」（§18.4，記得先篩選謙卦 App）。

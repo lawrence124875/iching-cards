@@ -46,7 +46,7 @@ class AppLanguages {
     code: 'en',
     locale: Locale('en'),
     contentFolder: 'en',
-    contentReady: false, // 介面已翻譯；英文解讀內容完成後改 true（§12）
+    contentReady: true, // 2026-10-05 英文 64 卦完成（§22）
   );
 
   /// 已有介面翻譯（ARB）的語言。順序無意義。

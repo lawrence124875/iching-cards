@@ -574,10 +574,11 @@
       }
     }
   },
-  "journalLimitBody": "已記下的卦記都會保留。成為會員即可繼續新增，不限則數。",
+  "journalLimitBody": "已記下的卦記都會保留。可以看一支廣告存下這一則，或成為會員，不限則數。",
   "premiumBadge": "會員",
   "menuPremium": "謙卦會員",
   "menuAdPrivacy": "廣告隱私設定",
   "menuPrivacyPolicy": "隱私權政策",
+  "journalWatchAd": "看廣告存這一則",
   "notNow": "先不要"
 }

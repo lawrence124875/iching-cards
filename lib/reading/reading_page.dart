@@ -168,6 +168,7 @@ class _ReadingPageState extends State<ReadingPage> {
     // 免費版卦記上限（§23）：已存的不刪，只是不能再新增
     final journal = _services.journal;
     if (!_services.isPremium && journal != null && (await journal.all()).length >= _services.limits.journalMax) {
+      // 會員、或看完獎勵廣告換「存這一則」才繼續（每次一則，不累積額度）
       if (!mounted || !await _journalLimit()) return;
       if (!mounted) return;
     }
@@ -183,22 +184,34 @@ class _ReadingPageState extends State<ReadingPage> {
     if (mounted) setState(() => _saved = true);
   }
 
-  /// 顯示卦記上限說明；成為會員回傳 true。
+  /// 顯示卦記上限說明。成為會員、或看完獎勵廣告（只換存這一則）回傳 true。
   Future<bool> _journalLimit() async {
     final l = context.l10n;
-    final go = await showDialog<bool>(
+    final choice = await showDialog<String>(
       context: context,
       builder: (ctx) => AlertDialog(
         title: Text(l.journalLimitTitle(_services.limits.journalMax)),
         content: Text(l.journalLimitBody),
         actions: [
-          TextButton(onPressed: () => Navigator.pop(ctx, false), child: Text(l.notNow)),
-          FilledButton(onPressed: () => Navigator.pop(ctx, true), child: Text(l.menuPremium)),
+          TextButton(onPressed: () => Navigator.pop(ctx), child: Text(l.notNow)),
+          TextButton(onPressed: () => Navigator.pop(ctx, 'watch'), child: Text(l.journalWatchAd)),
+          FilledButton(onPressed: () => Navigator.pop(ctx, 'premium'), child: Text(l.menuPremium)),
         ],
       ),
     );
-    if (go != true || !mounted) return false;
-    return openPaywall(context, source: 'journal_limit');
+    if (!mounted) return false;
+    if (choice == 'premium') return openPaywall(context, source: 'journal_limit');
+    if (choice != 'watch') return false;
+    final ready = await _services.ads.prepareRewarded();
+    if (!mounted) return false;
+    if (!ready || !await _services.ads.showRewarded()) {
+      if (mounted && !ready) {
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(l.castAdNotReady)));
+      }
+      return false;
+    }
+    _services.events.emit(const RewardedEarned(source: 'journal'));
+    return true;
   }
 
   int? get _focusHexagram {

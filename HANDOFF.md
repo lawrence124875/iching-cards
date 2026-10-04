@@ -737,12 +737,13 @@ checkout 本 repo → 以 `BUILDS_REPO_TOKEN` sparse-checkout iching-content 的
 |---|---|---|
 | `qg_free_casts_per_day` | 3 | 每日免費起卦（抽卦＋擲錢合計；擲錢只在第一擲前計一次） |
 | `qg_free_rewarded_per_day` | 3 | 每日可看獎勵廣告換起卦次數 |
-| `qg_free_journal_max` | 10 | 卦記上限（已存的不刪） |
+| `qg_free_journal_max` | 10 | 卦記上限（已存的不刪；計的是目前則數，刪舊的可再存，刻意不防，見下） |
 | `qg_interstitial_every` | 3 | 每幾次解讀最多一次插頁（0＝關閉插頁） |
 | `qg_interstitial_gap_min` | 3 | 全螢幕廣告最短間隔（分鐘） |
 - 呼吸 1／2 分鐘免費；3／5 分鐘、雙耳節拍屬會員（鎖頭圖示，點了開訂閱頁）。**解讀內容永遠不鎖。**
 - 計次存本機 `quota.json`（依手機日期跨日歸零，重裝歸零可接受）。
-- 廣告位置：橫幅＝首頁、卦記列表底部；插頁＝從解讀頁**返回**起卦頁時（不在閱讀中、不在開啟 App 時、不在呼吸中）；獎勵＝起卦次數用完時使用者自選。廣告分級上限 PG。
+- 廣告位置：橫幅＝首頁、卦記列表底部；插頁＝從解讀頁**返回**起卦頁時（不在閱讀中、不在開啟 App 時、不在呼吸中）；獎勵＝起卦次數用完時使用者自選；卦記達上限時也可看獎勵廣告「存這一則」（2026-10-05，0.2.0+25；每次只換一則、不累積額度、不受 `qg_free_rewarded_per_day` 限制；事件 `qg_rewarded_earned` source＝journal）。廣告分級上限 PG。
+- **卦記刪舊再存（2026-10-05 使用者提問，決定不防）**：上限計目前則數，刪掉舊的就能再存。不改成「累計存過幾則」：卦記價值在回頭對照，會刪舊紀錄的人本來就不是訂閱對象；改累計計數對誠實使用者不公平，且重裝會歸零、擋不住。觀察 `qg_paywall_shown`（journal_limit）與訂閱轉換後再用 Remote Config 調整。
 - 首頁右上角選單：謙卦會員、廣告隱私設定（UMP 判定需要時才出現）、隱私權政策。
 - 統計事件：`qg_paywall_shown`（source：cast_limit／journal_limit／breath／menu）、`qg_rewarded_earned`、`qg_subscribed`（monthly／yearly／restore）。
 

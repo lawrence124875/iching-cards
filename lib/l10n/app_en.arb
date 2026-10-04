@@ -524,10 +524,11 @@
   "castAdNotReady": "The ad couldn’t load right now. Please try again later.",
   "castComeTomorrow": "Come back tomorrow",
   "journalLimitTitle": "You’ve reached the free limit of {count} journal entries",
-  "journalLimitBody": "Everything you’ve saved stays. Go Premium to keep adding entries without limit.",
+  "journalLimitBody": "Everything you’ve saved stays. Watch an ad to save this one, or go Premium to add entries without limit.",
   "premiumBadge": "Premium",
   "menuPremium": "Qiangua Premium",
   "menuAdPrivacy": "Ad privacy settings",
   "menuPrivacyPolicy": "Privacy policy",
+  "journalWatchAd": "Watch an ad to save this one",
   "notNow": "Not now"
 }

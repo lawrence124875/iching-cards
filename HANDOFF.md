@@ -665,7 +665,7 @@ checkout 本 repo → 以 `BUILDS_REPO_TOKEN` sparse-checkout iching-content 的
 5. 🔶【內容】其餘 9 語分批（簡中 → 日 → 韓 → 越 → 西 → 葡 → 印尼 → 泰 → 阿），各語字型（§15）與 ARB 介面同步。
    - ✅ 2026-10-05 **簡中**（0.2.0+26，run #56 ✅）：iching-content `tools/to_hans.py` 自繁中轉出 64 卦（OpenCC tw2sp＋「乾」鎖定＋大陸譯名＋標點，說明 `zh-Hans/README.md`；**繁中改動後要重跑**）；`app_zh_Hans.arb` 同一函式轉出；`AppLanguages.zhHans`（contentReady true）；字型見 §15「簡中補字」。⏳ 使用者實機確認（手機語言改簡體中文，或 force_lang=zh-Hans）。
    - ✅ **日文**（2026-10-05；**64 卦完成**，0.2.0+30 起 `contentReady: true`，run #63 ✅）：App 端（0.2.0+29）：`app_ja.arb`、`AppLanguages.ja`、JP 字型（§15）、牌面卦序用漢數字「第十五卦」、CI／import／pubspec 加 `ja`。內容格式 iching-content `ja/README.md`（**經文用書き下し文**、爻階段固定譯法、新字体；`check_translation.py ja` 擋舊字体／差別語／保證語）；64 卦全數通過檢查（約 31 萬字）。待辦：① 日文母語者審閱（33–64 的回譯抽查與審閱一起做，見 ja/README §5 附註）；② ✅ 東西相映重複名句已四語一起換（2026-10-05：37 家人→塞內卡《書信》6.5、41 損→伊比鳩魯殘篇 135；09、14 保留原句）；③ 日文商店資訊已備妥（§21.2），待使用者上傳。
-   - 🔶 **韓文**（2026-10-05 起）：App 端完成（0.2.0+32）：`app_ko.arb`、`AppLanguages.ko`（**contentReady false**，64 卦寫完才改 true）、KR 字型（§15）、牌面卦序「제15괘」（ARB `cardOrdinal`）、CI／import／pubspec 加 `ko`、截圖測試加韓文卦記範例。內容格式 iching-content `ko/README.md`（**經文用現代韓文翻譯**、漢字只放括號內、半形標點、爻階段固定譯法；`check_translation.py ko` 擋括號外漢字／日式標點／비하어／保證語／무속字眼）。進度看 `ko/README.md` §5。測試：Run workflow `force_lang=ko`。
+   - ✅ **韓文**（2026-10-05；**64 卦完成**，0.2.0+33 起 `contentReady: true`）：App 端（0.2.0+32）：`app_ko.arb`、`AppLanguages.ko`、KR 字型（§15）、牌面卦序「제15괘」（ARB `cardOrdinal`）、CI／import／pubspec 加 `ko`、截圖測試加韓文卦記範例。內容格式 iching-content `ko/README.md`（**經文用現代韓文翻譯**、漢字只放括號內、半形標點、爻階段固定譯法；`check_translation.py ko` 擋括號外漢字／日式標點／비하어／保證語／무속字眼）；64 卦全數通過檢查（約 38.5 萬字），每卦回譯抽查與保守處理記在 ko/README §5。待辦：① 韓文母語者審閱；② 使用者實機測試（手機語言改韓文，或 Run workflow `force_lang=ko`）；③ 韓文商店文案（store/listing-ko.md）、主題圖片、截圖（`SCREENSHOT_LANG=ko`）未做。
 6. 🔶 2026-10-04 程式完成（0.2.0+23，§23），等使用者建 AdMob／RevenueCat／Play 訂閱與 Secrets；正式版申請。
 7. 之後：iOS（§9.1，需另決定 Apple 年費）。
 
@@ -688,7 +688,7 @@ checkout 本 repo → 以 `BUILDS_REPO_TOKEN` sparse-checkout iching-content 的
 
 - 2026-10-05（第七個對話，續）：重複名句四語一起換（37、41），升 0.2.0+31 建置帶入新內容。⚠️ 使用者要求：**與使用者對話一律用繁體中文**。
 
-- 2026-10-05（第八個對話）：§19.2 第 5 項韓文。App 端 0.2.0+32（run #65 ✅）；內容依 ko/README 撰寫（以繁中為準、日文版的保守處理為參考，經文自譯現代韓文），每卦跑 `check_translation.py ko`、每 3 卦 commit。草稿流程：在 scratchpad 寫只含內容欄位的 JSON，再用 iching-content `tools/ko_fill.py NN 草稿路徑` 從術語表／繁中補 id、name、爻名、stage 等固定欄位並跑檢查。進度看 ko/README §5（01–45 ✅）。使用者會另找時間實機測試（+31 日文、+32 之後韓文）。
+- 2026-10-05（第八個對話）：§19.2 第 5 項韓文。App 端 0.2.0+32（run #65 ✅）；內容依 ko/README 撰寫（以繁中為準、日文版的保守處理為參考，經文自譯現代韓文），每卦跑 `check_translation.py ko`、每 3 卦 commit。草稿流程：在 scratchpad 寫只含內容欄位的 JSON，再用 iching-content `tools/ko_fill.py NN 草稿路徑` 從術語表／繁中補 id、name、爻名、stage 等固定欄位並跑檢查。進度看 ko/README §5。64 卦完成後 `ko.contentReady = true`、0.2.0+33。使用者會另找時間實機測試（+31 日文、+33 韓文）。下一步：韓文商店資訊（§21.2 照日文作法）→ §19.2 第 5 項下一語（越南文）。
 
 ### 19.3 需要使用者做的事（Claude 會在對應階段提醒）
 - Firebase：確認 Analytics 即時報表看得到 `qg_reading_shown`、Crashlytics 不再「等待中」（§18.4，記得先篩選謙卦 App）。

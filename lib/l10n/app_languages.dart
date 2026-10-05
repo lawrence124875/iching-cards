@@ -67,7 +67,7 @@ class AppLanguages {
     code: 'ko',
     locale: Locale('ko'),
     contentFolder: 'ko',
-    contentReady: false, // 2026-10-05 介面完成，64 卦撰寫中（§22、iching-content ko/README.md）
+    contentReady: true, // 2026-10-05 韓文 64 卦完成（§22、iching-content ko/README.md）
   );
 
   /// 已有介面翻譯（ARB）的語言。順序無意義。

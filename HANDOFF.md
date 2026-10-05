@@ -519,6 +519,7 @@ checkout 本 repo → 以 `BUILDS_REPO_TOKEN` sparse-checkout iching-content 的
 - `theme.dart`：`kSans = 'NotoSansTC'` 為全 App 預設字族；`kSerif = 'NotoSerifTC'` 用於卦名、經文、標題。
 - ⚠️ **多語言時**：日、韓、泰、阿拉伯文等不在這兩個字型內，需要時再加對應的 Noto 字型（同樣子集化），或交給系統字體。
 - **簡中補字（2026-10-05，0.2.0+26）**：Noto Sans TC 缺約 1,000 個簡體字（例：图、详、问），交給系統字體會混字型。做法：再打包 **Noto Sans SC 400／500、Noto Serif SC 400**，但只收「GB2312 一級字＋實際用到的字」中 **TC 沒有的**（約 1,075 字，每檔 0.3–0.4 MB）；`theme.dart` 以 `fontFamilyFallback`（`kSansFallback`／`kSerifFallback`）接在 TC 後面——同一套思源設計，字形一致。⚠️ 之後任何 `fontFamily: kSerif` 都要同時帶 `fontFamilyFallback: kSerifFallback`（`copyWith` 會沿用黑體的 fallback）。CI cache key 改 `noto-tc-sc-9710da1e`。
+- **日文字型（2026-10-05，0.2.0+29）**：日文介面要用日本字形（TC 的「直、骨、角」等字形與日文不同），所以日文**不是 fallback，而是換主字型**：`theme.dart` 的 `AppFonts`（`chinese`＝TC 為主＋SC 補；`japanese`＝**Noto Sans/Serif JP 為主**＋TC、SC 補），`app.dart` 的 `builder` 依 `Localizations.localeOf` 選字族並重建主題（`AppFonts.current`；`kSerif`／`kSans` 改為 getter）。**經文漢字原文一律用 `AppFonts.chinese`**（那是中文經文）。子集：JIS 第一水準＋假名＋日文內容與 `app_ja.arb` 用到的字（約 4,000 字，Sans 400/500 各 1.4 MB、Serif 1.98 MB）。CI cache key `noto-tc-sc-jp-9710da1e`。
 - ✅ 2026-10-03 使用者實機確認 run #33 字體沒問題，首頁仍一屏顯示完。
 
 ### 15.1 置中提示語的寫法（2026-10-03 使用者決定，0.1.0+18）
@@ -661,7 +662,7 @@ checkout 本 repo → 以 `BUILDS_REPO_TOKEN` sparse-checkout iching-content 的
 4. ✅ 2026-10-05 完成【內容】英文版 64 卦（重新為英文讀者撰寫，非逐句翻譯；§12）：`check_translation.py en` 64 卦 OK、約 15.1 萬字；`en.contentReady = true`（0.2.0+24，run #53 正式版）；回譯抽查與名句來源記在 iching-content `en/README.md` §5。英文商店資訊、主題圖片已完成，截圖等使用者實機截圖（§21.2）。
 5. 🔶【內容】其餘 9 語分批（簡中 → 日 → 韓 → 越 → 西 → 葡 → 印尼 → 泰 → 阿），各語字型（§15）與 ARB 介面同步。
    - ✅ 2026-10-05 **簡中**（0.2.0+26，run #56 ✅）：iching-content `tools/to_hans.py` 自繁中轉出 64 卦（OpenCC tw2sp＋「乾」鎖定＋大陸譯名＋標點，說明 `zh-Hans/README.md`；**繁中改動後要重跑**）；`app_zh_Hans.arb` 同一函式轉出；`AppLanguages.zhHans`（contentReady true）；字型見 §15「簡中補字」。⏳ 使用者實機確認（手機語言改簡體中文，或 force_lang=zh-Hans）。
-   - 下一語：日文（需 Noto Sans/Serif JP 字型、依 §22 格式重寫）。
+   - 🔶 **日文**（2026-10-05 起）：App 端完成（0.2.0+29）：`app_ja.arb`、`AppLanguages.ja`（**contentReady false**，64 卦寫完才改 true）、JP 字型（§15）、牌面卦序用漢數字「第十五卦」、CI／import／pubspec 加 `ja`。內容格式 iching-content `ja/README.md`（**經文用書き下し文**、爻階段固定譯法、新字体；`check_translation.py ja` 擋舊字体／差別語／保證語）。進度看 `ja/README.md` §5。測試：Run workflow `force_lang=ja`。
 6. 🔶 2026-10-04 程式完成（0.2.0+23，§23），等使用者建 AdMob／RevenueCat／Play 訂閱與 Secrets；正式版申請。
 7. 之後：iOS（§9.1，需另決定 Apple 年費）。
 

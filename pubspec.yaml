@@ -1,7 +1,7 @@
 name: iching_cards
 description: "謙卦｜易經六十四卦卡（LC Lab）"
 publish_to: 'none'
-version: 0.2.0+28
+version: 0.2.0+29
 
 environment:
   sdk: '>=3.4.0 <4.0.0'
@@ -44,6 +44,7 @@ flutter:
     - assets/content/zh-Hant/
     - assets/content/en/
     - assets/content/zh-Hans/
+    - assets/content/ja/
     - assets/cards/
     - assets/licenses/
 
@@ -67,3 +68,12 @@ flutter:
     - family: NotoSerifSC
       fonts:
         - asset: assets/fonts/NotoSerifSC-400.ttf
+    # 日文介面的主字型（日本字形，HANDOFF §15）
+    - family: NotoSansJP
+      fonts:
+        - asset: assets/fonts/NotoSansJP-400.ttf
+        - asset: assets/fonts/NotoSansJP-500.ttf
+          weight: 500
+    - family: NotoSerifJP
+      fonts:
+        - asset: assets/fonts/NotoSerifJP-400.ttf

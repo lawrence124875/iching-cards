@@ -42,6 +42,7 @@ jobs:
             zh-Hant
             en
             zh-Hans
+            ja
             images/webp
             glossary
 
@@ -64,7 +65,7 @@ jobs:
         uses: actions/cache@v4
         with:
           path: _fonts_src
-          key: noto-tc-sc-9710da1e
+          key: noto-tc-sc-jp-9710da1e
 
       - name: 產生字型子集
         env:
@@ -77,6 +78,8 @@ jobs:
           [ -s "_fonts_src/NotoSerifTC[wght].ttf" ] || curl -fsSL -o "_fonts_src/NotoSerifTC[wght].ttf" "${base}/notoseriftc/NotoSerifTC%5Bwght%5D.ttf"
           [ -s "_fonts_src/NotoSansSC[wght].ttf" ] || curl -fsSL -o "_fonts_src/NotoSansSC[wght].ttf" "${base}/notosanssc/NotoSansSC%5Bwght%5D.ttf"
           [ -s "_fonts_src/NotoSerifSC[wght].ttf" ] || curl -fsSL -o "_fonts_src/NotoSerifSC[wght].ttf" "${base}/notoserifsc/NotoSerifSC%5Bwght%5D.ttf"
+          [ -s "_fonts_src/NotoSansJP[wght].ttf" ] || curl -fsSL -o "_fonts_src/NotoSansJP[wght].ttf" "${base}/notosansjp/NotoSansJP%5Bwght%5D.ttf"
+          [ -s "_fonts_src/NotoSerifJP[wght].ttf" ] || curl -fsSL -o "_fonts_src/NotoSerifJP[wght].ttf" "${base}/notoserifjp/NotoSerifJP%5Bwght%5D.ttf"
           pip install --quiet fonttools==4.62.1
           python3 scripts/build_fonts.py _fonts_src assets/fonts
 

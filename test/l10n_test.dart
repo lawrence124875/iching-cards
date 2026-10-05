@@ -116,11 +116,19 @@ void main() {
     });
   });
 
+  test('日文：手機語言日文且日文開放時用日文；未開放時用英文', () {
+    final withJa = [AppLanguages.zhHant, AppLanguages.en, AppLanguages.zhHans, AppLanguages.ja];
+    expect(AppLanguages.resolve([const Locale('ja', 'JP')], available: withJa), AppLanguages.ja);
+    expect(AppLanguages.resolve([const Locale('ja', 'JP')], available: [AppLanguages.zhHant, AppLanguages.en]),
+        AppLanguages.en);
+  });
+
   group('翻譯內容', () {
     test('每個語言都能載入，App 名稱正確', () {
       expect(lookupAppLocalizations(AppLanguages.zhHant.locale).appTitle, '謙卦');
       expect(lookupAppLocalizations(AppLanguages.en.locale).appTitle, 'Qiangua');
       expect(lookupAppLocalizations(AppLanguages.zhHans.locale).appTitle, '谦卦');
+      expect(lookupAppLocalizations(AppLanguages.ja.locale).appTitle, '謙卦');
     });
 
     test('單複數與 select', () {

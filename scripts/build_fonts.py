@@ -34,6 +34,34 @@ SC_WEIGHTS = [
     ("NotoSerifSC[wght].ttf", "NotoSerifSC", 400, "NotoSerifTC[wght].ttf"),
 ]
 
+# 日文介面的主字型（2026-10-05，HANDOFF §15）：theme.dart 的 AppFonts.japanese 以 JP 為主、TC／SC 為 fallback。
+# 收 JIS 第一水準漢字（2,965 字）＋假名、全形符號＋日文內容與介面實際用到的字＋英數標點。
+JP_WEIGHTS = [
+    ("NotoSansJP[wght].ttf", "NotoSansJP", 400),
+    ("NotoSansJP[wght].ttf", "NotoSansJP", 500),
+    ("NotoSerifJP[wght].ttf", "NotoSerifJP", 400),
+]
+
+
+def jis_level1() -> set[str]:
+    """JIS X 0208 非漢字（第 1–8 區：符號、全形英數、假名）＋第一水準漢字（第 16–47 區），以 EUC-JP 解碼。"""
+    out = set()
+    for hi in list(range(0xA1, 0xA9)) + list(range(0xB0, 0xD0)):
+        for lo in range(0xA1, 0xFF):
+            try:
+                out.add(bytes([hi, lo]).decode("euc_jp"))
+            except UnicodeDecodeError:
+                pass
+    return out
+
+
+def used_chars_ja(root: pathlib.Path) -> set[str]:
+    chars = set()
+    for pattern in ("assets/content/ja/*.json", "lib/l10n/app_ja.arb"):
+        for f in root.glob(pattern):
+            chars.update(f.read_text(encoding="utf-8"))
+    return chars
+
 
 def gb2312_level1() -> set[str]:
     """GB2312 一級常用漢字（0xB0A1–0xD7F9）——簡中使用者輸入「想問的事」用得到。"""
@@ -121,6 +149,29 @@ def main() -> None:
         path = out / f"{family}-{wght}.ttf"
         font.save(path)
         print(f"{path.name}：補 {len(missing)} 字，{path.stat().st_size / 1e6:.2f} MB")
+
+    jp = jis_level1() | used_chars_ja(root)
+    for a, b in ranges:
+        jp.update(chr(c) for c in range(a, b + 1))
+    jp.update(chr(c) for c in range(0x3040, 0x3100))  # 平假名、片假名全部
+    jp_codepoints = {ord(c) for c in jp if ord(c) >= 0x20}
+    for fname, family, wght in JP_WEIGHTS:
+        if not (src / fname).exists():
+            raise SystemExit(f"缺少 {fname}")
+        if fname not in cache:
+            cache[fname] = TTFont(src / fname)
+        font = instancer.instantiateVariableFont(cache[fname], {"wght": wght}, inplace=False)
+        opts = subset.Options()
+        opts.layout_features = ["*"]
+        opts.name_IDs = ["*"]
+        opts.notdef_outline = True
+        opts.hinting = False
+        sub = subset.Subsetter(opts)
+        sub.populate(unicodes=jp_codepoints)
+        sub.subset(font)
+        path = out / f"{family}-{wght}.ttf"
+        font.save(path)
+        print(f"{path.name}：{len(jp_codepoints)} 字，{path.stat().st_size / 1e6:.2f} MB")
 
 
 if __name__ == "__main__":

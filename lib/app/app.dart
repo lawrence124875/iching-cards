@@ -68,6 +68,12 @@ class _IchingAppState extends State<IchingApp> {
         return lang.locale;
       },
       theme: buildTheme(),
+      // 字族依介面語言（日文用思源 JP，HANDOFF §15）：Localizations 決定語言後才知道，所以在 builder 換主題。
+      builder: (context, child) {
+        final fonts = AppFonts.forLanguage(Localizations.localeOf(context).languageCode);
+        AppFonts.current = fonts;
+        return Theme(data: buildTheme(fonts), child: child!);
+      },
       home: const HomePage(),
     );
   }

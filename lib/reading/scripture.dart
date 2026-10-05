@@ -19,7 +19,7 @@ class Scripture extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(original,
-            style: TextStyle(fontFamily: kSerif, fontFamilyFallback: kSerifFallback, fontSize: 14.5, height: 1.7, color: QianColors.textSub)),
+            style: TextStyle(fontFamily: AppFonts.chinese.serif, fontFamilyFallback: AppFonts.chinese.serifFallback, fontSize: 14.5, height: 1.7, color: QianColors.textSub)),
         const SizedBox(height: 4),
         Text(text, style: body),
       ],

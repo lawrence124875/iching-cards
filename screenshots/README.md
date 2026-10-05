@@ -25,4 +25,6 @@ python3 ../iching-content/store/screenshots-en/make.py /tmp/shots/raw-*.png
 ```
 
 改了畫面、內容或順序：改 `store_screenshots_test.dart`（順序與 make.py 的 ITEMS 一致），重跑 2、3。
-其他語言：測試裡的 `Locale`、`L10n.language` 換成該語言即可，標題文字在對應的 make.py。
+其他語言：加 `SCREENSHOT_LANG=<語言代碼>`（zh-Hant、zh-Hans、ja…），排版用 iching-content
+`store/screenshots-<語言>/make.py`（標題文字與字型在裡面）。卦記範例的想問的事與回顧文字在測試的 `_sampleText`，新語言要加一份。
+已做：en（screenshots-en）、zh-Hans（screenshots-zh-Hans）。

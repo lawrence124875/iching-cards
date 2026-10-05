@@ -752,7 +752,7 @@ checkout 本 repo → 以 `BUILDS_REPO_TOKEN` sparse-checkout iching-content 的
 - 2026-10-05 使用者已完成：run #59（0.2.0+28，測試廣告、訂閱未開放）上傳**內部測試**；前景服務權限聲明重交；內容分級重做（可購買數位商品＝是）；資料安全性（裝置 ID 分享＝是／廣告或行銷、大概位置加廣告或行銷、新增購買記錄）；廣告 ID 加廣告或行銷；商店資訊新增英文、簡中（zh-CN，`store/listing-zh-Hans.md`、`feature-graphic-zh-Hans-1024x500.png`、`screenshots-zh-Hans/`），繁簡英完整說明加「免費下載，會員可選」段。版本資訊見 `store/release-notes/`（封閉測試用的版本寫明「測試廣告、會員即將開放」）。
 - 日文商店資訊（2026-10-05）：✅ `store/listing-ja.md`（名稱「謙卦：易経・六十四卦カード」，不加讀音以免與「喧嘩」同音）、✅ `feature-graphic-ja-1024x500.png`、✅ `screenshots-ja/`（`SCREENSHOT_LANG=ja` 渲染）；版本資訊 `0.2.0+30.txt` 加 `<ja-JP>`。使用者上傳：管理翻譯 → 新增日本語（ja-JP），圖像在日文的圖像區另外上傳。建議上架前請日文母語者看過。
 - 韓文商店資訊（2026-10-05）：✅ `store/listing-ko.md`（名稱「겸괘: 주역 64괘 카드」13 字、簡短說明 51 字、完整說明 1910 字；「운세」只用在否定句，不用 적중／개운／부적 等字眼）、✅ `feature-graphic-ko-1024x500.png`（`feature_graphic_ko.py`）、✅ `screenshots-ko/`（`SCREENSHOT_LANG=ko` 渲染）；版本資訊 `0.2.0+33.txt` 加 `<ko-KR>`。⚠️ run #66 建置時 `0.2.0+33.txt` 還沒進 iching-content，所以 Release 說明顯示「尚未撰寫」——**版本資訊直接從 `store/release-notes/0.2.0+33.txt` 複製**。使用者上傳：管理翻譯 → 新增 한국어（ko-KR），圖像在韓文的圖像區另外上傳。
-- 2026-10-05：使用者要把 run #66（0.2.0+33，測試廣告）AAB 上傳封閉測試，開始付費外部測試 14 天。
+- 2026-10-05：✅ 使用者實機測過 run #66（0.2.0+33）各語言沒問題，將 AAB 上傳封閉測試，開始付費外部測試 14 天。
 - **封閉測試建議**：審過後把 #59 從內部測試「升級版本」到封閉測試－外部測試，付費測試者全程用**測試廣告**版（避免真實廣告無效流量）；正式廣告版等 14 天結束、申請正式版時再上傳。
 - 下一步：§23.3 四個平台（AdMob → Play 訂閱 → RevenueCat → 5 個 Secrets），使用者截圖、Claude 逐欄回覆並**附操作路徑**。
 

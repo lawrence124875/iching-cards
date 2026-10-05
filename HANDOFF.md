@@ -694,6 +694,7 @@ checkout 本 repo → 以 `BUILDS_REPO_TOKEN` sparse-checkout iching-content 的
 
 **Claude 已完成**
 - **隱私權政策**：本 repo `docs/privacy.html`（繁中＋英文，同一頁；謙卦玄底配色，淺色模式自動切換）、`docs/index.html`（簡單首頁）。網址（開 Pages 後）：`https://lawrence124875.github.io/iching-cards/privacy.html`，資料刪除段落 `#data-deletion`。內容依 0.1.0+21 實際行為：卦記與想問的事只在本機；Firebase Analytics（`qg_` 事件與參數，§18）、Crashlytics、Remote Config；廣告 ID 權限（目前無廣告）；通知／準時鬧鐘／前景服務的用途；不適合 13 歲以下；非專業建議。⚠️ 加廣告、付費、Firestore、新統計事件或新權限時**必須先改這頁**。`docs/**` 不觸發建置。
+- **LC Lab 開發者首頁**（2026-10-05）：repo `lawrence124875/lawrence124875.github.io`（使用者站台）根目錄 `index.html`，網址 `https://lawrence124875.github.io/`（Play Console 帳戶網站已填這個）。兩張 App 卡片（智慧聽覺巡航、謙卦）各連隱私權政策；同 repo 根目錄 `app-ads.txt` 與英文 App 共用，**內容不可改動或刪除**。⚠️ **正式上架後回來補 Play 商店連結**：卡片目前是「Google Play 即將推出」佔位（封閉測試期間非測試者點開會找不到），謙卦連結 `https://play.google.com/store/apps/details?id=com.lclab.qiangua`（已寫在 index.html 註解）。
 - **商店素材**（私人 repo iching-content `store/`，含牌面圖所以不放公開 repo）：
   - `listing-zh-Hant.md`：名稱「謙卦｜易經六十四卦卡」、簡短說明、完整說明、類別建議（生活品味）、網址。
   - `feature-graphic-1024x500.png`：主題圖片（謙卦大字＋謙、艮、泰三張牌面）；`icon-512.png`：商店圖示。重產：Pillow 腳本寫法見本節末。

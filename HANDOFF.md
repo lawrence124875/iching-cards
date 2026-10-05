@@ -740,6 +740,10 @@ checkout 本 repo → 以 `BUILDS_REPO_TOKEN` sparse-checkout iching-content 的
 - 下一版（含 AdMob＋訂閱）送審前必改：iching-content `store/PLAY_CONSOLE.md` §5（6 項）＋商店完整說明補「含廣告、可訂閱」＋AI 素材聲明若新增素材再標。
 - 英文商店資訊（2026-10-05）：✅ `store/listing-en.md`、✅ `store/feature-graphic-en-1024x500.png`；✅ 截圖 8 張 `store/screenshots-en/screenshot-01～08.png`（1080×1920）——**不再用手機截圖**：本 repo `screenshots/store_screenshots_test.dart` 以 widget test 渲染 App 真實畫面（英文、會員、1080×2400／密度 2.625、打包的思源字型、正式內容與牌面；照使用者操作點按鈕走到各畫面，亂數固定所以每次相同），再跑 make.py 排版。步驟見 `screenshots/README.md`（約 15 秒）。原始畫面含私人內容，輸出放 repo 外。其他語言照同一支測試換 Locale。AI 素材聲明：截圖 01、07 含 Gemini 牌面要標 AI。⚠️ 已知外觀：英文內文的 “ ” ’ 用思源（CJK 全形）字形，前後空白較寬，實機相同，日後可評估補一個拉丁字型。上傳位置：Play Console 主要商店資訊 → 管理翻譯 → 新增 English (United States)，英文圖像要在該語言的圖像區另外上傳（未上傳會顯示繁中圖）。
 
+- 2026-10-05 使用者已完成：run #59（0.2.0+28，測試廣告、訂閱未開放）上傳**內部測試**；前景服務權限聲明重交；內容分級重做（可購買數位商品＝是）；資料安全性（裝置 ID 分享＝是／廣告或行銷、大概位置加廣告或行銷、新增購買記錄）；廣告 ID 加廣告或行銷；商店資訊新增英文、簡中（zh-CN，`store/listing-zh-Hans.md`、`feature-graphic-zh-Hans-1024x500.png`、`screenshots-zh-Hans/`），繁簡英完整說明加「免費下載，會員可選」段。版本資訊見 `store/release-notes/`（封閉測試用的版本寫明「測試廣告、會員即將開放」）。
+- **封閉測試建議**：審過後把 #59 從內部測試「升級版本」到封閉測試－外部測試，付費測試者全程用**測試廣告**版（避免真實廣告無效流量）；正式廣告版等 14 天結束、申請正式版時再上傳。
+- 下一步：§23.3 四個平台（AdMob → Play 訂閱 → RevenueCat → 5 個 Secrets），使用者截圖、Claude 逐欄回覆並**附操作路徑**。
+
 ## 23. 廣告與訂閱（2026-10-04，0.2.0+23，run #44 建置成功）
 
 依 §21.1 定案實作；**尚未上傳 Play**（封閉測試仍為 22）。送正式版前必須同時改 iching-content `store/PLAY_CONSOLE.md` §5 的 6 項。

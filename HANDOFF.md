@@ -693,6 +693,7 @@ checkout 本 repo → 以 `BUILDS_REPO_TOKEN` sparse-checkout iching-content 的
 - **翻譯原則（2026-10-05 使用者指示，所有非中文語言適用）**：使用者沒有中文以外的母語測試者，**不要請使用者看譯文內容**。Claude 全權負責謹慎翻譯與檢核：① 不可有不文雅、冒犯、迷信或保證語（各語 `check_translation.py` 黑名單＋逐卦回譯抽查）；② **經文（卦辭、彖、象、爻辭、小象）以市面通行版本為準**（通行本《周易》文字、程頤／朱熹的通行解讀；日文用通行書き下し、韓文依傳統諺解／《周易傳義》讀法譯成現代韓文），不可因翻譯偏離通行版本；有異說時並列或取通行說。使用者只測**功能是否正常、版面是否跑掉**。
 - 2026-10-05（第八個對話）：§19.2 第 5 項韓文。App 端 0.2.0+32（run #65 ✅）；內容依 ko/README 撰寫（以繁中為準、日文版的保守處理為參考，經文自譯現代韓文），每卦跑 `check_translation.py ko`、每 3 卦 commit。草稿流程：在 scratchpad 寫只含內容欄位的 JSON，再用 iching-content `tools/ko_fill.py NN 草稿路徑` 從術語表／繁中補 id、name、爻名、stage 等固定欄位並跑檢查。進度看 ko/README §5。64 卦完成後 `ko.contentReady = true`、0.2.0+33。使用者會另找時間實機測試（+31 日文、+33 韓文）。下一步：韓文商店資訊（§21.2 照日文作法）→ §19.2 第 5 項下一語（越南文）。
 - 2026-10-05（第九個對話）：run #66（0.2.0+33）✅，Release `謙卦 0.2.0+33（run 66）`，測試廣告；韓文商店資訊完成（§21.2）。截圖在雲端環境渲染：Flutter 用 `git clone --depth 1 -b stable https://github.com/flutter/flutter.git`，字型原檔下載到 iching-cards `_fonts_src/`（已 gitignore），其餘照 `screenshots/README.md`。下一步：越南文（計畫待使用者確認）。
+- 同一對話：使用者確認 run #66 各語言正常、上傳封閉測試；越南文經文選 A（只放意譯）。App 端 0.2.0+34（run #67）；iching-content `vi/README.md`、`check_translation.py vi`（NFC、粗話／差別語／迷信／保證／政治字眼；曾擋下：虞的漢越音「Ngu」＝笨、cam kết、bảo đảm、bùa、解讀中的 Thượng đế）、`tools/vi_fill.py`（用法同 ko_fill）。內容進度：01–24 完成（看 vi/README §5）。
 
 ### 19.3 需要使用者做的事（Claude 會在對應階段提醒）
 - Firebase：確認 Analytics 即時報表看得到 `qg_reading_shown`、Crashlytics 不再「等待中」（§18.4，記得先篩選謙卦 App）。

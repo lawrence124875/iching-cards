@@ -290,6 +290,7 @@ App 名稱與 applicationId、商業模式（廣告與付費內容）、隱私�
 ```
 
 - 檔名帶版本與 run 編號；舊 Release 定期刪除，只保留最近數個。
+- **版本詳細資訊（2026-10-05 起）**：Release 說明下方附 Play「版本資訊」，來源 iching-content `store/release-notes/<version>.txt`（`<zh-TW>`／`<en-US>`，各 ≤500 字元，寫「與 Play 上一版相比」的變化；說明見該資料夾 README）。⚠️ **每次改 pubspec version 時一併寫好該檔**，沒寫 CI 只警告。
 - 內容抓取也用同一個 Secret：`actions/checkout` 以 `repository: lawrence124875/iching-content`、`token: ${{ secrets.BUILDS_REPO_TOKEN }}` 取得解讀內容（取代原先規劃的 `CONTENT_TOKEN`，不另建）。
 - 公開 repo 的 Actions 紀錄任何人都看得到：建置步驟不可 `cat`／`echo` 內容檔或列出內容，不可印出權杖。
 - 2026-10-01 檢查：iching-cards 尚無任何 workflow，兩個 repo 的 Artifacts 與 Actions 執行紀錄皆為 0；iching-content 已有 commit（Release 需要）。

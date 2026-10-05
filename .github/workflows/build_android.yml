@@ -45,6 +45,7 @@ jobs:
             ja
             images/webp
             glossary
+            store/release-notes
 
       - uses: subosito/flutter-action@v2
         with:
@@ -197,10 +198,24 @@ jobs:
             cp "$aab" "iching_${ver}_run${n}.aab"
             files+=("iching_${ver}_run${n}.aab")
           fi
+          # 版本詳細資訊（Play「版本資訊」，HANDOFF §10.4）：iching-content store/release-notes/<版本>.txt，
+          # 已是 Play 可整段貼上的 <zh-TW>…</zh-TW> 格式；沒寫的版本註明尚未撰寫（不讓建置失敗）。
+          {
+            echo "commit ${{ github.sha }}；簽署：${SIGNING}；Firebase：${FIREBASE}；廣告：${ADS}；訂閱：${SUBS}"
+            echo
+            echo "### 版本詳細資訊（貼到 Play Console）"
+            rn="_content/store/release-notes/${ver}.txt"
+            if [ -f "$rn" ]; then
+              echo; echo '```'; cat "$rn"; echo '```'
+            else
+              echo; echo "（尚未撰寫：iching-content store/release-notes/${ver}.txt）"
+            fi
+          } > notes.md
+          [ -f "_content/store/release-notes/${ver}.txt" ] || echo "::warning::版本詳細資訊尚未撰寫：store/release-notes/${ver}.txt"
           gh release create "iching-android-run${n}" "${files[@]}" \
             --repo lawrence124875/iching-content \
             --title "謙卦 ${ver}（run ${n}）${FORCE_LANG:+［測試：介面 $FORCE_LANG］}${FORCE_PREMIUM:+［測試：會員］}" \
-            --notes "commit ${{ github.sha }}；簽署：${SIGNING}；Firebase：${FIREBASE}；廣告：${ADS}；訂閱：${SUBS}"
+            --notes-file notes.md
 
       # 依 run 編號排序：Release 的 createdAt 取自 iching-content 被標記的 commit，
       # 內容沒變時每個 Release 都相同，用它排序會誤刪最新的一個（run 6 曾發生）。

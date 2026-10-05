@@ -3,14 +3,14 @@
 // 不是示意圖：畫面全部是 App 本身的 Widget（首頁、抽卦翻牌、解讀頁、擲錢、呼吸、卦記），
 // 照使用者操作的順序點按鈕走到該畫面；字型為 App 打包的思源黑體／宋體子集（與實機相同），
 // 牌面圖與解讀為 iching-content 匯入的正式內容。只換掉手機才有的部分：
-//   - 會員（FreePremium(premium: true)，無廣告、無次數限制）、英文介面
+//   - 會員（FreePremium(premium: true)，無廣告、無次數限制）、介面語言由 SCREENSHOT_LANG 指定（預設 en）
 //   - 隨機數改成固定序列（抽到 15 謙、解讀第 1 組），每次產出相同
 //   - 呼吸音景不出聲：播放器回報固定的播放位置（吸氣中）
 //
 // 用法（需先像 CI 一樣匯入內容、產生術語表與字型子集，見 screenshots/README.md）：
-//   SCREENSHOT_OUT=/某資料夾 flutter test screenshots/store_screenshots_test.dart
+//   SCREENSHOT_OUT=/某資料夾 [SCREENSHOT_LANG=zh-Hans] flutter test screenshots/store_screenshots_test.dart
 // 輸出 raw-01.png…raw-08.png（1080×2400，Redmi 實機比例，順序同 iching-content
-// store/screenshots-en/make.py 的 ITEMS），再交給 make.py 排版。
+// store/screenshots-<語言>/make.py 的 ITEMS），再交給 make.py 排版。
 //
 // ⚠️ 本 repo 公開：截圖含私人內容，輸出資料夾不可在本 repo 內（.gitignore 也擋 screenshots/out/）。
 
@@ -51,12 +51,14 @@ const _navBar = 190.0;
 
 void main() {
   final out = Platform.environment['SCREENSHOT_OUT'] ?? '';
+  final langCode = Platform.environment['SCREENSHOT_LANG'] ?? 'en';
 
   setUpAll(() async {
     await _loadFonts();
   });
 
-  testWidgets('商店截圖（英文、會員）', (tester) async {
+  testWidgets('商店截圖（會員）', (tester) async {
+    final lang = AppLanguages.byCode(langCode) ?? (throw StateError('不認得的 SCREENSHOT_LANG：$langCode'));
     if (out.isEmpty) {
       markTestSkipped('未設定 SCREENSHOT_OUT');
       return;
@@ -68,14 +70,14 @@ void main() {
       ..devicePixelRatio = _dpr
       ..padding = const FakeViewPadding(top: _statusBar, bottom: _navBar)
       ..viewPadding = const FakeViewPadding(top: _statusBar, bottom: _navBar);
-    tester.platformDispatcher.localesTestValue = const [Locale('en', 'US')];
+    tester.platformDispatcher.localesTestValue = [lang.locale];
     addTearDown(tester.view.reset);
     addTearDown(tester.platformDispatcher.clearLocalesTestValue);
-    L10n.language = AppLanguages.en;
+    L10n.language = lang;
 
     debugDisableShadows = false; // flutter_test 預設關掉陰影；實機有（測試結束前要改回，見最後）
     final journal = MemoryJournalStore();
-    await journal.save(_sampleEntry());
+    await journal.save(_sampleEntry(langCode));
     final playback = _SilentPlayback();
     final services = Services(
       content: AssetContentSource(folder: () => L10n.contentFolder),
@@ -129,7 +131,7 @@ void main() {
     }
 
     NavigatorState nav() => tester.state<NavigatorState>(find.byType(Navigator).first);
-    final en = lookupAppLocalizations(const Locale('en'));
+    final en = lookupAppLocalizations(lang.locale);
 
     // 8 首頁（最後輸出，但先截：之後都從首頁進入）
     await shot(8);
@@ -191,18 +193,20 @@ void main() {
   });
 }
 
-/// 載入 App 打包的字型（pubspec 的 fonts）與 Material 圖示字型；flutter_test 預設不載入。
+/// 載入 App 打包的字型（照 pubspec.yaml 的 fonts，新增字族不必改這裡）與 Material 圖示字型；flutter_test 預設不載入。
 Future<void> _loadFonts() async {
   Future<ByteData> file(String path) async => ByteData.sublistView(File(path).readAsBytesSync());
-  final families = {
-    'NotoSansTC': ['assets/fonts/NotoSansTC-400.ttf', 'assets/fonts/NotoSansTC-500.ttf'],
-    'NotoSerifTC': ['assets/fonts/NotoSerifTC-400.ttf'],
-    'NotoSansSC': ['assets/fonts/NotoSansSC-400.ttf', 'assets/fonts/NotoSansSC-500.ttf'],
-    'NotoSerifSC': ['assets/fonts/NotoSerifSC-400.ttf'],
-    'MaterialIcons': [
-      '${Platform.environment['FLUTTER_ROOT']}/bin/cache/artifacts/material_fonts/MaterialIcons-Regular.otf',
-    ],
-  };
+  final families = <String, List<String>>{};
+  String? family;
+  for (final line in File('pubspec.yaml').readAsLinesSync()) {
+    final f = RegExp(r'^\s*- family:\s*(\S+)').firstMatch(line);
+    final a = RegExp(r'^\s*- asset:\s*(\S+)').firstMatch(line);
+    if (f != null) family = f.group(1);
+    if (a != null && family != null) (families[family] ??= []).add(a.group(1)!);
+  }
+  families['MaterialIcons'] = [
+    '${Platform.environment['FLUTTER_ROOT']}/bin/cache/artifacts/material_fonts/MaterialIcons-Regular.otf',
+  ];
   for (final e in families.entries) {
     final loader = FontLoader(e.key);
     for (final p in e.value) {
@@ -246,24 +250,36 @@ Future<void> _scrollTo(WidgetTester tester, Finder target, {double top = 0}) asy
 }
 
 /// 卦記範例：三枚銅錢起得 46 升、九二變 → 之卦 15 謙；當時看第 1 組解讀；有一則回顧與待提醒。
-JournalEntry _sampleEntry() {
+/// 想問的事與回顧是使用者自己寫的文字，依截圖語言給一份。
+const _sampleText = {
+  'en': (
+    'Should I take on the new project at work, or keep building what I have?',
+    'I said yes, but asked to start small. The first two weeks felt like a seed under the soil: '
+        'slow, quiet progress. The changing line toward Modesty reminded me not to rush the credit.',
+  ),
+  'zh-Hant': (
+    '要接下公司的新專案，還是繼續把手上的事做紮實？',
+    '後來答應了，但先從小範圍做起。頭兩週像種子在土裡，進展慢而安靜；變爻走向謙卦，提醒我不急著爭功。',
+  ),
+  'zh-Hans': (
+    '要接下公司的新项目，还是继续把手上的事做扎实？',
+    '后来答应了，但先从小范围做起。头两周像种子在土里，进展慢而安静；变爻走向谦卦，提醒我不急着争功。',
+  ),
+};
+
+JournalEntry _sampleEntry(String lang) {
   final now = DateTime.now();
   final created = DateTime(now.year, now.month, now.day, 21, 12).subtract(const Duration(days: 12));
+  final (question, review) = _sampleText[lang] ?? _sampleText['en']!;
   return JournalEntry(
     id: 'sample',
     createdAt: created,
     methodId: 'coins',
     lineValues: const [8, 9, 7, 8, 8, 8],
-    question: 'Should I take on the new project at work, or keep building what I have?',
+    question: question,
     readingIndex: 0,
     reminderAt: DateTime(now.year, now.month, now.day, 9).add(const Duration(days: 9)),
-    followUps: [
-      FollowUp(
-        at: created.add(const Duration(days: 10)),
-        text: 'I said yes, but asked to start small. The first two weeks felt like a seed under the soil: '
-            'slow, quiet progress. The changing line toward Modesty reminded me not to rush the credit.',
-      ),
-    ],
+    followUps: [FollowUp(at: created.add(const Duration(days: 10)), text: review)],
   );
 }
 

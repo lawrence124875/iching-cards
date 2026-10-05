@@ -1,7 +1,7 @@
 # HANDOFF — 易經卦卡 App（名稱未定）
 
 > 新對話接續時請先讀本檔。本檔記錄已確定的決策、內容規格與待討論事項。
-> 最後更新：2026-10-05（簡中完成 0.2.0+26；英文 30 離～37 家人完成，下一卦 38 睽；英文測試 run #47 建置成功）。2026-10-04（**Play Console 首版設定全部填完，待使用者按「送審 14 項變更」**：封閉測試－外部測試 22 (0.1.0)（run #40 AAB，無廣告無訂閱）、177 國、測試人員名單「測試一」（需 ≥12 人連續 14 天）；應用程式內容全部完成（實填紀錄與差異見 iching-content `store/PLAY_CONSOLE.md` §5，「廣告」聲明已選「是」）；商店資訊：名稱改 ASO 版「謙卦｜易經六十四卦卡・抽卦解卦」、簡短／完整說明 ASO 版（`store/listing-zh-Hant.md`）、圖示、主題圖片、8 張截圖（`store/screenshots-zh-Hant/`，使用者 Redmi 實機截圖＋`make.py` 排版）；AI 素材聲明：主題圖片與截圖 01、02、06、07 標示 AI（Gemini 牌面），圖示不標；類別生活品味、標記：自我成長、冥想、生活品味。商業模式 §21.1；英文 01～24 完成，下一卦 25 无妄）
+> 最後更新：2026-10-05（修正 +23 起啟動閃退 0.2.0+27；簡中完成 0.2.0+26；英文 30 離～37 家人完成，下一卦 38 睽；英文測試 run #47 建置成功）。2026-10-04（**Play Console 首版設定全部填完，待使用者按「送審 14 項變更」**：封閉測試－外部測試 22 (0.1.0)（run #40 AAB，無廣告無訂閱）、177 國、測試人員名單「測試一」（需 ≥12 人連續 14 天）；應用程式內容全部完成（實填紀錄與差異見 iching-content `store/PLAY_CONSOLE.md` §5，「廣告」聲明已選「是」）；商店資訊：名稱改 ASO 版「謙卦｜易經六十四卦卡・抽卦解卦」、簡短／完整說明 ASO 版（`store/listing-zh-Hant.md`）、圖示、主題圖片、8 張截圖（`store/screenshots-zh-Hant/`，使用者 Redmi 實機截圖＋`make.py` 排版）；AI 素材聲明：主題圖片與截圖 01、02、06、07 標示 AI（Gemini 牌面），圖示不標；類別生活品味、標記：自我成長、冥想、生活品味。商業模式 §21.1；英文 01～24 完成，下一卦 25 无妄）
 
 ---
 
@@ -675,7 +675,8 @@ checkout 本 repo → 以 `BUILDS_REPO_TOKEN` sparse-checkout iching-content 的
 - 下一步：使用者貼英文截圖 → 執行 make.py；使用者貼 AdMob／RevenueCat／Play 訂閱截圖 → 依 §23.3 逐欄回覆；之後 §19.2 第 5 項（簡中起）。
 - 2026-10-05（第五個對話）：尚未收到截圖時先做 §19.2 第 5 項簡中（0.2.0+26，見該項）；英文截圖、AdMob／RevenueCat／Play 訂閱仍等使用者貼圖。
 - 同一對話：使用者回報 run #54 無法開啟——研判是**降版**（#54＝0.2.0+24，手機上已裝 +25／+26，Android 不允許裝較低的 versionCode）。⚠️ **以後測試版一律從最新 commit 重建，不要叫使用者裝舊 run**。改建 run #57（force_lang=en＋force_premium=true，0.2.0+26，✅），商店截圖用這版：無廣告橫幅、無次數限制。
-- ⚠️ 使用者回報 **run #57 點圖示立刻閃退**（#54 也打不開，兩者共同點是 force_lang=en）。#56 與 #57 的 AndroidManifest 完全相同（androguard 比對），差別只在 dart-define。使用者確認一直從 Releases 裝 APK（排除 Play 簽章不符）。⏳ 等使用者回覆：正式版 #56 能否開啟、Crashlytics 當機紀錄截圖。
+- ⚠️ 使用者回報 **run #57 點圖示立刻閃退**（#54 也打不開，兩者共同點是 force_lang=en）。#56 與 #57 的 AndroidManifest 完全相同（androguard 比對），差別只在 dart-define。使用者確認一直從 Releases 裝 APK；最後能開的是 run #40（0.1.0+22）。
+- **閃退原因已找到（2026-10-05）**：0.2.0+23 加入 AdMob，SDK 帶入 WorkManager，啟動時由 androidx.startup 以反射建立 Room 的 `WorkDatabase_Impl`；我們的 ProGuard 沒有 WorkManager／Room keep 規則，R8 把它的建構子與 RoomDatabase 父類別砍掉（androguard 檢查 run #56 APK 確認），所以 **+23～+26 正式版與測試版全部一開就閃退**（run #54 打不開也是這個原因，不是降版）。修正：`scripts/patch_ads.sh` 加入與智慧聽覺巡航相同的 WorkManager／Room 規則（沒加到會讓 CI 失敗），0.2.0+27。⚠️ **教訓**：新增原生 SDK 時，對照智慧聽覺巡航 `scripts/patch_firebase_proguard.sh` 的 keep 規則；CI 建置成功不代表能開啟，要請使用者實機確認。
 
 ### 19.3 需要使用者做的事（Claude 會在對應階段提醒）
 - Firebase：確認 Analytics 即時報表看得到 `qg_reading_shown`、Crashlytics 不再「等待中」（§18.4，記得先篩選謙卦 App）。

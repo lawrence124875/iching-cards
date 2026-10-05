@@ -42,6 +42,24 @@ if ! grep -q "revenuecat" "$PROGUARD"; then
 -dontwarn com.google.android.gms.ads.**
 RULES
 fi
+# AdMob SDK 帶入 WorkManager，App 一啟動就由 androidx.startup 初始化它的 Room 資料庫（反射建立
+# WorkDatabase_Impl）。R8 砍掉建構子與 RoomDatabase 父類別 → 「點圖示立刻閃退」
+# （0.2.0+23～+26 全部中招，2026-10-05 以 androguard 確認；智慧聽覺巡航早已有同樣規則）。
+if ! grep -q "androidx.work.impl.WorkDatabase_Impl" "$PROGUARD"; then
+  cat >> "$PROGUARD" << 'RULES'
+# WorkManager / Room（AdMob 依賴）
+-keep class * extends androidx.room.RoomDatabase { *; }
+-keep @androidx.room.Database class * { *; }
+-keep class androidx.room.** { *; }
+-keep class androidx.work.impl.WorkDatabase { *; }
+-keep class androidx.work.impl.WorkDatabase_Impl { *; }
+-keep class androidx.work.impl.** { *; }
+-keepclassmembers class * extends androidx.room.RoomDatabase { <init>(); }
+-dontwarn androidx.room.**
+-dontwarn androidx.work.**
+RULES
+fi
+grep -q "androidx.work.impl.WorkDatabase_Impl" "$PROGUARD" && echo "已加入 WorkManager／Room keep 規則" || { echo "::error::WorkManager keep 規則未加入"; exit 1; }
 if [ -n "${REVENUECAT_API_KEY:-}" ]; then
   echo "SUBS=已設定" >> "${GITHUB_ENV:-/dev/null}"
 else

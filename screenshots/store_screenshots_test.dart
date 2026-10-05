@@ -273,6 +273,10 @@ const _sampleText = {
     '회사의 새 프로젝트를 맡아야 할까, 아니면 지금 하는 일을 더 단단히 다져야 할까?',
     '결국 맡았지만 작은 범위부터 시작하기로 했다. 처음 두 주는 흙 속의 씨앗처럼 더디고 조용히 나아갔다. 변효가 겸괘로 향하는 것을 보고 공을 서두르지 말자고 다시 떠올렸다.',
   ),
+  'vi': (
+    'Có nên nhận dự án mới ở công ty, hay tiếp tục làm thật vững việc đang có?',
+    'Cuối cùng tôi đã nhận, nhưng bắt đầu từ phạm vi nhỏ. Hai tuần đầu như hạt giống trong đất, tiến chậm và lặng lẽ. Thấy hào động hướng về quẻ Khiêm, tôi tự nhắc mình đừng vội tranh công.',
+  ),
 };
 
 JournalEntry _sampleEntry(String lang) {

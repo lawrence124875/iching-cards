@@ -130,6 +130,13 @@ void main() {
         AppLanguages.en);
   });
 
+  test('越南文：手機語言越南文且越南文開放時用越南文；未開放時用英文', () {
+    final withVi = [AppLanguages.zhHant, AppLanguages.en, AppLanguages.vi];
+    expect(AppLanguages.resolve([const Locale('vi', 'VN')], available: withVi), AppLanguages.vi);
+    expect(AppLanguages.resolve([const Locale('vi', 'VN')], available: [AppLanguages.zhHant, AppLanguages.en]),
+        AppLanguages.en);
+  });
+
   group('翻譯內容', () {
     test('每個語言都能載入，App 名稱正確', () {
       expect(lookupAppLocalizations(AppLanguages.zhHant.locale).appTitle, '謙卦');
@@ -137,6 +144,7 @@ void main() {
       expect(lookupAppLocalizations(AppLanguages.zhHans.locale).appTitle, '谦卦');
       expect(lookupAppLocalizations(AppLanguages.ja.locale).appTitle, '謙卦');
       expect(lookupAppLocalizations(AppLanguages.ko.locale).appTitle, '겸괘');
+      expect(lookupAppLocalizations(AppLanguages.vi.locale).appTitle, 'Quẻ Khiêm');
     });
 
     test('單複數與 select', () {

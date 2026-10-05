@@ -44,6 +44,7 @@ jobs:
             zh-Hans
             ja
             ko
+            vi
             images/webp
             glossary
             store/release-notes

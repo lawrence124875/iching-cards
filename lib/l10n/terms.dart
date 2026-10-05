@@ -74,7 +74,7 @@ extension IchingTerms on AppLocalizations {
 
   String phase(BreathPhase p) => breathPhase(p.name);
 
-  /// 牌面卦序：中文、日文「第十五卦」，其他語言用阿拉伯數字（ARB cardOrdinal：No. 15、제15괘）。
+  /// 牌面卦序：中文、日文「第十五卦」，其他語言用阿拉伯數字（ARB cardOrdinal：No. 15、제15괘、Quẻ 15）。
   String cardNumber(int n) => cardOrdinal(isChinese || glossaryCode == 'ja' ? chineseOrdinal(n) : '$n');
 
   String methodName(String methodId) => methodId == 'coins' ? methodCoins : methodDraw;

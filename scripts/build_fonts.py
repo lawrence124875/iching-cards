@@ -136,6 +136,10 @@ def main() -> None:
     ranges = [(0x20, 0x7E), (0xA0, 0xFF), (0x2000, 0x206F), (0x3000, 0x303F), (0xFF00, 0xFFEF)]
     for a, b in ranges:
         chars.update(chr(c) for c in range(a, b + 1))
+    # 越南文（2026-10-05，HANDOFF §15）：用 TC 的拉丁字形，收全部越南字母（使用者輸入「想問的事」用得到）：
+    # Latin Extended-A（ă đ ĩ ũ）、ơ ư、Latin Extended Additional（ạ…ỹ）、組合附加符號（部分輸入法送分解形式）。
+    for a, b in [(0x100, 0x17F), (0x1A0, 0x1B0), (0x300, 0x323), (0x1EA0, 0x1EF9)]:
+        chars.update(chr(c) for c in range(a, b + 1))
     codepoints = {ord(c) for c in chars if ord(c) >= 0x20}
     print(f"子集字數：{len(codepoints)}")
 

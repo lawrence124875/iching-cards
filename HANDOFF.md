@@ -688,7 +688,7 @@ checkout 本 repo → 以 `BUILDS_REPO_TOKEN` sparse-checkout iching-content 的
 
 - 2026-10-05（第七個對話，續）：重複名句四語一起換（37、41），升 0.2.0+31 建置帶入新內容。⚠️ 使用者要求：**與使用者對話一律用繁體中文**。
 
-- 2026-10-05（第八個對話）：§19.2 第 5 項韓文。App 端 0.2.0+32（run #65 ✅）；內容依 ko/README 撰寫（以繁中為準、日文版的保守處理為參考，經文自譯現代韓文），每卦跑 `check_translation.py ko`、每 3 卦 commit。草稿流程：在 scratchpad 寫只含內容欄位的 JSON，再用 iching-content `tools/ko_fill.py NN 草稿路徑` 從術語表／繁中補 id、name、爻名、stage 等固定欄位並跑檢查。進度看 ko/README §5（01–30 ✅，約 17.8 萬字）。使用者會另找時間實機測試（+31 日文、+32 之後韓文）。
+- 2026-10-05（第八個對話）：§19.2 第 5 項韓文。App 端 0.2.0+32（run #65 ✅）；內容依 ko/README 撰寫（以繁中為準、日文版的保守處理為參考，經文自譯現代韓文），每卦跑 `check_translation.py ko`、每 3 卦 commit。草稿流程：在 scratchpad 寫只含內容欄位的 JSON，再用 iching-content `tools/ko_fill.py NN 草稿路徑` 從術語表／繁中補 id、name、爻名、stage 等固定欄位並跑檢查。進度看 ko/README §5（01–45 ✅）。使用者會另找時間實機測試（+31 日文、+32 之後韓文）。
 
 ### 19.3 需要使用者做的事（Claude 會在對應階段提醒）
 - Firebase：確認 Analytics 即時報表看得到 `qg_reading_shown`、Crashlytics 不再「等待中」（§18.4，記得先篩選謙卦 App）。

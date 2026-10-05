@@ -763,7 +763,7 @@ checkout 本 repo → 以 `BUILDS_REPO_TOKEN` sparse-checkout iching-content 的
 
 ## 23. 廣告與訂閱（2026-10-04，0.2.0+23，run #44 建置成功）
 
-依 §21.1 定案實作；**尚未上傳 Play**（封閉測試仍為 22）。送正式版前必須同時改 iching-content `store/PLAY_CONSOLE.md` §5 的 6 項。
+依 §21.1 定案實作；後台設定 2026-10-05 完成（§23.4）。送正式版前必須同時改 iching-content `store/PLAY_CONSOLE.md` §5 的 6 項。
 
 **架構（§9）**：畫面只認介面 `lib/core/monetization/`（`AdService`／`NoAds`、`PremiumService`／`FreePremium`、`InterstitialPacer`、`FreeLimits`、`CastQuota`）。AdMob 只在 `lib/core/admob/admob_ads.dart`，RevenueCat 只在 `lib/core/revenuecat/revenuecat_premium.dart`。畫面元件在 `lib/shared/premium/`（`paywall_page.dart` 訂閱頁、`cast_gate.dart` 起卦前檢查、`ad_banner.dart`）。`main.dart`：Firebase → `FreeLimits.from(Remote Config)` → `RevenueCatPremium.init()` → `AdMobAds.create()`；訂閱狀態改變即 `ads.enabled = !premium`；runApp 後才 `ads.start()`（UMP 同意表單→初始化 SDK，只執行一次）。
 
@@ -785,12 +785,21 @@ checkout 本 repo → 以 `BUILDS_REPO_TOKEN` sparse-checkout iching-content 的
 ### 23.2 CI 與 Secrets（iching-cards，皆未設定時自動用 Google 測試 ID、訂閱頁顯示「尚未開放」）
 `ADMOB_APP_ID`（`scripts/patch_ads.sh` 寫入 Manifest；沒有會閃退，所以預設測試 App ID）、`ADMOB_BANNER_AD_UNIT_ID`、`ADMOB_INTERSTITIAL_AD_UNIT_ID`、`ADMOB_REWARDED_AD_UNIT_ID`、`REVENUECAT_ANDROID_API_KEY`（goog_ 開頭）。Release 說明顯示「廣告：測試廣告／正式廣告單元；訂閱：已設定／未設定」。workflow 新增輸入 `force_premium`（填 true＝會員測試版，只建 APK）。
 
-### 23.3 待使用者做
-1. AdMob：新增 App 謙卦、三個廣告單元（橫幅、插頁、獎勵）、封鎖敏感類別、「隱私權與訊息」建立 GDPR 訊息。
-2. RevenueCat：**另開專案「謙卦」**（不與英文 App 共用），加 Play App `com.lclab.qiangua`、Entitlement `premium`、Offering 放 Monthly／Annual Package；Play 服務帳戶憑證。
-3. Play Console：付款資料；上傳含帳單程式庫的版本後建立訂閱 `qg_premium_monthly`、`qg_premium_yearly`（價格待使用者決定；英文 App 為 NT$149／999）。
-4. 設好 5 個 Secrets → 重建 → 實機測試（訂閱用 Play 授權測試帳號）。
-5. 隱私權政策已於 2026-10-04 更新（AdMob、Play 結帳、RevenueCat）。
+### 23.3 待使用者做（2026-10-05 更新）
+1. ✅ AdMob：App 謙卦與三個廣告單元已建（ID 已設進 Secrets）。封鎖敏感類別、GDPR 訊息本次紀錄未提，之後再確認。
+2. ✅ RevenueCat：另開專案 qiangua 完成（見 §23.4）。
+3. ✅ Play Console：訂閱 `qg_premium_monthly`、`qg_premium_yearly` 已建立並啟用（見 §23.4）。
+4. 🔶 5 個 Secrets 已設齊 → 待正式建置（不填 force_lang／force_premium）→ 實機測試（訂閱用 Play 授權測試帳號）。
+5. ✅ 隱私權政策已於 2026-10-04 更新（AdMob、Play 結帳、RevenueCat）。
+6. ⏳ RevenueCat 商品目前顯示 Could not check：Google 權限同步最長約 36 小時，憑證驗證通過後應變 Published；在那之前實機購買可能失敗或訂閱頁抓不到商品，屬正常。
+
+### 23.4 後台設定紀錄（2026-10-05，聊天端逐欄確認完成）
+- **Play 訂閱**：`qg_premium_monthly`（基本方案 `monthly`，台灣 NT$99）、`qg_premium_yearly`（基本方案 `yearly`，台灣 NT$590）已啟用；手動設價 20 國，其餘依 US$3.99／US$24.99 自動換算；年齡分級 18+、允許重新訂閱。
+- **RevenueCat**：專案 qiangua（與英文 App 分開）；App `com.lclab.qiangua`，上傳與英文 App 共用的服務帳戶 JSON（revenuecat@learning-english-5ea8b.iam.gserviceaccount.com，Play「帳戶權限」已授權）；購買驗證等 Google 權限同步中（最長約 36 小時）。
+- **Products**：`qg_premium_monthly:monthly`、`qg_premium_yearly:yearly`（狀態 Could not check，憑證驗證通過後會變 Published）。
+- **Entitlement** `premium` 掛兩個商品；**Offering** `default`（Current）：`$rc_annual` → `qg_premium_yearly:yearly`，`$rc_monthly` → `qg_premium_monthly:monthly`。沒有建 Test Store 商品、沒有 Lifetime。
+- **GitHub Secrets** 5 個已設齊：`ADMOB_APP_ID`、`ADMOB_BANNER_AD_UNIT_ID`、`ADMOB_INTERSTITIAL_AD_UNIT_ID`、`ADMOB_REWARDED_AD_UNIT_ID`、`REVENUECAT_ANDROID_API_KEY`。
+- **封閉測試**：線上版本 28（0.2.0+28）已確認在 +27 閃退修正之後，但不含日文（+30 起）、韓文（+33 起）、越南文（+35 起）。
 
 ## 22. 英文內容格式（2026-10-03 決定，0.1.0+22）
 

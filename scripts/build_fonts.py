@@ -26,6 +26,25 @@ WEIGHTS = [
     ("NotoSansTC[wght].ttf", "NotoSansTC", 500),
     ("NotoSerifTC[wght].ttf", "NotoSerifTC", 400),
 ]
+# 簡中補字（2026-10-05，HANDOFF §15）：theme.dart 以 fontFamilyFallback 接在 TC 後面，
+# 只收「需要的字」中 TC 沒有的（GB2312 一級字 3,755 字＋實際用到的字），同一套思源設計，字形一致。
+SC_WEIGHTS = [
+    ("NotoSansSC[wght].ttf", "NotoSansSC", 400, "NotoSansTC[wght].ttf"),
+    ("NotoSansSC[wght].ttf", "NotoSansSC", 500, "NotoSansTC[wght].ttf"),
+    ("NotoSerifSC[wght].ttf", "NotoSerifSC", 400, "NotoSerifTC[wght].ttf"),
+]
+
+
+def gb2312_level1() -> set[str]:
+    """GB2312 一級常用漢字（0xB0A1–0xD7F9）——簡中使用者輸入「想問的事」用得到。"""
+    out = set()
+    for hi in range(0xB0, 0xD8):
+        for lo in range(0xA1, 0xFF):
+            try:
+                out.add(bytes([hi, lo]).decode("gb2312"))
+            except UnicodeDecodeError:
+                pass
+    return out
 
 
 def big5_common() -> set[str]:
@@ -80,6 +99,28 @@ def main() -> None:
         path = out / f"{family}-{wght}.ttf"
         font.save(path)
         print(f"{path.name}：{path.stat().st_size / 1e6:.2f} MB")
+
+    wanted = {ord(c) for c in gb2312_level1() | used_chars(root) if ord(c) >= 0x3400}
+    for fname, family, wght, tc in SC_WEIGHTS:
+        if not (src / fname).exists():
+            raise SystemExit(f"缺少 {fname}")
+        if tc not in cache:
+            cache[tc] = TTFont(src / tc)
+        missing = wanted - set(cache[tc].getBestCmap())
+        if fname not in cache:
+            cache[fname] = TTFont(src / fname)
+        font = instancer.instantiateVariableFont(cache[fname], {"wght": wght}, inplace=False)
+        opts = subset.Options()
+        opts.layout_features = ["*"]
+        opts.name_IDs = ["*"]
+        opts.notdef_outline = True
+        opts.hinting = False
+        sub = subset.Subsetter(opts)
+        sub.populate(unicodes=missing)
+        sub.subset(font)
+        path = out / f"{family}-{wght}.ttf"
+        font.save(path)
+        print(f"{path.name}：補 {len(missing)} 字，{path.stat().st_size / 1e6:.2f} MB")
 
 
 if __name__ == "__main__":

@@ -123,9 +123,9 @@ class _LineTile extends StatelessWidget {
               Padding(
                 padding: const EdgeInsets.only(bottom: 6),
                 child: Text([original!.text, original!.xiaoxiang].where((s) => s.isNotEmpty).join('\n'),
-                    style: t.bodySmall?.copyWith(fontFamily: kSerif, color: QianColors.textSub)),
+                    style: t.bodySmall?.copyWith(fontFamily: kSerif, fontFamilyFallback: kSerifFallback, color: QianColors.textSub)),
               ),
-            if (line.xiaoxiang.isNotEmpty) Text(line.xiaoxiang, style: t.bodySmall?.copyWith(fontFamily: kSerif)),
+            if (line.xiaoxiang.isNotEmpty) Text(line.xiaoxiang, style: t.bodySmall?.copyWith(fontFamily: kSerif, fontFamilyFallback: kSerifFallback)),
             Section(title: l.sectionImage, child: Text(line.image)),
             Section(title: l.sectionSource, child: Text(line.source)),
             Section(title: l.sectionForYou, child: Text(line.forYou)),

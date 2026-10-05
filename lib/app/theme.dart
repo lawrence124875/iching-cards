@@ -19,6 +19,12 @@ class QianColors {
 const kSerif = 'NotoSerifTC';
 const kSans = 'NotoSansTC';
 
+/// 簡中（2026-10-05）：繁中字型沒有的簡體字由思源 SC 子集補上（同一設計，字形一致），
+/// 子集只含 TC 缺的字（scripts/build_fonts.py）。每個指定 kSerif／kSans 的地方都要帶對應的 fallback，
+/// 否則 copyWith 會沿用黑體的 fallback。
+const kSerifFallback = ['NotoSerifSC'];
+const kSansFallback = ['NotoSansSC'];
+
 ThemeData buildTheme() {
   final scheme = ColorScheme.fromSeed(
     seedColor: QianColors.earth,
@@ -34,6 +40,7 @@ ThemeData buildTheme() {
   return ThemeData(
     useMaterial3: true,
     fontFamily: kSans,
+    fontFamilyFallback: kSansFallback,
     colorScheme: scheme,
     scaffoldBackgroundColor: QianColors.ink,
     dividerColor: QianColors.mountain,
@@ -43,13 +50,13 @@ ThemeData buildTheme() {
       elevation: 0,
       scrolledUnderElevation: 0,
       centerTitle: true,
-      titleTextStyle: TextStyle(fontFamily: kSerif, fontSize: 19, color: QianColors.text, letterSpacing: 2),
+      titleTextStyle: TextStyle(fontFamily: kSerif, fontFamilyFallback: kSerifFallback, fontSize: 19, color: QianColors.text, letterSpacing: 2),
     ),
     textTheme: const TextTheme(
-      displaySmall: TextStyle(fontFamily: kSerif, fontSize: 40, height: 1.2, letterSpacing: 8, color: QianColors.text),
-      headlineSmall: TextStyle(fontFamily: kSerif, fontSize: 24, height: 1.4, letterSpacing: 2, color: QianColors.text),
-      titleMedium: TextStyle(fontFamily: kSerif, fontSize: 17, height: 1.5, letterSpacing: 1, color: QianColors.rice),
-      bodyLarge: TextStyle(fontFamily: kSerif, fontSize: 17, height: 1.9, color: QianColors.text),
+      displaySmall: TextStyle(fontFamily: kSerif, fontFamilyFallback: kSerifFallback, fontSize: 40, height: 1.2, letterSpacing: 8, color: QianColors.text),
+      headlineSmall: TextStyle(fontFamily: kSerif, fontFamilyFallback: kSerifFallback, fontSize: 24, height: 1.4, letterSpacing: 2, color: QianColors.text),
+      titleMedium: TextStyle(fontFamily: kSerif, fontFamilyFallback: kSerifFallback, fontSize: 17, height: 1.5, letterSpacing: 1, color: QianColors.rice),
+      bodyLarge: TextStyle(fontFamily: kSerif, fontFamilyFallback: kSerifFallback, fontSize: 17, height: 1.9, color: QianColors.text),
       bodyMedium: TextStyle(fontSize: 15.5, height: 1.8, color: QianColors.text),
       bodySmall: TextStyle(fontSize: 13, height: 1.6, color: QianColors.textSub),
       labelLarge: TextStyle(fontSize: 16, letterSpacing: 2),

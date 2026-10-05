@@ -49,8 +49,15 @@ class AppLanguages {
     contentReady: true, // 2026-10-05 英文 64 卦完成（§22）
   );
 
+  static const zhHans = AppLanguage(
+    code: 'zh-Hans',
+    locale: Locale.fromSubtags(languageCode: 'zh', scriptCode: 'Hans'),
+    contentFolder: 'zh-Hans',
+    contentReady: true, // 2026-10-05 由繁中轉出（iching-content tools/to_hans.py，§19.2 第 5 項）
+  );
+
   /// 已有介面翻譯（ARB）的語言。順序無意義。
-  static const all = [zhHant, en];
+  static const all = [zhHant, en, zhHans];
 
   /// 只看介面不開放內容的測試用開關：建置時加 --dart-define=FORCE_LANG=en，
   /// 不論手機語言一律用該語言介面（內容仍退回繁中）。正式版不加。

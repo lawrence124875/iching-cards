@@ -73,6 +73,18 @@ void main() {
   group('語言判斷', () {
     final zhOnly = [AppLanguages.zhHant];
     final zhEn = [AppLanguages.zhHant, AppLanguages.en];
+    final all3 = [AppLanguages.zhHant, AppLanguages.en, AppLanguages.zhHans];
+
+    test('簡中開放時：中國／新加坡／標示 Hans → 簡中；台灣、香港仍繁中', () {
+      expect(AppLanguages.resolve([const Locale('zh', 'CN')], available: all3), AppLanguages.zhHans);
+      expect(AppLanguages.resolve([const Locale('zh', 'SG')], available: all3), AppLanguages.zhHans);
+      expect(
+          AppLanguages.resolve([const Locale.fromSubtags(languageCode: 'zh', scriptCode: 'Hans', countryCode: 'TW')],
+              available: all3),
+          AppLanguages.zhHans);
+      expect(AppLanguages.resolve([const Locale('zh', 'TW')], available: all3), AppLanguages.zhHant);
+      expect(AppLanguages.resolve([const Locale('zh', 'HK')], available: all3), AppLanguages.zhHant);
+    });
 
     test('台灣、香港用繁中', () {
       expect(AppLanguages.resolve([const Locale('zh', 'TW')], available: zhEn), AppLanguages.zhHant);
@@ -108,6 +120,7 @@ void main() {
     test('每個語言都能載入，App 名稱正確', () {
       expect(lookupAppLocalizations(AppLanguages.zhHant.locale).appTitle, '謙卦');
       expect(lookupAppLocalizations(AppLanguages.en.locale).appTitle, 'Qiangua');
+      expect(lookupAppLocalizations(AppLanguages.zhHans.locale).appTitle, '谦卦');
     });
 
     test('單複數與 select', () {

@@ -35,7 +35,7 @@ class CardFace extends StatelessWidget {
             Row(
               children: [
                 Text(l.cardNumber(info.number),
-                    style: t.bodySmall?.copyWith(fontFamily: kSerif, letterSpacing: 2)),
+                    style: t.bodySmall?.copyWith(fontFamily: kSerif, fontFamilyFallback: kSerifFallback, letterSpacing: 2)),
                 const Spacer(),
                 HexagramGlyph(lines: info.lines, width: 20),
               ],
@@ -59,7 +59,7 @@ class CardFace extends StatelessWidget {
                 l.cardTrigrams(l.trigramLabel(info.upper), l.trigramImage(info.upper), l.trigramLabel(info.lower),
                     l.trigramImage(info.lower)),
                 textAlign: TextAlign.center,
-                style: t.bodySmall?.copyWith(fontFamily: kSerif, color: QianColors.mountain)),
+                style: t.bodySmall?.copyWith(fontFamily: kSerif, fontFamilyFallback: kSerifFallback, color: QianColors.mountain)),
           ],
         ),
       ),

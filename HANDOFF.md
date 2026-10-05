@@ -1,7 +1,7 @@
 # HANDOFF — 易經卦卡 App（名稱未定）
 
 > 新對話接續時請先讀本檔。本檔記錄已確定的決策、內容規格與待討論事項。
-> 最後更新：2026-10-05（英文 30 離～37 家人完成，下一卦 38 睽；英文測試 run #47 建置成功）。2026-10-04（**Play Console 首版設定全部填完，待使用者按「送審 14 項變更」**：封閉測試－外部測試 22 (0.1.0)（run #40 AAB，無廣告無訂閱）、177 國、測試人員名單「測試一」（需 ≥12 人連續 14 天）；應用程式內容全部完成（實填紀錄與差異見 iching-content `store/PLAY_CONSOLE.md` §5，「廣告」聲明已選「是」）；商店資訊：名稱改 ASO 版「謙卦｜易經六十四卦卡・抽卦解卦」、簡短／完整說明 ASO 版（`store/listing-zh-Hant.md`）、圖示、主題圖片、8 張截圖（`store/screenshots-zh-Hant/`，使用者 Redmi 實機截圖＋`make.py` 排版）；AI 素材聲明：主題圖片與截圖 01、02、06、07 標示 AI（Gemini 牌面），圖示不標；類別生活品味、標記：自我成長、冥想、生活品味。商業模式 §21.1；英文 01～24 完成，下一卦 25 无妄）
+> 最後更新：2026-10-05（簡中完成 0.2.0+26；英文 30 離～37 家人完成，下一卦 38 睽；英文測試 run #47 建置成功）。2026-10-04（**Play Console 首版設定全部填完，待使用者按「送審 14 項變更」**：封閉測試－外部測試 22 (0.1.0)（run #40 AAB，無廣告無訂閱）、177 國、測試人員名單「測試一」（需 ≥12 人連續 14 天）；應用程式內容全部完成（實填紀錄與差異見 iching-content `store/PLAY_CONSOLE.md` §5，「廣告」聲明已選「是」）；商店資訊：名稱改 ASO 版「謙卦｜易經六十四卦卡・抽卦解卦」、簡短／完整說明 ASO 版（`store/listing-zh-Hant.md`）、圖示、主題圖片、8 張截圖（`store/screenshots-zh-Hant/`，使用者 Redmi 實機截圖＋`make.py` 排版）；AI 素材聲明：主題圖片與截圖 01、02、06、07 標示 AI（Gemini 牌面），圖示不標；類別生活品味、標記：自我成長、冥想、生活品味。商業模式 §21.1；英文 01～24 完成，下一卦 25 无妄）
 
 ---
 
@@ -517,7 +517,8 @@ checkout 本 repo → 以 `BUILDS_REPO_TOKEN` sparse-checkout iching-content 的
 - 字重：黑體 400、500（Material 按鈕與小標用 500）；宋體 400。程式目前沒有指定粗體；日後要用，在 `build_fonts.py` 的 `WEIGHTS` 加 700 並同步改 `pubspec.yaml`。
 - 字型檔不進 repo（`.gitignore` 擋 `assets/fonts/*.ttf`），只有授權全文 `assets/licenses/*-OFL.txt` 進 repo，並在 `main.dart` 以 `LicenseRegistry` 登記（OFL 要求附授權）。
 - `theme.dart`：`kSans = 'NotoSansTC'` 為全 App 預設字族；`kSerif = 'NotoSerifTC'` 用於卦名、經文、標題。
-- ⚠️ **多語言時**：日、韓、泰、阿拉伯文等不在這兩個字型內，需要時再加對應的 Noto 字型（同樣子集化），或交給系統字體。簡中可另加 Noto Sans SC／Serif SC。
+- ⚠️ **多語言時**：日、韓、泰、阿拉伯文等不在這兩個字型內，需要時再加對應的 Noto 字型（同樣子集化），或交給系統字體。
+- **簡中補字（2026-10-05，0.2.0+26）**：Noto Sans TC 缺約 1,000 個簡體字（例：图、详、问），交給系統字體會混字型。做法：再打包 **Noto Sans SC 400／500、Noto Serif SC 400**，但只收「GB2312 一級字＋實際用到的字」中 **TC 沒有的**（約 1,075 字，每檔 0.3–0.4 MB）；`theme.dart` 以 `fontFamilyFallback`（`kSansFallback`／`kSerifFallback`）接在 TC 後面——同一套思源設計，字形一致。⚠️ 之後任何 `fontFamily: kSerif` 都要同時帶 `fontFamilyFallback: kSerifFallback`（`copyWith` 會沿用黑體的 fallback）。CI cache key 改 `noto-tc-sc-9710da1e`。
 - ✅ 2026-10-03 使用者實機確認 run #33 字體沒問題，首頁仍一屏顯示完。
 
 ### 15.1 置中提示語的寫法（2026-10-03 使用者決定，0.1.0+18）
@@ -658,7 +659,9 @@ checkout 本 repo → 以 `BUILDS_REPO_TOKEN` sparse-checkout iching-content 的
 2. 🔶 2026-10-03 Claude 部分完成，等使用者操作（見第 20 節）【上架準備，繁中先上】**先用繁中版跑封閉測試**，讓 14 天的計時盡早開始，翻譯同時進行（§12 上線原則：未完整翻譯的語言不開放，繁中可單獨上架）：隱私權政策（本 repo GitHub Pages，寫明 Firebase Analytics／Crashlytics 收集項目）、Play 商店資訊文案（繁中）、截圖規劃、Data safety 與內容分級填答說明、廣告 ID 聲明（§18.4）。
 3. ✅ 2026-10-03 使用者定案（§21.1：廣告＋月訂／年訂）【決定】商業模式（免費／付費內容、廣告、訂閱；§7 第 3 項）：選定前封閉測試先以全免費版進行。
 4. ✅ 2026-10-05 完成【內容】英文版 64 卦（重新為英文讀者撰寫，非逐句翻譯；§12）：`check_translation.py en` 64 卦 OK、約 15.1 萬字；`en.contentReady = true`（0.2.0+24，run #53 正式版）；回譯抽查與名句來源記在 iching-content `en/README.md` §5。英文商店資訊、主題圖片已完成，截圖等使用者實機截圖（§21.2）。
-5. ⏳【內容】其餘 9 語分批（簡中 → 日 → 韓 → 越 → 西 → 葡 → 印尼 → 泰 → 阿），各語字型（§15）與 ARB 介面同步。
+5. 🔶【內容】其餘 9 語分批（簡中 → 日 → 韓 → 越 → 西 → 葡 → 印尼 → 泰 → 阿），各語字型（§15）與 ARB 介面同步。
+   - ✅ 2026-10-05 **簡中**（0.2.0+26）：iching-content `tools/to_hans.py` 自繁中轉出 64 卦（OpenCC tw2sp＋「乾」鎖定＋大陸譯名＋標點，說明 `zh-Hans/README.md`；**繁中改動後要重跑**）；`app_zh_Hans.arb` 同一函式轉出；`AppLanguages.zhHans`（contentReady true）；字型見 §15「簡中補字」。⏳ 使用者實機確認（手機語言改簡體中文，或 force_lang=zh-Hans）。
+   - 下一語：日文（需 Noto Sans/Serif JP 字型、依 §22 格式重寫）。
 6. 🔶 2026-10-04 程式完成（0.2.0+23，§23），等使用者建 AdMob／RevenueCat／Play 訂閱與 Secrets；正式版申請。
 7. 之後：iOS（§9.1，需另決定 Apple 年費）。
 
@@ -670,6 +673,7 @@ checkout 本 repo → 以 `BUILDS_REPO_TOKEN` sparse-checkout iching-content 的
 - 2026-10-05（第四個對話）：run #52（force_lang=en）✅、run #53（正式版 0.2.0+24，push 觸發）✅（Release 含 APK＋AAB）；之後手動觸發 force_lang=en run #54 ✅（Release iching-android-run54，0.2.0+24 介面 en，只有 APK）。en/README §5 補 53–64 回譯抽查與名句來源。§21.2 英文商店資訊：iching-content `store/listing-en.md`（名稱 Qiangua: I Ching Oracle Cards 29 字、簡短說明 80 字、完整說明 3421 字，依英文搜尋詞重寫；另附加上廣告／訂閱後要補的段落）、`store/feature-graphic-en-1024x500.png`（右側三牌右緣留 64px；`store/feature_graphic_en.py` 重製，字型 Cormorant Garamond）、`store/screenshots-en/make.py`（8 張，順序與要截的畫面寫在腳本 ITEMS；等使用者貼英文介面截圖）。
 - 同一對話：使用者問卦記 10 則會不會太多、刪舊可重複用 → 維持 10、不防刪舊（理由記在 §23.1）；新增卦記達上限可看獎勵廣告存一則，0.2.0+25 run #55 ✅（隱私權政策已同步）。
 - 下一步：使用者貼英文截圖 → 執行 make.py；使用者貼 AdMob／RevenueCat／Play 訂閱截圖 → 依 §23.3 逐欄回覆；之後 §19.2 第 5 項（簡中起）。
+- 2026-10-05（第五個對話）：尚未收到截圖時先做 §19.2 第 5 項簡中（0.2.0+26，見該項）；英文截圖、AdMob／RevenueCat／Play 訂閱仍等使用者貼圖。
 
 ### 19.3 需要使用者做的事（Claude 會在對應階段提醒）
 - Firebase：確認 Analytics 即時報表看得到 `qg_reading_shown`、Crashlytics 不再「等待中」（§18.4，記得先篩選謙卦 App）。

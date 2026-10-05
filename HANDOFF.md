@@ -675,6 +675,7 @@ checkout 本 repo → 以 `BUILDS_REPO_TOKEN` sparse-checkout iching-content 的
 - 下一步：使用者貼英文截圖 → 執行 make.py；使用者貼 AdMob／RevenueCat／Play 訂閱截圖 → 依 §23.3 逐欄回覆；之後 §19.2 第 5 項（簡中起）。
 - 2026-10-05（第五個對話）：尚未收到截圖時先做 §19.2 第 5 項簡中（0.2.0+26，見該項）；英文截圖、AdMob／RevenueCat／Play 訂閱仍等使用者貼圖。
 - 同一對話：使用者回報 run #54 無法開啟——研判是**降版**（#54＝0.2.0+24，手機上已裝 +25／+26，Android 不允許裝較低的 versionCode）。⚠️ **以後測試版一律從最新 commit 重建，不要叫使用者裝舊 run**。改建 run #57（force_lang=en＋force_premium=true，0.2.0+26，✅），商店截圖用這版：無廣告橫幅、無次數限制。
+- ⚠️ 使用者回報 **run #57 點圖示立刻閃退**（#54 也打不開，兩者共同點是 force_lang=en）。#56 與 #57 的 AndroidManifest 完全相同（androguard 比對），差別只在 dart-define。⏳ 等使用者回覆：正式版 #56 能否開啟、Crashlytics 當機紀錄截圖。
 
 ### 19.3 需要使用者做的事（Claude 會在對應階段提醒）
 - Firebase：確認 Analytics 即時報表看得到 `qg_reading_shown`、Crashlytics 不再「等待中」（§18.4，記得先篩選謙卦 App）。

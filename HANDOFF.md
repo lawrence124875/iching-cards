@@ -665,7 +665,7 @@ checkout 本 repo → 以 `BUILDS_REPO_TOKEN` sparse-checkout iching-content 的
 5. 🔶【內容】其餘 9 語分批（簡中 → 日 → 韓 → 越 → 西 → 葡 → 印尼 → 泰 → 阿），各語字型（§15）與 ARB 介面同步。
    - ✅ 2026-10-05 **簡中**（0.2.0+26，run #56 ✅）：iching-content `tools/to_hans.py` 自繁中轉出 64 卦（OpenCC tw2sp＋「乾」鎖定＋大陸譯名＋標點，說明 `zh-Hans/README.md`；**繁中改動後要重跑**）；`app_zh_Hans.arb` 同一函式轉出；`AppLanguages.zhHans`（contentReady true）；字型見 §15「簡中補字」。⏳ 使用者實機確認（手機語言改簡體中文，或 force_lang=zh-Hans）。
    - ✅ **日文**（2026-10-05；**64 卦完成**，0.2.0+30 起 `contentReady: true`，run #63 ✅）：App 端（0.2.0+29）：`app_ja.arb`、`AppLanguages.ja`、JP 字型（§15）、牌面卦序用漢數字「第十五卦」、CI／import／pubspec 加 `ja`。內容格式 iching-content `ja/README.md`（**經文用書き下し文**、爻階段固定譯法、新字体；`check_translation.py ja` 擋舊字体／差別語／保證語）；64 卦全數通過檢查（約 31 萬字）。待辦：① ~~日文母語者審閱~~（同上，由 Claude 回譯檢核負責）；② ✅ 東西相映重複名句已四語一起換（2026-10-05：37 家人→塞內卡《書信》6.5、41 損→伊比鳩魯殘篇 135；09、14 保留原句）；③ 日文商店資訊已備妥（§21.2），待使用者上傳。
-   - ✅ **韓文**（2026-10-05；**64 卦完成**，0.2.0+33 起 `contentReady: true`）：App 端（0.2.0+32）：`app_ko.arb`、`AppLanguages.ko`、KR 字型（§15）、牌面卦序「제15괘」（ARB `cardOrdinal`）、CI／import／pubspec 加 `ko`、截圖測試加韓文卦記範例。內容格式 iching-content `ko/README.md`（**經文用現代韓文翻譯**、漢字只放括號內、半形標點、爻階段固定譯法；`check_translation.py ko` 擋括號外漢字／日式標點／비하어／保證語／무속字眼）；64 卦全數通過檢查（約 38.5 萬字），每卦回譯抽查與保守處理記在 ko/README §5。待辦：① ~~韓文母語者審閱~~（使用者沒有母語審閱者，見 §19.4「翻譯原則」，由 Claude 回譯檢核負責）；② 使用者實機測試（只看功能與版面）（手機語言改韓文，或 Run workflow `force_lang=ko`）；③ 韓文商店文案（store/listing-ko.md）、主題圖片、截圖（`SCREENSHOT_LANG=ko`）未做。
+   - ✅ **韓文**（2026-10-05；**64 卦完成**，0.2.0+33 起 `contentReady: true`）：App 端（0.2.0+32）：`app_ko.arb`、`AppLanguages.ko`、KR 字型（§15）、牌面卦序「제15괘」（ARB `cardOrdinal`）、CI／import／pubspec 加 `ko`、截圖測試加韓文卦記範例。內容格式 iching-content `ko/README.md`（**經文用現代韓文翻譯**、漢字只放括號內、半形標點、爻階段固定譯法；`check_translation.py ko` 擋括號外漢字／日式標點／비하어／保證語／무속字眼）；64 卦全數通過檢查（約 38.5 萬字），每卦回譯抽查與保守處理記在 ko/README §5。待辦：① ~~韓文母語者審閱~~（使用者沒有母語審閱者，見 §19.4「翻譯原則」，由 Claude 回譯檢核負責）；② 使用者實機測試（只看功能與版面）（手機語言改韓文，或 Run workflow `force_lang=ko`）；③ ✅ 韓文商店資訊已備妥（§21.2），待使用者上傳。run #66（0.2.0+33）✅：Release `謙卦 0.2.0+33（run 66）`（tag `iching-android-run66`，APK＋AAB，**測試廣告**、訂閱尚未開放）。
 6. 🔶 2026-10-04 程式完成（0.2.0+23，§23），等使用者建 AdMob／RevenueCat／Play 訂閱與 Secrets；正式版申請。
 7. 之後：iOS（§9.1，需另決定 Apple 年費）。
 
@@ -690,6 +690,7 @@ checkout 本 repo → 以 `BUILDS_REPO_TOKEN` sparse-checkout iching-content 的
 
 - **翻譯原則（2026-10-05 使用者指示，所有非中文語言適用）**：使用者沒有中文以外的母語測試者，**不要請使用者看譯文內容**。Claude 全權負責謹慎翻譯與檢核：① 不可有不文雅、冒犯、迷信或保證語（各語 `check_translation.py` 黑名單＋逐卦回譯抽查）；② **經文（卦辭、彖、象、爻辭、小象）以市面通行版本為準**（通行本《周易》文字、程頤／朱熹的通行解讀；日文用通行書き下し、韓文依傳統諺解／《周易傳義》讀法譯成現代韓文），不可因翻譯偏離通行版本；有異說時並列或取通行說。使用者只測**功能是否正常、版面是否跑掉**。
 - 2026-10-05（第八個對話）：§19.2 第 5 項韓文。App 端 0.2.0+32（run #65 ✅）；內容依 ko/README 撰寫（以繁中為準、日文版的保守處理為參考，經文自譯現代韓文），每卦跑 `check_translation.py ko`、每 3 卦 commit。草稿流程：在 scratchpad 寫只含內容欄位的 JSON，再用 iching-content `tools/ko_fill.py NN 草稿路徑` 從術語表／繁中補 id、name、爻名、stage 等固定欄位並跑檢查。進度看 ko/README §5。64 卦完成後 `ko.contentReady = true`、0.2.0+33。使用者會另找時間實機測試（+31 日文、+33 韓文）。下一步：韓文商店資訊（§21.2 照日文作法）→ §19.2 第 5 項下一語（越南文）。
+- 2026-10-05（第九個對話）：run #66（0.2.0+33）✅，Release `謙卦 0.2.0+33（run 66）`，測試廣告；韓文商店資訊完成（§21.2）。截圖在雲端環境渲染：Flutter 用 `git clone --depth 1 -b stable https://github.com/flutter/flutter.git`，字型原檔下載到 iching-cards `_fonts_src/`（已 gitignore），其餘照 `screenshots/README.md`。下一步：越南文（計畫待使用者確認）。
 
 ### 19.3 需要使用者做的事（Claude 會在對應階段提醒）
 - Firebase：確認 Analytics 即時報表看得到 `qg_reading_shown`、Crashlytics 不再「等待中」（§18.4，記得先篩選謙卦 App）。
@@ -750,6 +751,8 @@ checkout 本 repo → 以 `BUILDS_REPO_TOKEN` sparse-checkout iching-content 的
 
 - 2026-10-05 使用者已完成：run #59（0.2.0+28，測試廣告、訂閱未開放）上傳**內部測試**；前景服務權限聲明重交；內容分級重做（可購買數位商品＝是）；資料安全性（裝置 ID 分享＝是／廣告或行銷、大概位置加廣告或行銷、新增購買記錄）；廣告 ID 加廣告或行銷；商店資訊新增英文、簡中（zh-CN，`store/listing-zh-Hans.md`、`feature-graphic-zh-Hans-1024x500.png`、`screenshots-zh-Hans/`），繁簡英完整說明加「免費下載，會員可選」段。版本資訊見 `store/release-notes/`（封閉測試用的版本寫明「測試廣告、會員即將開放」）。
 - 日文商店資訊（2026-10-05）：✅ `store/listing-ja.md`（名稱「謙卦：易経・六十四卦カード」，不加讀音以免與「喧嘩」同音）、✅ `feature-graphic-ja-1024x500.png`、✅ `screenshots-ja/`（`SCREENSHOT_LANG=ja` 渲染）；版本資訊 `0.2.0+30.txt` 加 `<ja-JP>`。使用者上傳：管理翻譯 → 新增日本語（ja-JP），圖像在日文的圖像區另外上傳。建議上架前請日文母語者看過。
+- 韓文商店資訊（2026-10-05）：✅ `store/listing-ko.md`（名稱「겸괘: 주역 64괘 카드」13 字、簡短說明 51 字、完整說明 1910 字；「운세」只用在否定句，不用 적중／개운／부적 等字眼）、✅ `feature-graphic-ko-1024x500.png`（`feature_graphic_ko.py`）、✅ `screenshots-ko/`（`SCREENSHOT_LANG=ko` 渲染）；版本資訊 `0.2.0+33.txt` 加 `<ko-KR>`。⚠️ run #66 建置時 `0.2.0+33.txt` 還沒進 iching-content，所以 Release 說明顯示「尚未撰寫」——**版本資訊直接從 `store/release-notes/0.2.0+33.txt` 複製**。使用者上傳：管理翻譯 → 新增 한국어（ko-KR），圖像在韓文的圖像區另外上傳。
+- 2026-10-05：使用者要把 run #66（0.2.0+33，測試廣告）AAB 上傳封閉測試，開始付費外部測試 14 天。
 - **封閉測試建議**：審過後把 #59 從內部測試「升級版本」到封閉測試－外部測試，付費測試者全程用**測試廣告**版（避免真實廣告無效流量）；正式廣告版等 14 天結束、申請正式版時再上傳。
 - 下一步：§23.3 四個平台（AdMob → Play 訂閱 → RevenueCat → 5 個 Secrets），使用者截圖、Claude 逐欄回覆並**附操作路徑**。
 

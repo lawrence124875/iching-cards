@@ -663,7 +663,7 @@ checkout 本 repo → 以 `BUILDS_REPO_TOKEN` sparse-checkout iching-content 的
 4. ✅ 2026-10-05 完成【內容】英文版 64 卦（重新為英文讀者撰寫，非逐句翻譯；§12）：`check_translation.py en` 64 卦 OK、約 15.1 萬字；`en.contentReady = true`（0.2.0+24，run #53 正式版）；回譯抽查與名句來源記在 iching-content `en/README.md` §5。英文商店資訊、主題圖片已完成，截圖等使用者實機截圖（§21.2）。
 5. 🔶【內容】其餘 9 語分批（簡中 → 日 → 韓 → 越 → 西 → 葡 → 印尼 → 泰 → 阿），各語字型（§15）與 ARB 介面同步。
    - ✅ 2026-10-05 **簡中**（0.2.0+26，run #56 ✅）：iching-content `tools/to_hans.py` 自繁中轉出 64 卦（OpenCC tw2sp＋「乾」鎖定＋大陸譯名＋標點，說明 `zh-Hans/README.md`；**繁中改動後要重跑**）；`app_zh_Hans.arb` 同一函式轉出；`AppLanguages.zhHans`（contentReady true）；字型見 §15「簡中補字」。⏳ 使用者實機確認（手機語言改簡體中文，或 force_lang=zh-Hans）。
-   - ✅ **日文**（2026-10-05；**64 卦完成**，0.2.0+30 起 `contentReady: true`，run #63 ✅）：App 端（0.2.0+29）：`app_ja.arb`、`AppLanguages.ja`、JP 字型（§15）、牌面卦序用漢數字「第十五卦」、CI／import／pubspec 加 `ja`。內容格式 iching-content `ja/README.md`（**經文用書き下し文**、爻階段固定譯法、新字体；`check_translation.py ja` 擋舊字体／差別語／保證語）；64 卦全數通過檢查（約 31 萬字）。待辦：① 日文母語者審閱（33–64 的回譯抽查與審閱一起做，見 ja/README §5 附註）；② 東西相映名句有兩組重複，沿用自繁中/英文：09 與 37 都用亞里斯多德 NE II.1（1103a34–b2）、14 與 41 都用蘇格拉底 DL II.25，要換的話繁中／英文／簡中／日文一起換；③ 日文商店資訊已備妥（§21.2），待使用者上傳。
+   - ✅ **日文**（2026-10-05；**64 卦完成**，0.2.0+30 起 `contentReady: true`，run #63 ✅）：App 端（0.2.0+29）：`app_ja.arb`、`AppLanguages.ja`、JP 字型（§15）、牌面卦序用漢數字「第十五卦」、CI／import／pubspec 加 `ja`。內容格式 iching-content `ja/README.md`（**經文用書き下し文**、爻階段固定譯法、新字体；`check_translation.py ja` 擋舊字体／差別語／保證語）；64 卦全數通過檢查（約 31 萬字）。待辦：① 日文母語者審閱（33–64 的回譯抽查與審閱一起做，見 ja/README §5 附註）；② ✅ 東西相映重複名句已四語一起換（2026-10-05：37 家人→塞內卡《書信》6.5、41 損→伊比鳩魯殘篇 135；09、14 保留原句）；③ 日文商店資訊已備妥（§21.2），待使用者上傳。
 6. 🔶 2026-10-04 程式完成（0.2.0+23，§23），等使用者建 AdMob／RevenueCat／Play 訂閱與 Secrets；正式版申請。
 7. 之後：iOS（§9.1，需另決定 Apple 年費）。
 

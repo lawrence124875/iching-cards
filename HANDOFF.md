@@ -663,7 +663,7 @@ checkout 本 repo → 以 `BUILDS_REPO_TOKEN` sparse-checkout iching-content 的
 4. ✅ 2026-10-05 完成【內容】英文版 64 卦（重新為英文讀者撰寫，非逐句翻譯；§12）：`check_translation.py en` 64 卦 OK、約 15.1 萬字；`en.contentReady = true`（0.2.0+24，run #53 正式版）；回譯抽查與名句來源記在 iching-content `en/README.md` §5。英文商店資訊、主題圖片已完成，截圖等使用者實機截圖（§21.2）。
 5. 🔶【內容】其餘 9 語分批（簡中 → 日 → 韓 → 越 → 西 → 葡 → 印尼 → 泰 → 阿），各語字型（§15）與 ARB 介面同步。
    - ✅ 2026-10-05 **簡中**（0.2.0+26，run #56 ✅）：iching-content `tools/to_hans.py` 自繁中轉出 64 卦（OpenCC tw2sp＋「乾」鎖定＋大陸譯名＋標點，說明 `zh-Hans/README.md`；**繁中改動後要重跑**）；`app_zh_Hans.arb` 同一函式轉出；`AppLanguages.zhHans`（contentReady true）；字型見 §15「簡中補字」。⏳ 使用者實機確認（手機語言改簡體中文，或 force_lang=zh-Hans）。
-   - 🔶 **日文**（2026-10-05 起；**01 乾～32 恒完成**，下一卦 33 遯；run #60 0.2.0+29 ✅）：App 端完成（0.2.0+29）：`app_ja.arb`、`AppLanguages.ja`（**contentReady false**，64 卦寫完才改 true）、JP 字型（§15）、牌面卦序用漢數字「第十五卦」、CI／import／pubspec 加 `ja`。內容格式 iching-content `ja/README.md`（**經文用書き下し文**、爻階段固定譯法、新字体；`check_translation.py ja` 擋舊字体／差別語／保證語）。進度看 `ja/README.md` §5。測試：Run workflow `force_lang=ja`。
+   - ✅ **日文**（2026-10-05；**64 卦完成**，0.2.0+30 起 `contentReady: true`）：App 端（0.2.0+29）：`app_ja.arb`、`AppLanguages.ja`、JP 字型（§15）、牌面卦序用漢數字「第十五卦」、CI／import／pubspec 加 `ja`。內容格式 iching-content `ja/README.md`（**經文用書き下し文**、爻階段固定譯法、新字体；`check_translation.py ja` 擋舊字体／差別語／保證語）；64 卦全數通過檢查（約 31 萬字）。待辦：① 日文母語者審閱（33–64 的回譯抽查與審閱一起做，見 ja/README §5 附註）；② 東西相映名句有兩組重複，沿用自繁中/英文：09 與 37 都用亞里斯多德 NE II.1（1103a34–b2）、14 與 41 都用蘇格拉底 DL II.25，要換的話繁中／英文／簡中／日文一起換；③ 日文商店文案與截圖未做。
 6. 🔶 2026-10-04 程式完成（0.2.0+23，§23），等使用者建 AdMob／RevenueCat／Play 訂閱與 Secrets；正式版申請。
 7. 之後：iOS（§9.1，需另決定 Apple 年費）。
 
@@ -681,6 +681,8 @@ checkout 本 repo → 以 `BUILDS_REPO_TOKEN` sparse-checkout iching-content 的
 - **閃退原因已找到（2026-10-05）**：0.2.0+23 加入 AdMob，SDK 帶入 WorkManager，啟動時由 androidx.startup 以反射建立 Room 的 `WorkDatabase_Impl`；我們的 ProGuard 沒有 WorkManager／Room keep 規則，R8 把它的建構子與 RoomDatabase 父類別砍掉（androguard 檢查 run #56 APK 確認），所以 **+23～+26 正式版與測試版全部一開就閃退**（run #54 打不開也是這個原因，不是降版）。修正：`scripts/patch_ads.sh` 加入與智慧聽覺巡航相同的 WorkManager／Room 規則（沒加到會讓 CI 失敗），0.2.0+27。⚠️ **教訓**：新增原生 SDK 時，對照智慧聽覺巡航 `scripts/patch_firebase_proguard.sh` 的 keep 規則；CI 建置成功不代表能開啟，要請使用者實機確認。
 
 - 2026-10-05（第六個對話）：使用者確認 run #58（+27）正常開啟。英文商店截圖改為雲端渲染（§21.2）。渲染時發現 `AssetContentSource._assetList()` 的 `.then().catchError()` 在資產清單已快取（SynchronousFuture）時永遠不完成→牌面圖與解讀一直載入中；實機只要有別處先讀過資產清單就會發生，改用 async try/catch（0.2.0+28）。⚠️ 寫 Flutter 程式：不要對可能是 SynchronousFuture 的 Future 用 `.catchError`。下一步：日文（§19.2 第 5 項）。
+
+- 2026-10-05（第七個對話）：§19.2 第 5 項日文。App 端 0.2.0+29（run #60 ✅）；內容 01–64 依 ja/README 撰寫，每卦跑 check_translation、每 2–3 卦 commit；64 卦完成後 `ja.contentReady = true`、0.2.0+30。下一步：使用者裝 +30 用日文介面試抽幾卦（字形、書き下し排版、爻名讀音）；日文商店文案／截圖；其餘見第 5 項待辦。
 
 ### 19.3 需要使用者做的事（Claude 會在對應階段提醒）
 - Firebase：確認 Analytics 即時報表看得到 `qg_reading_shown`、Crashlytics 不再「等待中」（§18.4，記得先篩選謙卦 App）。

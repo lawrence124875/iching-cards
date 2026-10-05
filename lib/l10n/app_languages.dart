@@ -60,7 +60,7 @@ class AppLanguages {
     code: 'ja',
     locale: Locale('ja'),
     contentFolder: 'ja',
-    contentReady: false, // 2026-10-05 介面完成，64 卦撰寫中（§22、iching-content ja/README.md）
+    contentReady: true, // 2026-10-05 日文 64 卦完成（§22、iching-content ja/README.md）
   );
 
   /// 已有介面翻譯（ARB）的語言。順序無意義。

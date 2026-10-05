@@ -74,7 +74,7 @@ class AppLanguages {
     code: 'vi',
     locale: Locale('vi'),
     contentFolder: 'vi',
-    contentReady: false, // 2026-10-05 介面完成，64 卦撰寫中（§22、iching-content vi/README.md）
+    contentReady: true, // 2026-10-05 越南文 64 卦完成（§22、iching-content vi/README.md）
   );
 
   /// 已有介面翻譯（ARB）的語言。順序無意義。

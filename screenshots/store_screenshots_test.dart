@@ -20,6 +20,7 @@ import 'dart:math';
 import 'dart:ui' as ui;
 
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:iching_cards/app/app.dart';
@@ -53,7 +54,6 @@ void main() {
 
   setUpAll(() async {
     await _loadFonts();
-    debugDisableShadows = false; // flutter_test 預設關掉陰影；實機有
   });
 
   testWidgets('商店截圖（英文、會員）', (tester) async {
@@ -73,6 +73,7 @@ void main() {
     addTearDown(tester.platformDispatcher.clearLocalesTestValue);
     L10n.language = AppLanguages.en;
 
+    debugDisableShadows = false; // flutter_test 預設關掉陰影；實機有（測試結束前要改回，見最後）
     final journal = MemoryJournalStore();
     await journal.save(_sampleEntry());
     final playback = _SilentPlayback();
@@ -115,11 +116,13 @@ void main() {
 
     Future<void> shot(int n) async {
       await _settle(tester);
-      final image = await captureImage(boundary.currentContext! as Element);
+      final render = boundary.currentContext!.findRenderObject()! as RenderRepaintBoundary;
+      final image = await tester.runAsync(() => render.toImage(pixelRatio: _dpr));
       final bytes = await tester.runAsync(() async {
-        final data = await image.toByteData(format: ui.ImageByteFormat.png);
+        final data = await image!.toByteData(format: ui.ImageByteFormat.png);
         return data!.buffer.asUint8List();
       });
+      expect(Size(image!.width.toDouble(), image.height.toDouble()), _size);
       image.dispose();
       final f = File('$out/raw-${n.toString().padLeft(2, '0')}.png')..writeAsBytesSync(bytes!);
       debugPrint('已輸出 ${f.path}');
@@ -181,6 +184,10 @@ void main() {
     await _settle(tester);
     expect(find.byType(JournalEntryPage), findsOneWidget);
     await shot(7);
+
+    nav().popUntil((r) => r.isFirst); // 關掉呼吸頁的 Ticker 等
+    await _settle(tester, frames: 3);
+    debugDisableShadows = true;
   });
 }
 

@@ -26,9 +26,17 @@ class AssetContentSource implements ContentSource {
   final Map<String, HexagramContent?> _cache = {};
   Future<Set<String>>? _assets;
 
-  Future<Set<String>> _assetList() => _assets ??= AssetManifest.loadFromAssetBundle(_bundle)
-      .then((m) => m.listAssets().toSet())
-      .catchError((Object _) => <String>{});
+  Future<Set<String>> _assetList() => _assets ??= _loadAssetList();
+
+  // 用 try/catch，不可改回 .then().catchError()：資產清單已在快取時，Flutter 回傳 SynchronousFuture，
+  // 它的 catchError 會回傳一個永遠不完成的 Future（2026-10-05 渲染商店截圖時發現：牌面圖與解讀一直載入中）。
+  Future<Set<String>> _loadAssetList() async {
+    try {
+      return (await AssetManifest.loadFromAssetBundle(_bundle)).listAssets().toSet();
+    } catch (_) {
+      return <String>{};
+    }
+  }
 
   static String _code(int n) => n.toString().padLeft(2, '0');
 

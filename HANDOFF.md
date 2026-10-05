@@ -1,7 +1,7 @@
 # HANDOFF — 易經卦卡 App（名稱未定）
 
 > 新對話接續時請先讀本檔。本檔記錄已確定的決策、內容規格與待討論事項。
-> 最後更新：2026-10-05（修正 +23 起啟動閃退 0.2.0+27；簡中完成 0.2.0+26；英文 30 離～37 家人完成，下一卦 38 睽；英文測試 run #47 建置成功）。2026-10-04（**Play Console 首版設定全部填完，待使用者按「送審 14 項變更」**：封閉測試－外部測試 22 (0.1.0)（run #40 AAB，無廣告無訂閱）、177 國、測試人員名單「測試一」（需 ≥12 人連續 14 天）；應用程式內容全部完成（實填紀錄與差異見 iching-content `store/PLAY_CONSOLE.md` §5，「廣告」聲明已選「是」）；商店資訊：名稱改 ASO 版「謙卦｜易經六十四卦卡・抽卦解卦」、簡短／完整說明 ASO 版（`store/listing-zh-Hant.md`）、圖示、主題圖片、8 張截圖（`store/screenshots-zh-Hant/`，使用者 Redmi 實機截圖＋`make.py` 排版）；AI 素材聲明：主題圖片與截圖 01、02、06、07 標示 AI（Gemini 牌面），圖示不標；類別生活品味、標記：自我成長、冥想、生活品味。商業模式 §21.1；英文 01～24 完成，下一卦 25 无妄）
+> 最後更新：2026-10-05（英文商店截圖改為渲染 App 真實畫面、修正內容資產清單永不完成的潛在問題 0.2.0+28；run #58（+27）使用者實機確認可正常開啟；修正 +23 起啟動閃退 0.2.0+27；簡中完成 0.2.0+26；英文 30 離～37 家人完成，下一卦 38 睽；英文測試 run #47 建置成功）。2026-10-04（**Play Console 首版設定全部填完，待使用者按「送審 14 項變更」**：封閉測試－外部測試 22 (0.1.0)（run #40 AAB，無廣告無訂閱）、177 國、測試人員名單「測試一」（需 ≥12 人連續 14 天）；應用程式內容全部完成（實填紀錄與差異見 iching-content `store/PLAY_CONSOLE.md` §5，「廣告」聲明已選「是」）；商店資訊：名稱改 ASO 版「謙卦｜易經六十四卦卡・抽卦解卦」、簡短／完整說明 ASO 版（`store/listing-zh-Hant.md`）、圖示、主題圖片、8 張截圖（`store/screenshots-zh-Hant/`，使用者 Redmi 實機截圖＋`make.py` 排版）；AI 素材聲明：主題圖片與截圖 01、02、06、07 標示 AI（Gemini 牌面），圖示不標；類別生活品味、標記：自我成長、冥想、生活品味。商業模式 §21.1；英文 01～24 完成，下一卦 25 无妄）
 
 ---
 
@@ -678,6 +678,8 @@ checkout 本 repo → 以 `BUILDS_REPO_TOKEN` sparse-checkout iching-content 的
 - ⚠️ 使用者回報 **run #57 點圖示立刻閃退**（#54 也打不開，兩者共同點是 force_lang=en）。#56 與 #57 的 AndroidManifest 完全相同（androguard 比對），差別只在 dart-define。使用者確認一直從 Releases 裝 APK；最後能開的是 run #40（0.1.0+22）。
 - **閃退原因已找到（2026-10-05）**：0.2.0+23 加入 AdMob，SDK 帶入 WorkManager，啟動時由 androidx.startup 以反射建立 Room 的 `WorkDatabase_Impl`；我們的 ProGuard 沒有 WorkManager／Room keep 規則，R8 把它的建構子與 RoomDatabase 父類別砍掉（androguard 檢查 run #56 APK 確認），所以 **+23～+26 正式版與測試版全部一開就閃退**（run #54 打不開也是這個原因，不是降版）。修正：`scripts/patch_ads.sh` 加入與智慧聽覺巡航相同的 WorkManager／Room 規則（沒加到會讓 CI 失敗），0.2.0+27。⚠️ **教訓**：新增原生 SDK 時，對照智慧聽覺巡航 `scripts/patch_firebase_proguard.sh` 的 keep 規則；CI 建置成功不代表能開啟，要請使用者實機確認。
 
+- 2026-10-05（第六個對話）：使用者確認 run #58（+27）正常開啟。英文商店截圖改為雲端渲染（§21.2）。渲染時發現 `AssetContentSource._assetList()` 的 `.then().catchError()` 在資產清單已快取（SynchronousFuture）時永遠不完成→牌面圖與解讀一直載入中；實機只要有別處先讀過資產清單就會發生，改用 async try/catch（0.2.0+28）。⚠️ 寫 Flutter 程式：不要對可能是 SynchronousFuture 的 Future 用 `.catchError`。下一步：日文（§19.2 第 5 項）。
+
 ### 19.3 需要使用者做的事（Claude 會在對應階段提醒）
 - Firebase：確認 Analytics 即時報表看得到 `qg_reading_shown`、Crashlytics 不再「等待中」（§18.4，記得先篩選謙卦 App）。
 - 每次新版：從 iching-content Releases 下載 APK 覆蓋安裝試用，有問題回報。
@@ -732,7 +734,7 @@ checkout 本 repo → 以 `BUILDS_REPO_TOKEN` sparse-checkout iching-content 的
 - 已完成並列入「發布總覽」待送審：封閉測試版本、商店資訊、商店設定、應用程式內容全部聲明。使用者下一步：快速檢查跑完後按「送審 14 項變更」；確認「測試一」名單 ≥12 個 Gmail。
 - 審查通過後：取得封閉測試加入連結，請測試人員接受邀請並安裝；14 天計時開始。
 - 下一版（含 AdMob＋訂閱）送審前必改：iching-content `store/PLAY_CONSOLE.md` §5（6 項）＋商店完整說明補「含廣告、可訂閱」＋AI 素材聲明若新增素材再標。
-- 英文商店資訊（2026-10-05）：✅ `store/listing-en.md`、✅ `store/feature-graphic-en-1024x500.png`；截圖 ⏳ 等使用者以英文介面（手機語言英文，或 force_lang=en 測試版）依 `store/screenshots-en/make.py` 的 ITEMS 順序截 8 張貼回。上傳位置：Play Console 主要商店資訊 → 管理翻譯 → 新增 English (United States)，英文圖像要在該語言的圖像區另外上傳（未上傳會顯示繁中圖）。
+- 英文商店資訊（2026-10-05）：✅ `store/listing-en.md`、✅ `store/feature-graphic-en-1024x500.png`；✅ 截圖 8 張 `store/screenshots-en/screenshot-01～08.png`（1080×1920）——**不再用手機截圖**：本 repo `screenshots/store_screenshots_test.dart` 以 widget test 渲染 App 真實畫面（英文、會員、1080×2400／密度 2.625、打包的思源字型、正式內容與牌面；照使用者操作點按鈕走到各畫面，亂數固定所以每次相同），再跑 make.py 排版。步驟見 `screenshots/README.md`（約 15 秒）。原始畫面含私人內容，輸出放 repo 外。其他語言照同一支測試換 Locale。AI 素材聲明：截圖 01、07 含 Gemini 牌面要標 AI。⚠️ 已知外觀：英文內文的 “ ” ’ 用思源（CJK 全形）字形，前後空白較寬，實機相同，日後可評估補一個拉丁字型。上傳位置：Play Console 主要商店資訊 → 管理翻譯 → 新增 English (United States)，英文圖像要在該語言的圖像區另外上傳（未上傳會顯示繁中圖）。
 
 ## 23. 廣告與訂閱（2026-10-04，0.2.0+23，run #44 建置成功）
 

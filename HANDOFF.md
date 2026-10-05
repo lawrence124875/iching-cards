@@ -663,7 +663,7 @@ checkout 本 repo → 以 `BUILDS_REPO_TOKEN` sparse-checkout iching-content 的
 4. ✅ 2026-10-05 完成【內容】英文版 64 卦（重新為英文讀者撰寫，非逐句翻譯；§12）：`check_translation.py en` 64 卦 OK、約 15.1 萬字；`en.contentReady = true`（0.2.0+24，run #53 正式版）；回譯抽查與名句來源記在 iching-content `en/README.md` §5。英文商店資訊、主題圖片已完成，截圖等使用者實機截圖（§21.2）。
 5. 🔶【內容】其餘 9 語分批（簡中 → 日 → 韓 → 越 → 西 → 葡 → 印尼 → 泰 → 阿），各語字型（§15）與 ARB 介面同步。
    - ✅ 2026-10-05 **簡中**（0.2.0+26，run #56 ✅）：iching-content `tools/to_hans.py` 自繁中轉出 64 卦（OpenCC tw2sp＋「乾」鎖定＋大陸譯名＋標點，說明 `zh-Hans/README.md`；**繁中改動後要重跑**）；`app_zh_Hans.arb` 同一函式轉出；`AppLanguages.zhHans`（contentReady true）；字型見 §15「簡中補字」。⏳ 使用者實機確認（手機語言改簡體中文，或 force_lang=zh-Hans）。
-   - ✅ **日文**（2026-10-05；**64 卦完成**，0.2.0+30 起 `contentReady: true`）：App 端（0.2.0+29）：`app_ja.arb`、`AppLanguages.ja`、JP 字型（§15）、牌面卦序用漢數字「第十五卦」、CI／import／pubspec 加 `ja`。內容格式 iching-content `ja/README.md`（**經文用書き下し文**、爻階段固定譯法、新字体；`check_translation.py ja` 擋舊字体／差別語／保證語）；64 卦全數通過檢查（約 31 萬字）。待辦：① 日文母語者審閱（33–64 的回譯抽查與審閱一起做，見 ja/README §5 附註）；② 東西相映名句有兩組重複，沿用自繁中/英文：09 與 37 都用亞里斯多德 NE II.1（1103a34–b2）、14 與 41 都用蘇格拉底 DL II.25，要換的話繁中／英文／簡中／日文一起換；③ 日文商店文案與截圖未做。
+   - ✅ **日文**（2026-10-05；**64 卦完成**，0.2.0+30 起 `contentReady: true`）：App 端（0.2.0+29）：`app_ja.arb`、`AppLanguages.ja`、JP 字型（§15）、牌面卦序用漢數字「第十五卦」、CI／import／pubspec 加 `ja`。內容格式 iching-content `ja/README.md`（**經文用書き下し文**、爻階段固定譯法、新字体；`check_translation.py ja` 擋舊字体／差別語／保證語）；64 卦全數通過檢查（約 31 萬字）。待辦：① 日文母語者審閱（33–64 的回譯抽查與審閱一起做，見 ja/README §5 附註）；② 東西相映名句有兩組重複，沿用自繁中/英文：09 與 37 都用亞里斯多德 NE II.1（1103a34–b2）、14 與 41 都用蘇格拉底 DL II.25，要換的話繁中／英文／簡中／日文一起換；③ 日文商店資訊已備妥（§21.2），待使用者上傳。
 6. 🔶 2026-10-04 程式完成（0.2.0+23，§23），等使用者建 AdMob／RevenueCat／Play 訂閱與 Secrets；正式版申請。
 7. 之後：iOS（§9.1，需另決定 Apple 年費）。
 
@@ -682,7 +682,7 @@ checkout 本 repo → 以 `BUILDS_REPO_TOKEN` sparse-checkout iching-content 的
 
 - 2026-10-05（第六個對話）：使用者確認 run #58（+27）正常開啟。英文商店截圖改為雲端渲染（§21.2）。渲染時發現 `AssetContentSource._assetList()` 的 `.then().catchError()` 在資產清單已快取（SynchronousFuture）時永遠不完成→牌面圖與解讀一直載入中；實機只要有別處先讀過資產清單就會發生，改用 async try/catch（0.2.0+28）。⚠️ 寫 Flutter 程式：不要對可能是 SynchronousFuture 的 Future 用 `.catchError`。下一步：日文（§19.2 第 5 項）。
 
-- 2026-10-05（第七個對話）：§19.2 第 5 項日文。App 端 0.2.0+29（run #60 ✅）；內容 01–64 依 ja/README 撰寫，每卦跑 check_translation、每 2–3 卦 commit；64 卦完成後 `ja.contentReady = true`、0.2.0+30。下一步：使用者裝 +30 用日文介面試抽幾卦（字形、書き下し排版、爻名讀音）；日文商店文案／截圖；其餘見第 5 項待辦。
+- 2026-10-05（第七個對話）：§19.2 第 5 項日文。App 端 0.2.0+29（run #60 ✅）；內容 01–64 依 ja/README 撰寫，每卦跑 check_translation、每 2–3 卦 commit；64 卦完成後 `ja.contentReady = true`、0.2.0+30。日文商店資訊也已備妥（§21.2）。下一步：使用者裝 +30 用日文介面試抽幾卦（字形、書き下し排版、爻名讀音）、上傳日文商店資訊；其餘見第 5 項待辦。
 
 ### 19.3 需要使用者做的事（Claude 會在對應階段提醒）
 - Firebase：確認 Analytics 即時報表看得到 `qg_reading_shown`、Crashlytics 不再「等待中」（§18.4，記得先篩選謙卦 App）。
@@ -741,6 +741,7 @@ checkout 本 repo → 以 `BUILDS_REPO_TOKEN` sparse-checkout iching-content 的
 - 英文商店資訊（2026-10-05）：✅ `store/listing-en.md`、✅ `store/feature-graphic-en-1024x500.png`；✅ 截圖 8 張 `store/screenshots-en/screenshot-01～08.png`（1080×1920）——**不再用手機截圖**：本 repo `screenshots/store_screenshots_test.dart` 以 widget test 渲染 App 真實畫面（英文、會員、1080×2400／密度 2.625、打包的思源字型、正式內容與牌面；照使用者操作點按鈕走到各畫面，亂數固定所以每次相同），再跑 make.py 排版。步驟見 `screenshots/README.md`（約 15 秒）。原始畫面含私人內容，輸出放 repo 外。其他語言照同一支測試換 Locale。AI 素材聲明：截圖 01、07 含 Gemini 牌面要標 AI。⚠️ 已知外觀：英文內文的 “ ” ’ 用思源（CJK 全形）字形，前後空白較寬，實機相同，日後可評估補一個拉丁字型。上傳位置：Play Console 主要商店資訊 → 管理翻譯 → 新增 English (United States)，英文圖像要在該語言的圖像區另外上傳（未上傳會顯示繁中圖）。
 
 - 2026-10-05 使用者已完成：run #59（0.2.0+28，測試廣告、訂閱未開放）上傳**內部測試**；前景服務權限聲明重交；內容分級重做（可購買數位商品＝是）；資料安全性（裝置 ID 分享＝是／廣告或行銷、大概位置加廣告或行銷、新增購買記錄）；廣告 ID 加廣告或行銷；商店資訊新增英文、簡中（zh-CN，`store/listing-zh-Hans.md`、`feature-graphic-zh-Hans-1024x500.png`、`screenshots-zh-Hans/`），繁簡英完整說明加「免費下載，會員可選」段。版本資訊見 `store/release-notes/`（封閉測試用的版本寫明「測試廣告、會員即將開放」）。
+- 日文商店資訊（2026-10-05）：✅ `store/listing-ja.md`（名稱「謙卦：易経・六十四卦カード」，不加讀音以免與「喧嘩」同音）、✅ `feature-graphic-ja-1024x500.png`、✅ `screenshots-ja/`（`SCREENSHOT_LANG=ja` 渲染）；版本資訊 `0.2.0+30.txt` 加 `<ja-JP>`。使用者上傳：管理翻譯 → 新增日本語（ja-JP），圖像在日文的圖像區另外上傳。建議上架前請日文母語者看過。
 - **封閉測試建議**：審過後把 #59 從內部測試「升級版本」到封閉測試－外部測試，付費測試者全程用**測試廣告**版（避免真實廣告無效流量）；正式廣告版等 14 天結束、申請正式版時再上傳。
 - 下一步：§23.3 四個平台（AdMob → Play 訂閱 → RevenueCat → 5 個 Secrets），使用者截圖、Claude 逐欄回覆並**附操作路徑**。
 

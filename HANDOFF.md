@@ -684,6 +684,8 @@ checkout 本 repo → 以 `BUILDS_REPO_TOKEN` sparse-checkout iching-content 的
 
 - 2026-10-05（第七個對話）：§19.2 第 5 項日文。App 端 0.2.0+29（run #60 ✅）；內容 01–64 依 ja/README 撰寫，每卦跑 check_translation、每 2–3 卦 commit；64 卦完成後 `ja.contentReady = true`、0.2.0+30。日文商店資訊也已備妥（§21.2）。下一步：使用者裝 +30 用日文介面試抽幾卦（字形、書き下し排版、爻名讀音）、上傳日文商店資訊；其餘見第 5 項待辦。
 
+- 2026-10-05（第七個對話，續）：重複名句四語一起換（37、41），升 0.2.0+31 建置帶入新內容。⚠️ 使用者要求：**與使用者對話一律用繁體中文**。
+
 ### 19.3 需要使用者做的事（Claude 會在對應階段提醒）
 - Firebase：確認 Analytics 即時報表看得到 `qg_reading_shown`、Crashlytics 不再「等待中」（§18.4，記得先篩選謙卦 App）。
 - 每次新版：從 iching-content Releases 下載 APK 覆蓋安裝試用，有問題回報。

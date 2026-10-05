@@ -20,6 +20,7 @@ class QianColors {
 /// 依介面語言選字族（[AppFonts.current]，MaterialApp 的 builder 依語言設定）：
 /// - 中文、英文…：思源 TC 為主，簡體字由 SC 子集補（只含 TC 缺的字，2026-10-05）。
 /// - 日文（2026-10-05）：思源 JP 為主（日本字形），JP 子集沒有的字再由 TC、SC 補。
+/// - 韓文（2026-10-05）：思源 KR 為主（韓文音節與韓式漢字字形），其餘同日文。
 /// 每個指定 [kSerif]／[kSans] 的地方都要帶對應的 fallback，否則 copyWith 會沿用黑體的 fallback。
 /// 經文的漢字原文（非中文語言時顯示在譯文上方）一律用 [AppFonts.chinese]：那是中文經文，用中文字形。
 class AppFonts {
@@ -33,9 +34,15 @@ class AppFonts {
   static const chinese = AppFonts._('NotoSerifTC', 'NotoSansTC', ['NotoSerifSC'], ['NotoSansSC']);
   static const japanese =
       AppFonts._('NotoSerifJP', 'NotoSansJP', ['NotoSerifTC', 'NotoSerifSC'], ['NotoSansTC', 'NotoSansSC']);
+  static const korean =
+      AppFonts._('NotoSerifKR', 'NotoSansKR', ['NotoSerifTC', 'NotoSerifSC'], ['NotoSansTC', 'NotoSansSC']);
 
   /// 語言代碼（Locale.languageCode）→ 字族組合。
-  static AppFonts forLanguage(String languageCode) => languageCode == 'ja' ? japanese : chinese;
+  static AppFonts forLanguage(String languageCode) => switch (languageCode) {
+        'ja' => japanese,
+        'ko' => korean,
+        _ => chinese,
+      };
 
   /// 目前介面語言的字族（app.dart 的 builder 設定；沒有 context 的地方也能用）。
   static AppFonts current = chinese;

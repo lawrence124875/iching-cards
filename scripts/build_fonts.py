@@ -62,6 +62,34 @@ def used_chars_ja(root: pathlib.Path) -> set[str]:
             chars.update(f.read_text(encoding="utf-8"))
     return chars
 
+# 韓文介面的主字型（2026-10-05，HANDOFF §15）：theme.dart 的 AppFonts.korean 以 KR 為主、TC／SC 為 fallback。
+# 收 KS X 1001 非漢字（符號、相容字母）＋常用韓文音節 2,350 字＋韓文內容與介面實際用到的字（含括號內漢字）＋英數標點。
+KR_WEIGHTS = [
+    ("NotoSansKR[wght].ttf", "NotoSansKR", 400),
+    ("NotoSansKR[wght].ttf", "NotoSansKR", 500),
+    ("NotoSerifKR[wght].ttf", "NotoSerifKR", 400),
+]
+
+
+def ksx1001_hangul() -> set[str]:
+    """KS X 1001 第 1–12 區（符號、韓文相容字母）＋第 16–40 區（韓文音節 2,350 字），以 EUC-KR 解碼。"""
+    out = set()
+    for hi in list(range(0xA1, 0xAD)) + list(range(0xB0, 0xC9)):
+        for lo in range(0xA1, 0xFF):
+            try:
+                out.add(bytes([hi, lo]).decode("euc_kr"))
+            except UnicodeDecodeError:
+                pass
+    return out
+
+
+def used_chars_ko(root: pathlib.Path) -> set[str]:
+    chars = set()
+    for pattern in ("assets/content/ko/*.json", "lib/l10n/app_ko.arb"):
+        for f in root.glob(pattern):
+            chars.update(f.read_text(encoding="utf-8"))
+    return chars
+
 
 def gb2312_level1() -> set[str]:
     """GB2312 一級常用漢字（0xB0A1–0xD7F9）——簡中使用者輸入「想問的事」用得到。"""
@@ -151,11 +179,18 @@ def main() -> None:
         print(f"{path.name}：補 {len(missing)} 字，{path.stat().st_size / 1e6:.2f} MB")
 
     jp = jis_level1() | used_chars_ja(root)
-    for a, b in ranges:
-        jp.update(chr(c) for c in range(a, b + 1))
     jp.update(chr(c) for c in range(0x3040, 0x3100))  # 平假名、片假名全部
-    jp_codepoints = {ord(c) for c in jp if ord(c) >= 0x20}
-    for fname, family, wght in JP_WEIGHTS:
+    subset_primary(src, out, cache, JP_WEIGHTS, jp, ranges)
+    subset_primary(src, out, cache, KR_WEIGHTS, ksx1001_hangul() | used_chars_ko(root), ranges)
+
+
+def subset_primary(src, out, cache, weights, chars: set[str], ranges) -> None:
+    """日文、韓文的主字型：整組字直接子集（不是只補 TC 缺的字）。"""
+    chars = set(chars)
+    for a, b in ranges:
+        chars.update(chr(c) for c in range(a, b + 1))
+    codepoints = {ord(c) for c in chars if ord(c) >= 0x20}
+    for fname, family, wght in weights:
         if not (src / fname).exists():
             raise SystemExit(f"缺少 {fname}")
         if fname not in cache:
@@ -167,11 +202,11 @@ def main() -> None:
         opts.notdef_outline = True
         opts.hinting = False
         sub = subset.Subsetter(opts)
-        sub.populate(unicodes=jp_codepoints)
+        sub.populate(unicodes=codepoints)
         sub.subset(font)
         path = out / f"{family}-{wght}.ttf"
         font.save(path)
-        print(f"{path.name}：{len(jp_codepoints)} 字，{path.stat().st_size / 1e6:.2f} MB")
+        print(f"{path.name}：{len(codepoints)} 字，{path.stat().st_size / 1e6:.2f} MB")
 
 
 if __name__ == "__main__":

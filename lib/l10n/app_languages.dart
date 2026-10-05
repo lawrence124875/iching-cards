@@ -63,8 +63,15 @@ class AppLanguages {
     contentReady: true, // 2026-10-05 日文 64 卦完成（§22、iching-content ja/README.md）
   );
 
+  static const ko = AppLanguage(
+    code: 'ko',
+    locale: Locale('ko'),
+    contentFolder: 'ko',
+    contentReady: false, // 2026-10-05 介面完成，64 卦撰寫中（§22、iching-content ko/README.md）
+  );
+
   /// 已有介面翻譯（ARB）的語言。順序無意義。
-  static const all = [zhHant, en, zhHans, ja];
+  static const all = [zhHant, en, zhHans, ja, ko];
 
   /// 只看介面不開放內容的測試用開關：建置時加 --dart-define=FORCE_LANG=en，
   /// 不論手機語言一律用該語言介面（內容仍退回繁中）。正式版不加。

@@ -792,6 +792,7 @@ checkout 本 repo → 以 `BUILDS_REPO_TOKEN` sparse-checkout iching-content 的
 4. 🔶 5 個 Secrets 已設齊 → ✅ 正式建置 run #69（0.2.0+36，commit c1e8381）成功，iching-content Release「謙卦 0.2.0+36（run 69）」說明顯示「廣告：正式廣告單元；訂閱：已設定」（Secrets 讀取正常），檔案 `iching_0.2.0+36_run69.apk`／`.aab` → ⏳ 使用者上傳 AAB 到封閉測試並實機測試（正式廣告、訂閱頁月 NT$99／年 NT$590、授權測試帳號購買解鎖、恢復購買、日韓越版面）。
 5. ✅ 隱私權政策已於 2026-10-04 更新（AdMob、Play 結帳、RevenueCat）。
    - 2026-10-06 再更新（生效日 10/6）：廣告段逐項列出 AdMob 蒐集的資料類型（裝置或其他 ID、大略位置〔IP 推得，不用 GPS〕、應用程式互動、當機記錄與診斷、裝置與 App 資訊）與用途（廣告或行銷、數據分析、詐欺防範／安全性／法規遵循）；訂閱段寫明 RevenueCat 匿名使用者 ID 與購買記錄欄位；「刪除資料」段（錨點 `#data-deletion`／`#data-deletion-en` 不變，Play「資料刪除網址」可直接用）重寫：App 名稱謙卦（com.lclab.qiangua）＋開發者 LC Lab、本機資料解除安裝即刪、Android 設定重設／刪除廣告 ID 路徑、訂閱資料來信 lawrence124875@gmail.com（附 GPA. 訂單編號，30 天內向 RevenueCat 申請刪除）、Google Play 購買記錄依 Google 政策保留、刪資料不等於取消訂閱。中英文同步。⚠️ Play Console 資料安全性表單要與此一致（AdMob 的應用程式互動、當機記錄、診斷資訊也要勾「分享」，用途含詐欺防範）。
+   - ✅ 2026-10-06 使用者已補好資料安全性表單（AdMob 應用程式互動／當機記錄／診斷資訊＝分享，用途含詐欺防範）、確認線上隱私權頁面正常，並送審。⏳ 等審查結果；被拒的話把原因貼回對話。
 6. ⏳ RevenueCat 商品目前顯示 Could not check：Google 權限同步最長約 36 小時，憑證驗證通過後應變 Published；在那之前實機購買可能失敗或訂閱頁抓不到商品，屬正常。
 
 ### 23.4 後台設定紀錄（2026-10-05，聊天端逐欄確認完成）

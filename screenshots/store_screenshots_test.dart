@@ -279,7 +279,7 @@ const _sampleText = {
   ),
   'es': (
     '¿Debo aceptar el nuevo proyecto en el trabajo o seguir afianzando lo que ya hago?',
-    'Al final lo acepté, pero empezando por algo pequeño. Las dos primeras semanas avancé despacio y en silencio, como una semilla bajo la tierra. Al ver que la línea cambiante llevaba a Modestia, me recordé no apresurarme a buscar reconocimiento.',
+    'Al final lo acepté, pero empezando por algo pequeño. Las dos primeras semanas avancé despacio y en silencio, como una semilla bajo la tierra. Al ver que la línea mutante llevaba a Modestia, me recordé no apresurarme a buscar reconocimiento.',
   ),
 };
 

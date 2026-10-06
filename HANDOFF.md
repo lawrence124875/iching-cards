@@ -789,7 +789,7 @@ checkout 本 repo → 以 `BUILDS_REPO_TOKEN` sparse-checkout iching-content 的
 1. ✅ AdMob：App 謙卦與三個廣告單元已建（ID 已設進 Secrets）。封鎖敏感類別、GDPR 訊息本次紀錄未提，之後再確認。
 2. ✅ RevenueCat：另開專案 qiangua 完成（見 §23.4）。
 3. ✅ Play Console：訂閱 `qg_premium_monthly`、`qg_premium_yearly` 已建立並啟用（見 §23.4）。
-4. 🔶 5 個 Secrets 已設齊 → 待正式建置（不填 force_lang／force_premium）→ 實機測試（訂閱用 Play 授權測試帳號）。
+4. 🔶 5 個 Secrets 已設齊 → ✅ 正式建置 run #69（0.2.0+36，commit c1e8381）成功，iching-content Release「謙卦 0.2.0+36（run 69）」說明顯示「廣告：正式廣告單元；訂閱：已設定」（Secrets 讀取正常），檔案 `iching_0.2.0+36_run69.apk`／`.aab` → ⏳ 使用者上傳 AAB 到封閉測試並實機測試（正式廣告、訂閱頁月 NT$99／年 NT$590、授權測試帳號購買解鎖、恢復購買、日韓越版面）。
 5. ✅ 隱私權政策已於 2026-10-04 更新（AdMob、Play 結帳、RevenueCat）。
 6. ⏳ RevenueCat 商品目前顯示 Could not check：Google 權限同步最長約 36 小時，憑證驗證通過後應變 Published；在那之前實機購買可能失敗或訂閱頁抓不到商品，屬正常。
 
@@ -799,6 +799,7 @@ checkout 本 repo → 以 `BUILDS_REPO_TOKEN` sparse-checkout iching-content 的
 - **Products**：`qg_premium_monthly:monthly`、`qg_premium_yearly:yearly`（狀態 Could not check，憑證驗證通過後會變 Published）。
 - **Entitlement** `premium` 掛兩個商品；**Offering** `default`（Current）：`$rc_annual` → `qg_premium_yearly:yearly`，`$rc_monthly` → `qg_premium_monthly:monthly`。沒有建 Test Store 商品、沒有 Lifetime。
 - **GitHub Secrets** 5 個已設齊：`ADMOB_APP_ID`、`ADMOB_BANNER_AD_UNIT_ID`、`ADMOB_INTERSTITIAL_AD_UNIT_ID`、`ADMOB_REWARDED_AD_UNIT_ID`、`REVENUECAT_ANDROID_API_KEY`。
+- **正式建置**（2026-10-06 確認）：run #69 ✅，0.2.0+36，廣告＝正式廣告單元、訂閱＝已設定；版本資訊含 zh-TW／en-US／ja-JP／ko-KR／vi-VN（`store/release-notes/0.2.0+36.txt`）。
 - **封閉測試**：線上版本 28（0.2.0+28）已確認在 +27 閃退修正之後，但不含日文（+30 起）、韓文（+33 起）、越南文（+35 起）。
 
 ## 22. 英文內容格式（2026-10-03 決定，0.1.0+22）

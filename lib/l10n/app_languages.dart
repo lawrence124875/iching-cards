@@ -92,8 +92,16 @@ class AppLanguages {
     contentReady: true, // 2026-10-06 巴西葡萄牙文 64 卦完成（§22、iching-content pt-BR/README.md）
   );
 
+  /// 印尼文：標準印尼文（kamu 體）。
+  static const id = AppLanguage(
+    code: 'id',
+    locale: Locale('id'),
+    contentFolder: 'id',
+    contentReady: true, // 2026-10-06 印尼文 64 卦完成（§22、iching-content id/README.md）
+  );
+
   /// 已有介面翻譯（ARB）的語言。順序無意義。
-  static const all = [zhHant, en, zhHans, ja, ko, vi, es, pt];
+  static const all = [zhHant, en, zhHans, ja, ko, vi, es, pt, id];
 
   /// 只看介面不開放內容的測試用開關：建置時加 --dart-define=FORCE_LANG=en，
   /// 不論手機語言一律用該語言介面（內容仍退回繁中）。正式版不加。

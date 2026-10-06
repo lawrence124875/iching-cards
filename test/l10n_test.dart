@@ -154,6 +154,15 @@ void main() {
         AppLanguages.en);
   });
 
+  test('印尼文：id 手機用印尼文；未開放時用英文', () {
+    final withId = [AppLanguages.zhHant, AppLanguages.en, AppLanguages.id];
+    expect(AppLanguages.resolve([const Locale('id', 'ID')], available: withId), AppLanguages.id);
+    expect(AppLanguages.id.contentFolder, 'id');
+    expect(AppLanguages.byCode('id'), AppLanguages.id);
+    expect(AppLanguages.resolve([const Locale('id', 'ID')], available: [AppLanguages.zhHant, AppLanguages.en]),
+        AppLanguages.en);
+  });
+
   group('翻譯內容', () {
     test('每個語言都能載入，App 名稱正確', () {
       expect(lookupAppLocalizations(AppLanguages.zhHant.locale).appTitle, '謙卦');
@@ -164,6 +173,7 @@ void main() {
       expect(lookupAppLocalizations(AppLanguages.vi.locale).appTitle, 'Quẻ Khiêm');
       expect(lookupAppLocalizations(AppLanguages.es.locale).appTitle, 'Qiangua');
       expect(lookupAppLocalizations(AppLanguages.pt.locale).appTitle, 'Qiangua');
+      expect(lookupAppLocalizations(AppLanguages.id.locale).appTitle, 'Qiangua');
     });
 
     test('單複數與 select', () {

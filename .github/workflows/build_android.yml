@@ -47,6 +47,7 @@ jobs:
             vi
             es
             pt-BR
+            id
             images/webp
             glossary
             store/release-notes

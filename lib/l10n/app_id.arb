@@ -1,0 +1,534 @@
+{
+  "@@locale": "id",
+  "appTitle": "Qiangua",
+  "appSubtitle": "I Ching · 64 Kartu Heksagram",
+  "homeMotto": "I Ching bukan untuk menebak nasib\nmelainkan untuk belajar membaca citra dan memutuskan",
+  "homeDisclaimer": "Hanya untuk refleksi diri dan hiburan",
+  "cancel": "Batal",
+  "ok": "OK",
+  "delete": "Hapus",
+  "back": "Kembali",
+  "save": "Simpan",
+  "viewReading": "Lihat Ulasan",
+  "separator": " · ",
+  "listSeparator": ", ",
+  "featureDraw": "Ambil Satu Kartu",
+  "featureCoins": "Lempar Tiga Koin",
+  "featureJournal": "Jurnal",
+  "featureBreath": "Lanskap Suara Napas",
+  "readingActionBreath": "Bernapas bersama Heksagram Ini",
+  "methodDraw": "Ambil satu kartu",
+  "methodCoins": "Lempar tiga koin",
+  "questionTitle": "Pertanyaanmu",
+  "questionHint": "Dalam satu atau dua kalimat, apa yang sedang kamu pikirkan? (opsional)",
+  "questionPromptLink": "Tuliskan pertanyaanmu (opsional)",
+  "questionShown": "T: {question}",
+  "@questionShown": {
+    "placeholders": {
+      "question": {
+        "type": "String"
+      }
+    }
+  },
+  "optionalHint": "Opsional",
+  "drawPromptBefore": "Pikirkan satu hal\nKetuk kartu saat kamu siap",
+  "drawPromptAfter": "Inilah citra saat ini",
+  "drawFlip": "Buka",
+  "drawAgain": "Ambil Lagi",
+  "coinsInstructions": "Sisi gambar bernilai 3 dan sisi angka bernilai 2; jumlah tiga koin menjadi satu garis. Lempar enam kali dari bawah ke atas. 6 dan 9 adalah garis berubah.",
+  "coinsToss": "Lemparan {n} dari 6",
+  "@coinsToss": {
+    "placeholders": {
+      "n": {
+        "type": "int"
+      }
+    }
+  },
+  "coinsTossAll": "Lempar Sekaligus",
+  "coinsRestart": "Mulai Lagi",
+  "lineName": "{position, select, first{Garis 1} second{Garis 2} third{Garis 3} fourth{Garis 4} fifth{Garis 5} top{Garis 6} other{Garis}}",
+  "@lineName": {
+    "placeholders": {
+      "position": {
+        "type": "String"
+      }
+    }
+  },
+  "lineTitle": "{name}: {text}",
+  "@lineTitle": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      },
+      "text": {
+        "type": "String"
+      }
+    }
+  },
+  "lineValue": "{kind, select, oldYin{yin tua} youngYang{yang muda} youngYin{yin muda} oldYang{yang tua} other{-}}",
+  "@lineValue": {
+    "placeholders": {
+      "kind": {
+        "type": "String"
+      }
+    }
+  },
+  "coinLineValue": "{value}  {kind}",
+  "@coinLineValue": {
+    "placeholders": {
+      "value": {
+        "type": "int"
+      },
+      "kind": {
+        "type": "String"
+      }
+    }
+  },
+  "coinChangingMark": " (berubah)",
+  "sectionReading": "Ulasan",
+  "sectionImage": "Citra",
+  "sectionSource": "Dari Mana Citra Ini Datang",
+  "sectionForYou": "Untukmu Saat Ini",
+  "sectionAction": "Langkah Kecil Hari Ini",
+  "sectionQuestion": "Pertanyaan untuk Direnungkan",
+  "sectionEastWest": "Timur Bertemu Barat",
+  "sectionFocus": "Fokus Bacaan Ini",
+  "sectionText": "Teks",
+  "sectionJudgment": "Putusan",
+  "readingNotWritten": "Ulasan untuk heksagram ini masih sedang ditulis. Untuk sementara, lihatlah pemandangan pada kartu dan perhatikan apa yang terlintas di benakmu.",
+  "hexagramContentInProgress": "Isi heksagram ini masih sedang ditulis.",
+  "contentInProgress": "Isi {name} masih sedang ditulis.",
+  "@contentInProgress": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "lineInProgress": "Garis {name} ini masih sedang ditulis.",
+  "@lineInProgress": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "savedToJournalHint": "Tersimpan di Jurnalmu. Kembalilah dari layar utama untuk membandingkannya nanti.",
+  "saveThisReading": "Simpan Bacaan Ini",
+  "detailButton": "{name}: Teks dan Enam Garis",
+  "@detailButton": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "detailButtonChanged": "Hasil perubahan {name}: Teks dan Enam Garis",
+  "@detailButtonChanged": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "primaryHexagram": "Utama",
+  "changedHexagram": "Hasil perubahan",
+  "quoteMarks": "“{text}”",
+  "@quoteMarks": {
+    "placeholders": {
+      "text": {
+        "type": "String"
+      }
+    }
+  },
+  "quoteAttribution": "{author}, {source}",
+  "@quoteAttribution": {
+    "placeholders": {
+      "author": {
+        "type": "String"
+      },
+      "source": {
+        "type": "String"
+      }
+    }
+  },
+  "focusExplanation": "{reason, select, none{Tidak ada garis berubah: bacalah Putusan heksagram utama.} one{Satu garis berubah: bacalah garis itu.} two{Dua garis berubah: bacalah keduanya, dengan garis yang di atas sebagai fokus utama.} three{Tiga garis berubah: bacalah Putusan heksagram utama dan heksagram hasil perubahan.} four{Empat garis berubah: bacalah dua garis yang tidak berubah pada heksagram hasil perubahan, dengan garis yang di bawah sebagai fokus utama.} five{Lima garis berubah: bacalah satu-satunya garis yang tidak berubah pada heksagram hasil perubahan.} allQian{Keenam garis berubah: untuk Qián, bacalah “Semua garis sembilan”.} allKun{Keenam garis berubah: untuk Kūn, bacalah “Semua garis enam”.} other{Keenam garis berubah: bacalah Putusan heksagram hasil perubahan.}}",
+  "@focusExplanation": {
+    "placeholders": {
+      "reason": {
+        "type": "String"
+      }
+    }
+  },
+  "glyphLabel": "Gambar heksagram",
+  "glyphLabelChanging": "Gambar heksagram, garis berubah: {lines}",
+  "@glyphLabelChanging": {
+    "placeholders": {
+      "lines": {
+        "type": "String"
+      }
+    }
+  },
+  "cardOrdinal": "No. {ordinal}",
+  "@cardOrdinal": {
+    "placeholders": {
+      "ordinal": {
+        "type": "String"
+      }
+    }
+  },
+  "cardTrigrams": "{upperNature} di atas {lowerNature}",
+  "@cardTrigrams": {
+    "placeholders": {
+      "upperName": {
+        "type": "String"
+      },
+      "upperNature": {
+        "type": "String"
+      },
+      "lowerName": {
+        "type": "String"
+      },
+      "lowerNature": {
+        "type": "String"
+      }
+    }
+  },
+  "cardZoomLabel": "Perbesar gambar kartu {name}",
+  "@cardZoomLabel": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "artViewerLabel": "Gambar kartu {name}. Ketuk untuk kembali",
+  "@artViewerLabel": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "tapToReturn": "Ketuk untuk kembali",
+  "journalEmpty": "Belum ada catatan\n\nSetelah mengambil kartu\nketuk “Simpan Bacaan Ini” di akhir ulasan\nLalu kembalilah nanti\nuntuk melihat bagaimana citra itu terwujud",
+  "journalNoQuestion": "(Tidak ada pertanyaan yang ditulis)",
+  "journalReviewCount": "{count, plural, =1{1 catatan} other{{count} catatan}}",
+  "@journalReviewCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "journalReminderOn": "Pengingat {date}",
+  "@journalReminderOn": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "journalTitleSingle": "{name}",
+  "@journalTitleSingle": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "journalTitleChange": "{from} → {to}",
+  "@journalTitleChange": {
+    "placeholders": {
+      "from": {
+        "type": "String"
+      },
+      "to": {
+        "type": "String"
+      }
+    }
+  },
+  "journalNotFound": "Catatan ini tidak ditemukan. Mungkin sudah dihapus.",
+  "journalDeleteTitle": "Hapus catatan ini?",
+  "journalDeleteBody": "Tindakan ini tidak dapat dibatalkan.",
+  "journalChangedTo": "Hasil perubahan: {name}",
+  "@journalChangedTo": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "journalReadingThen": "Ulasan saat itu",
+  "journalQuestionEmpty": "(Belum diisi. Ketuk untuk menambahkan)",
+  "journalViewReading": "Lihat Ulasan Saat Itu",
+  "journalReviews": "Menengok Kembali",
+  "journalReviewPrompt": "Apa yang terjadi sesudahnya? Bila menengok kembali, di mana citra itu bertemu dengan apa yang terjadi?",
+  "journalAddReview": "Tulis Apa yang Terjadi",
+  "journalReviewDialogTitle": "Apa yang terjadi sesudahnya?",
+  "journalEditReview": "Ubah Catatan Ini",
+  "journalReminderSection": "Pengingat untuk Menengok Kembali",
+  "journalReminderPending": "Kamu akan diingatkan pada {date} pukul {hour} malam.",
+  "@journalReminderPending": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      },
+      "hour": {
+        "type": "int"
+      }
+    }
+  },
+  "journalReminderNone": "Belum ada pengingat. Pilih jumlah hari dari hari ini:",
+  "reminderFailed": "Pengingat tidak dapat dipasang. {reason}",
+  "@reminderFailed": {
+    "placeholders": {
+      "reason": {
+        "type": "String"
+      }
+    }
+  },
+  "saveSheetNote": "Hanya disimpan di ponsel ini. Kembalilah nanti untuk membandingkan dan berlatih membaca citra.",
+  "saveSheetRemind": "Ingatkan Aku untuk Menengok Kembali",
+  "saveSheetRemindIn": "{days, plural, =1{Pengingat besok pukul {hour} malam} other{Pengingat {days} hari lagi pukul {hour} malam}}",
+  "@saveSheetRemindIn": {
+    "placeholders": {
+      "days": {
+        "type": "int"
+      },
+      "hour": {
+        "type": "int"
+      }
+    }
+  },
+  "savedOk": "Tersimpan di Jurnalmu.",
+  "savedReminderFailed": "Tersimpan di Jurnalmu, tetapi pengingat tidak dapat dipasang. {reason}",
+  "@savedReminderFailed": {
+    "placeholders": {
+      "reason": {
+        "type": "String"
+      }
+    }
+  },
+  "reminderPickerTitle": "Ingatkan aku berapa hari lagi?",
+  "daysSuffix": "hari",
+  "daysHint": "1–365",
+  "reminderOff": "Tanpa pengingat",
+  "reminderDays": "{days, plural, =1{1 hari} other{{days} hari}}",
+  "@reminderDays": {
+    "placeholders": {
+      "days": {
+        "type": "int"
+      }
+    }
+  },
+  "reminderCustom": "Atur sendiri",
+  "reminderPermissionDenied": "Notifikasi untuk Qiangua sedang mati. Kamu dapat menyalakannya di Setelan → Aplikasi → Qiangua → Notifikasi.",
+  "reminderInitFailed": "Notifikasi tidak dapat dimulai: {detail}",
+  "@reminderInitFailed": {
+    "placeholders": {
+      "detail": {
+        "type": "String"
+      }
+    }
+  },
+  "reminderScheduleFailed": "Penjadwalan gagal: {detail}",
+  "@reminderScheduleFailed": {
+    "placeholders": {
+      "detail": {
+        "type": "String"
+      }
+    }
+  },
+  "reminderUnsupported": "Pengingat belum didukung di platform ini",
+  "reminderChannelName": "Pengingat jurnal",
+  "reminderChannelDescription": "Mengingatkanmu untuk menengok kembali bacaan yang kamu simpan",
+  "reviewNotificationTitle": "Tengok kembali: {name}",
+  "@reviewNotificationTitle": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "reviewNotificationBody": "{days, plural, =1{Kemarin kamu mengambil {name}. Tengok kembali: bagaimana citra itu terwujud?} other{{days} hari yang lalu kamu mengambil {name}. Tengok kembali: bagaimana citra itu terwujud?}}",
+  "@reviewNotificationBody": {
+    "placeholders": {
+      "days": {
+        "type": "int"
+      },
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "breathChannelName": "Lanskap suara napas",
+  "breathSetupTitle": "Lanskap Suara Napas · {name}",
+  "@breathSetupTitle": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "breathSoundSingle": "{nature} ({trigram}): {sound}",
+  "@breathSoundSingle": {
+    "placeholders": {
+      "trigram": {
+        "type": "String"
+      },
+      "nature": {
+        "type": "String"
+      },
+      "sound": {
+        "type": "String"
+      }
+    }
+  },
+  "breathSoundUpper": "Atas: {nature} ({trigram}), {sound}",
+  "@breathSoundUpper": {
+    "placeholders": {
+      "trigram": {
+        "type": "String"
+      },
+      "nature": {
+        "type": "String"
+      },
+      "sound": {
+        "type": "String"
+      }
+    }
+  },
+  "breathSoundLower": "Bawah: {nature} ({trigram}), {sound}",
+  "@breathSoundLower": {
+    "placeholders": {
+      "trigram": {
+        "type": "String"
+      },
+      "nature": {
+        "type": "String"
+      },
+      "sound": {
+        "type": "String"
+      }
+    }
+  },
+  "breathSetupNote": "Tarik napas selama 4 detik dan embuskan selama 6 detik (6 napas per menit). Lanskap suara naik dan turun mengikuti napasmu; nada dan lonceng disetel pada 432 Hz.",
+  "breathDuration": "Durasi",
+  "minutes": "{m, plural, =1{1 menit} other{{m} menit}}",
+  "@minutes": {
+    "placeholders": {
+      "m": {
+        "type": "int"
+      }
+    }
+  },
+  "breathBells": "Lonceng lembut saat napas berganti",
+  "breathBellsSub": "Ikuti dengan mata terpejam",
+  "breathBinaural": "Ketukan binaural 7,83 Hz",
+  "breathBinauralSub": "Perlu headphone (kiri 216 Hz, kanan 223,83 Hz)",
+  "breathHeadphones": "Disarankan memakai headphone; pengeras suara ponsel kesulitan memutar suara rendah.",
+  "breathStart": "Mulai",
+  "breathMediaTitle": "{name} · Lanskap Suara Napas",
+  "@breathMediaTitle": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "breathMediaSubtitle": "{sounds} | {duration}",
+  "@breathMediaSubtitle": {
+    "placeholders": {
+      "sounds": {
+        "type": "String"
+      },
+      "duration": {
+        "type": "String"
+      }
+    }
+  },
+  "breathPreparing": "Menyiapkan lanskap suara",
+  "breathPreparingSub": "Pertama kali perlu beberapa detik",
+  "breathFailed": "Ponsel ini tidak dapat memutar lanskap suara saat ini.\nKamu dapat memakai panduan tanpa suara.",
+  "breathEnded": "Selesai",
+  "breathDone": "Selesai",
+  "breathStoppedFromNotification": "Dihentikan dari notifikasi",
+  "breathSummary": "{minutes} menit · {breaths} napas",
+  "@breathSummary": {
+    "placeholders": {
+      "minutes": {
+        "type": "int"
+      },
+      "breaths": {
+        "type": "int"
+      }
+    }
+  },
+  "breathPaused": "Dijeda",
+  "breathUseSilent": "Pakai Panduan Tanpa Suara",
+  "breathBackToReading": "Kembali ke Ulasan",
+  "breathViewArtAgain": "Lihat Kartu Lagi",
+  "breathRemaining": "Sisa {time}",
+  "@breathRemaining": {
+    "placeholders": {
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "breathSilentMark": " · tanpa suara",
+  "breathViewArt": "Kartu",
+  "breathResume": "Lanjutkan",
+  "breathPause": "Jeda",
+  "breathEnd": "Akhiri",
+  "breathPhase": "{phase, select, prepare{Siap} inhale{Tarik} exhale{Embuskan} done{Selesai} other{-}}",
+  "@breathPhase": {
+    "placeholders": {
+      "phase": {
+        "type": "String"
+      }
+    }
+  },
+  "soundscapeName": "{key, select, qian{Angin Jernih di Ketinggian} kun{Jangkrik di Padang Malam} zhen{Guntur Jauh, Hujan Musim Semi} xun{Angin di Pepohonan} kan{Aliran Sungai Gunung} li{Api Unggun} gen{Keheningan Gunung} dui{Riak di Tepi Danau} other{-}}",
+  "@soundscapeName": {
+    "placeholders": {
+      "key": {
+        "type": "String"
+      }
+    }
+  },
+  "premiumTitle": "Qiangua Premium",
+  "premiumSubtitle": "Tanpa iklan, dan semua fitur tanpa batas",
+  "premiumBenefitNoAds": "Sama sekali tanpa iklan",
+  "premiumBenefitCasts": "Ambil kartu dan lempar koin tanpa batas",
+  "premiumBenefitJournal": "Catatan jurnal tanpa batas",
+  "premiumBenefitBreath": "Latihan napas 3 dan 5 menit serta ketukan binaural",
+  "premiumFreeNote": "Teks klasik, ulasan tiap garis, ketiga ulasan, dan Timur Bertemu Barat selalu gratis.",
+  "planMonthly": "Bulanan",
+  "planYearly": "Tahunan",
+  "premiumSubscribe": "Berlangganan",
+  "premiumRestore": "Pulihkan pembelian",
+  "premiumManage": "Kelola langganan",
+  "premiumActive": "Kamu anggota Qiangua Premium. Terima kasih atas dukunganmu.",
+  "premiumUnavailable": "Langganan belum tersedia.",
+  "premiumLoadFailed": "Paket langganan tidak dapat dimuat. Periksa koneksimu dan coba lagi.",
+  "premiumTerms": "Langganan diperpanjang otomatis. Batalkan kapan saja di Google Play pada Pembayaran & langganan; Premium tetap aktif sampai akhir periode yang sedang berjalan.",
+  "premiumThanks": "Kamu sudah berlangganan. Terima kasih atas dukunganmu!",
+  "premiumPurchaseFailed": "Pembelian tidak selesai. Kamu tidak dikenai biaya.",
+  "premiumRestoreNone": "Tidak ada langganan yang dapat dipulihkan.",
+  "castLimitTitle": "Kamu sudah memakai {count} kesempatan gratis hari ini",
+  "castLimitBody": "Tonton iklan singkat untuk satu kesempatan lagi, atau pilih Premium untuk kesempatan tanpa batas dan tanpa iklan.",
+  "castLimitBodyExhausted": "Itu saja untuk hari ini. Renungkan sejenak citra yang kamu dapat dan kembalilah besok, atau pilih Premium untuk kesempatan tanpa batas.",
+  "castWatchAd": "Tonton iklan untuk satu kesempatan lagi",
+  "castAdNotReady": "Iklan tidak dapat dimuat saat ini. Coba lagi nanti.",
+  "castComeTomorrow": "Kembali besok",
+  "journalLimitTitle": "Kamu sudah mencapai batas gratis {count} catatan jurnal",
+  "journalLimitBody": "Semua yang sudah kamu simpan tetap ada. Tonton iklan untuk menyimpan yang ini, atau pilih Premium untuk menambah catatan tanpa batas.",
+  "premiumBadge": "Premium",
+  "menuPremium": "Qiangua Premium",
+  "menuAdPrivacy": "Setelan privasi iklan",
+  "menuPrivacyPolicy": "Kebijakan privasi",
+  "journalWatchAd": "Tonton iklan untuk menyimpan yang ini",
+  "notNow": "Nanti saja"
+}

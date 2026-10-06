@@ -277,6 +277,10 @@ const _sampleText = {
     'Có nên nhận dự án mới ở công ty, hay tiếp tục làm thật vững việc đang có?',
     'Cuối cùng tôi đã nhận, nhưng bắt đầu từ phạm vi nhỏ. Hai tuần đầu như hạt giống trong đất, tiến chậm và lặng lẽ. Thấy hào động hướng về quẻ Khiêm, tôi tự nhắc mình đừng vội tranh công.',
   ),
+  'es': (
+    '¿Debo aceptar el nuevo proyecto en el trabajo o seguir afianzando lo que ya hago?',
+    'Al final lo acepté, pero empezando por algo pequeño. Las dos primeras semanas avancé despacio y en silencio, como una semilla bajo la tierra. Al ver que la línea cambiante llevaba a Modestia, me recordé no apresurarme a buscar reconocimiento.',
+  ),
 };
 
 JournalEntry _sampleEntry(String lang) {

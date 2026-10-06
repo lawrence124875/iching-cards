@@ -1,7 +1,7 @@
 name: iching_cards
 description: "謙卦｜易經六十四卦卡（LC Lab）"
 publish_to: 'none'
-version: 0.2.0+36
+version: 0.2.0+37
 
 environment:
   sdk: '>=3.4.0 <4.0.0'
@@ -47,6 +47,7 @@ flutter:
     - assets/content/ja/
     - assets/content/ko/
     - assets/content/vi/
+    - assets/content/es/
     - assets/cards/
     - assets/licenses/
 

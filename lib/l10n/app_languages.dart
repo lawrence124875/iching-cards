@@ -77,8 +77,15 @@ class AppLanguages {
     contentReady: true, // 2026-10-05 越南文 64 卦完成（§22、iching-content vi/README.md）
   );
 
+  static const es = AppLanguage(
+    code: 'es',
+    locale: Locale('es'),
+    contentFolder: 'es',
+    contentReady: false, // 2026-10-06 介面完成，64 卦撰寫中（§22、iching-content es/README.md）
+  );
+
   /// 已有介面翻譯（ARB）的語言。順序無意義。
-  static const all = [zhHant, en, zhHans, ja, ko, vi];
+  static const all = [zhHant, en, zhHans, ja, ko, vi, es];
 
   /// 只看介面不開放內容的測試用開關：建置時加 --dart-define=FORCE_LANG=en，
   /// 不論手機語言一律用該語言介面（內容仍退回繁中）。正式版不加。

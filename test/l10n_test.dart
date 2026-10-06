@@ -137,6 +137,13 @@ void main() {
         AppLanguages.en);
   });
 
+  test('西班牙文：手機語言西班牙文且西班牙文開放時用西班牙文；未開放時用英文', () {
+    final withEs = [AppLanguages.zhHant, AppLanguages.en, AppLanguages.es];
+    expect(AppLanguages.resolve([const Locale('es', 'MX')], available: withEs), AppLanguages.es);
+    expect(AppLanguages.resolve([const Locale('es', 'ES')], available: [AppLanguages.zhHant, AppLanguages.en]),
+        AppLanguages.en);
+  });
+
   group('翻譯內容', () {
     test('每個語言都能載入，App 名稱正確', () {
       expect(lookupAppLocalizations(AppLanguages.zhHant.locale).appTitle, '謙卦');
@@ -145,6 +152,7 @@ void main() {
       expect(lookupAppLocalizations(AppLanguages.ja.locale).appTitle, '謙卦');
       expect(lookupAppLocalizations(AppLanguages.ko.locale).appTitle, '겸괘');
       expect(lookupAppLocalizations(AppLanguages.vi.locale).appTitle, 'Quẻ Khiêm');
+      expect(lookupAppLocalizations(AppLanguages.es.locale).appTitle, 'Qiangua');
     });
 
     test('單複數與 select', () {

@@ -45,6 +45,7 @@ jobs:
             ja
             ko
             vi
+            es
             images/webp
             glossary
             store/release-notes

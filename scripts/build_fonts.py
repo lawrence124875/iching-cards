@@ -71,6 +71,15 @@ KR_WEIGHTS = [
 ]
 
 
+# 泰文介面的主字型（2026-10-06，HANDOFF §15）：theme.dart 的 AppFonts.thai 以 Noto Sans/Serif Thai 為主、TC／SC 為 fallback。
+# 原檔已很小（約 0.2–0.3 MB，含泰文、拉丁字母與標點），只固定字重與寬度（wdth 100），不另做子集。
+TH_WEIGHTS = [
+    ("NotoSansThai[wdth,wght].ttf", "NotoSansThai", 400),
+    ("NotoSansThai[wdth,wght].ttf", "NotoSansThai", 500),
+    ("NotoSerifThai[wdth,wght].ttf", "NotoSerifThai", 400),
+]
+
+
 def ksx1001_hangul() -> set[str]:
     """KS X 1001 第 1–12 區（符號、韓文相容字母）＋第 16–40 區（韓文音節 2,350 字），以 EUC-KR 解碼。"""
     out = set()
@@ -186,6 +195,20 @@ def main() -> None:
     jp.update(chr(c) for c in range(0x3040, 0x3100))  # 平假名、片假名全部
     subset_primary(src, out, cache, JP_WEIGHTS, jp, ranges)
     subset_primary(src, out, cache, KR_WEIGHTS, ksx1001_hangul() | used_chars_ko(root), ranges)
+    instance_only(src, out, cache, TH_WEIGHTS)
+
+
+def instance_only(src, out, cache, weights) -> None:
+    """泰文：整套字型只固定字重（wdth 取 100），保留全部字形與 OpenType 功能（泰文上下標記的定位靠 GPOS／mark）。"""
+    for fname, family, wght in weights:
+        if not (src / fname).exists():
+            raise SystemExit(f"缺少 {fname}")
+        if fname not in cache:
+            cache[fname] = TTFont(src / fname)
+        font = instancer.instantiateVariableFont(cache[fname], {"wght": wght, "wdth": 100}, inplace=False)
+        path = out / f"{family}-{wght}.ttf"
+        font.save(path)
+        print(f"{path.name}：{path.stat().st_size / 1e6:.2f} MB")
 
 
 def subset_primary(src, out, cache, weights, chars: set[str], ranges) -> None:

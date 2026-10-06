@@ -3,6 +3,7 @@ import 'dart:io';
 import 'dart:ui';
 
 import 'package:flutter_test/flutter_test.dart';
+import 'package:iching_cards/app/theme.dart';
 import 'package:iching_cards/core/iching/cast_result.dart';
 import 'package:iching_cards/core/iching/focus_rule.dart';
 import 'package:iching_cards/core/iching/hexagram_table.dart';
@@ -163,6 +164,16 @@ void main() {
         AppLanguages.en);
   });
 
+  test('泰文：th 手機用泰文與泰文字型；未開放時用英文', () {
+    final withTh = [AppLanguages.zhHant, AppLanguages.en, AppLanguages.th];
+    expect(AppLanguages.resolve([const Locale('th', 'TH')], available: withTh), AppLanguages.th);
+    expect(AppLanguages.th.contentFolder, 'th');
+    expect(AppLanguages.byCode('th'), AppLanguages.th);
+    expect(AppLanguages.resolve([const Locale('th', 'TH')], available: [AppLanguages.zhHant, AppLanguages.en]),
+        AppLanguages.en);
+    expect(AppFonts.forLanguage('th'), AppFonts.thai);
+  });
+
   group('翻譯內容', () {
     test('每個語言都能載入，App 名稱正確', () {
       expect(lookupAppLocalizations(AppLanguages.zhHant.locale).appTitle, '謙卦');
@@ -174,6 +185,7 @@ void main() {
       expect(lookupAppLocalizations(AppLanguages.es.locale).appTitle, 'Qiangua');
       expect(lookupAppLocalizations(AppLanguages.pt.locale).appTitle, 'Qiangua');
       expect(lookupAppLocalizations(AppLanguages.id.locale).appTitle, 'Qiangua');
+      expect(lookupAppLocalizations(AppLanguages.th.locale).appTitle, 'Qiangua');
     });
 
     test('單複數與 select', () {

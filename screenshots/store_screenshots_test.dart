@@ -285,6 +285,10 @@ const _sampleText = {
     'Devo aceitar o novo projeto no trabalho ou continuar consolidando o que já faço?',
     'No fim aceitei, mas começando por algo pequeno. Nas duas primeiras semanas avancei devagar e em silêncio, como uma semente debaixo da terra. Ao ver que a linha mutável levava à Modéstia, lembrei a mim mesmo de não ter pressa em buscar reconhecimento.',
   ),
+  'th': (
+    'ฉันควรรับโปรเจกต์ใหม่ที่ทำงาน หรือทำสิ่งที่ทำอยู่ให้มั่นคงขึ้นต่อไป?',
+    'สุดท้ายฉันรับไว้ แต่เริ่มจากเรื่องเล็ก ๆ ก่อน สองสัปดาห์แรกค่อย ๆ ก้าวไปอย่างเงียบ ๆ เหมือนเมล็ดพันธุ์ใต้ดิน เมื่อเห็นว่าเส้นที่แปรเปลี่ยนนำไปสู่ความถ่อมตน ฉันจึงเตือนตัวเองว่าไม่ต้องรีบแสวงหาการยอมรับ',
+  ),
   'id': (
     'Haruskah aku menerima proyek baru di kantor, atau terus memperkuat apa yang sudah kukerjakan?',
     'Akhirnya aku menerimanya, tetapi mulai dari hal yang kecil. Dua minggu pertama aku melangkah pelan dan tanpa banyak bicara, seperti benih di bawah tanah. Ketika melihat garis berubah mengarah ke Kerendahan Hati, aku mengingatkan diriku untuk tidak terburu-buru mencari pengakuan.',

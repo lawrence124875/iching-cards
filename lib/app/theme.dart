@@ -36,11 +36,14 @@ class AppFonts {
       AppFonts._('NotoSerifJP', 'NotoSansJP', ['NotoSerifTC', 'NotoSerifSC'], ['NotoSansTC', 'NotoSansSC']);
   static const korean =
       AppFonts._('NotoSerifKR', 'NotoSansKR', ['NotoSerifTC', 'NotoSerifSC'], ['NotoSansTC', 'NotoSansSC']);
+  static const thai =
+      AppFonts._('NotoSerifThai', 'NotoSansThai', ['NotoSerifTC', 'NotoSerifSC'], ['NotoSansTC', 'NotoSansSC']);
 
   /// 語言代碼（Locale.languageCode）→ 字族組合。
   static AppFonts forLanguage(String languageCode) => switch (languageCode) {
         'ja' => japanese,
         'ko' => korean,
+        'th' => thai,
         _ => chinese,
       };
 

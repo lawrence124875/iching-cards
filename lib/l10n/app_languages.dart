@@ -100,8 +100,16 @@ class AppLanguages {
     contentReady: true, // 2026-10-06 印尼文 64 卦完成（§22、iching-content id/README.md）
   );
 
+  /// 泰文：書面標準泰文（讀者稱 คุณ），字型用 Noto Sans/Serif Thai（§15）。
+  static const th = AppLanguage(
+    code: 'th',
+    locale: Locale('th'),
+    contentFolder: 'th',
+    contentReady: true, // 2026-10-06 泰文 64 卦完成（§22、iching-content th/README.md）
+  );
+
   /// 已有介面翻譯（ARB）的語言。順序無意義。
-  static const all = [zhHant, en, zhHans, ja, ko, vi, es, pt, id];
+  static const all = [zhHant, en, zhHans, ja, ko, vi, es, pt, id, th];
 
   /// 只看介面不開放內容的測試用開關：建置時加 --dart-define=FORCE_LANG=en，
   /// 不論手機語言一律用該語言介面（內容仍退回繁中）。正式版不加。

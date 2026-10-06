@@ -281,6 +281,10 @@ const _sampleText = {
     '¿Debo aceptar el nuevo proyecto en el trabajo o seguir afianzando lo que ya hago?',
     'Al final lo acepté, pero empezando por algo pequeño. Las dos primeras semanas avancé despacio y en silencio, como una semilla bajo la tierra. Al ver que la línea mutante llevaba a Modestia, me recordé no apresurarme a buscar reconocimiento.',
   ),
+  'pt-BR': (
+    'Devo aceitar o novo projeto no trabalho ou continuar consolidando o que já faço?',
+    'No fim aceitei, mas começando por algo pequeno. Nas duas primeiras semanas avancei devagar e em silêncio, como uma semente debaixo da terra. Ao ver que a linha mutável levava à Modéstia, lembrei a mim mesmo de não ter pressa em buscar reconhecimento.',
+  ),
 };
 
 JournalEntry _sampleEntry(String lang) {

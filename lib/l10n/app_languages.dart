@@ -84,8 +84,16 @@ class AppLanguages {
     contentReady: true, // 2026-10-06 西班牙文 64 卦完成（§22、iching-content es/README.md）
   );
 
+  /// 葡萄牙文：內容寫巴西葡萄牙文（pt-BR，代碼與術語表一致），手機語言是任何葡萄牙文（含葡萄牙 pt-PT）都用這一份（見 [resolve]）。
+  static const pt = AppLanguage(
+    code: 'pt-BR',
+    locale: Locale('pt'),
+    contentFolder: 'pt-BR',
+    contentReady: false, // 2026-10-06 介面完成，64 卦撰寫中（§22、iching-content pt-BR/README.md）
+  );
+
   /// 已有介面翻譯（ARB）的語言。順序無意義。
-  static const all = [zhHant, en, zhHans, ja, ko, vi, es];
+  static const all = [zhHant, en, zhHans, ja, ko, vi, es, pt];
 
   /// 只看介面不開放內容的測試用開關：建置時加 --dart-define=FORCE_LANG=en，
   /// 不論手機語言一律用該語言介面（內容仍退回繁中）。正式版不加。
@@ -113,6 +121,7 @@ class AppLanguages {
   ///
   /// - 中文：明確標示簡體（Hans），或地區為中國、新加坡、馬來西亞時優先簡體，其餘優先繁體；
   ///   沒有開放的那一種就用另一種（簡體使用者看繁體，比看英文好）。
+  /// - 葡萄牙文（任何地區）對應 pt-BR。
   /// - 其他語言照語言代碼比對；都對不上時用英文（若已開放），否則繁中。
   static AppLanguage resolve(Iterable<Locale> device, {List<AppLanguage>? available}) {
     final f = available == null ? forced : null;
@@ -133,7 +142,7 @@ class AppLanguages {
         if (hit != null) return hit;
         continue;
       }
-      final hit = find(d.languageCode);
+      final hit = find(d.languageCode == 'pt' ? 'pt-BR' : d.languageCode);
       if (hit != null) return hit;
     }
     return find('en') ?? find('zh-Hant') ?? langs.first;

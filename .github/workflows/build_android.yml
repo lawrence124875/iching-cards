@@ -46,6 +46,7 @@ jobs:
             ko
             vi
             es
+            pt-BR
             images/webp
             glossary
             store/release-notes

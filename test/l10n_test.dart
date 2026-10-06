@@ -144,6 +144,16 @@ void main() {
         AppLanguages.en);
   });
 
+  test('葡萄牙文：巴西與葡萄牙的手機都用 pt-BR；未開放時用英文', () {
+    final withPt = [AppLanguages.zhHant, AppLanguages.en, AppLanguages.pt];
+    expect(AppLanguages.resolve([const Locale('pt', 'BR')], available: withPt), AppLanguages.pt);
+    expect(AppLanguages.resolve([const Locale('pt', 'PT')], available: withPt), AppLanguages.pt);
+    expect(AppLanguages.pt.contentFolder, 'pt-BR');
+    expect(AppLanguages.byCode('pt-BR'), AppLanguages.pt);
+    expect(AppLanguages.resolve([const Locale('pt', 'BR')], available: [AppLanguages.zhHant, AppLanguages.en]),
+        AppLanguages.en);
+  });
+
   group('翻譯內容', () {
     test('每個語言都能載入，App 名稱正確', () {
       expect(lookupAppLocalizations(AppLanguages.zhHant.locale).appTitle, '謙卦');
@@ -153,6 +163,7 @@ void main() {
       expect(lookupAppLocalizations(AppLanguages.ko.locale).appTitle, '겸괘');
       expect(lookupAppLocalizations(AppLanguages.vi.locale).appTitle, 'Quẻ Khiêm');
       expect(lookupAppLocalizations(AppLanguages.es.locale).appTitle, 'Qiangua');
+      expect(lookupAppLocalizations(AppLanguages.pt.locale).appTitle, 'Qiangua');
     });
 
     test('單複數與 select', () {

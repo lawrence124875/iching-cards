@@ -81,7 +81,7 @@ class AppLanguages {
     code: 'es',
     locale: Locale('es'),
     contentFolder: 'es',
-    contentReady: false, // 2026-10-06 介面完成，64 卦撰寫中（§22、iching-content es/README.md）
+    contentReady: true, // 2026-10-06 西班牙文 64 卦完成（§22、iching-content es/README.md）
   );
 
   /// 已有介面翻譯（ARB）的語言。順序無意義。

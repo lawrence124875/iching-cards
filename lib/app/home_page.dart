@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 
+import '../features/intro/intro_page.dart';
+import '../features/share/share.dart';
 import '../shared/premium/ad_banner.dart';
 import '../shared/premium/paywall_page.dart';
 
@@ -87,9 +89,9 @@ class HomePage extends StatelessWidget {
   }
 }
 
-enum _MenuItem { premium, adPrivacy, privacyPolicy }
+enum _MenuItem { premium, intro, shareApp, adPrivacy, privacyPolicy }
 
-/// 首頁右上角選單：謙卦會員、廣告隱私設定（需要同意的地區才出現）、隱私權政策。
+/// 首頁右上角選單：謙卦會員、功能介紹、推薦給朋友、廣告隱私設定（需要同意的地區才出現）、隱私權政策。
 class _HomeMenu extends StatelessWidget {
   const _HomeMenu();
 
@@ -103,6 +105,10 @@ class _HomeMenu extends StatelessWidget {
         switch (item) {
           case _MenuItem.premium:
             openPaywall(context, source: 'menu');
+          case _MenuItem.intro:
+            showIntro(Navigator.of(context));
+          case _MenuItem.shareApp:
+            shareApp(context);
           case _MenuItem.adPrivacy:
             s.ads.showPrivacyOptions();
           case _MenuItem.privacyPolicy:
@@ -111,6 +117,8 @@ class _HomeMenu extends StatelessWidget {
       },
       itemBuilder: (_) => [
         PopupMenuItem(value: _MenuItem.premium, child: Text(l.menuPremium)),
+        PopupMenuItem(value: _MenuItem.intro, child: Text(l.menuIntro)),
+        PopupMenuItem(value: _MenuItem.shareApp, child: Text(l.menuShareApp)),
         if (s.ads.privacyOptionsRequired && !s.isPremium)
           PopupMenuItem(value: _MenuItem.adPrivacy, child: Text(l.menuAdPrivacy)),
         PopupMenuItem(value: _MenuItem.privacyPolicy, child: Text(l.menuPrivacyPolicy)),

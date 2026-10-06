@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 
 import '../l10n/l10n.dart';
+import '../features/intro/intro_page.dart';
 import 'feature_registry.dart';
 import 'home_page.dart';
 import 'services.dart';
@@ -24,11 +25,20 @@ class _IchingAppState extends State<IchingApp> {
   void didChangeDependencies() {
     super.didChangeDependencies();
     if (_taps != null) return;
-    final reminders = AppServices.of(context).reminders;
+    final services = AppServices.of(context);
+    final reminders = services.reminders;
     _taps = reminders.taps.listen(_open);
-    WidgetsBinding.instance.addPostFrameCallback((_) {
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
       final p = reminders.takeLaunchPayload();
-      if (p != null) _open(p);
+      if (p != null) {
+        _open(p);
+        return;
+      }
+      // 首次開啟顯示功能介紹（從通知打開時不打斷）
+      final intro = services.intro;
+      if (intro == null || await intro.seen()) return;
+      final nav = _navigatorKey.currentState;
+      if (nav != null) await showIntro(nav);
     });
   }
 

@@ -460,7 +460,7 @@
   "breathBells": "換氣時輕敲鈴聲",
   "breathBellsSub": "閉上眼睛也能跟著吸吐",
   "breathBinaural": "雙耳節拍 7.83Hz",
-  "breathBinauralSub": "需戴耳機（左 216Hz、右 223.83Hz）",
+  "breathBinauralSub": "需戴耳機；左右耳相差 7.83Hz",
   "breathHeadphones": "建議戴耳機；手機喇叭較難聽出低沉的聲音。",
   "breathStart": "開始",
   "breathMediaTitle": "{name}・呼吸音景",
@@ -580,5 +580,47 @@
   "menuAdPrivacy": "廣告隱私設定",
   "menuPrivacyPolicy": "隱私權政策",
   "journalWatchAd": "看廣告存這一則",
-  "notNow": "先不要"
+  "notNow": "先不要",
+  "breathCarrier128": "左 128Hz・右 135.83Hz",
+  "breathCarrier216": "左 216Hz・右 223.83Hz",
+  "menuIntro": "功能介紹",
+  "menuShareApp": "推薦給朋友",
+  "introSkip": "略過",
+  "introNext": "下一步",
+  "introStart": "開始使用",
+  "intro1Title": "抽一卦，讀當下的象",
+  "intro1Body": "心裡放著一件事，抽一張卦卡，或用三枚銅錢起卦。每一卦都有卦象、解讀、小行動與一個提問，陪你把事情想清楚。",
+  "intro2Title": "卦記：記下，再回顧",
+  "intro2Body": "把問題和這一卦存進卦記，可以設定日後提醒，回頭看看當時的想法與後來的發展。",
+  "intro3Title": "跟著卦呼吸",
+  "intro3Body": "在解讀頁可以跟著這一卦的上下卦音景呼吸：吸 4 秒、吐 6 秒。背景長音與鈴聲以 432Hz 調音；戴耳機可開 7.83Hz 雙耳節拍（左右耳相差 7.83Hz）。",
+  "intro4Title": "分享與會員",
+  "intro4Body": "喜歡的一卦可以做成卡片分享給朋友。卦辭、爻辭與解讀永遠免費；謙卦會員沒有廣告、起卦不限次數，並有更長的呼吸練習與雙耳節拍。",
+  "shareReading": "分享這一卦",
+  "shareImage": "分享圖片",
+  "shareFailed": "暫時無法分享，請稍後再試。",
+  "shareAppText": "我在用「謙卦」抽易經卦卡、跟著卦的音景呼吸，推薦給你：{url}",
+  "@shareAppText": {
+    "description": "推薦給朋友的分享文字",
+    "placeholders": {
+      "url": {
+        "type": "String"
+      }
+    }
+  },
+  "shareReadingText": "我抽到{name}：「{title}」\n用「謙卦」抽一張易經卦卡：{url}",
+  "@shareReadingText": {
+    "description": "分享解讀卡片時附上的文字",
+    "placeholders": {
+      "name": {
+        "type": "String"
+      },
+      "title": {
+        "type": "String"
+      },
+      "url": {
+        "type": "String"
+      }
+    }
+  }
 }

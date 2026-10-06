@@ -1,3 +1,4 @@
+import 'dart:math' as math;
 import 'dart:typed_data';
 
 import 'package:flutter_test/flutter_test.dart';
@@ -106,7 +107,7 @@ void main() {
     final d = ByteData.sublistView(bytes);
     expect(d.getUint32(24, Endian.little), 8000);
     expect(d.getInt16(44, Endian.little).abs(), lessThan(10)); // 從無聲淡入
-    expect(spec.key, 'v2_kun_gen_1m_b');
+    expect(spec.key, 'v3_kun_gen_1m_b');
     expect(d.getUint16(22, Endian.little), 1);
   });
 
@@ -117,11 +118,77 @@ void main() {
     final samples = (spec.timeline.totalSeconds * 8000).round();
     expect(bytes.length, 44 + samples * 4);
     expect(d.getUint16(22, Endian.little), 2);
-    expect(spec.key, 'v2_qian_qian_1m_q_bi');
+    expect(spec.key, 'v3_qian_qian_1m_q_bi128');
     var diff = 0;
     for (var i = 8000 * 10; i < 8000 * 11; i++) {
       diff += (d.getInt16(44 + i * 4, Endian.little) - d.getInt16(46 + i * 4, Endian.little)).abs();
     }
     expect(diff, greaterThan(0));
+  });
+
+  group('432Hz 與 7.83Hz 可量測', () {
+    // 某個頻率在訊號中的振幅（單一頻率的離散傅立葉轉換）。
+    double amp(List<double> x, int sr, double f) {
+      var re = 0.0, im = 0.0;
+      for (var i = 0; i < x.length; i++) {
+        final w = 2 * math.pi * f * i / sr;
+        re += x[i] * math.cos(w);
+        im += x[i] * math.sin(w);
+      }
+      return 2 * math.sqrt(re * re + im * im) / x.length;
+    }
+
+    List<double> channel(Uint8List bytes, int ch, int from, int to, {required int channels}) {
+      final d = ByteData.sublistView(bytes);
+      return [for (var i = from; i < to; i++) d.getInt16(44 + (i * channels + ch) * 2, Endian.little) / 32768];
+    }
+
+    for (final c in BinauralCarrier.values) {
+      test('雙耳節拍 ${c.left}Hz：左耳 ${c.left}、右耳 ${c.right}，相差 7.83Hz', () {
+        expect(c.right - c.left, closeTo(7.83, 1e-9));
+        final spec =
+            SessionSpec(upper: Trigram.kan, lower: Trigram.kun, minutes: 1, bells: false, binaural: true, carrier: c);
+        const sr = 8000;
+        final bytes = const SessionRenderer(sampleRate: sr).renderWav(spec);
+        // 20 秒（解析度 0.05Hz）：音景與長音墊兩耳相同，相減後只剩兩個雙耳音
+        final l = channel(bytes, 0, 20 * sr, 40 * sr, channels: 2);
+        final r = channel(bytes, 1, 20 * sr, 40 * sr, channels: 2);
+        final diff = [for (var i = 0; i < l.length; i++) l[i] - r[i]];
+        final atLeft = amp(diff, sr, c.left), atRight = amp(diff, sr, c.right);
+        expect(atLeft, greaterThan(0.02));
+        expect(atRight, greaterThan(0.02));
+        // 偏 0.1Hz 就明顯變小：頻率是精準的
+        expect(amp(diff, sr, c.left + 0.1), lessThan(atLeft * 0.2));
+        expect(amp(diff, sr, c.right - 0.1), lessThan(atRight * 0.2));
+      });
+    }
+
+    test('長音墊只用 432Hz 系統的整數頻率', () {
+      for (final f in TonalPad.frequencies) {
+        expect(f, f.roundToDouble());
+        // 皆為 A＝432 純律 A 大調五聲音階（A、B、C#、E、F#）的八度
+        const pitchClasses = [432.0, 486.0, 540.0, 648.0, 720.0];
+        var x = f;
+        while (x < 432) {
+          x *= 2;
+        }
+        while (x >= 864) {
+          x /= 2;
+        }
+        expect(pitchClasses.any((p) => (p - x).abs() < 1e-9), isTrue, reason: '$f Hz');
+      }
+    });
+
+    test('鈴聲：吸氣 432Hz', () {
+      const spec = SessionSpec(upper: Trigram.gen, lower: Trigram.gen, minutes: 1, bells: true);
+      const sr = 8000;
+      final bytes = const SessionRenderer(sampleRate: sr).renderWav(spec);
+      final tl = spec.timeline;
+      final start = ((tl.leadIn + 10) * sr).round(); // 第二次吸氣鈴
+      final x = channel(bytes, 0, start, start + 2 * sr, channels: 1);
+      final at432 = amp(x, sr, 432);
+      expect(at432, greaterThan(amp(x, sr, 428) * 3));
+      expect(at432, greaterThan(amp(x, sr, 436) * 3));
+    });
   });
 }

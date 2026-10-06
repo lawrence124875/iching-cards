@@ -12,6 +12,7 @@ import 'dsp.dart';
 ///
 /// 0.1.0+10 調得更柔和：整體削弱高頻、突發聲（雷、劈啪、拍岸、雨滴）壓低並放緩起音、
 /// 起伏放慢；泛音長鳴改以 432Hz 為基準（108Hz＝432÷4，泛音含 216、324、432Hz）。
+/// 0.2.x：泛音長鳴與蟲鳴都是精準的 432Hz 系統頻率，可用調音器量測。
 class SynthBedSource extends BedSource {
   const SynthBedSource({this.seed = 1});
 
@@ -290,7 +291,7 @@ List<Float32List> _sky(Rng r, int sr, int n) {
   final partials = [
     for (var p = 0; p < ratios.length; p++)
       (
-        f: base * ratios[p] + r.range(-0.15, 0.15),
+        f: base * ratios[p], // 精準的 432Hz 系統頻率（不再加隨機偏移）
         a: amps[p],
         lfo: SmoothRandom(r, r.range(0.03, 0.08), sr),
         phase: r.range(0, 2 * math.pi),
@@ -321,7 +322,7 @@ List<Float32List> _earth(Rng r, int sr, int n) {
   final crickets = [
     for (var c = 0; c < 3; c++)
       (
-        f: r.range(3400, 4200),
+        f: const [3240.0, 3456.0, 3888.0][c], // 432Hz 系統的高音（324×10、432×8、432×9）
         period: r.range(0.5, 0.9),
         pulses: 3 + r.nextInt(2),
         pulseRate: r.range(26, 34),

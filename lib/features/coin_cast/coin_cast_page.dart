@@ -7,6 +7,7 @@ import '../../core/iching/divination_method.dart';
 import '../../l10n/l10n.dart';
 import '../../reading/reading_page.dart';
 import '../../shared/premium/cast_gate.dart';
+import '../../shared/widgets/adaptive_layout.dart';
 import '../../shared/widgets/hexagram_glyph.dart';
 import '../../shared/widgets/question_dialog.dart';
 
@@ -69,64 +70,91 @@ class _CoinCastPageState extends State<CoinCastPage> {
     final padded = [...lines.map((l) => l.isYang), ...List.filled(6 - lines.length, false)];
     final changing = {for (var i = 0; i < lines.length; i++) if (lines[i].isChanging) i + 1};
 
+    final top = [
+      Text(
+        l.coinsInstructions,
+        textAlign: TextAlign.center,
+        style: t.bodySmall,
+      ),
+      // 擲完六次就不再寫想問的事（存進卦記時仍可修改）
+      QuestionPrompt(
+        question: _question,
+        onChanged: (q) => setState(() => _question = q),
+        enabled: !_done,
+      ),
+    ];
+    final lineTable = LayoutBuilder(
+      builder: (context, box) => Center(
+        child: FittedBox(
+          fit: BoxFit.scaleDown,
+          child: SizedBox(
+            // 至少 320 寬（橫放時左欄窄，整塊等比縮小而不擠壓），平板不隨螢幕無限加寬
+            width: box.maxWidth.clamp(320, 480).toDouble(),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                const SizedBox(height: 12),
+                HexagramGlyph(
+                  lines: padded,
+                  changing: changing,
+                  width: 104,
+                  visibleCount: lines.length,
+                ),
+                const SizedBox(height: 20),
+                // 六列固定保留，未擲的爻顯示「—」，畫面不會隨擲錢跳動。
+                for (var i = 5; i >= 0; i--) _row(t, l, i, i < lines.length ? _tosses[i] : null),
+                const SizedBox(height: 8),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+    final buttons = [
+      if (!_done) ...[
+        FilledButton(onPressed: _toss, child: Text(l.coinsToss(_tosses.length + 1))),
+        TextButton(onPressed: _tossAll, child: Text(l.coinsTossAll)),
+      ] else ...[
+        FilledButton(
+          onPressed: () => _openReading(lines),
+          child: Text(l.viewReading),
+        ),
+        TextButton(onPressed: () => setState(_tosses.clear), child: Text(l.coinsRestart)),
+      ],
+    ];
+
     return Scaffold(
       appBar: AppBar(), // 首頁連結已寫「三枚銅錢起卦」，這裡不再重複標題
       body: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.fromLTRB(28, 4, 28, 16),
-          child: Column(
-            children: [
-              Text(
-                l.coinsInstructions,
-                textAlign: TextAlign.center,
-                style: t.bodySmall,
-              ),
-              // 擲完六次就不再寫想問的事（存進卦記時仍可修改）
-              QuestionPrompt(
-                question: _question,
-                onChanged: (q) => setState(() => _question = q),
-                enabled: !_done,
-              ),
-              Expanded(
-                child: LayoutBuilder(
-                  builder: (context, box) => Center(
-                    child: FittedBox(
-                      fit: BoxFit.scaleDown,
-                      child: SizedBox(
-                        width: box.maxWidth,
-                        child: Column(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            const SizedBox(height: 12),
-                            HexagramGlyph(
-                              lines: padded,
-                              changing: changing,
-                              width: 104,
-                              visibleCount: lines.length,
+        child: LayoutBuilder(
+          builder: (context, box) => isShortWide(box.biggest)
+              // 手機橫放：卦象與六爻在左、說明與按鈕在右
+              ? Padding(
+                  padding: const EdgeInsets.fromLTRB(28, 4, 28, 12),
+                  child: Row(
+                    children: [
+                      Expanded(child: lineTable),
+                      const SizedBox(width: 32),
+                      SizedBox(
+                        width: 320,
+                        child: Center(
+                          child: SingleChildScrollView(
+                            child: Column(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [...top, const SizedBox(height: 16), ...buttons],
                             ),
-                            const SizedBox(height: 20),
-                            // 六列固定保留，未擲的爻顯示「—」，畫面不會隨擲錢跳動。
-                            for (var i = 5; i >= 0; i--) _row(t, l, i, i < lines.length ? _tosses[i] : null),
-                            const SizedBox(height: 8),
-                          ],
+                          ),
                         ),
                       ),
-                    ),
+                    ],
+                  ),
+                )
+              : Padding(
+                  padding: const EdgeInsets.fromLTRB(28, 4, 28, 16),
+                  child: Column(
+                    children: [...top, Expanded(child: lineTable), ...buttons],
                   ),
                 ),
-              ),
-              if (!_done) ...[
-                FilledButton(onPressed: _toss, child: Text(l.coinsToss(_tosses.length + 1))),
-                TextButton(onPressed: _tossAll, child: Text(l.coinsTossAll)),
-              ] else ...[
-                FilledButton(
-                  onPressed: () => _openReading(lines),
-                  child: Text(l.viewReading),
-                ),
-                TextButton(onPressed: () => setState(_tosses.clear), child: Text(l.coinsRestart)),
-              ],
-            ],
-          ),
         ),
       ),
     );

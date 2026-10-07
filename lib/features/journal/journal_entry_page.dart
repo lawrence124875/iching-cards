@@ -14,6 +14,7 @@ import '../../shared/widgets/card_face.dart';
 import '../../shared/widgets/hexagram_glyph.dart';
 import '../../shared/widgets/question_dialog.dart';
 import '../../shared/widgets/reminder_picker.dart';
+import '../../shared/widgets/adaptive_layout.dart';
 
 /// 一筆卦記：當時的卦與問題 → 當時的解讀 → 回顧（後來發生了什麼、象怎麼對上）→ 提醒。
 class JournalEntryPage extends StatefulWidget {
@@ -158,7 +159,7 @@ class _JournalEntryPageState extends State<JournalEntryPage> {
         : null;
 
     return ListView(
-      padding: EdgeInsets.fromLTRB(24, 8, 24, 40 + MediaQuery.viewPaddingOf(context).bottom),
+      padding: readablePadding(context, top: 8, bottom: 40),
       children: [
         Text('${formatDateTime(e.createdAt)}${l.separator}${l.methodName(e.methodId)}',
             textAlign: TextAlign.center, style: t.bodySmall),

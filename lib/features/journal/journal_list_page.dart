@@ -11,6 +11,7 @@ import '../../l10n/l10n.dart';
 import '../../shared/format.dart';
 import '../../shared/widgets/hexagram_glyph.dart';
 import 'journal_entry_page.dart';
+import '../../shared/widgets/adaptive_layout.dart';
 
 /// 卦記列表：由新到舊。
 class JournalListPage extends StatelessWidget {
@@ -43,7 +44,7 @@ class _List extends StatelessWidget {
           final entries = snap.data!;
           if (entries.isEmpty) return const _Empty();
           return ListView.separated(
-            padding: EdgeInsets.fromLTRB(16, 8, 16, 32 + MediaQuery.viewPaddingOf(context).bottom),
+            padding: readablePadding(context, horizontal: 16, top: 8, bottom: 32),
             itemCount: entries.length,
             separatorBuilder: (_, __) => const Divider(height: 1, color: QianColors.inkCard),
             itemBuilder: (context, i) => _Tile(entry: entries[i]),

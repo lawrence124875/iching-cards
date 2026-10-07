@@ -6,6 +6,7 @@ import '../../app/theme.dart';
 import '../../core/events/event_bus.dart';
 import '../../core/monetization/premium_service.dart';
 import '../../l10n/l10n.dart';
+import '../widgets/adaptive_layout.dart';
 
 /// 開啟訂閱頁。[source]：從哪裡進來（統計用：cast_limit、journal_limit、breath、menu）。
 /// 回傳離開時是否為訂閱戶。
@@ -92,7 +93,7 @@ class _PaywallPageState extends State<PaywallPage> {
         child: ValueListenableBuilder<bool>(
           valueListenable: _s.premium.isPremium,
           builder: (context, premium, _) => ListView(
-            padding: const EdgeInsets.fromLTRB(28, 0, 28, 24),
+            padding: readablePadding(context, horizontal: 28, bottom: 24, maxWidth: 560),
             children: [
               Text(l.premiumTitle, style: t.headlineSmall, textAlign: TextAlign.center),
               const SizedBox(height: 6),

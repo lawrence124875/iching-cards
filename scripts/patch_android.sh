@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# CI 產生 android/ 後套用 App 設定：桌面名稱、套件名稱、固定直向、桌面圖示、上傳金鑰簽署。
+# CI 產生 android/ 後套用 App 設定：桌面名稱、套件名稱、不鎖方向、無邊框畫面、桌面圖示、上傳金鑰簽署。
 # 上傳金鑰的四個 Secrets 尚未設定時，改用除錯金鑰簽署（只能自己側載測試）。
 set -euo pipefail
 
@@ -11,10 +11,14 @@ sed -i 's/android:label="[^"]*"/android:label="謙卦"/' "$MANIFEST"
 GRADLE="android/app/build.gradle.kts"
 sed -i 's/applicationId = "[^"]*"/applicationId = "com.lclab.qiangua"/' "$GRADLE"
 grep -q 'applicationId = "com.lclab.qiangua"' "$GRADLE" && echo "套件名稱：com.lclab.qiangua"
-# 固定直向：卦卡為 9:16 直式設計
-grep -q 'android:screenOrientation' "$MANIFEST" || \
-  sed -i '0,/<activity/s//<activity android:screenOrientation="portrait"/' "$MANIFEST"
-grep -q 'android:screenOrientation="portrait"' "$MANIFEST" && echo "已固定直向"
+# 不鎖方向、不限制調整大小（2026-10-07）：Android 16 起大螢幕（平板、摺疊機）會忽略這些限制，
+# Play Console 要求移除；橫放與寬螢幕由 App 版面處理（lib/shared/widgets/adaptive_layout.dart）。
+# 0.2.0+42 以前這裡會加 screenOrientation="portrait"；保險起見，flutter create 範本若帶了也一併移除。
+sed -i -E 's/[[:space:]]*android:(screenOrientation|resizeableActivity)="[^"]*"//g' "$MANIFEST"
+if grep -qE 'android:(screenOrientation|resizeableActivity)=' "$MANIFEST"; then
+  echo "::error::AndroidManifest 仍有方向或大小調整限制"; exit 1
+fi
+echo "未鎖方向、可調整大小"
 
 # 卦記回顧提醒（flutter_local_notifications）：
 # 1) 通知與開機權限；2) 兩個 receiver——少了它們排程會「成功」但時間到永遠不會跳出，
@@ -129,6 +133,39 @@ if grep -q AudioServiceActivity "$MAIN_ACTIVITY" && grep -q 'com.ryanheise.audio
   echo "已設定背景播放（AudioService、AudioServiceActivity、singleTask）"
 else
   echo "::error::背景播放設定失敗（flutter create 範本可能改了）"; exit 1
+fi
+
+# 無邊框畫面（Play Console：Android 15 起 targetSdk 35 預設無邊框，舊版 Android 也應一併啟用）：
+# AudioServiceActivity 不是 ComponentActivity，不能用 enableEdgeToEdge()，改用它內部同一個做法
+# WindowCompat.setDecorFitsSystemWindows(window, false)，在 super.onCreate 之前（第一個畫面就無邊框）。
+# 系統列透明與圖示顏色由 Dart 端設定（lib/main.dart、theme.dart 的 qianSystemBars）。
+python3 - "$MAIN_ACTIVITY" "$GRADLE" << 'PYEOF'
+import re, sys
+activity, gradle = sys.argv[1], sys.argv[2]
+k = open(activity, encoding="utf-8").read()
+if "setDecorFitsSystemWindows" not in k:
+    k = k.replace("import com.ryanheise.audioservice.AudioServiceActivity",
+                  "import android.os.Bundle\nimport androidx.core.view.WindowCompat\nimport com.ryanheise.audioservice.AudioServiceActivity", 1)
+    body = """class MainActivity : AudioServiceActivity() {
+    override fun onCreate(savedInstanceState: Bundle?) {
+        WindowCompat.setDecorFitsSystemWindows(window, false)
+        super.onCreate(savedInstanceState)
+    }
+}
+"""
+    k, n = re.subn(r"class MainActivity : AudioServiceActivity\(\)\s*(\{\s*\})?\s*$", body, k)
+    if n != 1:
+        raise SystemExit("MainActivity 格式不符，無法加入無邊框設定")
+    open(activity, "w", encoding="utf-8").write(k)
+g = open(gradle, encoding="utf-8").read()
+if "androidx.core:core" not in g:
+    g = g.rstrip() + '\n\ndependencies {\n    implementation("androidx.core:core:1.13.1")\n}\n'
+    open(gradle, "w", encoding="utf-8").write(g)
+PYEOF
+if grep -q 'WindowCompat.setDecorFitsSystemWindows(window, false)' "$MAIN_ACTIVITY"; then
+  echo "已啟用無邊框畫面（MainActivity）"
+else
+  echo "::error::無邊框設定失敗"; exit 1
 fi
 
 # 桌面圖示（謙卦卦卡）：覆蓋 flutter create 的預設圖示，含 Android 8+ 自適應圖示

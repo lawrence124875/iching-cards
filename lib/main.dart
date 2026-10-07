@@ -7,6 +7,7 @@ import 'package:flutter/services.dart';
 import 'app/app.dart';
 import 'app/feature_registry.dart';
 import 'app/services.dart';
+import 'app/theme.dart';
 import 'core/audio/just_audio_playback.dart';
 import 'core/admob/admob_ads.dart';
 import 'core/firebase/firebase_telemetry.dart';
@@ -22,9 +23,12 @@ Future<void> main() async {
   // 失敗不影響 App（統計不送、遠端開關全照預設）。
   final telemetry = await FirebaseTelemetry.init(featureIds: registeredFeatures.map((f) => f.id));
   _registerFontLicenses();
-  // 卦卡為 9:16 直式設計，固定直向（HANDOFF §11.2）。
-  // Android 另在 AndroidManifest 設定 screenOrientation，避免啟動瞬間閃成橫向。
-  await SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
+  // 無邊框畫面（Android 15 起 targetSdk 35 的預設；這裡讓舊版 Android 也一致）：
+  // 狀態列、導覽列透明，畫面延伸到系統列後面，各頁以 SafeArea／viewPadding 讓出位置。
+  // 不再鎖直向（2026-10-07）：Android 16 起大螢幕會忽略方向限制，平板、摺疊機與橫放由各頁版面處理
+  // （lib/shared/widgets/adaptive_layout.dart）。
+  await SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
+  SystemChrome.setSystemUIOverlayStyle(qianSystemBars);
   // 呼吸音景的背景播放與通知控制；失敗不影響其他功能
   // 通知類別名稱跟著手機語言（L10n 在 MaterialApp 決定語言前先依手機設定判斷）
   final l = L10n.current;

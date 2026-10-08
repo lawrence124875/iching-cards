@@ -47,7 +47,7 @@ class QuestionPrompt extends StatelessWidget {
     final t = Theme.of(context).textTheme;
     // 0.1.0+19 使用者回饋：連結原本是按鈕字（16、字重 500、字距 2），比頁面上方提示語還大、字體也不一致。
     // 改成與提示語同一套黑體一般字重，字級小一號（提示語 15.5 → 13.5），顏色同提示語。
-    final small = t.bodyMedium?.copyWith(fontSize: 13.5, height: 1.4, letterSpacing: 0.5, color: QianColors.textSub);
+    final small = t.bodyMedium?.copyWith(fontSize: 13.5, height: 1.4, letterSpacing: tracking(0.5), color: QianColors.textSub);
     if (question.isEmpty) {
       if (!enabled) return const SizedBox.shrink();
       return TextButton.icon(

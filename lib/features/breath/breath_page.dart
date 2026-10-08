@@ -228,7 +228,7 @@ class _BreathPageState extends State<BreathPage> with SingleTickerProviderStateM
           padding: const EdgeInsets.fromLTRB(28, 0, 28, 20),
           child: Column(
             children: [
-              Text(_soundNames(l), style: t.bodySmall?.copyWith(letterSpacing: 3)),
+              Text(_soundNames(l), style: t.bodySmall?.copyWith(letterSpacing: tracking(3))),
               Expanded(
                 child: Center(
                   child: AspectRatio(
@@ -304,7 +304,7 @@ class _BreathPageState extends State<BreathPage> with SingleTickerProviderStateM
         final left = math.max(0.0, _tl.breathEnd - _now.value);
         return Column(children: [
           Text('${l.breathRemaining(formatClock(left.ceil()))}${_silent ? l.breathSilentMark : ''}',
-              style: t.bodySmall?.copyWith(letterSpacing: 2)),
+              style: t.bodySmall?.copyWith(letterSpacing: tracking(2))),
           const SizedBox(height: 14),
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
@@ -362,7 +362,7 @@ class _RoundButton extends StatelessWidget {
         const SizedBox(height: 6),
         ExcludeSemantics(
           child: Text(label,
-              style: Theme.of(context).textTheme.bodySmall?.copyWith(fontSize: 12, letterSpacing: 2)),
+              style: Theme.of(context).textTheme.bodySmall?.copyWith(fontSize: 12, letterSpacing: tracking(2))),
         ),
       ]),
     );

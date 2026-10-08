@@ -68,7 +68,10 @@ class _CoinCastPageState extends State<CoinCastPage> {
     final l = context.l10n;
     final lines = [for (final x in _tosses) x.line];
     final padded = [...lines.map((l) => l.isYang), ...List.filled(6 - lines.length, false)];
-    final changing = {for (var i = 0; i < lines.length; i++) if (lines[i].isChanging) i + 1};
+    final changing = {
+      for (var i = 0; i < lines.length; i++)
+        if (lines[i].isChanging) i + 1
+    };
 
     final top = [
       Text(
@@ -87,24 +90,27 @@ class _CoinCastPageState extends State<CoinCastPage> {
       builder: (context, box) => Center(
         child: FittedBox(
           fit: BoxFit.scaleDown,
-          child: SizedBox(
-            // 至少 320 寬（橫放時左欄窄，整塊等比縮小而不擠壓），平板不隨螢幕無限加寬
-            width: box.maxWidth.clamp(320, 480).toDouble(),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                const SizedBox(height: 12),
-                HexagramGlyph(
-                  lines: padded,
-                  changing: changing,
-                  width: 104,
-                  visibleCount: lines.length,
-                ),
-                const SizedBox(height: 20),
-                // 六列固定保留，未擲的爻顯示「—」，畫面不會隨擲錢跳動。
-                for (var i = 5; i >= 0; i--) _row(t, l, i, i < lines.length ? _tosses[i] : null),
-                const SizedBox(height: 8),
-              ],
+          // 寬度取「內容自然寬度」與「可用寬度（至少 320、最多 480）」較大者：爻位名稱較長的語言
+          // （阿拉伯文、泰文）或橫放時左欄窄，整塊等比縮小而不是被擠出畫面；平板不隨螢幕無限加寬。
+          child: ConstrainedBox(
+            constraints: BoxConstraints(minWidth: box.maxWidth.clamp(320, 480).toDouble()),
+            child: IntrinsicWidth(
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  const SizedBox(height: 12),
+                  HexagramGlyph(
+                    lines: padded,
+                    changing: changing,
+                    width: 104,
+                    visibleCount: lines.length,
+                  ),
+                  const SizedBox(height: 20),
+                  // 六列固定保留，未擲的爻顯示「—」，畫面不會隨擲錢跳動。
+                  for (var i = 5; i >= 0; i--) _row(t, l, i, i < lines.length ? _tosses[i] : null),
+                  const SizedBox(height: 8),
+                ],
+              ),
             ),
           ),
         ),
@@ -167,15 +173,21 @@ class _CoinCastPageState extends State<CoinCastPage> {
       height: 34,
       child: Row(
         children: [
-          SizedBox(
-            width: l.isChinese ? 44 : 60, // 英文「Line 1」較寬
-            child: Text(l.linePosition(i + 1),
-                style: t.titleMedium?.copyWith(
-                  color: line == null && !next ? QianColors.textSub.withValues(alpha: 0.5) : null,
-                )),
+          // 英文「Line 1」較寬；泰文「เส้นที่ 1」更寬，固定寬度會折行，所以只給最小寬度、依字寬伸展
+          ConstrainedBox(
+            constraints: BoxConstraints(minWidth: l.isChinese ? 44 : 60),
+            child: Padding(
+              padding: const EdgeInsetsDirectional.only(end: 8),
+              child: Text(l.linePosition(i + 1),
+                  softWrap: false,
+                  style: t.titleMedium?.copyWith(
+                    color: line == null && !next ? QianColors.textSub.withValues(alpha: 0.5) : null,
+                  )),
+            ),
           ),
           Text(toss == null ? '' : toss.coins.join(' + '), style: t.bodySmall),
           const Spacer(),
+          const SizedBox(width: 12),
           Text(
             line == null
                 ? '—'

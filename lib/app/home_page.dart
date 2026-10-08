@@ -32,7 +32,7 @@ class HomePage extends StatelessWidget {
       const SizedBox(height: 32),
       Text(l.appTitle, style: t.displaySmall),
       const SizedBox(height: 6),
-      Text(l.appSubtitle, style: t.titleSmall?.copyWith(color: QianColors.earth, letterSpacing: 4)),
+      Text(l.appSubtitle, style: t.titleSmall?.copyWith(color: QianColors.earth, letterSpacing: tracking(4))),
     ];
     final motto = Text(l.homeMotto,
         textAlign: TextAlign.center, style: t.bodyLarge?.copyWith(color: QianColors.textSub, fontSize: 15));
@@ -95,7 +95,7 @@ class HomePage extends StatelessWidget {
             ],
           ),
         ),
-          const Positioned(top: 4, right: 4, child: _HomeMenu()),
+          const PositionedDirectional(top: 4, end: 4, child: _HomeMenu()),
         ]),
       ),
     );

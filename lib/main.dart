@@ -66,7 +66,7 @@ Future<void> main() async {
 /// 思源黑體／宋體為 SIL OFL 1.1，散布時須附授權全文（顯示於系統授權頁）。
 void _registerFontLicenses() {
   LicenseRegistry.addLicense(() async* {
-    for (final name in ['NotoSansTC', 'NotoSerifTC', 'NotoSansSC', 'NotoSerifSC', 'NotoSansJP', 'NotoSerifJP', 'NotoSansKR', 'NotoSerifKR', 'NotoSansThai', 'NotoSerifThai']) {
+    for (final name in ['NotoSansTC', 'NotoSerifTC', 'NotoSansSC', 'NotoSerifSC', 'NotoSansJP', 'NotoSerifJP', 'NotoSansKR', 'NotoSerifKR', 'NotoSansThai', 'NotoSerifThai', 'NotoSansArabic', 'NotoNaskhArabic']) {
       final text = await rootBundle.loadString('assets/licenses/$name-OFL.txt');
       yield LicenseEntryWithLineBreaks([name], text);
     }

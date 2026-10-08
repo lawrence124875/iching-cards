@@ -226,7 +226,8 @@ class _BreathPageState extends State<BreathPage> with SingleTickerProviderStateM
       appBar: AppBar(title: Text(l.hexFullName(_info))),
       body: SafeArea(
         child: LayoutBuilder(builder: (context, box) {
-          final names = Text(_soundNames(l), style: t.bodySmall?.copyWith(letterSpacing: 3), textAlign: TextAlign.center);
+          final names = Text(_soundNames(l),
+              style: t.bodySmall?.copyWith(letterSpacing: tracking(3)), textAlign: TextAlign.center);
           final circle = Center(
             child: AspectRatio(
               aspectRatio: 1,
@@ -321,23 +322,28 @@ class _BreathPageState extends State<BreathPage> with SingleTickerProviderStateM
         final left = math.max(0.0, _tl.breathEnd - _now.value);
         return Column(children: [
           Text('${l.breathRemaining(formatClock(left.ceil()))}${_silent ? l.breathSilentMark : ''}',
-              style: t.bodySmall?.copyWith(letterSpacing: 2)),
+              style: t.bodySmall?.copyWith(letterSpacing: tracking(2))),
           const SizedBox(height: 14),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              _RoundButton(icon: Icons.landscape_outlined, label: l.breathViewArt, onTap: _showArt),
-              const SizedBox(width: 36),
-              _RoundButton(
-                icon: _paused ? Icons.play_arrow_rounded : Icons.pause_rounded,
-                label: _paused ? l.breathResume : l.breathPause,
-                onTap: _togglePause,
-                primary: true,
-              ),
-              const SizedBox(width: 36),
-              _RoundButton(icon: Icons.close_rounded, label: l.breathEnd, onTap: () => Navigator.of(context).pop()),
-            ],
+          // 橫放時右欄只有 320 寬，按鈕標籤較長的語言（阿拉伯文等）整列等比縮小，不被擠出
+          FittedBox(
+            fit: BoxFit.scaleDown,
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                _RoundButton(icon: Icons.landscape_outlined, label: l.breathViewArt, onTap: _showArt),
+                const SizedBox(width: 36),
+                _RoundButton(
+                  icon: _paused ? Icons.play_arrow_rounded : Icons.pause_rounded,
+                  label: _paused ? l.breathResume : l.breathPause,
+                  onTap: _togglePause,
+                  primary: true,
+                ),
+                const SizedBox(width: 36),
+                _RoundButton(icon: Icons.close_rounded, label: l.breathEnd, onTap: () => Navigator.of(context).pop()),
+              ],
+            ),
           ),
         ]);
     }
@@ -379,7 +385,7 @@ class _RoundButton extends StatelessWidget {
         const SizedBox(height: 6),
         ExcludeSemantics(
           child: Text(label,
-              style: Theme.of(context).textTheme.bodySmall?.copyWith(fontSize: 12, letterSpacing: 2)),
+              style: Theme.of(context).textTheme.bodySmall?.copyWith(fontSize: 12, letterSpacing: tracking(2))),
         ),
       ]),
     );

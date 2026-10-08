@@ -108,8 +108,17 @@ class AppLanguages {
     contentReady: true, // 2026-10-06 泰文 64 卦完成（§22、iching-content th/README.md）
   );
 
+  /// 阿拉伯文：現代標準阿拉伯文（讀者稱 أنت），由右至左（MaterialApp 依 locale 自動 RTL），
+  /// 字型用 Noto Naskh／Sans Arabic（§15）。
+  static const ar = AppLanguage(
+    code: 'ar',
+    locale: Locale('ar'),
+    contentFolder: 'ar',
+    contentReady: true, // 2026-10-07 阿拉伯文 64 卦完成（§22、iching-content ar/README.md）
+  );
+
   /// 已有介面翻譯（ARB）的語言。順序無意義。
-  static const all = [zhHant, en, zhHans, ja, ko, vi, es, pt, id, th];
+  static const all = [zhHant, en, zhHans, ja, ko, vi, es, pt, id, th, ar];
 
   /// 只看介面不開放內容的測試用開關：建置時加 --dart-define=FORCE_LANG=en，
   /// 不論手機語言一律用該語言介面（內容仍退回繁中）。正式版不加。

@@ -323,10 +323,10 @@ class _FocusText extends StatelessWidget {
     }
     return Container(
       width: double.infinity,
-      padding: const EdgeInsets.only(left: 12),
+      padding: const EdgeInsetsDirectional.only(start: 12),
       decoration: BoxDecoration(
-        border: Border(
-          left: BorderSide(color: item.primary ? QianColors.rice : QianColors.mountain, width: 2),
+        border: BorderDirectional(
+          start: BorderSide(color: item.primary ? QianColors.rice : QianColors.mountain, width: 2),
         ),
       ),
       child: Column(

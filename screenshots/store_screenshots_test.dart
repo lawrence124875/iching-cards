@@ -289,6 +289,10 @@ const _sampleText = {
     'ฉันควรรับโปรเจกต์ใหม่ที่ทำงาน หรือทำสิ่งที่ทำอยู่ให้มั่นคงขึ้นต่อไป?',
     'สุดท้ายฉันรับไว้ แต่เริ่มจากเรื่องเล็ก ๆ ก่อน สองสัปดาห์แรกค่อย ๆ ก้าวไปอย่างเงียบ ๆ เหมือนเมล็ดพันธุ์ใต้ดิน เมื่อเห็นว่าเส้นที่แปรเปลี่ยนนำไปสู่ความถ่อมตน ฉันจึงเตือนตัวเองว่าไม่ต้องรีบแสวงหาการยอมรับ',
   ),
+  'ar': (
+    'هل أقبل المشروع الجديد في العمل، أم أواصل ترسيخ ما أقوم به الآن؟',
+    'في النهاية قبلته، لكنّي بدأت بشيء صغير. في الأسبوعين الأوّلين تقدّمت ببطء وهدوء، كبذرة تحت التراب. وحين رأيت أنّ الخطّ المتحوّل يقود إلى التواضع، ذكّرت نفسي بألّا أستعجل طلب التقدير.',
+  ),
   'id': (
     'Haruskah aku menerima proyek baru di kantor, atau terus memperkuat apa yang sudah kukerjakan?',
     'Akhirnya aku menerimanya, tetapi mulai dari hal yang kecil. Dua minggu pertama aku melangkah pelan dan tanpa banyak bicara, seperti benih di bawah tanah. Ketika melihat garis berubah mengarah ke Kerendahan Hati, aku mengingatkan diriku untuk tidak terburu-buru mencari pengakuan.',

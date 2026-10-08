@@ -102,8 +102,8 @@ class _LineTile extends StatelessWidget {
       margin: const EdgeInsets.only(top: 10),
       decoration: BoxDecoration(
         color: QianColors.inkCard,
-        border: Border(
-          left: BorderSide(color: highlighted ? QianColors.rice : QianColors.mountain, width: highlighted ? 3 : 1),
+        border: BorderDirectional(
+          start: BorderSide(color: highlighted ? QianColors.rice : QianColors.mountain, width: highlighted ? 3 : 1),
         ),
       ),
       child: Theme(

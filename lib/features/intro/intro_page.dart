@@ -55,7 +55,7 @@ class _IntroPageState extends State<IntroPage> {
           child: Column(
             children: [
               Align(
-                alignment: Alignment.centerRight,
+                alignment: AlignmentDirectional.centerEnd,
                 child: Padding(
                   padding: const EdgeInsets.fromLTRB(8, 4, 8, 0),
                   child: last ? const SizedBox(height: 48) : TextButton(onPressed: _finish, child: Text(l.introSkip)),

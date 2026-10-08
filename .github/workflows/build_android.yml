@@ -49,6 +49,7 @@ jobs:
             pt-BR
             id
             th
+            ar
             images/webp
             glossary
             store/release-notes
@@ -72,7 +73,7 @@ jobs:
         uses: actions/cache@v4
         with:
           path: _fonts_src
-          key: noto-tc-sc-jp-kr-th-9710da1e
+          key: noto-tc-sc-jp-kr-th-ar-9710da1e
 
       - name: 產生字型子集
         env:
@@ -91,6 +92,8 @@ jobs:
           [ -s "_fonts_src/NotoSerifKR[wght].ttf" ] || curl -fsSL -o "_fonts_src/NotoSerifKR[wght].ttf" "${base}/notoserifkr/NotoSerifKR%5Bwght%5D.ttf"
           [ -s "_fonts_src/NotoSansThai[wdth,wght].ttf" ] || curl -fsSL -o "_fonts_src/NotoSansThai[wdth,wght].ttf" "${base}/notosansthai/NotoSansThai%5Bwdth%2Cwght%5D.ttf"
           [ -s "_fonts_src/NotoSerifThai[wdth,wght].ttf" ] || curl -fsSL -o "_fonts_src/NotoSerifThai[wdth,wght].ttf" "${base}/notoserifthai/NotoSerifThai%5Bwdth%2Cwght%5D.ttf"
+          [ -s "_fonts_src/NotoSansArabic[wdth,wght].ttf" ] || curl -fsSL -o "_fonts_src/NotoSansArabic[wdth,wght].ttf" "${base}/notosansarabic/NotoSansArabic%5Bwdth%2Cwght%5D.ttf"
+          [ -s "_fonts_src/NotoNaskhArabic[wght].ttf" ] || curl -fsSL -o "_fonts_src/NotoNaskhArabic[wght].ttf" "${base}/notonaskharabic/NotoNaskhArabic%5Bwght%5D.ttf"
           pip install --quiet fonttools==4.62.1
           python3 scripts/build_fonts.py _fonts_src assets/fonts
 

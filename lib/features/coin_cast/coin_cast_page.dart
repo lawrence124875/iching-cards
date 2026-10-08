@@ -139,12 +139,17 @@ class _CoinCastPageState extends State<CoinCastPage> {
       height: 34,
       child: Row(
         children: [
-          SizedBox(
-            width: l.isChinese ? 44 : 60, // 英文「Line 1」較寬
-            child: Text(l.linePosition(i + 1),
-                style: t.titleMedium?.copyWith(
-                  color: line == null && !next ? QianColors.textSub.withValues(alpha: 0.5) : null,
-                )),
+          // 英文「Line 1」較寬；泰文「เส้นที่ 1」更寬，固定寬度會折行，所以只給最小寬度、依字寬伸展
+          ConstrainedBox(
+            constraints: BoxConstraints(minWidth: l.isChinese ? 44 : 60),
+            child: Padding(
+              padding: const EdgeInsets.only(right: 8),
+              child: Text(l.linePosition(i + 1),
+                  softWrap: false,
+                  style: t.titleMedium?.copyWith(
+                    color: line == null && !next ? QianColors.textSub.withValues(alpha: 0.5) : null,
+                  )),
+            ),
           ),
           Text(toss == null ? '' : toss.coins.join(' + '), style: t.bodySmall),
           const Spacer(),

@@ -52,6 +52,7 @@ flutter:
     - assets/content/pt-BR/
     - assets/content/id/
     - assets/content/th/
+    - assets/content/ar/
     - assets/cards/
     - assets/licenses/
 
@@ -102,3 +103,12 @@ flutter:
     - family: NotoSerifThai
       fonts:
         - asset: assets/fonts/NotoSerifThai-400.ttf
+    # 阿拉伯文介面的主字型（HANDOFF §15）
+    - family: NotoSansArabic
+      fonts:
+        - asset: assets/fonts/NotoSansArabic-400.ttf
+        - asset: assets/fonts/NotoSansArabic-500.ttf
+          weight: 500
+    - family: NotoNaskhArabic
+      fonts:
+        - asset: assets/fonts/NotoNaskhArabic-400.ttf

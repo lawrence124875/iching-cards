@@ -35,7 +35,7 @@ class CardFace extends StatelessWidget {
             Row(
               children: [
                 Text(l.cardNumber(info.number),
-                    style: t.bodySmall?.copyWith(fontFamily: kSerif, fontFamilyFallback: kSerifFallback, letterSpacing: 2)),
+                    style: t.bodySmall?.copyWith(fontFamily: kSerif, fontFamilyFallback: kSerifFallback, letterSpacing: tracking(2))),
                 const Spacer(),
                 HexagramGlyph(lines: info.lines, width: 20),
               ],
@@ -83,8 +83,8 @@ class _ZoomableArt extends StatelessWidget {
           fit: StackFit.expand,
           children: [
             _Art(info: info),
-            const Positioned(
-              right: 6,
+            const PositionedDirectional(
+              end: 6,
               bottom: 6,
               child: DecoratedBox(
                 decoration: BoxDecoration(color: Color(0x99000000), shape: BoxShape.circle),

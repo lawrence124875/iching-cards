@@ -1,9 +1,11 @@
 import 'dart:convert';
 import 'dart:io';
-import 'dart:ui';
 
+import 'package:flutter/widgets.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:iching_cards/app/theme.dart';
+import 'package:iching_cards/core/content/asset_content_source.dart';
 import 'package:iching_cards/core/iching/cast_result.dart';
 import 'package:iching_cards/core/iching/focus_rule.dart';
 import 'package:iching_cards/core/iching/hexagram_table.dart';
@@ -174,6 +176,38 @@ void main() {
     expect(AppFonts.forLanguage('th'), AppFonts.thai);
   });
 
+  test('阿拉伯文：ar 手機用阿拉伯文與阿拉伯文字型（RTL）；未開放時用英文', () {
+    final withAr = [AppLanguages.zhHant, AppLanguages.en, AppLanguages.ar];
+    expect(AppLanguages.resolve([const Locale('ar', 'SA')], available: withAr), AppLanguages.ar);
+    expect(AppLanguages.resolve([const Locale('ar', 'EG')], available: withAr), AppLanguages.ar);
+    expect(AppLanguages.ar.contentFolder, 'ar');
+    expect(AppLanguages.byCode('ar'), AppLanguages.ar);
+    expect(AppLanguages.resolve([const Locale('ar', 'SA')], available: [AppLanguages.zhHant, AppLanguages.en]),
+        AppLanguages.en);
+    expect(AppFonts.forLanguage('ar'), AppFonts.arabic);
+  });
+
+  test('阿拉伯文內容：«…» 內的外文原文以 LRI／PDI 隔離，阿拉伯文引文不動', () {
+    const note = 'ترجمة LC Lab عن الأصل الألماني: «Ich bin also der Meinung.» و«نص عربي».';
+    final out = AssetContentSource.isolateForeignQuotes('ar', note);
+    expect(out, contains('\u2066«Ich bin also der Meinung.»\u2069'));
+    expect(out, contains('«نص عربي»'));
+    expect(AssetContentSource.isolateForeignQuotes('en', note), note);
+  });
+
+  testWidgets('阿拉伯文介面為由右至左', (tester) async {
+    late TextDirection dir;
+    await tester.pumpWidget(Localizations(
+      locale: AppLanguages.ar.locale,
+      delegates: const [GlobalWidgetsLocalizations.delegate],
+      child: Builder(builder: (context) {
+        dir = Directionality.of(context);
+        return const SizedBox();
+      }),
+    ));
+    expect(dir, TextDirection.rtl);
+  });
+
   group('翻譯內容', () {
     test('每個語言都能載入，App 名稱正確', () {
       expect(lookupAppLocalizations(AppLanguages.zhHant.locale).appTitle, '謙卦');
@@ -186,6 +220,7 @@ void main() {
       expect(lookupAppLocalizations(AppLanguages.pt.locale).appTitle, 'Qiangua');
       expect(lookupAppLocalizations(AppLanguages.id.locale).appTitle, 'Qiangua');
       expect(lookupAppLocalizations(AppLanguages.th.locale).appTitle, 'Qiangua');
+      expect(lookupAppLocalizations(AppLanguages.ar.locale).appTitle, 'Qiangua');
     });
 
     test('單複數與 select', () {

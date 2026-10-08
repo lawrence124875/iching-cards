@@ -83,8 +83,8 @@ class _ZoomableArt extends StatelessWidget {
           fit: StackFit.expand,
           children: [
             _Art(info: info),
-            const Positioned(
-              right: 6,
+            const PositionedDirectional(
+              end: 6,
               bottom: 6,
               child: DecoratedBox(
                 decoration: BoxDecoration(color: Color(0x99000000), shape: BoxShape.circle),

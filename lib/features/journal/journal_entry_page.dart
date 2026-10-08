@@ -236,9 +236,9 @@ class _JournalEntryPageState extends State<JournalEntryPage> {
                   child: Container(
                     width: double.infinity,
                     margin: const EdgeInsets.only(top: 12),
-                    padding: const EdgeInsets.only(left: 12),
+                    padding: const EdgeInsetsDirectional.only(start: 12),
                     decoration: const BoxDecoration(
-                      border: Border(left: BorderSide(color: QianColors.rice, width: 2)),
+                      border: BorderDirectional(start: BorderSide(color: QianColors.rice, width: 2)),
                     ),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,

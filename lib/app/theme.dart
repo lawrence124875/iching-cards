@@ -43,12 +43,19 @@ class AppFonts {
   static const thai =
       AppFonts._('NotoSerifThai', 'NotoSansThai', ['NotoSerifTC', 'NotoSerifSC'], ['NotoSansTC', 'NotoSansSC'],
           tracking: false);
+  /// 阿拉伯文（2026-10-07）：內文 Noto Naskh Arabic（書本常用的 Naskh 體）、介面 Noto Sans Arabic；
+  /// 拼音與外文原名的拉丁字母由 TC 補。版面方向（RTL）由 MaterialApp 依 ar locale 自動決定。
+  /// 不加字距：阿拉伯字母是連寫體，字距會把字母之間的連筆拆開。
+  static const arabic = AppFonts._(
+      'NotoNaskhArabic', 'NotoSansArabic', ['NotoSerifTC', 'NotoSerifSC'], ['NotoSansTC', 'NotoSansSC'],
+      tracking: false);
 
   /// 語言代碼（Locale.languageCode）→ 字族組合。
   static AppFonts forLanguage(String languageCode) => switch (languageCode) {
         'ja' => japanese,
         'ko' => korean,
         'th' => thai,
+        'ar' => arabic,
         _ => chinese,
       };
 

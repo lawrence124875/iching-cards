@@ -22,6 +22,18 @@ class AssetContentSource implements ContentSource {
   /// 經文原文所在資料夾；中文語言（zh-Hant、zh-Hans）本身就是原文，不另接。
   final String originalFolder;
   static const _chineseFolders = {'zh-Hant', 'zh-Hans'};
+
+  /// 由右至左的語言（阿拉伯文，2026-10-07）：段落裡整段外文原文的引文（例：translationNote 的
+  /// 「ترجمة LC Lab عن الأصل الألماني: «Ich bin …»」）在 RTL 段落中，句尾標點與引號會被雙向演算法排到另一側。
+  /// 載入時把「«…»」內不含阿拉伯字母的引文（連同引號）用 LRI…PDI 隔離，讓它整段由左至右顯示。
+  /// 內容檔本身不放方向控制字元（iching-content check_translation.py ar 會擋）。
+  static const _rtlFolders = {'ar'};
+  static final _foreignQuote = RegExp(r'«([^«»\u0600-\u06FF]*[A-Za-z\u0370-\u03FF][^«»\u0600-\u06FF]*)»');
+
+  /// 只對 [_rtlFolders] 生效；其他語言原樣回傳。
+  static String isolateForeignQuotes(String folder, String text) => _rtlFolders.contains(folder)
+      ? text.replaceAllMapped(_foreignQuote, (m) => '\u2066«${m[1]}»\u2069')
+      : text;
   final AssetBundle _bundle;
   final Map<String, HexagramContent?> _cache = {};
   Future<Set<String>>? _assets;
@@ -56,7 +68,7 @@ class AssetContentSource implements ContentSource {
     HexagramContent? result;
     if ((await _assetList()).contains(path)) {
       try {
-        final raw = await _bundle.loadString(path);
+        final raw = isolateForeignQuotes(f, await _bundle.loadString(path));
         result = HexagramContent.fromJson(jsonDecode(raw) as Map<String, dynamic>);
       } catch (e) {
         debugPrint('內容解析失敗：$path（$e）');

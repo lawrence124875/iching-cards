@@ -80,7 +80,7 @@ class HomePage extends StatelessWidget {
             ],
           ),
         ),
-          const Positioned(top: 4, right: 4, child: _HomeMenu()),
+          const PositionedDirectional(top: 4, end: 4, child: _HomeMenu()),
         ]),
       ),
     );

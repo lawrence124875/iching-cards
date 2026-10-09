@@ -143,7 +143,7 @@ void main() {
     await _settle(tester, frames: 40);
     await shot(1);
 
-    // 2–4 解讀頁：「View Reading」→ 依序捲到各段落
+    // 2–3 解讀頁：「View Reading」→ 依序捲到各段落
     await tester.tap(find.widgetWithText(FilledButton, en.viewReading));
     await _settle(tester);
     final reading = (await services.content.hexagram(15))!.readings[0];
@@ -151,8 +151,12 @@ void main() {
     await shot(2);
     await _scrollTo(tester, find.text(en.sectionEastWest), top: 8);
     await shot(3);
-    await _scrollTo(tester, find.text(en.sectionAction), top: 8);
+    // 4 分享卦象卡片：解讀頁右上角分享鈕 → 預覽（2026-10-09 取代「今日小行動」）
+    await tester.tap(find.byTooltip(en.shareReading));
+    await _settle(tester);
     await shot(4);
+    Navigator.of(tester.element(find.byType(AlertDialog))).pop();
+    await _settle(tester);
 
     // 5 三枚銅錢：回首頁 →「Cast with Three Coins」→ 擲六次
     nav().popUntil((r) => r.isFirst);

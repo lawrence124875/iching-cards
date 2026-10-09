@@ -140,18 +140,25 @@ class ShareCard extends StatelessWidget {
                 textAlign: TextAlign.center, maxLines: 2, overflow: TextOverflow.ellipsis, style: t.titleLarge),
           if (image != null) ...[
             const SizedBox(height: 10),
+            // 卦象文字：依剩下的高度決定行數，最後一行以「…」收尾（不在半行處被切掉）
             Expanded(
-              child: Text(image!,
-                  textAlign: TextAlign.center,
-                  maxLines: 5,
-                  overflow: TextOverflow.ellipsis,
-                  style: t.bodyMedium?.copyWith(color: QianColors.textSub)),
+              child: LayoutBuilder(builder: (context, box) {
+                final style = t.bodyMedium?.copyWith(color: QianColors.textSub);
+                final line = (style?.fontSize ?? 14) * (style?.height ?? 1.4) * MediaQuery.textScalerOf(context).scale(1);
+                final lines = (box.maxHeight / line).floor().clamp(1, 6);
+                return Text(image!,
+                    textAlign: TextAlign.center, maxLines: lines, overflow: TextOverflow.ellipsis, style: style);
+              }),
             ),
           ] else
             const Spacer(),
           const SizedBox(height: 8),
-          Text('${l.appTitle}${l.separator}${l.appSubtitle}',
-              style: t.bodySmall?.copyWith(color: QianColors.earth, letterSpacing: 2)),
+          // 名稱與副標一行，太長時等比縮小（英文等副標較長的語言原本會折成兩行、靠邊）
+          FittedBox(
+            fit: BoxFit.scaleDown,
+            child: Text('${l.appTitle}${l.separator}${l.appSubtitle}',
+                maxLines: 1, style: t.bodySmall?.copyWith(color: QianColors.earth, letterSpacing: 2)),
+          ),
         ],
       ),
     );

@@ -204,5 +204,6 @@
   "journalBackupSubject": "Sao lưu nhật ký Quẻ Khiêm {date}",
   "journalRestoreDone": "{count, plural, other{Đã khôi phục {count} ghi chép}}",
   "journalRestoreNone": "Mọi ghi chép trong bản sao lưu này đã có trên điện thoại.",
-  "journalRestoreFailed": "Không đọc được tệp này. Hãy chọn tệp sao lưu nhật ký Quẻ Khiêm (.json)."
+  "journalRestoreFailed": "Không đọc được tệp này. Hãy chọn tệp sao lưu nhật ký Quẻ Khiêm (.json).",
+  "menuShareUsage": "Gửi thống kê sử dụng ẩn danh và báo cáo lỗi"
 }

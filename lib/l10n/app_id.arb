@@ -559,5 +559,6 @@
   "journalBackupSubject": "Cadangan jurnal Qiangua {date}",
   "journalRestoreDone": "{count, plural, other{{count} catatan dipulihkan}}",
   "journalRestoreNone": "Semua catatan di cadangan ini sudah ada di ponsel ini.",
-  "journalRestoreFailed": "File ini tidak dapat dibaca. Pilih file cadangan jurnal Qiangua (.json)."
+  "journalRestoreFailed": "File ini tidak dapat dibaca. Pilih file cadangan jurnal Qiangua (.json).",
+  "menuShareUsage": "Bagikan statistik anonim dan laporan error"
 }

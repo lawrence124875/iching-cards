@@ -559,5 +559,6 @@
   "journalBackupSubject": "Qiangua journal backup {date}",
   "journalRestoreDone": "{count, plural, =1{Restored 1 entry} other{Restored {count} entries}}",
   "journalRestoreNone": "Every entry in this backup is already on this phone.",
-  "journalRestoreFailed": "Couldn't read this file. Please choose a Qiangua journal backup (.json)."
+  "journalRestoreFailed": "Couldn't read this file. Please choose a Qiangua journal backup (.json).",
+  "menuShareUsage": "Share anonymous usage stats & crash reports"
 }

@@ -4,6 +4,7 @@ import 'package:iching_cards/core/events/event_bus.dart';
 import 'package:iching_cards/core/telemetry/analytics.dart';
 import 'package:iching_cards/core/telemetry/analytics_listener.dart';
 import 'package:iching_cards/core/telemetry/remote_flags.dart';
+import 'package:iching_cards/core/telemetry/usage_sharing.dart';
 
 class _Recorder implements Analytics {
   final logged = <(String, Map<String, Object>)>[];
@@ -76,5 +77,18 @@ void main() {
     for (final id in ids) {
       expect(RegExp(r'^[a-z_][a-z0-9_]*$').hasMatch(featureFlagKey(id)), isTrue, reason: id);
     }
+  });
+
+  test('使用統計開關：存檔並通知 Firebase，同值不重複通知', () async {
+    final store = MemoryUsageSharingStore();
+    final applied = <bool>[];
+    final u = UsageSharing(initial: await store.load(), store: store, apply: (v) async => applied.add(v));
+    expect(u.enabled.value, isTrue);
+    await u.set(false);
+    await u.set(false);
+    expect(store.value, isFalse);
+    expect(applied, [false]);
+    await u.set(true);
+    expect(applied, [false, true]);
   });
 }

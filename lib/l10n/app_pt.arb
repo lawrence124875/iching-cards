@@ -204,5 +204,6 @@
   "journalBackupSubject": "Backup do Diário do Qiangua {date}",
   "journalRestoreDone": "{count, plural, =1{1 registro restaurado} other{{count} registros restaurados}}",
   "journalRestoreNone": "Todos os registros deste backup já estão neste celular.",
-  "journalRestoreFailed": "Não foi possível ler este arquivo. Escolha um backup do Diário do Qiangua (.json)."
+  "journalRestoreFailed": "Não foi possível ler este arquivo. Escolha um backup do Diário do Qiangua (.json).",
+  "menuShareUsage": "Compartilhar estatísticas anônimas e relatórios de erros"
 }

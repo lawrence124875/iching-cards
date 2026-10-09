@@ -204,5 +204,6 @@
   "journalBackupSubject": "谦卦卦记备份 {date}",
   "journalRestoreDone": "{count, plural, other{已恢复 {count} 则卦记}}",
   "journalRestoreNone": "备份里的卦记都已经在这部手机上了。",
-  "journalRestoreFailed": "无法读取这个文件。请选择谦卦的卦记备份文件（.json）。"
+  "journalRestoreFailed": "无法读取这个文件。请选择谦卦的卦记备份文件（.json）。",
+  "menuShareUsage": "分享匿名使用统计与崩溃报告"
 }

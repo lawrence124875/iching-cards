@@ -21,6 +21,7 @@ import '../core/reminders/reminder_service.dart';
 import '../core/soundscape/soundscape_files.dart';
 import '../core/telemetry/analytics.dart';
 import '../core/telemetry/remote_flags.dart';
+import '../core/telemetry/usage_sharing.dart';
 import '../l10n/l10n.dart';
 
 /// App 共用服務。換實作（內容來源、變爻規則…）只改 Services.standard()。
@@ -36,6 +37,7 @@ class Services {
     this.intro,
     this.analytics = const NoopAnalytics(),
     this.flags = const DefaultRemoteFlags(),
+    this.usage,
     PremiumService? premium,
     AdService? ads,
     FreeLimits? limits,
@@ -52,6 +54,7 @@ class Services {
     PremiumService? premium,
     AdService? ads,
     FreeLimits limits = const FreeLimits(),
+    UsageSharing? usage,
   }) =>
       Services(
         content: AssetContentSource(folder: () => L10n.contentFolder),
@@ -71,6 +74,7 @@ class Services {
         ),
         analytics: analytics,
         flags: flags,
+        usage: usage,
         premium: premium,
         ads: ads,
         limits: limits,
@@ -97,6 +101,9 @@ class Services {
 
   /// 遠端開關（Firebase Remote Config，§18）。
   final RemoteFlags flags;
+
+  /// 「分享匿名使用統計與當機報告」開關（§18.4）；null＝選單不顯示（測試、沒有 Firebase）。
+  final UsageSharing? usage;
 
   /// 訂閱（§23）。不傳＝永遠免費版、不能購買。
   final PremiumService premium;

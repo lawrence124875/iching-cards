@@ -204,5 +204,6 @@
   "journalBackupSubject": "نسخة احتياطيّة من دفتر Qiangua {date}",
   "journalRestoreDone": "{count, plural, =1{استُعيدت مدوّنة واحدة} =2{استُعيدت مدوّنتان} few{استُعيدت {count} مدوّنات} many{استُعيدت {count} مدوّنة} other{استُعيدت {count} مدوّنة}}",
   "journalRestoreNone": "كلّ المدوّنات في هذه النسخة موجودة على هذا الهاتف.",
-  "journalRestoreFailed": "تعذّرت قراءة هذا الملفّ. اختر ملفّ نسخة احتياطيّة من دفتر Qiangua ‏(.json)."
+  "journalRestoreFailed": "تعذّرت قراءة هذا الملفّ. اختر ملفّ نسخة احتياطيّة من دفتر Qiangua ‏(.json).",
+  "menuShareUsage": "مشاركة إحصاءات استخدام مجهولة الهويّة وتقارير الأعطال"
 }

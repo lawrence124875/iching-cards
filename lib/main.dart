@@ -15,13 +15,17 @@ import 'core/monetization/ad_service.dart';
 import 'core/monetization/free_limits.dart';
 import 'core/revenuecat/revenuecat_premium.dart';
 import 'core/telemetry/analytics_listener.dart';
+import 'core/telemetry/usage_sharing.dart';
 import 'l10n/l10n.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   // Firebase（Analytics、Crashlytics、Remote Config，HANDOFF §18）放最前面，才接得到啟動中的當機；
   // 失敗不影響 App（統計不送、遠端開關全照預設）。
-  final telemetry = await FirebaseTelemetry.init(featureIds: registeredFeatures.map((f) => f.id));
+  final sharingStore = FileUsageSharingStore();
+  final sharing = await sharingStore.load();
+  final telemetry = await FirebaseTelemetry.init(featureIds: registeredFeatures.map((f) => f.id), sharing: sharing);
+  final usage = UsageSharing(initial: sharing, store: sharingStore, apply: telemetry.setSharing);
   _registerFontLicenses();
   // 無邊框畫面（Android 15 起 targetSdk 35 的預設；這裡讓舊版 Android 也一致）：
   // 狀態列、導覽列透明，畫面延伸到系統列後面，各頁以 SafeArea／viewPadding 讓出位置。
@@ -55,6 +59,7 @@ Future<void> main() async {
     premium: premium,
     ads: ads,
     limits: limits,
+    usage: usage,
   );
   AnalyticsListener(services.events, services.analytics); // 全 App 存活期間都在，不需 dispose
   await services.reminders.init(); // 不拋例外；失敗時提醒功能停用

@@ -17,14 +17,15 @@ import '../telemetry/remote_flags.dart';
 /// Firebase 專案與智慧聽覺巡航共用（帳號專案數已滿）：本 App 是同專案的第二個 Android App
 /// `com.lclab.qiangua`。統計事件與 Remote Config 參數一律 `qg_` 開頭。
 class FirebaseTelemetry {
-  FirebaseTelemetry._(this.analytics, this.flags);
+  FirebaseTelemetry._(this.analytics, this.flags, {bool available = false}) : _available = available;
 
   final Analytics analytics;
   final RemoteFlags flags;
 
   /// 初始化；任何失敗（沒有 google-services.json、沒網路、逾時）都退回替代實作，不影響 App 啟動。
   /// [featureIds]：功能註冊表的 id，用來設定 Remote Config 的 App 內預設值（全部開啟）。
-  static Future<FirebaseTelemetry> init({required Iterable<String> featureIds}) async {
+  /// [sharing]：使用者的「分享匿名使用統計與當機報告」設定；false 時 Analytics、Crashlytics 都不蒐集。
+  static Future<FirebaseTelemetry> init({required Iterable<String> featureIds, bool sharing = true}) async {
     try {
       await Firebase.initializeApp().timeout(const Duration(seconds: 8));
     } catch (e) {
@@ -35,7 +36,7 @@ class FirebaseTelemetry {
     // 當機回報：release 版才收集。
     try {
       final crash = FirebaseCrashlytics.instance;
-      await crash.setCrashlyticsCollectionEnabled(!kDebugMode);
+      await crash.setCrashlyticsCollectionEnabled(!kDebugMode && sharing);
       FlutterError.onError = crash.recordFlutterFatalError;
       PlatformDispatcher.instance.onError = (error, stack) {
         crash.recordError(error, stack, fatal: true);
@@ -45,8 +46,27 @@ class FirebaseTelemetry {
       debugPrint('Crashlytics 設定失敗：$e');
     }
 
+    try {
+      await FirebaseAnalytics.instance.setAnalyticsCollectionEnabled(sharing);
+    } catch (e) {
+      debugPrint('Analytics 設定失敗：$e');
+    }
+
     final RemoteFlags flags = await _FirebaseRemoteFlags.init(featureIds);
-    return FirebaseTelemetry._(const _FirebaseAnalytics(), flags);
+    return FirebaseTelemetry._(const _FirebaseAnalytics(), flags, available: true);
+  }
+
+  final bool _available;
+
+  /// 使用者切換「分享匿名使用統計與當機報告」時呼叫；立即生效。Firebase 沒初始化時什麼都不做。
+  Future<void> setSharing(bool enabled) async {
+    if (!_available) return;
+    try {
+      await FirebaseAnalytics.instance.setAnalyticsCollectionEnabled(enabled);
+      await FirebaseCrashlytics.instance.setCrashlyticsCollectionEnabled(!kDebugMode && enabled);
+    } catch (e) {
+      debugPrint('切換使用統計失敗：$e');
+    }
   }
 }
 

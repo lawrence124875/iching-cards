@@ -646,5 +646,6 @@
     }
   },
   "journalRestoreNone": "備份裡的卦記都已經在這支手機上了。",
-  "journalRestoreFailed": "無法讀取這個檔案。請選擇謙卦的卦記備份檔（.json）。"
+  "journalRestoreFailed": "無法讀取這個檔案。請選擇謙卦的卦記備份檔（.json）。",
+  "menuShareUsage": "分享匿名使用統計與當機報告"
 }

@@ -204,5 +204,6 @@
   "journalBackupSubject": "ไฟล์สำรองบันทึก Qiangua {date}",
   "journalRestoreDone": "{count, plural, other{กู้คืนแล้ว {count} บันทึก}}",
   "journalRestoreNone": "บันทึกทั้งหมดในไฟล์สำรองนี้มีอยู่ในโทรศัพท์เครื่องนี้แล้ว",
-  "journalRestoreFailed": "อ่านไฟล์นี้ไม่ได้ โปรดเลือกไฟล์สำรองบันทึกของ Qiangua (.json)"
+  "journalRestoreFailed": "อ่านไฟล์นี้ไม่ได้ โปรดเลือกไฟล์สำรองบันทึกของ Qiangua (.json)",
+  "menuShareUsage": "ส่งสถิติการใช้งานแบบไม่ระบุตัวตนและรายงานข้อผิดพลาด"
 }

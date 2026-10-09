@@ -204,5 +204,6 @@
   "journalBackupSubject": "謙卦 記録のバックアップ {date}",
   "journalRestoreDone": "{count, plural, other{記録を {count} 件復元しました}}",
   "journalRestoreNone": "このバックアップの記録は、すべてこの端末にあります。",
-  "journalRestoreFailed": "このファイルを読み込めません。謙卦の記録のバックアップ（.json）を選んでください。"
+  "journalRestoreFailed": "このファイルを読み込めません。謙卦の記録のバックアップ（.json）を選んでください。",
+  "menuShareUsage": "匿名の利用統計とクラッシュレポートを送信"
 }

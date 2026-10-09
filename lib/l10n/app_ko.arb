@@ -204,5 +204,6 @@
   "journalBackupSubject": "겸괘 기록 백업 {date}",
   "journalRestoreDone": "{count, plural, other{기록 {count}개를 복원했습니다}}",
   "journalRestoreNone": "이 백업의 기록은 모두 이미 이 휴대폰에 있습니다.",
-  "journalRestoreFailed": "이 파일을 읽을 수 없습니다. 겸괘 기록 백업 파일(.json)을 골라 주세요."
+  "journalRestoreFailed": "이 파일을 읽을 수 없습니다. 겸괘 기록 백업 파일(.json)을 골라 주세요.",
+  "menuShareUsage": "익명 사용 통계와 오류 보고서 보내기"
 }

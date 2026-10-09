@@ -39,6 +39,11 @@ jobs:
             glossary
             store/release-notes
 
+      # macOS 系統 Python 不允許直接 pip 安裝（字型子集要 fontTools）
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
       - uses: subosito/flutter-action@v2
         with:
           channel: 'stable'

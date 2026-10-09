@@ -5,6 +5,7 @@ import '../app/theme.dart';
 import '../core/content/hexagram_content.dart';
 import '../core/iching/hexagram_table.dart';
 import '../l10n/l10n.dart';
+import '../shared/widgets/adaptive_layout.dart';
 import '../shared/widgets/hexagram_glyph.dart';
 import 'scripture.dart';
 import 'section.dart';
@@ -39,7 +40,7 @@ class _DetailPageState extends State<DetailPage> {
           }
           final c = snap.data;
           return ListView(
-            padding: EdgeInsets.fromLTRB(24, 8, 24, 40 + MediaQuery.viewPaddingOf(context).bottom),
+            padding: readablePadding(context, top: 8, bottom: 40),
             children: [
               Center(child: HexagramGlyph(lines: info.lines, width: 64)),
               const SizedBox(height: 12),

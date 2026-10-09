@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 /// 謙卦主題配色（HANDOFF §6.1）：天玄地黃，玄底黃點綴。
 class QianColors {
@@ -68,6 +69,18 @@ String get kSans => AppFonts.current.sans;
 List<String> get kSerifFallback => AppFonts.current.serifFallback;
 List<String> get kSansFallback => AppFonts.current.sansFallback;
 
+/// 系統列（無邊框畫面）：透明、淺色圖示（玄底），導覽列不加系統的半透明遮罩。
+/// main() 開機時套用；AppBar 也用同一份，進出各頁不會閃動。
+const qianSystemBars = SystemUiOverlayStyle(
+  statusBarColor: Colors.transparent,
+  statusBarIconBrightness: Brightness.light,
+  statusBarBrightness: Brightness.dark,
+  systemNavigationBarColor: Colors.transparent,
+  systemNavigationBarDividerColor: Colors.transparent,
+  systemNavigationBarIconBrightness: Brightness.light,
+  systemNavigationBarContrastEnforced: false,
+);
+
 /// 字距：寫 `letterSpacing: tracking(2)`，不加字距的文字（泰文）回傳 0。
 double tracking(double value) => AppFonts.current.tracking ? value : 0;
 
@@ -93,6 +106,7 @@ ThemeData buildTheme([AppFonts fonts = AppFonts.chinese]) {
     scaffoldBackgroundColor: QianColors.ink,
     dividerColor: QianColors.mountain,
     appBarTheme: AppBarTheme(
+      systemOverlayStyle: qianSystemBars,
       backgroundColor: QianColors.ink,
       foregroundColor: QianColors.text,
       elevation: 0,

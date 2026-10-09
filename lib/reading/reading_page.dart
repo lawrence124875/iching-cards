@@ -17,6 +17,7 @@ import '../shared/premium/paywall_page.dart';
 import 'save_reading_sheet.dart';
 import 'scripture.dart';
 import 'section.dart';
+import '../shared/widgets/adaptive_layout.dart';
 
 /// 解讀頁：牌面 →（擲錢時）本次重點 → 隨機一組解讀 → 東西相映 → 小行動與提問 →（記下這一卦）。
 /// [review] 為 true 時是從卦記回看：顯示當時那一組解讀（[readingIndex]），不發事件、不顯示儲存。
@@ -90,8 +91,8 @@ class _ReadingPageState extends State<ReadingPage> {
               : pc.readings[_readingSeed % pc.readings.length];
 
           return ListView(
-            // 底部加上系統導覽列高度，最後的按鈕不會被擋住
-            padding: EdgeInsets.fromLTRB(24, 8, 24, 40 + MediaQuery.viewPaddingOf(context).bottom),
+            // 底部加上系統導覽列高度，最後的按鈕不會被擋住；寬螢幕內容置中
+            padding: readablePadding(context, top: 8, bottom: 40),
             children: [
               if (widget.question.isNotEmpty)
                 Padding(

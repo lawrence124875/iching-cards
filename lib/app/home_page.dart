@@ -6,6 +6,7 @@ import '../features/share/share.dart';
 import '../shared/premium/ad_banner.dart';
 import '../shared/premium/paywall_page.dart';
 
+import '../shared/widgets/adaptive_layout.dart';
 import '../shared/widgets/card_back.dart';
 import '../l10n/l10n.dart';
 import 'feature_registry.dart';
@@ -25,6 +26,27 @@ class HomePage extends StatelessWidget {
 
     void open(AppFeature f) => Navigator.of(context).push(MaterialPageRoute<void>(builder: f.builder!));
 
+    final brand = [
+      const SizedBox(
+        width: 168,
+        child: AspectRatio(aspectRatio: 0.62, child: CardBack()),
+      ),
+      const SizedBox(height: 32),
+      Text(l.appTitle, style: t.displaySmall),
+      const SizedBox(height: 6),
+      Text(l.appSubtitle, style: t.titleSmall?.copyWith(color: QianColors.earth, letterSpacing: tracking(4))),
+    ];
+    final motto = Text(l.homeMotto,
+        textAlign: TextAlign.center, style: t.bodyLarge?.copyWith(color: QianColors.textSub, fontSize: 15));
+    final actions = [
+      for (final f in primary)
+        Padding(
+          padding: const EdgeInsets.only(bottom: 8),
+          child: FilledButton(onPressed: () => open(f), child: Text(f.label(l))),
+        ),
+      for (final f in secondary) TextButton(onPressed: () => open(f), child: Text(f.label(l))),
+    ];
+
     // 0.1.0+16：整頁一定一屏顯示完（不捲動）。主內容放在 FittedBox 裡，螢幕矮或系統字體放大時
     // 等比縮小；免責聲明固定貼在底部，不會被擠到畫面外。
     return Scaffold(
@@ -40,34 +62,27 @@ class HomePage extends StatelessWidget {
                     padding: const EdgeInsets.fromLTRB(28, 16, 28, 8),
                     child: FittedBox(
                       fit: BoxFit.scaleDown,
-                      child: SizedBox(
-                        width: box.maxWidth - 56,
-                        child: Column(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            const SizedBox(
-                              width: 168,
-                              child: AspectRatio(aspectRatio: 0.62, child: CardBack()),
-                            ),
-                            const SizedBox(height: 32),
-                            Text(l.appTitle, style: t.displaySmall),
-                            const SizedBox(height: 6),
-                            Text(l.appSubtitle, style: t.titleSmall?.copyWith(color: QianColors.earth, letterSpacing: tracking(4))),
-                            const SizedBox(height: 16),
-                            Text(l.homeMotto,
-                                textAlign: TextAlign.center,
-                                style: t.bodyLarge?.copyWith(color: QianColors.textSub, fontSize: 15)),
-                            const SizedBox(height: 32),
-                            for (final f in primary)
-                              Padding(
-                                padding: const EdgeInsets.only(bottom: 8),
-                                child: FilledButton(onPressed: () => open(f), child: Text(f.label(l))),
+                      // 手機橫放（矮而寬）：卦卡與標題在左、箴言與按鈕在右，不必縮得太小
+                      child: isShortWide(box.biggest)
+                          ? Row(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                Column(mainAxisSize: MainAxisSize.min, children: brand),
+                                const SizedBox(width: 56),
+                                SizedBox(
+                                  width: 320,
+                                  child: Column(mainAxisSize: MainAxisSize.min, children: [motto, ...actions]),
+                                ),
+                              ],
+                            )
+                          : SizedBox(
+                              // 平板、摺疊機：不隨螢幕無限加寬
+                              width: (box.maxWidth - 56).clamp(0, 480).toDouble(),
+                              child: Column(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [...brand, const SizedBox(height: 16), motto, const SizedBox(height: 32), ...actions],
                               ),
-                            for (final f in secondary)
-                              TextButton(onPressed: () => open(f), child: Text(f.label(l))),
-                          ],
-                        ),
-                      ),
+                            ),
                     ),
                   ),
                 ),

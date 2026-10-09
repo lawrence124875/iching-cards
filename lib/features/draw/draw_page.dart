@@ -7,6 +7,7 @@ import '../../core/iching/divination_method.dart';
 import '../../core/iching/hexagram_table.dart';
 import '../../l10n/l10n.dart';
 import '../../reading/reading_page.dart';
+import '../../shared/widgets/adaptive_layout.dart';
 import '../../shared/widgets/card_back.dart';
 import '../../shared/widgets/card_face.dart';
 import '../../shared/widgets/flip_card.dart';
@@ -52,57 +53,86 @@ class _DrawPageState extends State<DrawPage> {
     final t = Theme.of(context).textTheme;
     final cast = _cast;
     final l = context.l10n;
+    final prompt = [
+      Text(
+        cast == null ? l.drawPromptBefore : l.drawPromptAfter,
+        style: t.bodyMedium?.copyWith(color: QianColors.textSub),
+        textAlign: TextAlign.center,
+      ),
+      // 翻牌後就不再寫想問的事（存進卦記時仍可修改）
+      if (cast == null)
+        QuestionPrompt(question: _question, onChanged: (q) => setState(() => _question = q))
+      else if (_question.isNotEmpty)
+        QuestionPrompt(question: _question, onChanged: (_) {}, enabled: false),
+    ];
+    final card = Center(
+      child: AspectRatio(
+        aspectRatio: 0.62,
+        child: GestureDetector(
+          onTap: _draw,
+          child: Semantics(
+            button: cast == null,
+            label: cast == null ? l.drawFlip : null,
+            child: FlipCard(
+              flipped: cast != null,
+              back: const CardBack(),
+              front: cast == null
+                  ? const SizedBox.shrink()
+                  : CardFace(info: HexagramTable.byNumber(cast.primary), zoomable: true),
+            ),
+          ),
+        ),
+      ),
+    );
+    final buttons = [
+      if (cast == null)
+        FilledButton(onPressed: _draw, child: Text(l.drawFlip))
+      else ...[
+        FilledButton(
+          onPressed: () => _openReading(cast),
+          child: Text(l.viewReading),
+        ),
+        TextButton(onPressed: _reset, child: Text(l.drawAgain)),
+      ],
+    ];
     return Scaffold(
       appBar: AppBar(), // 首頁按鈕已寫「抽一卦」，這裡不再重複標題
       body: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.fromLTRB(32, 8, 32, 24),
-          child: Column(
-            children: [
-              Text(
-                cast == null ? l.drawPromptBefore : l.drawPromptAfter,
-                style: t.bodyMedium?.copyWith(color: QianColors.textSub),
-                textAlign: TextAlign.center,
-              ),
-              // 翻牌後就不再寫想問的事（存進卦記時仍可修改）
-              if (cast == null)
-                QuestionPrompt(question: _question, onChanged: (q) => setState(() => _question = q))
-              else if (_question.isNotEmpty)
-                QuestionPrompt(question: _question, onChanged: (_) {}, enabled: false),
-              const SizedBox(height: 8),
-              Expanded(
-                child: Center(
-                  child: AspectRatio(
-                    aspectRatio: 0.62,
-                    child: GestureDetector(
-                      onTap: _draw,
-                      child: Semantics(
-                        button: cast == null,
-                        label: cast == null ? l.drawFlip : null,
-                        child: FlipCard(
-                          flipped: cast != null,
-                          back: const CardBack(),
-                          front: cast == null
-                              ? const SizedBox.shrink()
-                              : CardFace(info: HexagramTable.byNumber(cast.primary), zoomable: true),
+        child: LayoutBuilder(
+          builder: (context, box) => isShortWide(box.biggest)
+              // 手機橫放：牌在左、文字與按鈕在右
+              ? Padding(
+                  padding: const EdgeInsets.fromLTRB(32, 8, 32, 16),
+                  child: Row(
+                    children: [
+                      Expanded(child: card),
+                      const SizedBox(width: 32),
+                      SizedBox(
+                        width: 320,
+                        child: Center(
+                          child: SingleChildScrollView(
+                            child: Column(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [...prompt, const SizedBox(height: 24), ...buttons],
+                            ),
+                          ),
                         ),
                       ),
-                    ),
+                    ],
+                  ),
+                )
+              : Padding(
+                  padding: const EdgeInsets.fromLTRB(32, 8, 32, 24),
+                  child: Column(
+                    children: [
+                      ...prompt,
+                      const SizedBox(height: 8),
+                      Expanded(child: card),
+                      const SizedBox(height: 24),
+                      ...buttons,
+                    ],
                   ),
                 ),
-              ),
-              const SizedBox(height: 24),
-              if (cast == null)
-                FilledButton(onPressed: _draw, child: Text(l.drawFlip))
-              else ...[
-                FilledButton(
-                  onPressed: () => _openReading(cast),
-                  child: Text(l.viewReading),
-                ),
-                TextButton(onPressed: _reset, child: Text(l.drawAgain)),
-              ],
-            ],
-          ),
         ),
       ),
     );

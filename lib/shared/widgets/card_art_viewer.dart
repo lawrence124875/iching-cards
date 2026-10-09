@@ -20,8 +20,8 @@ Future<void> showCardArt(BuildContext context, HexagramInfo info, {Widget? overl
   ));
 }
 
-/// 滿版看圖：預設填滿螢幕（BoxFit.cover）；點兩下切換「完整畫面」（contain）；
-/// 兩指可縮放；點一下返回。進入時隱藏系統列，離開時恢復。
+/// 滿版看圖：直向預設填滿螢幕（BoxFit.cover），橫向／寬螢幕預設「完整畫面」（contain，直式牌面才不會被裁掉大半）；
+/// 點兩下切換；兩指可縮放；點一下返回。進入時隱藏系統列，離開時恢復。
 class CardArtViewer extends StatefulWidget {
   const CardArtViewer({super.key, required this.info, this.overlay});
 
@@ -35,7 +35,7 @@ class CardArtViewer extends StatefulWidget {
 class _CardArtViewerState extends State<CardArtViewer> {
   late final Future<ImageProvider?> _art = AppServices.of(context).content.cardArt(widget.info.number);
   final _zoom = TransformationController();
-  bool _fill = true;
+  bool? _fill; // null＝依螢幕方向
   bool _hint = true;
   Timer? _hintTimer;
 
@@ -56,14 +56,16 @@ class _CardArtViewerState extends State<CardArtViewer> {
     super.dispose();
   }
 
-  void _toggleFit() => setState(() {
-        _fill = !_fill;
+  void _toggleFit(bool fill) => setState(() {
+        _fill = !fill;
         _zoom.value = Matrix4.identity();
       });
 
   @override
   Widget build(BuildContext context) {
     final t = Theme.of(context).textTheme;
+    final size = MediaQuery.sizeOf(context);
+    final fill = _fill ?? size.height >= size.width;
     return Scaffold(
       backgroundColor: Colors.black,
       body: Semantics(
@@ -71,7 +73,7 @@ class _CardArtViewerState extends State<CardArtViewer> {
         child: GestureDetector(
           behavior: HitTestBehavior.opaque,
           onTap: () => Navigator.of(context).pop(),
-          onDoubleTap: _toggleFit,
+          onDoubleTap: () => _toggleFit(fill),
           child: Stack(
             fit: StackFit.expand,
             children: [
@@ -91,7 +93,7 @@ class _CardArtViewerState extends State<CardArtViewer> {
                     minScale: 1,
                     maxScale: 4,
                     child: SizedBox.expand(
-                      child: Image(image: img, fit: _fill ? BoxFit.cover : BoxFit.contain),
+                      child: Image(image: img, fit: fill ? BoxFit.cover : BoxFit.contain),
                     ),
                   );
                 },

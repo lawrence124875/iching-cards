@@ -13,6 +13,7 @@ import '../../core/iching/hexagram_table.dart';
 import '../../core/soundscape/breath_timeline.dart';
 import '../../core/soundscape/session_renderer.dart';
 import '../../shared/format.dart';
+import '../../shared/widgets/adaptive_layout.dart';
 import '../../shared/widgets/card_art_viewer.dart';
 import '../../l10n/l10n.dart';
 
@@ -224,29 +225,46 @@ class _BreathPageState extends State<BreathPage> with SingleTickerProviderStateM
     return Scaffold(
       appBar: AppBar(title: Text(l.hexFullName(_info))),
       body: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.fromLTRB(28, 0, 28, 20),
-          child: Column(
-            children: [
-              Text(_soundNames(l), style: t.bodySmall?.copyWith(letterSpacing: tracking(3))),
-              Expanded(
-                child: Center(
-                  child: AspectRatio(
-                    aspectRatio: 1,
-                    child: CustomPaint(
-                      painter: BreathCirclePainter(
-                        fullness: _stage == _Stage.running ? state.fullness : 0,
-                        inhale: state.phase == BreathPhase.inhale,
-                      ),
-                      child: Center(child: _centre(t, state)),
-                    ),
+        child: LayoutBuilder(builder: (context, box) {
+          final names = Text(_soundNames(l),
+              style: t.bodySmall?.copyWith(letterSpacing: tracking(3)), textAlign: TextAlign.center);
+          final circle = Center(
+            child: AspectRatio(
+              aspectRatio: 1,
+              child: CustomPaint(
+                painter: BreathCirclePainter(
+                  fullness: _stage == _Stage.running ? state.fullness : 0,
+                  inhale: state.phase == BreathPhase.inhale,
+                ),
+                child: Center(child: _centre(t, state)),
+              ),
+            ),
+          );
+          final bottom = SizedBox(height: 132, child: _bottom(t));
+          if (isShortWide(box.biggest)) {
+            // 手機橫放：呼吸圓在左、音景名稱與按鈕在右
+            return Padding(
+              padding: const EdgeInsets.fromLTRB(28, 4, 28, 12),
+              child: Row(children: [
+                Expanded(child: circle),
+                const SizedBox(width: 32),
+                SizedBox(
+                  width: 320,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [names, const SizedBox(height: 16), bottom],
                   ),
                 ),
-              ),
-              SizedBox(height: 132, child: _bottom(t)),
-            ],
-          ),
-        ),
+              ]),
+            );
+          }
+          return Padding(
+            padding: const EdgeInsets.fromLTRB(28, 0, 28, 20),
+            child: Column(
+              children: [names, Expanded(child: circle), bottom],
+            ),
+          );
+        }),
       ),
     );
   }
@@ -306,21 +324,26 @@ class _BreathPageState extends State<BreathPage> with SingleTickerProviderStateM
           Text('${l.breathRemaining(formatClock(left.ceil()))}${_silent ? l.breathSilentMark : ''}',
               style: t.bodySmall?.copyWith(letterSpacing: tracking(2))),
           const SizedBox(height: 14),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              _RoundButton(icon: Icons.landscape_outlined, label: l.breathViewArt, onTap: _showArt),
-              const SizedBox(width: 36),
-              _RoundButton(
-                icon: _paused ? Icons.play_arrow_rounded : Icons.pause_rounded,
-                label: _paused ? l.breathResume : l.breathPause,
-                onTap: _togglePause,
-                primary: true,
-              ),
-              const SizedBox(width: 36),
-              _RoundButton(icon: Icons.close_rounded, label: l.breathEnd, onTap: () => Navigator.of(context).pop()),
-            ],
+          // 橫放時右欄只有 320 寬，按鈕標籤較長的語言（阿拉伯文等）整列等比縮小，不被擠出
+          FittedBox(
+            fit: BoxFit.scaleDown,
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                _RoundButton(icon: Icons.landscape_outlined, label: l.breathViewArt, onTap: _showArt),
+                const SizedBox(width: 36),
+                _RoundButton(
+                  icon: _paused ? Icons.play_arrow_rounded : Icons.pause_rounded,
+                  label: _paused ? l.breathResume : l.breathPause,
+                  onTap: _togglePause,
+                  primary: true,
+                ),
+                const SizedBox(width: 36),
+                _RoundButton(icon: Icons.close_rounded, label: l.breathEnd, onTap: () => Navigator.of(context).pop()),
+              ],
+            ),
           ),
         ]);
     }

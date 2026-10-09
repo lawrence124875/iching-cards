@@ -20,6 +20,7 @@ Future<bool> ensureCanCast(BuildContext context) async {
   final choice = await showModalBottomSheet<_Choice>(
     context: context,
     showDragHandle: true,
+    isScrollControlled: true, // 手機橫放時面板矮，內容改可捲動
     builder: (ctx) => _LimitSheet(canWatch: allowance == CastAllowance.needsReward),
   );
   if (!context.mounted) return false;
@@ -60,7 +61,7 @@ class _LimitSheet extends StatelessWidget {
     final l = context.l10n;
     final limits = AppServices.of(context).limits;
     return SafeArea(
-      child: Padding(
+      child: SingleChildScrollView(
         padding: const EdgeInsets.fromLTRB(28, 0, 28, 20),
         child: Column(
           mainAxisSize: MainAxisSize.min,

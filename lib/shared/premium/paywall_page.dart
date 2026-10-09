@@ -1,6 +1,8 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 
+import '../../app/home_page.dart' show privacyPolicyUrl;
 import '../../app/services.dart';
 import '../../app/theme.dart';
 import '../../core/events/event_bus.dart';
@@ -163,14 +165,25 @@ class _PaywallPageState extends State<PaywallPage> {
       ),
       TextButton(onPressed: _busy ? null : _restore, child: Text(l.premiumRestore)),
       const SizedBox(height: 8),
-      Text(l.premiumTerms, style: t.bodySmall?.copyWith(color: QianColors.textSub), textAlign: TextAlign.center),
+      Text(_ios ? l.premiumTermsIos : l.premiumTerms,
+          style: t.bodySmall?.copyWith(color: QianColors.textSub), textAlign: TextAlign.center),
+      // App Store 審查（3.1.2）要求訂閱頁有使用條款與隱私權政策連結；使用條款用 Apple 標準 EULA。
+      if (_ios)
+        Wrap(alignment: WrapAlignment.center, children: [
+          TextButton(onPressed: () => _open(_appleEula), child: Text(l.termsOfUse)),
+          TextButton(onPressed: () => _open(privacyPolicyUrl), child: Text(l.menuPrivacyPolicy)),
+        ]),
     ];
   }
 
-  Future<void> _manage() => launchUrl(
-        Uri.parse('https://play.google.com/store/account/subscriptions?package=com.lclab.qiangua'),
-        mode: LaunchMode.externalApplication,
-      );
+  static bool get _ios => defaultTargetPlatform == TargetPlatform.iOS;
+  static const _appleEula = 'https://www.apple.com/legal/internet-services/itunes/dev/stdeula/';
+
+  Future<void> _open(String url) => launchUrl(Uri.parse(url), mode: LaunchMode.externalApplication);
+
+  Future<void> _manage() => _open(_ios
+      ? 'https://apps.apple.com/account/subscriptions'
+      : 'https://play.google.com/store/account/subscriptions?package=com.lclab.qiangua');
 }
 
 class _PlanTile extends StatelessWidget {

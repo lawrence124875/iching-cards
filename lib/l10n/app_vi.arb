@@ -210,5 +210,7 @@
   "methodYarrow": "Cỏ thi",
   "yarrowInstructions": "Cách cổ: chia 49 cọng cỏ thi làm hai, gác riêng một cọng, đếm từng bốn cọng và bỏ phần dư. Ba lần như vậy được một hào: số cọng còn lại chia 4 ra 6, 7, 8 hoặc 9. Lập sáu hào từ dưới lên trên. 6 và 9 là hào động.",
   "yarrowStep": "Hào thứ {n}",
-  "yarrowAll": "Lập một lần cả sáu"
+  "yarrowAll": "Lập một lần cả sáu",
+  "premiumTermsIos": "Gói đăng ký tự động gia hạn. Bạn có thể hủy bất cứ lúc nào trên iPhone trong Cài đặt → Tài khoản Apple → Đăng ký; sau khi hủy, bạn vẫn là thành viên đến hết kỳ hiện tại.",
+  "termsOfUse": "Điều khoản sử dụng"
 }

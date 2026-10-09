@@ -210,5 +210,7 @@
   "methodYarrow": "Tallos de milenrama",
   "yarrowInstructions": "El método clásico: 49 tallos de milenrama se dividen en dos, se aparta uno y ambos montones se cuentan de cuatro en cuatro. Tres rondas dan una línea: los tallos restantes, divididos entre 4, dan 6, 7, 8 o 9. Seis líneas de abajo arriba. El 6 y el 9 son líneas mutantes.",
   "yarrowStep": "Línea {n} de 6",
-  "yarrowAll": "Las seis de una vez"
+  "yarrowAll": "Las seis de una vez",
+  "premiumTermsIos": "La suscripción se renueva automáticamente. Puedes cancelarla cuando quieras en tu iPhone, en Ajustes → Cuenta de Apple → Suscripciones; conservas Premium hasta el final del período en curso.",
+  "termsOfUse": "Términos de uso"
 }

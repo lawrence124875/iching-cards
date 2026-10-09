@@ -565,5 +565,7 @@
   "methodYarrow": "Batang yarrow",
   "yarrowInstructions": "Cara klasik: 49 batang yarrow dibagi dua, satu batang disisihkan, lalu kedua tumpukan dihitung per empat. Tiga putaran menghasilkan satu garis: sisa batang dibagi 4 memberi 6, 7, 8, atau 9. Enam garis dari bawah ke atas. 6 dan 9 adalah garis berubah.",
   "yarrowStep": "Garis {n} dari 6",
-  "yarrowAll": "Keenamnya Sekaligus"
+  "yarrowAll": "Keenamnya Sekaligus",
+  "premiumTermsIos": "Langganan diperpanjang otomatis. Batalkan kapan saja di iPhone melalui Pengaturan → Akun Apple → Langganan; Premium tetap aktif sampai akhir periode yang sedang berjalan.",
+  "termsOfUse": "Ketentuan Penggunaan"
 }

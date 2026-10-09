@@ -565,5 +565,7 @@
   "methodYarrow": "Yarrow-stalk cast",
   "yarrowInstructions": "The classic method: 49 yarrow stalks are split in two, one is set aside, and both piles are counted off in fours. Three rounds give one line: the stalks left, divided by 4, give 6, 7, 8 or 9. Six lines from the bottom up; 6 and 9 are changing lines.",
   "yarrowStep": "Line {n} of 6",
-  "yarrowAll": "Cast All Six Lines"
+  "yarrowAll": "Cast All Six Lines",
+  "premiumTermsIos": "Subscriptions renew automatically. Cancel anytime on your iPhone in Settings → Apple Account → Subscriptions; you keep Premium until the end of the current period.",
+  "termsOfUse": "Terms of Use"
 }

@@ -724,6 +724,8 @@ checkout 本 repo → 以 `BUILDS_REPO_TOKEN` sparse-checkout iching-content 的
 
 - 2026-10-09：使用者要求接續開發。完成：版本資訊 `0.2.0+44.txt`、`0.2.0+45.txt`（iching-content，首次加 zh-CN 區塊）；`store/PLAY_CONSOLE.md` §6 正式版申請前核對表（使用者待做：AdMob 敏感類別、AdMob GDPR 訊息、國家／地區決定）；卦記備份與還原（0.2.0+45，見 §13）。剩下的候選：商店截圖補新功能、蓍草法起卦、「不分享使用統計」開關、iOS。
 
+- 2026-10-09（續）：使用者要求剩餘候選全部完成。0.2.0+46：首頁選單「分享匿名使用統計與當機報告」勾選開關（`core/telemetry/usage_sharing.dart`，存 `usage_sharing.json`，關掉即 `setAnalyticsCollectionEnabled(false)`＋Crashlytics 停收；隱私權政策已補寫）；蓍草起卦（`YarrowStalks`，擲錢與蓍草共用 `shared/cast/stepwise_cast_page.dart`，`methodId` = `yarrow`）；分享卡片卦象文字依高度決定行數；商店截圖 11 語重渲染（第 4 張＝分享卡片、第 5 張標題加蓍草，繁中也改用渲染）；iOS 準備見 §24。
+
 ### 19.3 需要使用者做的事（Claude 會在對應階段提醒）
 - Firebase：確認 Analytics 即時報表看得到 `qg_reading_shown`、Crashlytics 不再「等待中」（§18.4，記得先篩選謙卦 App）。
 - 每次新版：從 iching-content Releases 下載 APK 覆蓋安裝試用，有問題回報。
@@ -886,3 +888,16 @@ checkout 本 repo → 以 `BUILDS_REPO_TOKEN` sparse-checkout iching-content 的
 - **象的畫面**：一座藏在大地之下的山，而你站在山腳最低的地方。低到不能再低，卻正是出發渡河的起點。
 - **象從哪裡來**：初爻是全卦最底層，又位在下卦「艮山」的最下方。謙卦本身已是山伏於地下，初六再處其最低處，所以是「謙而又謙」。陰爻居陽位並不當位，上方的六四也同是陰爻，沒有呼應支援，處境看似弱小。但也正因為沒有依靠、不爭不搶，反而能穩穩地一步步前行，這就是「用涉大川」的由來。
 - **給現在的你**：事情剛開始、自己還沒有什麼份量的時候，不必急著被看見。把姿態放低，專心照顧好自己的本分，這種安靜的踏實，會帶你渡過眼前那條看似很寬的河。
+
+## 24. iOS 準備（2026-10-09，0.2.0+46）
+
+使用者要求先把 iOS 能做的都做好；Apple 開發者帳號（年費 US$99）尚未決定，所以只做到「同一份程式能編出 iOS 版」。
+
+- **建置**：`.github/workflows/build_ios.yml`（只手動觸發，macOS 執行環境對公開 repo 免費）：匯入內容、字型子集 → `flutter create --platforms=ios`（`ios/` 不進 repo，與 android/ 相同做法）→ `scripts/patch_ios.sh` → `flutter build ios --release --no-codesign`。不簽章、不產生可安裝檔、不上傳任何東西。
+- **`patch_ios.sh`**：Bundle ID `com.lclab.qiangua`（與 Android 相同）、顯示名稱謙卦、`CFBundleLocalizations` 11 語（少了 iOS 一律給英文）、`GADApplicationIdentifier`（Secret `ADMOB_IOS_APP_ID`，沒設用 Google iOS 測試 ID；少了 AdMob 一啟動就當）、`UIBackgroundModes: audio`（呼吸背景播放）、最低 iOS 15（Podfile 先從 Flutter 範本複製再設定）、AppDelegate 設通知代理（前景也顯示卦記提醒）。
+- **程式**：AdMob 測試廣告單元依平台選 iOS／Android；訂閱頁在 iOS 顯示 App Store 版續訂說明（`premiumTermsIos`）、「使用條款」（Apple 標準 EULA）與隱私權政策連結（App Store 審查 3.1.2 要求），管理訂閱開 apps.apple.com；分享連結 iOS 用 dart-define `IOS_STORE_URL`（上架後才有，未設定時仍用 Google Play 連結）。
+- **Firebase**：iOS 尚未在 Firebase 專案新增 iOS App（沒有 GoogleService-Info.plist），App 會照現有設計退回不統計、遠端開關用預設值，不影響使用。
+
+**決定開 iOS 之後要做的事**（使用者）：付 Apple 開發者年費 → App Store Connect 建 App（Bundle ID com.lclab.qiangua）→ 訂閱商品（與 Play 同名、同價位）→ RevenueCat 加 iOS App（取 `appl_` 金鑰）→ AdMob 加 iOS App 與三個廣告單元 → Firebase 加 iOS App。
+**Claude 接著做**：簽章（App Store Connect API 金鑰存 Secrets）＋上傳 TestFlight 的 CI、Secrets `REVENUECAT_IOS_API_KEY`／`ADMOB_IOS_*`、GoogleService-Info.plist 注入、App Store 商店資訊與 iPhone 截圖尺寸（6.9 吋 1320×2868）、隱私權「營養標籤」逐題答案、`IOS_STORE_URL`。
+

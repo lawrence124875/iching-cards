@@ -20,11 +20,17 @@ class AdMobAds implements AdService {
   static const _interstitialId = String.fromEnvironment('ADMOB_INTERSTITIAL_AD_UNIT_ID');
   static const _rewardedId = String.fromEnvironment('ADMOB_REWARDED_AD_UNIT_ID');
 
-  // Google 官方測試廣告單元（Android）
-  static String get bannerUnit => _bannerId.isEmpty ? 'ca-app-pub-3940256099942544/6300978111' : _bannerId;
-  static String get _interstitialUnit =>
-      _interstitialId.isEmpty ? 'ca-app-pub-3940256099942544/1033173712' : _interstitialId;
-  static String get _rewardedUnit => _rewardedId.isEmpty ? 'ca-app-pub-3940256099942544/5224354917' : _rewardedId;
+  // Google 官方測試廣告單元（Android 與 iOS 各一組）。正式單元由 CI 以 dart-define 傳入（iOS 建置傳 iOS 的單元）。
+  static bool get _ios => defaultTargetPlatform == TargetPlatform.iOS;
+  static String get bannerUnit => _bannerId.isNotEmpty
+      ? _bannerId
+      : (_ios ? 'ca-app-pub-3940256099942544/2934735716' : 'ca-app-pub-3940256099942544/6300978111');
+  static String get _interstitialUnit => _interstitialId.isNotEmpty
+      ? _interstitialId
+      : (_ios ? 'ca-app-pub-3940256099942544/4411468910' : 'ca-app-pub-3940256099942544/1033173712');
+  static String get _rewardedUnit => _rewardedId.isNotEmpty
+      ? _rewardedId
+      : (_ios ? 'ca-app-pub-3940256099942544/1712485313' : 'ca-app-pub-3940256099942544/5224354917');
 
   /// 是否用正式廣告單元（Release 說明顯示用）。
   static bool get usingRealUnits => _bannerId.isNotEmpty;

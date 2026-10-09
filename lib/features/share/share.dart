@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'dart:ui' as ui;
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:path_provider/path_provider.dart';
@@ -11,8 +12,11 @@ import '../../core/iching/hexagram_table.dart';
 import '../../l10n/l10n.dart';
 import '../../shared/widgets/card_face.dart';
 
-/// Google Play 商店頁（分享文字附上的下載連結）。
-const storeUrl = 'https://play.google.com/store/apps/details?id=com.lclab.qiangua';
+/// 分享文字附上的下載連結：Android 為 Google Play；iOS 上架後由 CI 傳入 App Store 網址（IOS_STORE_URL），
+/// 未設定時仍用 Google Play 連結。
+const _playUrl = 'https://play.google.com/store/apps/details?id=com.lclab.qiangua';
+const _iosUrl = String.fromEnvironment('IOS_STORE_URL');
+String get storeUrl => defaultTargetPlatform == TargetPlatform.iOS && _iosUrl.isNotEmpty ? _iosUrl : _playUrl;
 
 /// 分享面板在 iPad 上要知道從哪裡彈出；手機上不影響。
 Rect? _origin(BuildContext context) {

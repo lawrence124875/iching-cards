@@ -103,4 +103,56 @@ void main() {
       });
     }
   });
+
+  group('橫放與平板', () {
+    const sizes = [Size(392, 850), Size(850, 392), Size(640, 360), Size(1280, 800)];
+    for (final size in sizes) {
+      testWidgets('${size.width.toInt()}×${size.height.toInt()}：介紹頁與分享預覽不溢出', (tester) async {
+        L10n.language = AppLanguages.byCode('zh-Hant')!;
+        tester.view
+          ..physicalSize = size
+          ..devicePixelRatio = 1;
+        addTearDown(tester.view.reset);
+        await tester.pumpWidget(AppServices(
+          services: _services(),
+          child: MaterialApp(
+            localizationsDelegates: const [
+              AppLocalizations.delegate,
+              GlobalMaterialLocalizations.delegate,
+              GlobalWidgetsLocalizations.delegate,
+              GlobalCupertinoLocalizations.delegate,
+            ],
+            supportedLocales: [for (final l in AppLanguages.all) l.locale],
+            locale: L10n.language.locale,
+            home: Builder(
+              builder: (context) => Scaffold(
+                body: Column(children: [
+                  TextButton(
+                    onPressed: () => showShareReading(context,
+                        info: HexagramTable.byNumber(15), title: 'W' * 30, image: 'W ' * 200),
+                    child: const Text('share'),
+                  ),
+                  TextButton(onPressed: () => showIntro(Navigator.of(context)), child: const Text('intro')),
+                ]),
+              ),
+            ),
+          ),
+        ));
+        await tester.tap(find.text('share'));
+        await tester.pumpAndSettle();
+        expect(tester.takeException(), isNull);
+        expect(find.byType(ShareCard), findsOneWidget);
+        await tester.tap(find.byType(TextButton).last); // 取消
+        await tester.pumpAndSettle();
+        await tester.tap(find.text('intro'));
+        await tester.pumpAndSettle();
+        for (var i = 0; i < 4; i++) {
+          expect(tester.takeException(), isNull);
+          await tester.tap(find.byType(FilledButton));
+          await tester.pumpAndSettle();
+        }
+        expect(find.byType(IntroPage), findsNothing);
+      });
+    }
+  });
 }

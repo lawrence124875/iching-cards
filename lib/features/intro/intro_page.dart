@@ -5,7 +5,7 @@ import '../../app/theme.dart';
 import '../../l10n/l10n.dart';
 
 /// 功能介紹：首次開啟時顯示一次（可略過），之後可從首頁右上角選單重看。
-/// 四頁：抽卦／擲錢、卦記、呼吸音景（432Hz、7.83Hz 雙耳節拍）、分享與會員。
+/// 五頁：抽卦／擲錢／蓍草、卦記（含備份）、呼吸音景（432Hz、7.83Hz 雙耳節拍）、分享與會員、選單（意見回饋、使用統計開關）。
 /// 文案只描述做法，不寫任何療效（Google Play 健康宣稱政策，HANDOFF §14.2）。
 Future<void> showIntro(NavigatorState navigator) => navigator.push(MaterialPageRoute<void>(
       fullscreenDialog: true,
@@ -23,7 +23,7 @@ class _IntroPageState extends State<IntroPage> {
   final _pages = PageController();
   int _index = 0;
 
-  static const _icons = [Icons.style_outlined, Icons.bookmark_outline, Icons.air, Icons.ios_share];
+  static const _icons = [Icons.style_outlined, Icons.bookmark_outline, Icons.air, Icons.ios_share, Icons.mail_outline];
 
   @override
   void dispose() {
@@ -43,6 +43,7 @@ class _IntroPageState extends State<IntroPage> {
       (l.intro2Title, l.intro2Body),
       (l.intro3Title, l.intro3Body),
       (l.intro4Title, l.intro4Body),
+      (l.intro5Title, l.intro5Body),
     ];
     final last = _index == pages.length - 1;
 

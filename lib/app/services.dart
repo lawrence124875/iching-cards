@@ -8,6 +8,7 @@ import '../core/audio/screen_awake.dart';
 import '../core/content/asset_content_source.dart';
 import '../core/content/content_source.dart';
 import '../core/events/event_bus.dart';
+import '../core/feedback/feedback_sender.dart';
 import '../core/journal/file_journal_store.dart';
 import '../core/onboarding/intro_store.dart';
 import '../core/monetization/ad_service.dart';
@@ -38,6 +39,7 @@ class Services {
     this.analytics = const NoopAnalytics(),
     this.flags = const DefaultRemoteFlags(),
     this.usage,
+    this.feedback,
     PremiumService? premium,
     AdService? ads,
     FreeLimits? limits,
@@ -55,6 +57,7 @@ class Services {
     AdService? ads,
     FreeLimits limits = const FreeLimits(),
     UsageSharing? usage,
+    FeedbackSender? feedback,
   }) =>
       Services(
         content: AssetContentSource(folder: () => L10n.contentFolder),
@@ -75,6 +78,7 @@ class Services {
         analytics: analytics,
         flags: flags,
         usage: usage,
+        feedback: feedback,
         premium: premium,
         ads: ads,
         limits: limits,
@@ -104,6 +108,9 @@ class Services {
 
   /// 「分享匿名使用統計與當機報告」開關（§18.4）；null＝選單不顯示（測試、沒有 Firebase）。
   final UsageSharing? usage;
+
+  /// 意見回饋（Firestore `qg_feedback`）；null＝選單不顯示（測試、Firebase 沒初始化）。
+  final FeedbackSender? feedback;
 
   /// 訂閱（§23）。不傳＝永遠免費版、不能購買。
   final PremiumService premium;

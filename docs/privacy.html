@@ -67,6 +67,9 @@
 <h2>訂閱（謙卦會員）</h2>
 <p>月訂與年訂經由 <strong>Google Play 結帳</strong>完成，付款資料（信用卡等）由 Google 處理，開發者看不到。訂閱狀態透過 <strong>RevenueCat</strong> 服務確認：RevenueCat 會收到一組由 App 隨機產生的<strong>匿名使用者 ID</strong>（格式如 $RCAnonymousID:…，與您的 Google 帳戶、姓名或電子郵件無關）、<strong>購買記錄</strong>（方案、價格與幣別、購買與到期時間、Google Play 訂單編號與購買憑證）以及裝置與 App 基本資訊，只用於確認您是否為會員、恢復購買與訂閱統計，不含您的姓名或電子郵件。訂閱會自動續訂，可隨時在 Google Play 的「付款和訂閱」中取消，取消後會員資格保留到本期結束。RevenueCat 的資料處理方式請見 <a href="https://www.revenuecat.com/privacy" target="_blank" rel="noopener">RevenueCat 隱私權政策</a>。</p>
 
+<h2>意見回饋</h2>
+<p>首頁右上角選單的「意見回饋」由您<strong>主動填寫並按下送出</strong>才會傳送，內容包括：您選的類型（回報問題／功能建議／其他）、您寫的內容、<strong>選填</strong>的聯絡信箱，以及 App 版本、介面語言、平台（Android 或 iOS）與送出時間。資料存放在 Google 的 <strong>Firebase Cloud Firestore</strong>，只有開發者能在後台查看，App 本身無法讀取任何人的回饋。用途只限於了解問題、改善 App，以及在您留下信箱時回覆您；不會用於廣告或寄送行銷信件。意見回饋不會附上您的卦記或想問的事；請勿在內容中填寫不想讓開發者看到的個人資料。</p>
+
 <h2>App 使用的權限</h2>
 <ul>
   <li><strong>通知、準時鬧鐘、開機後重新排程</strong>：只用於您自行設定的「卦記回顧提醒」，在您選定的日子提醒您回來看這一卦。</li>
@@ -78,13 +81,13 @@
 <h2>本 App 不會做的事</h2>
 <ul>
   <li>不要求註冊帳號或登入。</li>
-  <li>不蒐集姓名、電話、電子郵件、地址、相片、聯絡人或精確位置。</li>
+  <li>不蒐集姓名、電話、電子郵件、地址、相片、聯絡人或精確位置（您在意見回饋中自願留下的聯絡信箱除外）。</li>
   <li>不出售或出租任何使用者資料。</li>
   <li>不使用 AI 服務分析您的提問或筆記。</li>
 </ul>
 
 <h2>資料分享</h2>
-<p>上述統計、當機與設定資料由 Google 的 Firebase 服務處理；廣告由 Google AdMob 處理；訂閱由 Google Play 與 RevenueCat 處理（見上方各段）。傳輸過程皆經過加密。除此之外，本 App 不與任何第三方分享資料，也絕不分享您的卦記與輸入的文字。Firebase 的資料處理方式請見 <a href="https://firebase.google.com/support/privacy" target="_blank" rel="noopener">Firebase 隱私權與安全性說明</a>。</p>
+<p>上述統計、當機、設定與意見回饋資料由 Google 的 Firebase 服務處理；廣告由 Google AdMob 處理；訂閱由 Google Play 與 RevenueCat 處理（見上方各段）。傳輸過程皆經過加密。除此之外，本 App 不與任何第三方分享資料，也絕不分享您的卦記與輸入的文字。Firebase 的資料處理方式請見 <a href="https://firebase.google.com/support/privacy" target="_blank" rel="noopener">Firebase 隱私權與安全性說明</a>。</p>
 
 <h2>兒童隱私</h2>
 <p>本 App 並非為 13 歲以下兒童設計，也不會刻意向兒童蒐集個人資訊。</p>
@@ -99,6 +102,7 @@
   <li><strong>廣告 ID</strong>：可在 Android「設定 → 隱私權 → 廣告」（部分機型為「設定 → Google → 廣告」）選擇<strong>重設廣告 ID</strong> 或<strong>刪除廣告 ID</strong>。刪除後 AdMob 無法再將廣告資料與您的裝置連結；AdMob 已蒐集的資料由 Google 依其政策處理與保留。</li>
   <li><strong>訂閱相關資料（RevenueCat）</strong>：請來信 <a href="mailto:lawrence124875@gmail.com">lawrence124875@gmail.com</a>，主旨註明「謙卦 資料刪除請求」，並附上 Google Play 訂單編號（GPA. 開頭，可在 Google Play「付款和訂閱 → 預算和記錄」或購買收據信中找到）。我們會在 30 天內向 RevenueCat 提出刪除該匿名使用者 ID 及其購買記錄的請求，完成後回信通知。刪除後如需恢復會員，可在 App 內按「恢復購買」重新建立。</li>
   <li><strong>Google Play 購買記錄</strong>：付款與訂單記錄由 Google 依 <a href="https://policies.google.com/privacy" target="_blank" rel="noopener">Google 隱私權政策</a>及稅務、會計法規保留，開發者無法刪除；如需處理請洽 Google。</li>
+  <li><strong>意見回饋（Firebase Cloud Firestore）</strong>：請來信（同上），主旨註明「謙卦 意見回饋刪除請求」，並說明大約的送出日期與內容（或您留下的信箱），我們會在 30 天內刪除並回信通知。</li>
   <li><strong>使用統計與當機報告（Firebase）</strong>：不含可識別您身分的資訊，Analytics 事件資料保留 14 個月後自動刪除；如希望提前刪除與您裝置相關的資料，同樣可來信（同上）。</li>
 </ul>
 <p>⚠️ 刪除資料或解除安裝<strong>不會取消訂閱</strong>。請先在 Google Play「付款和訂閱 → 訂閱」取消，以免繼續扣款。</p>
@@ -153,6 +157,9 @@ Developer: LC Lab (Lawrence Chang) · Contact: <a href="mailto:lawrence124875@gm
 <h2>Subscription (Qiangua Premium)</h2>
 <p>Monthly and yearly subscriptions are purchased through <strong>Google Play Billing</strong>; your payment details are handled by Google and are never visible to the developer. Subscription status is checked through <strong>RevenueCat</strong>, which receives an <strong>anonymous user ID</strong> generated at random by the App (such as $RCAnonymousID:…, not linked to your Google account, name or email) and <strong>purchase history</strong> (plan, price and currency, purchase and expiry times, Google Play order ID and purchase token) and basic device and app information. This is used only to confirm membership, restore purchases and produce subscription statistics, and does not include your name or email address. Subscriptions renew automatically; cancel anytime in Google Play under Payments &amp; subscriptions, and you keep Premium until the end of the current period. See the <a href="https://www.revenuecat.com/privacy" target="_blank" rel="noopener">RevenueCat Privacy Policy</a>.</p>
 
+<h2>Feedback</h2>
+<p>“Send feedback” in the home screen menu sends something only when <strong>you fill it in and tap send</strong>. It includes the type you chose (problem, feature suggestion or other), your message, an <strong>optional</strong> contact email, and the App version, interface language, platform (Android or iOS) and time sent. It is stored in Google <strong>Firebase Cloud Firestore</strong> and can be viewed only by the developer in the Firebase console; the App itself cannot read anyone’s feedback. It is used only to understand problems, improve the App and, if you left an email address, reply to you; never for ads or marketing email. Feedback never includes your journal or your questions; please don’t put personal information you don’t want the developer to see in the message.</p>
+
 <h2>Permissions</h2>
 <ul>
   <li><strong>Notifications, exact alarms, rescheduling after reboot</strong>: used only for journal review reminders that you set yourself.</li>
@@ -164,13 +171,13 @@ Developer: LC Lab (Lawrence Chang) · Contact: <a href="mailto:lawrence124875@gm
 <h2>What the App does not do</h2>
 <ul>
   <li>No account or sign-in.</li>
-  <li>No collection of names, phone numbers, email addresses, home addresses, photos, contacts or precise location.</li>
+  <li>No collection of names, phone numbers, email addresses, home addresses, photos, contacts or precise location (except a contact email you choose to leave with feedback).</li>
   <li>No selling or renting of user data.</li>
   <li>No AI analysis of your questions or notes.</li>
 </ul>
 
 <h2>Data sharing</h2>
-<p>The statistics, crash and settings data above are processed by Google Firebase; ads by Google AdMob; subscriptions by Google Play and RevenueCat (see the sections above). All data is encrypted in transit. The App shares no data with any other third party, and never shares your journal or anything you type. See <a href="https://firebase.google.com/support/privacy" target="_blank" rel="noopener">Privacy and Security in Firebase</a>.</p>
+<p>The statistics, crash, settings and feedback data above are processed by Google Firebase; ads by Google AdMob; subscriptions by Google Play and RevenueCat (see the sections above). All data is encrypted in transit. The App shares no data with any other third party, and never shares your journal or anything you type. See <a href="https://firebase.google.com/support/privacy" target="_blank" rel="noopener">Privacy and Security in Firebase</a>.</p>
 
 <h2>Children</h2>
 <p>The App is not designed for children under 13 and does not knowingly collect personal information from children.</p>
@@ -185,6 +192,7 @@ Developer: LC Lab (Lawrence Chang) · Contact: <a href="mailto:lawrence124875@gm
   <li><strong>Advertising ID</strong>: in Android Settings → Privacy → Ads (on some devices Settings → Google → Ads), choose <strong>Reset advertising ID</strong> or <strong>Delete advertising ID</strong>. After deletion AdMob can no longer link ad data to your device; data AdMob has already collected is handled and retained by Google under its policies.</li>
   <li><strong>Subscription data (RevenueCat)</strong>: email <a href="mailto:lawrence124875@gmail.com">lawrence124875@gmail.com</a> with the subject “Qiangua data deletion request” and include your Google Play order ID (starting with GPA., found in Google Play → Payments &amp; subscriptions → Budget &amp; history, or in your receipt email). Within 30 days we will ask RevenueCat to delete that anonymous user ID and its purchase history, and reply to confirm. If you later want Premium back, tap “Restore purchases” in the App.</li>
   <li><strong>Google Play purchase records</strong>: payment and order records are retained by Google under the <a href="https://policies.google.com/privacy" target="_blank" rel="noopener">Google Privacy Policy</a> and applicable tax and accounting laws; the developer cannot delete them. Please contact Google for these.</li>
+  <li><strong>Feedback (Firebase Cloud Firestore)</strong>: email us as above with the subject “Qiangua feedback deletion request”, giving roughly when you sent it and what it said (or the email you left). We will delete it within 30 days and reply to confirm.</li>
   <li><strong>Usage statistics and crash reports (Firebase)</strong> contain no information that identifies you; Analytics event data is deleted automatically after 14 months. To request earlier deletion of data associated with your device, email us as above.</li>
 </ul>
 <p>⚠️ Deleting data or uninstalling the App <strong>does not cancel your subscription</strong>. Cancel first in Google Play → Payments &amp; subscriptions → Subscriptions to stop future charges.</p>

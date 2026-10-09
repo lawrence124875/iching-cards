@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 
+import '../features/feedback/feedback_page.dart';
 import '../features/intro/intro_page.dart';
 import '../features/share/share.dart';
 import '../shared/premium/ad_banner.dart';
@@ -104,9 +105,9 @@ class HomePage extends StatelessWidget {
   }
 }
 
-enum _MenuItem { premium, intro, shareApp, usage, adPrivacy, privacyPolicy }
+enum _MenuItem { premium, intro, shareApp, feedback, usage, adPrivacy, privacyPolicy }
 
-/// 首頁右上角選單：謙卦會員、功能介紹、推薦給朋友、分享使用統計（勾選開關）、廣告隱私設定（需要同意的地區才出現）、隱私權政策。
+/// 首頁右上角選單：謙卦會員、功能介紹、推薦給朋友、意見回饋、分享使用統計（勾選開關）、廣告隱私設定（需要同意的地區才出現）、隱私權政策。
 class _HomeMenu extends StatelessWidget {
   const _HomeMenu();
 
@@ -124,6 +125,8 @@ class _HomeMenu extends StatelessWidget {
             showIntro(Navigator.of(context));
           case _MenuItem.shareApp:
             shareApp(context);
+          case _MenuItem.feedback:
+            openFeedback(context);
           case _MenuItem.usage:
             final u = s.usage!;
             u.set(!u.enabled.value);
@@ -137,6 +140,7 @@ class _HomeMenu extends StatelessWidget {
         PopupMenuItem(value: _MenuItem.premium, child: Text(l.menuPremium)),
         PopupMenuItem(value: _MenuItem.intro, child: Text(l.menuIntro)),
         PopupMenuItem(value: _MenuItem.shareApp, child: Text(l.menuShareApp)),
+        if (s.feedback != null) PopupMenuItem(value: _MenuItem.feedback, child: Text(l.menuFeedback)),
         if (s.usage != null)
           CheckedPopupMenuItem(
             value: _MenuItem.usage,

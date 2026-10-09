@@ -58,6 +58,9 @@ class FirebaseTelemetry {
 
   final bool _available;
 
+  /// Firebase 是否初始化成功（意見回饋等需要 Firebase 的功能據此決定是否顯示）。
+  bool get available => _available;
+
   /// 使用者切換「分享匿名使用統計與當機報告」時呼叫；立即生效。Firebase 沒初始化時什麼都不做。
   Future<void> setSharing(bool enabled) async {
     if (!_available) return;

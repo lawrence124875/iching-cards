@@ -618,7 +618,7 @@ checkout 本 repo → 以 `BUILDS_REPO_TOKEN` sparse-checkout iching-content 的
   4. **Crashlytics** 依 App 分開顯示，不需特別處理。
   5. `google-services.json` 內含**兩個 App** 的設定；Gradle 外掛依 applicationId 自動挑 `com.lclab.qiangua` 那一筆。英文 App 的 Secret 是另一份（`FIREBASE_GOOGLE_SERVICES_JSON`，純文字），兩者互不影響；新下載的 json 也含英文 App，英文 App 不必更新。
   6. 免費方案的配額（Analytics、Crashlytics、Remote Config 都無上限或很寬）兩個 App 共用，目前不構成問題。
-  7. **Firestore 安全規則整個專案只有一份**（2026-10-03 英文 App 對話通知）：英文 App 用 `feedback` 集合，規則為 create-only（只能新增，不能讀、改、刪）。謙卦目前**沒有用 Firestore**；日後若要用：
+  7. **Firestore 安全規則整個專案只有一份**（2026-10-03 英文 App 對話通知）：英文 App 用 `feedback` 集合，規則為 create-only（只能新增，不能讀、改、刪）。謙卦 0.2.0+47 起用 `qg_feedback`（意見回饋，規則見 §18.5）：
      - 集合名稱一律 `qg_` 開頭（例如 `qg_feedback`），不可用 `feedback`。
      - 發布規則時必須**合併**，保留英文 App 的 `feedback` create 規則，**不可整份覆蓋**，否則英文 App 的意見回饋會失敗。
      - 發布前先把**完整規則內容**給使用者確認。
@@ -634,7 +634,8 @@ checkout 本 repo → 以 `BUILDS_REPO_TOKEN` sparse-checkout iching-content 的
 
 ### 18.3 程式（依 §9：Firebase 只出現在一個檔案）
 - `lib/core/telemetry/`：介面 `Analytics`（`NoopAnalytics`）、`RemoteFlags`（`DefaultRemoteFlags`＝全開；`featureFlagKey(id)` → `qg_feature_<id>`）、`AnalyticsListener`（事件匯流排的旁觀者，事件→統計事件；`describe()` 可單獨測試）。
-- `lib/core/firebase/firebase_telemetry.dart`：**唯一 import Firebase 的檔案**。`FirebaseTelemetry.init(featureIds:)`：`Firebase.initializeApp`（8 秒逾時）→ Crashlytics（release 才收集；接 `FlutterError.onError` 與 `PlatformDispatcher.onError`）→ Remote Config。任何失敗都退回 Noop／預設值，不影響啟動。拔除 Firebase＝`main.dart` 不呼叫它並移除套件。
+- `lib/core/firebase/firebase_feedback.dart`（0.2.0+47）：`FirestoreFeedbackSender` 寫 `qg_feedback`；介面 `lib/core/feedback/feedback_sender.dart`。除了這兩個 firebase 檔，其他程式都不 import Firebase。
+- `lib/core/firebase/firebase_telemetry.dart`：Analytics／Crashlytics／Remote Config 唯一 import 處。`FirebaseTelemetry.init(featureIds:)`：`Firebase.initializeApp`（8 秒逾時）→ Crashlytics（release 才收集；接 `FlutterError.onError` 與 `PlatformDispatcher.onError`）→ Remote Config。任何失敗都退回 Noop／預設值，不影響啟動。拔除 Firebase＝`main.dart` 不呼叫它並移除套件。
 - `main.dart`：最先初始化 Firebase（才接得到啟動中的當機）→ `Services.standard(analytics:, flags:)` → `AnalyticsListener`。
 - 套件：`firebase_core` ^3.6.0、`firebase_analytics` ^11.3.3、`firebase_crashlytics` ^4.1.3（同英文 App）、`firebase_remote_config` ^5.1.3。皆支援 iOS；做 iOS 時需 `GoogleService-Info.plist`（同專案再加 iOS App）。
 - 測試：`test/telemetry_test.dart`（事件名稱合規且 `qg_` 開頭、參數只有字串／數字、事件轉送、開關名稱與過濾）。
@@ -661,6 +662,29 @@ checkout 本 repo → 以 `BUILDS_REPO_TOKEN` sparse-checkout iching-content 的
 
 - 讀法：**下次啟動生效**——啟動時套用上次抓到的值，背景再抓新值（12 小時一次）。改了主控台的值，使用者通常要重開 App 一到兩次才看到。
 - 參數名稱由功能 id 自動產生（`registeredFeatures` 的 `id`），新功能自動有開關。日後付費內容、A/B 測試的參數同樣 `qg_` 開頭並設在 App 條件下。
+
+### 18.5 意見回饋（2026-10-09，0.2.0+47；使用者選「App 內表單」，同英文 App）
+- 首頁右上角選單「意見回饋」→ `lib/features/feedback/feedback_page.dart`：類型（bug／suggestion／other）、內容（≤2000 字）、選填聯絡信箱。Firebase 沒初始化成功時選單不顯示。
+- 欄位同英文 App `feedback`：`message`、`category`、`contactEmail`（null 或字串）、`appVersion`、`platform`（android／iOS）、`locale`、`createdAt`（伺服器時間）。介面文字取自英文 App 的 11 語翻譯（印尼文改 kamu、阿拉伯文改中性、葡文改 Agradecemos）。
+- 離線：Firestore 先存手機、連網後自動送；等 10 秒未確認就當成已排入佇列（顯示感謝，不讓使用者重送）。
+- ⚠️ **使用者要在 Firebase 主控台 → Firestore → 規則，於現有規則中「加入」下面這段**（放在 `match /databases/{database}/documents { … }` 裡、英文 App 的 `match /feedback/{…}` 旁邊；英文 App 那段**原封不動**），未加之前送出會顯示「送出失敗」：
+```
+    // 謙卦 App 意見回饋（只能新增，不能讀、改、刪）
+    match /qg_feedback/{docId} {
+      allow create: if request.resource.data.keys().hasOnly(
+                         ['message', 'category', 'contactEmail', 'appVersion', 'platform', 'locale', 'createdAt'])
+                    && request.resource.data.message is string
+                    && request.resource.data.message.size() > 0
+                    && request.resource.data.message.size() <= 4000
+                    && request.resource.data.category in ['bug', 'suggestion', 'other']
+                    && (request.resource.data.contactEmail == null
+                        || (request.resource.data.contactEmail is string
+                            && request.resource.data.contactEmail.size() <= 200))
+                    && request.resource.data.createdAt == request.time;
+    }
+```
+  （message 上限 4000：App 限 2000 個字，表情符號在規則裡可能算 2 個字元，留餘裕。）
+- 查看：Firestore → 資料 → `qg_feedback`。Play「資料安全性」要加：**應用程式活動 → 其他使用者產生的內容**、**個人資訊 → 電子郵件地址**（選填），用途「應用程式功能」，不分享、傳輸加密、可要求刪除（來信）。隱私權政策已補「意見回饋」段與刪除方式。
 
 ### 18.4 待辦
 - ✅ **2026-10-03 run #38 解決**：使用者重設 Secret 後手動重建，CI 檢查通過，APK 已含 Firebase（Release 說明「Firebase：已啟用」）。以下為 run #37 當時的紀錄：run #37 Secret 讀不到。程式與 CI 都已通過（analyze、test、release 建置成功，沒有 Firebase 也能正常執行），但 workflow 收到的 `GOOGLE_SERVICES_JSON_BASE64` 是空的，所以這個 APK 不含 Firebase。請使用者到 iching-cards → Settings → Secrets and variables → **Actions** → 「Repository secrets」確認：名稱完全是 `GOOGLE_SERVICES_JSON_BASE64`、建在 iching-cards（不是 english-learning-app）、不是放在 Environment／Dependabot／Codespaces 分頁。改好後到 Actions → Build Android APK → Run workflow 手動重建；Release 說明應顯示「Firebase：已啟用」，若內容不對，CI 會以 annotation 說明（例如沒有 `com.lclab.qiangua`）。容器權杖無法列出 Secret 名稱（403），只能由建置結果判斷。
@@ -725,6 +749,8 @@ checkout 本 repo → 以 `BUILDS_REPO_TOKEN` sparse-checkout iching-content 的
 - 2026-10-09：使用者要求接續開發。完成：版本資訊 `0.2.0+44.txt`、`0.2.0+45.txt`（iching-content，首次加 zh-CN 區塊）；`store/PLAY_CONSOLE.md` §6 正式版申請前核對表（使用者待做：AdMob 敏感類別、AdMob GDPR 訊息、國家／地區決定）；卦記備份與還原（0.2.0+45，見 §13）。剩下的候選：商店截圖補新功能、蓍草法起卦、「不分享使用統計」開關、iOS。
 
 - 2026-10-09（續）：使用者要求剩餘候選全部完成。0.2.0+46：首頁選單「分享匿名使用統計與當機報告」勾選開關（`core/telemetry/usage_sharing.dart`，存 `usage_sharing.json`，關掉即 `setAnalyticsCollectionEnabled(false)`＋Crashlytics 停收；隱私權政策已補寫）；蓍草起卦（`YarrowStalks`，擲錢與蓍草共用 `shared/cast/stepwise_cast_page.dart`，`methodId` = `yarrow`）；分享卡片卦象文字依高度決定行數；商店截圖 11 語重渲染（第 4 張＝分享卡片、第 5 張標題加蓍草，繁中也改用渲染）；iOS 準備見 §24。
+
+- 2026-10-09（續）：使用者要求「功能介紹要修改」「要有意見回饋」。0.2.0+47：功能介紹改五頁（第 1 頁補蓍草、第 2 頁補卦記備份、新第 5 頁＝右上角選單：重看介紹、意見回饋、使用統計開關）；意見回饋＝App 內表單寫 Firestore `qg_feedback`（§18.5，使用者需在 Firebase 加規則）。
 
 ### 19.3 需要使用者做的事（Claude 會在對應階段提醒）
 - Firebase：確認 Analytics 即時報表看得到 `qg_reading_shown`、Crashlytics 不再「等待中」（§18.4，記得先篩選謙卦 App）。

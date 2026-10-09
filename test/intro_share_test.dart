@@ -26,12 +26,12 @@ Services _services({IntroStore? intro}) => Services(
 
 void main() {
   group('功能介紹', () {
-    testWidgets('首次開啟顯示四頁，看完記為已看過', (tester) async {
+    testWidgets('首次開啟顯示五頁，看完記為已看過', (tester) async {
       final store = MemoryIntroStore();
       await tester.pumpWidget(AppServices(services: _services(intro: store), child: const IchingApp()));
       await tester.pumpAndSettle();
       expect(find.byType(IntroPage), findsOneWidget);
-      for (var i = 0; i < 3; i++) {
+      for (var i = 0; i < 4; i++) {
         await tester.tap(find.byType(FilledButton));
         await tester.pumpAndSettle();
       }
@@ -95,10 +95,10 @@ void main() {
         tester.view.devicePixelRatio = 3;
         addTearDown(tester.view.reset);
         await tester.pumpWidget(app(const IntroPage()));
-        for (var i = 0; i < 4; i++) {
+        for (var i = 0; i < 5; i++) {
           await tester.pumpAndSettle();
           expect(tester.takeException(), isNull);
-          if (i < 3) await tester.tap(find.byType(FilledButton));
+          if (i < 4) await tester.tap(find.byType(FilledButton));
         }
       });
     }
@@ -146,7 +146,7 @@ void main() {
         await tester.pumpAndSettle();
         await tester.tap(find.text('intro'));
         await tester.pumpAndSettle();
-        for (var i = 0; i < 4; i++) {
+        for (var i = 0; i < 5; i++) {
           expect(tester.takeException(), isNull);
           await tester.tap(find.byType(FilledButton));
           await tester.pumpAndSettle();

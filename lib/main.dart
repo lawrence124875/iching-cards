@@ -10,6 +10,7 @@ import 'app/services.dart';
 import 'app/theme.dart';
 import 'core/audio/just_audio_playback.dart';
 import 'core/admob/admob_ads.dart';
+import 'core/firebase/firebase_feedback.dart';
 import 'core/firebase/firebase_telemetry.dart';
 import 'core/monetization/ad_service.dart';
 import 'core/monetization/free_limits.dart';
@@ -60,6 +61,7 @@ Future<void> main() async {
     ads: ads,
     limits: limits,
     usage: usage,
+    feedback: telemetry.available ? const FirestoreFeedbackSender() : null,
   );
   AnalyticsListener(services.events, services.analytics); // 全 App 存活期間都在，不需 dispose
   await services.reminders.init(); // 不拋例外；失敗時提醒功能停用

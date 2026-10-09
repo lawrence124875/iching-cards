@@ -8,6 +8,7 @@ import '../core/events/event_bus.dart';
 import '../core/iching/cast_result.dart';
 import '../core/iching/focus_rule.dart';
 import '../core/iching/hexagram_table.dart';
+import '../features/share/share.dart';
 import '../l10n/l10n.dart';
 import '../shared/widgets/card_face.dart';
 import '../shared/widgets/hexagram_glyph.dart';
@@ -69,7 +70,16 @@ class _ReadingPageState extends State<ReadingPage> {
     final l = context.l10n;
 
     return Scaffold(
-      appBar: AppBar(title: Text(l.hexFullName(primary))),
+      appBar: AppBar(
+        title: Text(l.hexFullName(primary)),
+        actions: [
+          IconButton(
+            tooltip: l.shareReading,
+            icon: const Icon(Icons.ios_share),
+            onPressed: () => _share(primary),
+          ),
+        ],
+      ),
       body: FutureBuilder<List<HexagramContent?>>(
         future: _content,
         builder: (context, snap) {
@@ -163,6 +173,14 @@ class _ReadingPageState extends State<ReadingPage> {
         },
       ),
     );
+  }
+
+  /// 分享這一卦：用畫面上這一組解讀的標題與卦象做卡片。
+  Future<void> _share(HexagramInfo primary) async {
+    final pc = (await _content)[0];
+    final reading = (pc == null || pc.readings.isEmpty) ? null : pc.readings[_readingSeed % pc.readings.length];
+    if (!mounted) return;
+    await showShareReading(context, info: primary, title: reading?.title, image: reading?.image);
   }
 
   Future<void> _save(HexagramContent? pc) async {

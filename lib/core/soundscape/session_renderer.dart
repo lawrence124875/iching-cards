@@ -16,6 +16,7 @@ class SessionSpec {
     required this.minutes,
     required this.bells,
     this.binaural = false,
+    this.carrier = BinauralCarrier.c128,
   });
 
   final Trigram upper;
@@ -23,17 +24,35 @@ class SessionSpec {
   final int minutes;
   final bool bells;
 
-  /// 雙耳節拍：左耳 216Hz、右耳 223.83Hz，兩耳差 7.83Hz（需戴耳機）。開啟時輸出立體聲。
+  /// 雙耳節拍：左耳 [carrier]、右耳高 7.83Hz，兩耳差 7.83Hz（需戴耳機）。開啟時輸出立體聲。
   final bool binaural;
+
+  /// 雙耳節拍左耳的頻率（使用者可選 128Hz 或 216Hz）。
+  final BinauralCarrier carrier;
 
   SessionTimeline get timeline => SessionTimeline(minutes: minutes);
 
-  /// 快取檔名用。改了合成方式請把版本往上加，舊快取自然失效（v2：0.1.0+10 柔和版＋432Hz）。
-  String get key => 'v2_${upper.name}_${lower.name}_${minutes}m_${bells ? 'b' : 'q'}${binaural ? '_bi' : ''}';
+  /// 快取檔名用。改了合成方式請把版本往上加，舊快取自然失效
+  /// （v2：0.1.0+10 柔和版＋432Hz；v3：432Hz 長音墊、精準頻率、雙耳節拍可選 128／216Hz）。
+  String get key =>
+      'v3_${upper.name}_${lower.name}_${minutes}m_${bells ? 'b' : 'q'}${binaural ? '_bi${carrier.left.round()}' : ''}';
+}
+
+/// 雙耳節拍兩組頻率：左耳 [left]、右耳 [right]，相差正好 7.83Hz。
+/// 128Hz 是 432Hz 調音（畢氏音律）裡的 C（C4＝256Hz）；216Hz 是 432Hz 的低八度。
+enum BinauralCarrier {
+  c128(128.0),
+  a216(216.0);
+
+  const BinauralCarrier(this.left);
+
+  final double left;
+  double get right => left + SessionRenderer.binauralBeat;
 }
 
 /// 合成整段練習音檔（16-bit WAV，單聲道；開雙耳節拍時立體聲）：上卦、下卦兩種音景疊加，
-/// 柔化高頻後依呼吸時間軸起伏音量，加上換氣鈴聲（432Hz 調音）。純計算，可在背景 isolate 或單元測試中執行。
+/// 柔化高頻後加上 432Hz 調音的長音墊（[TonalPad]），依呼吸時間軸起伏音量，再加上換氣鈴聲（432Hz 調音）。
+/// 所有有音高的聲音都是精準頻率的正弦波，可用調音器或頻譜 App 量測。純計算，可在背景 isolate 或單元測試中執行。
 class SessionRenderer {
   const SessionRenderer({this.source = const SynthBedSource(), this.sampleRate = 22050});
 
@@ -44,8 +63,7 @@ class SessionRenderer {
   static const upperSeconds = 31.0;
   static const lowerSeconds = 37.0;
 
-  /// 雙耳節拍：載波取 432Hz 的低八度 216Hz，右耳高 7.83Hz（舒曼共振頻率）。
-  static const binauralCarrier = 216.0;
+  /// 雙耳節拍：右耳比左耳高 7.83Hz（舒曼共振頻率）；左耳頻率見 [BinauralCarrier]。
   static const binauralBeat = 7.83;
   static const binauralLevel = 0.045;
 
@@ -69,13 +87,16 @@ class SessionRenderer {
 
     final ch = spec.binaural ? 2 : 1;
     final soften = Biquad.lowpass(sr, softenCutoff, 0.6);
+    final pad = TonalPad(tl);
+    final left = spec.carrier.left, right = spec.carrier.right;
     final data = ByteData(44 + n * 2 * ch);
     _writeHeader(data, n, sr, ch);
     for (var i = 0; i < n; i++) {
       final t = i / sr;
       var v = lower[i % lower.length] * g;
       if (upper != null) v += upper[i % upper.length] * g;
-      v = soften.process(v) * tl.bedGain(t);
+      // 長音墊加在低通之後：純正弦波不受濾波影響，頻率保持精準
+      v = (soften.process(v) + pad.valueAt(t)) * tl.bedGain(t);
 
       while (nextBell < bells.length && bells[nextBell].time <= t) {
         active.add(_Bell(bells[nextBell].kind, bells[nextBell].time));
@@ -95,8 +116,8 @@ class SessionRenderer {
         // 雙耳節拍只隨準備淡入、結束淡出，不跟呼吸起伏（保持穩定的差頻）
         final e = binauralLevel * tl.bedGain(t) / (1 - tl.depth).clamp(0.01, 1.0);
         final env = math.min(e, binauralLevel);
-        final l = v + env * math.sin(2 * math.pi * binauralCarrier * t);
-        final r = v + env * math.sin(2 * math.pi * (binauralCarrier + binauralBeat) * t);
+        final l = v + env * math.sin(2 * math.pi * left * t);
+        final r = v + env * math.sin(2 * math.pi * right * t);
         data.setInt16(44 + i * 4, _pcm(l), Endian.little);
         data.setInt16(46 + i * 4, _pcm(r), Endian.little);
       }
@@ -138,14 +159,69 @@ class SessionRenderer {
   }
 }
 
-/// 頌缽般的柔和鈴聲：三個泛音、各自指數衰減。432Hz 調音：吸氣 432Hz（A4）、吐氣與結束 324Hz（其下純四度）。
+/// 432Hz 調音的柔和長音墊：A 大調五聲音階（純律，以 A＝432Hz 為準），每個音都是整數赫茲，
+/// 調音器量得到。和弦每次呼吸（吸氣開始時）換一次，3 秒交叉淡入，聽起來明亮、緩慢、不搶耳。
+///
+/// 用到的音：E 81／162／324、F# 90／180／360、A 108／216／432、B 243、C# 270（Hz）。
+class TonalPad {
+  TonalPad(this.timeline);
+
+  final SessionTimeline timeline;
+
+  /// 整體音量：和各卦音景差不多大小（均方根約 0.03）。
+  static const level = 0.06;
+
+  /// 換和弦的交叉淡入秒數。
+  static const fade = 3.0;
+
+  /// 和弦進行：A → F#m7 → Esus → A6，每個和弦由低到高。
+  static const chords = <List<double>>[
+    [108, 216, 270, 324, 432],
+    [90, 180, 216, 270, 360],
+    [81, 162, 243, 324, 432],
+    [108, 216, 270, 360, 432],
+  ];
+
+  /// 低音較大、高音較輕。
+  static const _amps = [0.5, 0.4, 0.3, 0.25, 0.15];
+
+  /// 每個聲部各自緩慢起伏（秒週期不同，避免同時漲落）。
+  static const _lfo = [0.050, 0.067, 0.083, 0.059, 0.073];
+
+  /// 所有用得到的頻率（測試與說明用）。
+  static Set<double> get frequencies => {for (final c in chords) ...c};
+
+  double _chord(int index, double t) {
+    final c = chords[index];
+    var v = 0.0;
+    for (var k = 0; k < c.length; k++) {
+      final w = 2 * math.pi * c[k] * t;
+      final swell = 0.75 + 0.25 * math.sin(2 * math.pi * _lfo[k] * t + k);
+      v += _amps[k] * swell * (math.sin(w) + 0.12 * math.sin(2 * w));
+    }
+    return v;
+  }
+
+  double valueAt(double t) {
+    // 第幾次呼吸（準備期算第 0 次）與這次呼吸已過的秒數
+    final cycle = timeline.pattern.cycle;
+    final n = math.max(0, ((t - timeline.leadIn) / cycle).floor());
+    final idx = n % chords.length;
+    final x = n == 0 ? 1.0 : smoothstep((t - timeline.leadIn - n * cycle) / fade);
+    var v = _chord(idx, t) * x;
+    if (x < 1) v += _chord((idx + chords.length - 1) % chords.length, t) * (1 - x);
+    return v * level;
+  }
+}
+
+/// 頌缽般的柔和鈴聲：三個泛音（整數倍）、各自指數衰減。432Hz 調音：吸氣 432Hz（A4）、吐氣與結束 324Hz（其下純四度）。
 class _Bell {
   _Bell(this.kind, this.start);
 
   final BellKind kind;
   final double start;
 
-  static const _ratios = [1.0, 2.01, 2.99];
+  static const _ratios = [1.0, 2.0, 3.0];
   static const _amps = [1.0, 0.35, 0.15];
   static const _decays = [2.4, 1.2, 0.7];
 

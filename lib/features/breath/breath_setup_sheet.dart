@@ -9,7 +9,7 @@ import '../../core/soundscape/session_renderer.dart';
 import 'breath_page.dart';
 import '../../l10n/l10n.dart';
 
-/// 開始前的設定：時長 1／2／3／5 分鐘、換氣鈴聲、雙耳節拍（皆預設關閉）。
+/// 開始前的設定：時長 1／2／3／5 分鐘、換氣鈴聲、雙耳節拍（皆預設關閉；雙耳節拍可選 128Hz 或 216Hz）。
 /// 文案只描述做法，不寫任何療效（Google Play 健康宣稱政策，HANDOFF §14.2）。
 /// 選擇只在這次開啟 App 期間記住（不另存檔）。
 Future<void> showBreathSetup(BuildContext context, int hexagram) async {
@@ -43,6 +43,8 @@ class _SetupSheetState extends State<_SetupSheet> {
   bool _bells = _lastBells;
   static bool _lastBinaural = false;
   bool _binaural = _lastBinaural;
+  static BinauralCarrier _lastCarrier = BinauralCarrier.c128;
+  BinauralCarrier _carrier = _lastCarrier;
 
   // 免費版（§23）：只有 1／2 分鐘、沒有雙耳節拍；其餘點了開訂閱頁
   late final Services _s = AppServices.of(context);
@@ -126,6 +128,22 @@ class _SetupSheetState extends State<_SetupSheet> {
               value: _binaural,
               onChanged: (v) => (v && !_s.isPremium) ? _unlock(() => _binaural = true) : setState(() => _binaural = v),
             ),
+            if (_binaural)
+              Wrap(
+                spacing: 10,
+                runSpacing: 4,
+                children: [
+                  for (final c in BinauralCarrier.values)
+                    ChoiceChip(
+                      label: Text(switch (c) {
+                        BinauralCarrier.c128 => l.breathCarrier128,
+                        BinauralCarrier.a216 => l.breathCarrier216,
+                      }),
+                      selected: _carrier == c,
+                      onSelected: (_) => setState(() => _carrier = c),
+                    ),
+                ],
+              ),
             const SizedBox(height: 4),
             Text(l.breathHeadphones, style: t.bodySmall),
             const SizedBox(height: 16),
@@ -135,12 +153,14 @@ class _SetupSheetState extends State<_SetupSheet> {
                   _lastMinutes = _minutes;
                   _lastBells = _bells;
                   _lastBinaural = _binaural;
+                  _lastCarrier = _carrier;
                   Navigator.of(context).pop(SessionSpec(
                     upper: info.upper,
                     lower: info.lower,
                     minutes: _minutes,
                     bells: _bells,
                     binaural: _binaural,
+                    carrier: _carrier,
                   ));
                 },
                 child: Text(l.breathStart),

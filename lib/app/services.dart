@@ -9,6 +9,7 @@ import '../core/content/asset_content_source.dart';
 import '../core/content/content_source.dart';
 import '../core/events/event_bus.dart';
 import '../core/journal/file_journal_store.dart';
+import '../core/onboarding/intro_store.dart';
 import '../core/monetization/ad_service.dart';
 import '../core/monetization/cast_quota.dart';
 import '../core/monetization/free_limits.dart';
@@ -32,6 +33,7 @@ class Services {
     required this.reminders,
     this.journal,
     this.breath,
+    this.intro,
     this.analytics = const NoopAnalytics(),
     this.flags = const DefaultRemoteFlags(),
     PremiumService? premium,
@@ -61,6 +63,7 @@ class Services {
           channelDescription: () => L10n.current.reminderChannelDescription,
         ),
         journal: FileJournalStore(),
+        intro: FileIntroStore(),
         breath: BreathServices(
           files: CachedSoundscapeFiles(),
           playback: JustAudioPlayback(),
@@ -85,6 +88,9 @@ class Services {
 
   /// 呼吸音景；為 null 時練習頁直接提供無聲引導。拔除功能請移出註冊表。
   final BreathServices? breath;
+
+  /// 功能介紹是否看過；null＝不自動顯示（測試）。
+  final IntroStore? intro;
 
   /// 使用統計（只由 AnalyticsListener 從事件匯流排轉送，畫面不直接呼叫）。
   final Analytics analytics;

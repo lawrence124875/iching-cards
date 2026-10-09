@@ -195,5 +195,14 @@
   "shareImage": "شارك الصورة",
   "shareFailed": "تعذّرت المشاركة الآن. حاول مرة أخرى لاحقًا.",
   "shareAppText": "أستخدم Qiangua لسحب بطاقات «إي تشينغ» والتنفّس مع مشاهدها الصوتية. جرّبه: {url}",
-  "shareReadingText": "سحبتُ {name}: «{title}»\nاسحب بطاقتك من «إي تشينغ» مع Qiangua: {url}"
+  "shareReadingText": "سحبتُ {name}: «{title}»\nاسحب بطاقتك من «إي تشينغ» مع Qiangua: {url}",
+  "journalMenuBackup": "نسخ احتياطيّ للدفتر",
+  "journalMenuRestore": "الاستعادة من نسخة احتياطيّة",
+  "journalBackupBody": "يتضمّن ملفّ النسخة الاحتياطيّة الأسئلة والملاحظات التي كتبتها. في الخطوة التالية اختر مكان حفظه، مثل التخزين السحابيّ، أو أرسله إلى نفسك.\n\nعلى هاتف جديد أو بعد إعادة تثبيت التطبيق، اختر هنا «الاستعادة من نسخة احتياطيّة» لاسترجاعه.",
+  "journalBackupContinue": "اختيار مكان الحفظ",
+  "journalBackupEmpty": "لا مدوّنات لنسخها بعد.",
+  "journalBackupSubject": "نسخة احتياطيّة من دفتر Qiangua {date}",
+  "journalRestoreDone": "{count, plural, =1{استُعيدت مدوّنة واحدة} =2{استُعيدت مدوّنتان} few{استُعيدت {count} مدوّنات} many{استُعيدت {count} مدوّنة} other{استُعيدت {count} مدوّنة}}",
+  "journalRestoreNone": "كلّ المدوّنات في هذه النسخة موجودة على هذا الهاتف.",
+  "journalRestoreFailed": "تعذّرت قراءة هذا الملفّ. اختر ملفّ نسخة احتياطيّة من دفتر Qiangua ‏(.json)."
 }

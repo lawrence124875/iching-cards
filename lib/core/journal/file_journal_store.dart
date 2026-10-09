@@ -70,6 +70,19 @@ class FileJournalStore extends JournalStore {
     await _persist();
   }
 
+  /// 一次寫檔（不逐筆 save）。
+  @override
+  Future<List<JournalEntry>> addMissing(List<JournalEntry> entries) async {
+    final list = await _load();
+    final have = {for (final e in list) e.id};
+    final added = [for (final e in entries) if (have.add(e.id)) e];
+    if (added.isEmpty) return added;
+    list.addAll(added);
+    notifyListeners();
+    await _persist();
+    return added;
+  }
+
   @override
   Future<void> delete(String id) async {
     (await _load()).removeWhere((e) => e.id == id);

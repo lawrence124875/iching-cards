@@ -195,5 +195,14 @@
   "shareImage": "이미지 공유",
   "shareFailed": "지금은 공유할 수 없습니다. 잠시 후 다시 시도해 주세요.",
   "shareAppText": "‘겸괘’로 주역 괘 카드를 뽑고 괘의 사운드스케이프와 함께 호흡하고 있어요. 추천해요: {url}",
-  "shareReadingText": "제가 뽑은 괘: {name} “{title}”\n‘겸괘’로 주역 괘 카드를 뽑아 보세요: {url}"
+  "shareReadingText": "제가 뽑은 괘: {name} “{title}”\n‘겸괘’로 주역 괘 카드를 뽑아 보세요: {url}",
+  "journalMenuBackup": "기록 백업",
+  "journalMenuRestore": "백업에서 복원",
+  "journalBackupBody": "백업 파일에는 적어 둔 질문과 돌아보기가 들어 있습니다. 다음 화면에서 보관할 곳(클라우드 드라이브, 나에게 보내기 등)을 고르세요.\n\n휴대폰을 바꾸거나 앱을 다시 설치한 뒤 여기서 ‘백업에서 복원’을 고르면 되돌릴 수 있습니다.",
+  "journalBackupContinue": "보관할 곳 고르기",
+  "journalBackupEmpty": "아직 백업할 기록이 없습니다.",
+  "journalBackupSubject": "겸괘 기록 백업 {date}",
+  "journalRestoreDone": "{count, plural, other{기록 {count}개를 복원했습니다}}",
+  "journalRestoreNone": "이 백업의 기록은 모두 이미 이 휴대폰에 있습니다.",
+  "journalRestoreFailed": "이 파일을 읽을 수 없습니다. 겸괘 기록 백업 파일(.json)을 골라 주세요."
 }

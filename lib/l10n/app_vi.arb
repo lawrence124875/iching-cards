@@ -195,5 +195,14 @@
   "shareImage": "Chia sẻ hình",
   "shareFailed": "Hiện chưa chia sẻ được. Vui lòng thử lại sau.",
   "shareAppText": "Mình đang dùng Quẻ Khiêm để rút thẻ Kinh Dịch và thở cùng âm thanh của quẻ. Giới thiệu bạn: {url}",
-  "shareReadingText": "Mình rút được {name}: “{title}”\nRút một thẻ Kinh Dịch với Quẻ Khiêm: {url}"
+  "shareReadingText": "Mình rút được {name}: “{title}”\nRút một thẻ Kinh Dịch với Quẻ Khiêm: {url}",
+  "journalMenuBackup": "Sao lưu nhật ký",
+  "journalMenuRestore": "Khôi phục từ bản sao lưu",
+  "journalBackupBody": "Tệp sao lưu có cả điều bạn muốn hỏi và những lần nhìn lại bạn đã viết. Bước tiếp theo, hãy chọn nơi lưu, ví dụ ổ đám mây, hoặc gửi cho chính mình.\n\nKhi đổi điện thoại hoặc cài lại ứng dụng, chọn “Khôi phục từ bản sao lưu” ở đây để lấy lại.",
+  "journalBackupContinue": "Chọn nơi lưu",
+  "journalBackupEmpty": "Chưa có ghi chép nào để sao lưu.",
+  "journalBackupSubject": "Sao lưu nhật ký Quẻ Khiêm {date}",
+  "journalRestoreDone": "{count, plural, other{Đã khôi phục {count} ghi chép}}",
+  "journalRestoreNone": "Mọi ghi chép trong bản sao lưu này đã có trên điện thoại.",
+  "journalRestoreFailed": "Không đọc được tệp này. Hãy chọn tệp sao lưu nhật ký Quẻ Khiêm (.json)."
 }

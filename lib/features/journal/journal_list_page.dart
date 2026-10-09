@@ -10,6 +10,7 @@ import '../../core/journal/journal_store.dart';
 import '../../l10n/l10n.dart';
 import '../../shared/format.dart';
 import '../../shared/widgets/hexagram_glyph.dart';
+import 'journal_backup_menu.dart';
 import 'journal_entry_page.dart';
 import '../../shared/widgets/adaptive_layout.dart';
 
@@ -21,7 +22,10 @@ class JournalListPage extends StatelessWidget {
   Widget build(BuildContext context) {
     final store = AppServices.of(context).journal;
     return Scaffold(
-      appBar: AppBar(title: Text(context.l10n.featureJournal)),
+      appBar: AppBar(
+        title: Text(context.l10n.featureJournal),
+        actions: [if (store != null) const JournalBackupMenu()],
+      ),
       body: store == null ? const _Empty() : _List(store: store),
       bottomNavigationBar: const AdBanner(),
     );

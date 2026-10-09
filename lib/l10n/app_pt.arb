@@ -195,5 +195,14 @@
   "shareImage": "Compartilhar imagem",
   "shareFailed": "Não foi possível compartilhar agora. Tente novamente mais tarde.",
   "shareAppText": "Estou usando o Qiangua para tirar cartas do I Ching e respirar com as paisagens sonoras. Experimente: {url}",
-  "shareReadingText": "Tirei {name}: “{title}”\nTire sua carta do I Ching com o Qiangua: {url}"
+  "shareReadingText": "Tirei {name}: “{title}”\nTire sua carta do I Ching com o Qiangua: {url}",
+  "journalMenuBackup": "Fazer backup do Diário",
+  "journalMenuRestore": "Restaurar backup",
+  "journalBackupBody": "O backup inclui as perguntas e notas que você escreveu. Em seguida, escolha onde guardá-lo, por exemplo na sua nuvem, ou envie para você mesmo.\n\nEm um celular novo ou depois de reinstalar, escolha “Restaurar backup” aqui para recuperar.",
+  "journalBackupContinue": "Escolher onde salvar",
+  "journalBackupEmpty": "Ainda não há registros para o backup.",
+  "journalBackupSubject": "Backup do Diário do Qiangua {date}",
+  "journalRestoreDone": "{count, plural, =1{1 registro restaurado} other{{count} registros restaurados}}",
+  "journalRestoreNone": "Todos os registros deste backup já estão neste celular.",
+  "journalRestoreFailed": "Não foi possível ler este arquivo. Escolha um backup do Diário do Qiangua (.json)."
 }

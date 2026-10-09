@@ -550,5 +550,14 @@
   "shareImage": "Share image",
   "shareFailed": "Couldn't share right now. Please try again later.",
   "shareAppText": "I've been using Qiangua to draw I Ching cards and breathe with their soundscapes. Try it: {url}",
-  "shareReadingText": "I drew {name}: \"{title}\"\nDraw your own I Ching card with Qiangua: {url}"
+  "shareReadingText": "I drew {name}: \"{title}\"\nDraw your own I Ching card with Qiangua: {url}",
+  "journalMenuBackup": "Back up journal",
+  "journalMenuRestore": "Restore from backup",
+  "journalBackupBody": "The backup file includes the questions and notes you wrote. Next, choose where to keep it, such as your cloud drive, or send it to yourself.\n\nOn a new phone or after reinstalling, choose “Restore from backup” here to bring it back.",
+  "journalBackupContinue": "Choose where to save",
+  "journalBackupEmpty": "There are no entries to back up yet.",
+  "journalBackupSubject": "Qiangua journal backup {date}",
+  "journalRestoreDone": "{count, plural, =1{Restored 1 entry} other{Restored {count} entries}}",
+  "journalRestoreNone": "Every entry in this backup is already on this phone.",
+  "journalRestoreFailed": "Couldn't read this file. Please choose a Qiangua journal backup (.json)."
 }

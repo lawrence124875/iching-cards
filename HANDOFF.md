@@ -409,6 +409,12 @@ checkout 本 repo → 以 `BUILDS_REPO_TOKEN` sparse-checkout iching-content 的
 - `test/journal_test.dart`：JSON 來回、跨月回顧時間、payload、儲存。
 - iOS 上架時：需在 AppDelegate 設定通知代理（flutter_local_notifications 的 iOS 說明），其餘程式共用。
 
+**備份與還原（2026-10-09，0.2.0+45）**
+- 卦記列表右上角選單：「備份卦記」→ 說明對話框（備份含想問的事與回顧）→ 寫 `qiangua-journal-YYYY-MM-DD.json` 到暫存資料夾 → 系統分享選單，使用者自選存放處（雲端硬碟、傳給自己…）；「從備份還原」→ `file_picker` 選檔（系統文件選擇器，不需儲存權限）→ 只加入手機上沒有的（以 id 判斷，已有的不覆蓋）→ 補排未來的回顧提醒。
+- 還原不受免費版 `qg_free_journal_max` 限制（已存的一律保留，§23.1）；備份與還原免費（資料屬於使用者）。
+- 程式：`lib/core/journal/journal_backup.dart`（格式 `format: qiangua-journal`，也接受 App 內 journal.json）、`JournalStore.addMissing`、`lib/features/journal/journal_backup_menu.dart`；11 語 ARB 新增 9 個 `journalMenu*`／`journalBackup*`／`journalRestore*` 鍵；測試在 `test/journal_test.dart`「卦記備份」。
+- 隱私權政策卦記段補寫備份（生效日 2026-10-09）；資料安全性不用改（App 不經手備份檔）。
+
 **準時模式（2026-10-02 使用者決定比照智慧聽覺巡航，0.1.0+11）**
 - 使用者允許「鬧鐘與提醒」（精確鬧鐘）時用 `exactAllowWhileIdle` 準時跳出；不允許則退回 `inexactAllowWhileIdle`（省電時可能延後）。
 - **第一次**設定提醒時開一次系統設定頁請使用者允許（`requestExactAlarmsPermission`，返回後才排程）；之後不再主動開，旗標檔 `exact_alarm_asked` 存在 App 私有資料夾。拒絕後可自行到手機設定 → 應用程式 → 謙卦 → 鬧鐘與提醒 開啟。
@@ -715,6 +721,8 @@ checkout 本 repo → 以 `BUILDS_REPO_TOKEN` sparse-checkout iching-content 的
 - 2026-10-05（第九個對話）：run #66（0.2.0+33）✅，Release `謙卦 0.2.0+33（run 66）`，測試廣告；韓文商店資訊完成（§21.2）。截圖在雲端環境渲染：Flutter 用 `git clone --depth 1 -b stable https://github.com/flutter/flutter.git`，字型原檔下載到 iching-cards `_fonts_src/`（已 gitignore），其餘照 `screenshots/README.md`。下一步：越南文（計畫待使用者確認）。
 - 同一對話：使用者確認 run #66 各語言正常、上傳封閉測試；越南文經文選 A（只放意譯）。App 端 0.2.0+34（run #67）；iching-content `vi/README.md`、`check_translation.py vi`（NFC、粗話／差別語／迷信／保證／政治字眼；曾擋下：虞的漢越音「Ngu」＝笨、cam kết、bảo đảm、bùa、解讀中的 Thượng đế）、`tools/vi_fill.py`（用法同 ko_fill）。內容進度：01–24 完成（看 vi/README §5）。
 - 同一對話（續）：越南文 25–64 完成（共 160,063 字；`check_translation.py vi` 全過；每卦處理要點與回譯抽查記在 vi/README §5）。檢查器另擋下：「chính quyền」（洛克書名改 việc cai trị）、「cave」（Robbers Cave 只寫越文 hang Robbers）、「bảo đảm」「cam kết」；鬼方只在經文用 Quỷ Phương、上帝只在經文用 Thượng đế，解讀改寫。`vi.contentReady = true`、0.2.0+35（run #68），版本資訊 `store/release-notes/0.2.0+35.txt`（含 vi-VN）。越南文商店資訊完成（§21.2）。
+
+- 2026-10-09：使用者要求接續開發。完成：版本資訊 `0.2.0+44.txt`、`0.2.0+45.txt`（iching-content，首次加 zh-CN 區塊）；`store/PLAY_CONSOLE.md` §6 正式版申請前核對表（使用者待做：AdMob 敏感類別、AdMob GDPR 訊息、國家／地區決定）；卦記備份與還原（0.2.0+45，見 §13）。剩下的候選：商店截圖補新功能、蓍草法起卦、「不分享使用統計」開關、iOS。
 
 ### 19.3 需要使用者做的事（Claude 會在對應階段提醒）
 - Firebase：確認 Analytics 即時報表看得到 `qg_reading_shown`、Crashlytics 不再「等待中」（§18.4，記得先篩選謙卦 App）。

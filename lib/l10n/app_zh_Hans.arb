@@ -195,5 +195,14 @@
   "shareImage": "分享图片",
   "shareFailed": "暂时无法分享，请稍后再试。",
   "shareAppText": "我在用「谦卦」抽易经卦卡、跟着卦的音景呼吸，推荐给你：{url}",
-  "shareReadingText": "我抽到{name}：「{title}」\n用「谦卦」抽一张易经卦卡：{url}"
+  "shareReadingText": "我抽到{name}：「{title}」\n用「谦卦」抽一张易经卦卡：{url}",
+  "journalMenuBackup": "备份卦记",
+  "journalMenuRestore": "从备份恢复",
+  "journalBackupBody": "备份文件包含你写下的问题与回顾。下一步请选择存放的地方，例如云盘，或发给自己。\n\n换手机或重装 App 后，在这里选“从备份恢复”即可取回。",
+  "journalBackupContinue": "选择存放位置",
+  "journalBackupEmpty": "还没有卦记可以备份。",
+  "journalBackupSubject": "谦卦卦记备份 {date}",
+  "journalRestoreDone": "{count, plural, other{已恢复 {count} 则卦记}}",
+  "journalRestoreNone": "备份里的卦记都已经在这部手机上了。",
+  "journalRestoreFailed": "无法读取这个文件。请选择谦卦的卦记备份文件（.json）。"
 }

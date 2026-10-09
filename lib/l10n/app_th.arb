@@ -195,5 +195,14 @@
   "shareImage": "แชร์รูปภาพ",
   "shareFailed": "ยังแชร์ไม่ได้ในตอนนี้ โปรดลองอีกครั้งภายหลัง",
   "shareAppText": "ฉันใช้ Qiangua จับไพ่อี้จิงและหายใจไปกับเสียงประกอบของฉั่ว ลองดูนะ: {url}",
-  "shareReadingText": "ฉันได้ {name}: “{title}”\nจับไพ่อี้จิงของคุณด้วย Qiangua: {url}"
+  "shareReadingText": "ฉันได้ {name}: “{title}”\nจับไพ่อี้จิงของคุณด้วย Qiangua: {url}",
+  "journalMenuBackup": "สำรองบันทึก",
+  "journalMenuRestore": "กู้คืนจากไฟล์สำรอง",
+  "journalBackupBody": "ไฟล์สำรองมีคำถามและบันทึกที่คุณเขียนไว้ ขั้นต่อไปให้เลือกที่เก็บ เช่น พื้นที่เก็บข้อมูลออนไลน์ หรือส่งให้ตัวเอง\n\nเมื่อเปลี่ยนโทรศัพท์หรือติดตั้งแอปใหม่ ให้เลือก “กู้คืนจากไฟล์สำรอง” ที่นี่เพื่อนำกลับมา",
+  "journalBackupContinue": "เลือกที่เก็บ",
+  "journalBackupEmpty": "ยังไม่มีบันทึกให้สำรอง",
+  "journalBackupSubject": "ไฟล์สำรองบันทึก Qiangua {date}",
+  "journalRestoreDone": "{count, plural, other{กู้คืนแล้ว {count} บันทึก}}",
+  "journalRestoreNone": "บันทึกทั้งหมดในไฟล์สำรองนี้มีอยู่ในโทรศัพท์เครื่องนี้แล้ว",
+  "journalRestoreFailed": "อ่านไฟล์นี้ไม่ได้ โปรดเลือกไฟล์สำรองบันทึกของ Qiangua (.json)"
 }

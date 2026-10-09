@@ -622,5 +622,29 @@
         "type": "String"
       }
     }
-  }
+  },
+  "journalMenuBackup": "備份卦記",
+  "journalMenuRestore": "從備份還原",
+  "journalBackupBody": "備份檔包含你寫下的問題與回顧。下一步請選擇存放的地方，例如雲端硬碟，或傳給自己。\n\n換手機或重裝 App 後，在這裡選「從備份還原」即可取回。",
+  "journalBackupContinue": "選擇存放位置",
+  "journalBackupEmpty": "還沒有卦記可以備份。",
+  "journalBackupSubject": "謙卦卦記備份 {date}",
+  "@journalBackupSubject": {
+    "description": "分享備份檔時的主旨",
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "journalRestoreDone": "{count, plural, other{已還原 {count} 則卦記}}",
+  "@journalRestoreDone": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "journalRestoreNone": "備份裡的卦記都已經在這支手機上了。",
+  "journalRestoreFailed": "無法讀取這個檔案。請選擇謙卦的卦記備份檔（.json）。"
 }

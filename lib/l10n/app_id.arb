@@ -550,5 +550,14 @@
   "shareImage": "Bagikan gambar",
   "shareFailed": "Belum bisa membagikan sekarang. Coba lagi nanti.",
   "shareAppText": "Aku pakai Qiangua untuk mengambil kartu I Ching dan bernapas mengikuti lanskap suaranya. Coba deh: {url}",
-  "shareReadingText": "Aku mendapat {name}: “{title}”\nAmbil kartu I Ching-mu dengan Qiangua: {url}"
+  "shareReadingText": "Aku mendapat {name}: “{title}”\nAmbil kartu I Ching-mu dengan Qiangua: {url}",
+  "journalMenuBackup": "Cadangkan jurnal",
+  "journalMenuRestore": "Pulihkan dari cadangan",
+  "journalBackupBody": "File cadangan berisi pertanyaan dan catatan yang kamu tulis. Selanjutnya, pilih tempat menyimpannya, misalnya penyimpanan awan, atau kirim ke dirimu sendiri.\n\nDi ponsel baru atau setelah memasang ulang aplikasi, pilih “Pulihkan dari cadangan” di sini untuk mengembalikannya.",
+  "journalBackupContinue": "Pilih tempat menyimpan",
+  "journalBackupEmpty": "Belum ada catatan untuk dicadangkan.",
+  "journalBackupSubject": "Cadangan jurnal Qiangua {date}",
+  "journalRestoreDone": "{count, plural, other{{count} catatan dipulihkan}}",
+  "journalRestoreNone": "Semua catatan di cadangan ini sudah ada di ponsel ini.",
+  "journalRestoreFailed": "File ini tidak dapat dibaca. Pilih file cadangan jurnal Qiangua (.json)."
 }

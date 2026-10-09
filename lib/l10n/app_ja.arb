@@ -195,5 +195,14 @@
   "shareImage": "画像をシェア",
   "shareFailed": "いまはシェアできません。しばらくしてからもう一度お試しください。",
   "shareAppText": "「謙卦」で易経の卦カードを引いて、卦のサウンドスケープとともに呼吸しています。おすすめです：{url}",
-  "shareReadingText": "{name}を引きました：「{title}」\n「謙卦」で易経の卦カードを引いてみて：{url}"
+  "shareReadingText": "{name}を引きました：「{title}」\n「謙卦」で易経の卦カードを引いてみて：{url}",
+  "journalMenuBackup": "記録をバックアップ",
+  "journalMenuRestore": "バックアップから復元",
+  "journalBackupBody": "バックアップファイルには、書いた問いとふり返りが含まれます。次の画面で保存先（クラウドドライブ、自分宛てに送るなど）を選んでください。\n\n機種変更や再インストールのあとは、ここで「バックアップから復元」を選ぶと元に戻せます。",
+  "journalBackupContinue": "保存先を選ぶ",
+  "journalBackupEmpty": "バックアップできる記録はまだありません。",
+  "journalBackupSubject": "謙卦 記録のバックアップ {date}",
+  "journalRestoreDone": "{count, plural, other{記録を {count} 件復元しました}}",
+  "journalRestoreNone": "このバックアップの記録は、すべてこの端末にあります。",
+  "journalRestoreFailed": "このファイルを読み込めません。謙卦の記録のバックアップ（.json）を選んでください。"
 }

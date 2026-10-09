@@ -560,5 +560,10 @@
   "journalRestoreDone": "{count, plural, other{{count} catatan dipulihkan}}",
   "journalRestoreNone": "Semua catatan di cadangan ini sudah ada di ponsel ini.",
   "journalRestoreFailed": "File ini tidak dapat dibaca. Pilih file cadangan jurnal Qiangua (.json).",
-  "menuShareUsage": "Bagikan statistik anonim dan laporan error"
+  "menuShareUsage": "Bagikan statistik anonim dan laporan error",
+  "featureYarrow": "Batang Yarrow",
+  "methodYarrow": "Batang yarrow",
+  "yarrowInstructions": "Cara klasik: 49 batang yarrow dibagi dua, satu batang disisihkan, lalu kedua tumpukan dihitung per empat. Tiga putaran menghasilkan satu garis: sisa batang dibagi 4 memberi 6, 7, 8, atau 9. Enam garis dari bawah ke atas. 6 dan 9 adalah garis berubah.",
+  "yarrowStep": "Garis {n} dari 6",
+  "yarrowAll": "Keenamnya Sekaligus"
 }

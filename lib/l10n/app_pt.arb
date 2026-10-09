@@ -205,5 +205,10 @@
   "journalRestoreDone": "{count, plural, =1{1 registro restaurado} other{{count} registros restaurados}}",
   "journalRestoreNone": "Todos os registros deste backup já estão neste celular.",
   "journalRestoreFailed": "Não foi possível ler este arquivo. Escolha um backup do Diário do Qiangua (.json).",
-  "menuShareUsage": "Compartilhar estatísticas anônimas e relatórios de erros"
+  "menuShareUsage": "Compartilhar estatísticas anônimas e relatórios de erros",
+  "featureYarrow": "Varetas de milefólio",
+  "methodYarrow": "Varetas de milefólio",
+  "yarrowInstructions": "O método clássico: 49 varetas de milefólio são divididas em dois montes, uma é separada e os montes são contados de quatro em quatro. Três rodadas formam uma linha: as varetas restantes, divididas por 4, dão 6, 7, 8 ou 9. Seis linhas de baixo para cima. O 6 e o 9 são linhas mutáveis.",
+  "yarrowStep": "Linha {n} de 6",
+  "yarrowAll": "As seis de uma vez"
 }

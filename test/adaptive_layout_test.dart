@@ -93,6 +93,14 @@ void main() {
         await tester.tap(find.widgetWithText(TextButton, l.coinsTossAll));
         await _settle(tester, frames: 40);
 
+        // 蓍草：說明較長，先看未起卦的版面，再一次演完
+        nav().popUntil((r) => r.isFirst);
+        await _settle(tester);
+        await tester.tap(find.text(l.featureYarrow));
+        await _settle(tester);
+        await tester.tap(find.widgetWithText(TextButton, l.yarrowAll));
+        await _settle(tester, frames: 40);
+
         // 呼吸音景
         nav().popUntil((r) => r.isFirst);
         final qian = HexagramTable.byNumber(15);

@@ -647,5 +647,17 @@
   },
   "journalRestoreNone": "備份裡的卦記都已經在這支手機上了。",
   "journalRestoreFailed": "無法讀取這個檔案。請選擇謙卦的卦記備份檔（.json）。",
-  "menuShareUsage": "分享匿名使用統計與當機報告"
+  "menuShareUsage": "分享匿名使用統計與當機報告",
+  "featureYarrow": "用蓍草起卦",
+  "methodYarrow": "蓍草起卦",
+  "yarrowInstructions": "古法以四十九根蓍草，分二、掛一、揲四、歸奇，三變得一爻：剩下的根數除以 4，得 6、7、8 或 9。由下往上六爻，6 與 9 為變爻。",
+  "yarrowStep": "演第 {n} 爻",
+  "yarrowAll": "一次演完",
+  "@yarrowStep": {
+    "placeholders": {
+      "n": {
+        "type": "int"
+      }
+    }
+  }
 }

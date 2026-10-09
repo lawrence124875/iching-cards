@@ -77,7 +77,11 @@ extension IchingTerms on AppLocalizations {
   /// 牌面卦序：中文、日文「第十五卦」，其他語言用阿拉伯數字（ARB cardOrdinal：No. 15、제15괘、Quẻ 15）。
   String cardNumber(int n) => cardOrdinal(isChinese || glossaryCode == 'ja' ? chineseOrdinal(n) : '$n');
 
-  String methodName(String methodId) => methodId == 'coins' ? methodCoins : methodDraw;
+  String methodName(String methodId) => switch (methodId) {
+        'coins' => methodCoins,
+        'yarrow' => methodYarrow,
+        _ => methodDraw,
+      };
 
   /// 提醒失敗的原因（給使用者看）。
   String reminderFailureText(ReminderFailure? f) => switch (f?.kind) {

@@ -6,23 +6,36 @@ import '../../core/iching/cast_result.dart';
 import '../../core/iching/divination_method.dart';
 import '../../l10n/l10n.dart';
 import '../../reading/reading_page.dart';
-import '../../shared/premium/cast_gate.dart';
-import '../../shared/widgets/adaptive_layout.dart';
-import '../../shared/widgets/hexagram_glyph.dart';
-import '../../shared/widgets/question_dialog.dart';
+import '../premium/cast_gate.dart';
+import '../widgets/adaptive_layout.dart';
+import '../widgets/hexagram_glyph.dart';
+import '../widgets/question_dialog.dart';
 
-/// 擲錢起卦：三枚銅錢擲六次，由初爻往上；含變爻與之卦。
+/// 逐爻起卦頁（擲錢、蓍草共用）：由初爻往上求六爻；含變爻與之卦。
 /// 版面固定在一個畫面內：說明 → 卦象＋六爻表（空間不足時等比縮小）→ 底部按鈕。
-class CoinCastPage extends StatefulWidget {
-  const CoinCastPage({super.key});
+class StepwiseCastPage extends StatefulWidget {
+  const StepwiseCastPage({
+    super.key,
+    required this.method,
+    required this.instructions,
+    required this.stepLabel,
+    required this.allLabel,
+  });
+
+  final StepwiseMethod method;
+  final String Function(AppLocalizations l) instructions;
+
+  /// 求第 n 爻的按鈕文字。
+  final String Function(AppLocalizations l, int n) stepLabel;
+  final String Function(AppLocalizations l) allLabel;
 
   @override
-  State<CoinCastPage> createState() => _CoinCastPageState();
+  State<StepwiseCastPage> createState() => _StepwiseCastPageState();
 }
 
-class _CoinCastPageState extends State<CoinCastPage> {
-  static const _method = ThreeCoins();
-  final List<CoinToss> _tosses = [];
+class _StepwiseCastPageState extends State<StepwiseCastPage> {
+  StepwiseMethod get _method => widget.method;
+  final List<LineStep> _tosses = [];
   String _question = '';
 
   bool get _done => _tosses.length == 6;
@@ -41,7 +54,7 @@ class _CoinCastPageState extends State<CoinCastPage> {
 
   Future<void> _toss() async {
     if (_done || !await _allowed()) return;
-    setState(() => _tosses.add(_method.tossOnce(AppServices.of(context).random)));
+    setState(() => _tosses.add(_method.step(AppServices.of(context).random)));
   }
 
   Future<void> _openReading(List<LineValue> lines) async {
@@ -57,7 +70,7 @@ class _CoinCastPageState extends State<CoinCastPage> {
     final r = AppServices.of(context).random;
     setState(() {
       while (_tosses.length < 6) {
-        _tosses.add(_method.tossOnce(r));
+        _tosses.add(_method.step(r));
       }
     });
   }
@@ -75,7 +88,7 @@ class _CoinCastPageState extends State<CoinCastPage> {
 
     final top = [
       Text(
-        l.coinsInstructions,
+        widget.instructions(l),
         textAlign: TextAlign.center,
         style: t.bodySmall,
       ),
@@ -118,8 +131,8 @@ class _CoinCastPageState extends State<CoinCastPage> {
     );
     final buttons = [
       if (!_done) ...[
-        FilledButton(onPressed: _toss, child: Text(l.coinsToss(_tosses.length + 1))),
-        TextButton(onPressed: _tossAll, child: Text(l.coinsTossAll)),
+        FilledButton(onPressed: _toss, child: Text(widget.stepLabel(l, _tosses.length + 1))),
+        TextButton(onPressed: _tossAll, child: Text(widget.allLabel(l))),
       ] else ...[
         FilledButton(
           onPressed: () => _openReading(lines),
@@ -130,7 +143,7 @@ class _CoinCastPageState extends State<CoinCastPage> {
     ];
 
     return Scaffold(
-      appBar: AppBar(), // 首頁連結已寫「三枚銅錢起卦」，這裡不再重複標題
+      appBar: AppBar(), // 首頁連結已寫起卦方式，這裡不再重複標題
       body: SafeArea(
         child: LayoutBuilder(
           builder: (context, box) => isShortWide(box.biggest)
@@ -166,7 +179,7 @@ class _CoinCastPageState extends State<CoinCastPage> {
     );
   }
 
-  Widget _row(TextTheme t, AppLocalizations l, int i, CoinToss? toss) {
+  Widget _row(TextTheme t, AppLocalizations l, int i, LineStep? toss) {
     final line = toss?.line;
     final next = i == _tosses.length;
     return SizedBox(
@@ -185,7 +198,7 @@ class _CoinCastPageState extends State<CoinCastPage> {
                   )),
             ),
           ),
-          Text(toss == null ? '' : toss.coins.join(' + '), style: t.bodySmall),
+          Text(toss?.detail ?? '', style: t.bodySmall),
           const Spacer(),
           const SizedBox(width: 12),
           Text(

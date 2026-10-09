@@ -2,6 +2,7 @@ import '../features/breath/breath_feature.dart';
 import '../features/coin_cast/coin_cast_feature.dart';
 import '../features/draw/draw_feature.dart';
 import '../features/journal/journal_feature.dart';
+import '../features/yarrow/yarrow_feature.dart';
 import '../core/telemetry/remote_flags.dart';
 import 'app_feature.dart';
 
@@ -11,6 +12,7 @@ export 'app_feature.dart';
 final List<AppFeature> registeredFeatures = [
   drawFeature,
   coinCastFeature,
+  yarrowFeature,
   journalFeature,
   breathFeature,
 ];

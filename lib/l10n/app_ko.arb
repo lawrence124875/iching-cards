@@ -205,5 +205,10 @@
   "journalRestoreDone": "{count, plural, other{기록 {count}개를 복원했습니다}}",
   "journalRestoreNone": "이 백업의 기록은 모두 이미 이 휴대폰에 있습니다.",
   "journalRestoreFailed": "이 파일을 읽을 수 없습니다. 겸괘 기록 백업 파일(.json)을 골라 주세요.",
-  "menuShareUsage": "익명 사용 통계와 오류 보고서 보내기"
+  "menuShareUsage": "익명 사용 통계와 오류 보고서 보내기",
+  "featureYarrow": "시초로 괘 세우기",
+  "methodYarrow": "시초로 괘 세우기",
+  "yarrowInstructions": "옛 방식은 시초 49개를 둘로 나누고 하나를 걸어 둔 뒤, 넷씩 세어 나머지를 덜어 냅니다. 세 번 되풀이하면 한 효가 나옵니다. 남은 개수를 4로 나누면 6·7·8·9 중 하나가 됩니다. 아래에서 위로 여섯 효, 6과 9가 변효입니다.",
+  "yarrowStep": "{n}번째 효 구하기",
+  "yarrowAll": "한 번에 모두 구하기"
 }

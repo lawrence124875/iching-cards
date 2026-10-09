@@ -205,5 +205,10 @@
   "journalRestoreDone": "{count, plural, =1{Se restauró 1 entrada} other{Se restauraron {count} entradas}}",
   "journalRestoreNone": "Todas las entradas de esta copia ya están en este teléfono.",
   "journalRestoreFailed": "No se pudo leer este archivo. Elige una copia del diario de Qiangua (.json).",
-  "menuShareUsage": "Compartir estadísticas anónimas e informes de errores"
+  "menuShareUsage": "Compartir estadísticas anónimas e informes de errores",
+  "featureYarrow": "Tallos de milenrama",
+  "methodYarrow": "Tallos de milenrama",
+  "yarrowInstructions": "El método clásico: 49 tallos de milenrama se dividen en dos, se aparta uno y ambos montones se cuentan de cuatro en cuatro. Tres rondas dan una línea: los tallos restantes, divididos entre 4, dan 6, 7, 8 o 9. Seis líneas de abajo arriba. El 6 y el 9 son líneas mutantes.",
+  "yarrowStep": "Línea {n} de 6",
+  "yarrowAll": "Las seis de una vez"
 }

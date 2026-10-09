@@ -205,5 +205,10 @@
   "journalRestoreDone": "{count, plural, other{Đã khôi phục {count} ghi chép}}",
   "journalRestoreNone": "Mọi ghi chép trong bản sao lưu này đã có trên điện thoại.",
   "journalRestoreFailed": "Không đọc được tệp này. Hãy chọn tệp sao lưu nhật ký Quẻ Khiêm (.json).",
-  "menuShareUsage": "Gửi thống kê sử dụng ẩn danh và báo cáo lỗi"
+  "menuShareUsage": "Gửi thống kê sử dụng ẩn danh và báo cáo lỗi",
+  "featureYarrow": "Lập quẻ bằng cỏ thi",
+  "methodYarrow": "Cỏ thi",
+  "yarrowInstructions": "Cách cổ: chia 49 cọng cỏ thi làm hai, gác riêng một cọng, đếm từng bốn cọng và bỏ phần dư. Ba lần như vậy được một hào: số cọng còn lại chia 4 ra 6, 7, 8 hoặc 9. Lập sáu hào từ dưới lên trên. 6 và 9 là hào động.",
+  "yarrowStep": "Hào thứ {n}",
+  "yarrowAll": "Lập một lần cả sáu"
 }

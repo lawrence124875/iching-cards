@@ -560,5 +560,10 @@
   "journalRestoreDone": "{count, plural, =1{Restored 1 entry} other{Restored {count} entries}}",
   "journalRestoreNone": "Every entry in this backup is already on this phone.",
   "journalRestoreFailed": "Couldn't read this file. Please choose a Qiangua journal backup (.json).",
-  "menuShareUsage": "Share anonymous usage stats & crash reports"
+  "menuShareUsage": "Share anonymous usage stats & crash reports",
+  "featureYarrow": "Cast with Yarrow Stalks",
+  "methodYarrow": "Yarrow-stalk cast",
+  "yarrowInstructions": "The classic method: 49 yarrow stalks are split in two, one is set aside, and both piles are counted off in fours. Three rounds give one line: the stalks left, divided by 4, give 6, 7, 8 or 9. Six lines from the bottom up; 6 and 9 are changing lines.",
+  "yarrowStep": "Line {n} of 6",
+  "yarrowAll": "Cast All Six Lines"
 }

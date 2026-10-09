@@ -47,9 +47,28 @@ void main() {
     test('三枚銅錢只會出現 6–9', () {
       final r = Random(2);
       for (var i = 0; i < 500; i++) {
-        final v = const ThreeCoins().tossOnce(r).line.value;
+        final v = const ThreeCoins().step(r).line.value;
         expect(v, inInclusiveRange(6, 9));
       }
+    });
+
+    test('蓍草三變：每變掛扐根數合規，機率接近 1:5:7:3（老陰:少陽:少陰:老陽）', () {
+      final r = Random(3);
+      const n = 64000;
+      final counts = {6: 0, 7: 0, 8: 0, 9: 0};
+      for (var i = 0; i < n; i++) {
+        final s = const YarrowStalks().step(r);
+        expect(s.removed[0], anyOf(5, 9));
+        expect(s.removed[1], anyOf(4, 8));
+        expect(s.removed[2], anyOf(4, 8));
+        expect(s.remaining, anyOf(24, 28, 32, 36));
+        counts[s.line.value] = counts[s.line.value]! + 1;
+      }
+      // 1:5:7:3 是假設每變兩種餘數機率固定的理想值；實際隨機分堆約 5%／29%／45%／21%，容許 ±3 個百分點
+      for (final e in {6: 1, 7: 5, 8: 7, 9: 3}.entries) {
+        expect(counts[e.key]! / n, closeTo(e.value / 16, 0.03), reason: '${e.key}');
+      }
+      expect(const YarrowStalks().cast(r).methodId, 'yarrow');
     });
 
     test('乾卦六爻皆老陽 → 之卦為坤', () {

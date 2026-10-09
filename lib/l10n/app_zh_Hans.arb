@@ -205,5 +205,10 @@
   "journalRestoreDone": "{count, plural, other{已恢复 {count} 则卦记}}",
   "journalRestoreNone": "备份里的卦记都已经在这部手机上了。",
   "journalRestoreFailed": "无法读取这个文件。请选择谦卦的卦记备份文件（.json）。",
-  "menuShareUsage": "分享匿名使用统计与崩溃报告"
+  "menuShareUsage": "分享匿名使用统计与崩溃报告",
+  "featureYarrow": "用蓍草起卦",
+  "methodYarrow": "蓍草起卦",
+  "yarrowInstructions": "古法以四十九根蓍草，分二、挂一、揲四、归奇，三变得一爻：剩下的根数除以 4，得 6、7、8 或 9。由下往上六爻，6 与 9 为变爻。",
+  "yarrowStep": "演第 {n} 爻",
+  "yarrowAll": "一次演完"
 }

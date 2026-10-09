@@ -42,6 +42,7 @@
   <li><strong>匿名使用統計（Firebase Analytics）</strong>：記錄少數操作事件，以了解功能是否好用，例如：顯示了一次解讀（起卦方式、卦序 1–64、是否有變爻）、保存了一則卦記（是否設定提醒）、開始或完成一次呼吸練習（卦序、分鐘數、是否開啟無聲引導或雙耳節拍）。Firebase Analytics 也會自動收集一般的裝置與使用資訊（例如裝置型號、系統版本、App 版本、大致地區、使用時段），並使用 App 實例識別碼等裝置識別碼。<br>
   <strong>統計絕不包含</strong>您寫下的「想問的事」、回顧筆記或任何您輸入的文字。</li>
   <li><strong>當機報告（Firebase Crashlytics）</strong>：App 發生當機時，蒐集錯誤堆疊、裝置型號、系統版本等診斷資訊，用於修正問題，不包含您的個人身分資訊或卦記內容。</li>
+  <li><strong>可以關閉</strong>：首頁右上角選單取消勾選「分享匿名使用統計與當機報告」，App 就立即停止蒐集上述使用統計與當機報告（廣告的資料處理另見下方「廣告」段）。</li>
   <li><strong>功能設定（Firebase Remote Config）</strong>：App 會定期下載功能開關設定（例如暫時關閉某項功能），此過程會使用 App 實例識別碼，不傳送您的個人資料。</li>
 </ul>
 
@@ -127,6 +128,7 @@ Developer: LC Lab (Lawrence Chang) · Contact: <a href="mailto:lawrence124875@gm
   <li><strong>Anonymous usage statistics (Firebase Analytics)</strong>: a few events that show how features are used — a reading was shown (casting method, hexagram number 1–64, whether there were changing lines), a journal entry was saved (whether a reminder was set), a breathing session was started or completed (hexagram number, minutes, whether silent guidance or binaural beats were on). Firebase Analytics also automatically collects general device and usage information (such as device model, OS version, App version, approximate region and session times) and uses device identifiers such as the app instance ID.<br>
   <strong>Statistics never include</strong> your question, your notes or any text you type.</li>
   <li><strong>Crash reports (Firebase Crashlytics)</strong>: when the App crashes, diagnostic information such as the stack trace, device model and OS version is collected to fix the problem. It contains no personal identity information or journal content.</li>
+  <li><strong>You can turn this off</strong>: untick “Share anonymous usage stats &amp; crash reports” in the home screen menu and the App immediately stops collecting the usage statistics and crash reports above (advertising data is covered separately under “Ads” below).</li>
   <li><strong>Feature settings (Firebase Remote Config)</strong>: the App periodically downloads feature switches. This uses the app instance ID and sends no personal data.</li>
 </ul>
 

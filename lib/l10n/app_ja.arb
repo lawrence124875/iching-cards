@@ -205,5 +205,10 @@
   "journalRestoreDone": "{count, plural, other{記録を {count} 件復元しました}}",
   "journalRestoreNone": "このバックアップの記録は、すべてこの端末にあります。",
   "journalRestoreFailed": "このファイルを読み込めません。謙卦の記録のバックアップ（.json）を選んでください。",
-  "menuShareUsage": "匿名の利用統計とクラッシュレポートを送信"
+  "menuShareUsage": "匿名の利用統計とクラッシュレポートを送信",
+  "featureYarrow": "筮竹で立てる",
+  "methodYarrow": "筮竹で立てる",
+  "yarrowInstructions": "古式では49本の筮竹を二つに分け、一本を掛け、四本ずつ数えて余りを除きます。三回で一爻：残りの本数を4で割ると6・7・8・9のいずれかになります。下から上へ六爻、6と9が変爻です。",
+  "yarrowStep": "{n} 爻目を求める",
+  "yarrowAll": "まとめて求める"
 }

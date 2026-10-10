@@ -530,6 +530,17 @@ checkout 本 repo → 以 `BUILDS_REPO_TOKEN` sparse-checkout iching-content 的
 - **分享（`features/share/`，share_plus）**：解讀頁右上角分享鈕 → 預覽卦象卡片（牌面、這組解讀的標題與卦象，不含使用者寫的問題）→ 輸出 1080×1920 PNG 並附文字與 Play 商店連結；首頁選單「推薦給朋友」分享文字＋商店連結。
 - 10 種語言 ARB 新增 20 個鍵（`breathCarrier*`、`intro*`、`menuIntro`、`menuShareApp`、`share*`），`breathBinauralSub` 改為不寫頻率（頻率移到選項上）。
 
+### 14.9 0.2.0+48 自訂時長最長 60 分鐘、分段無縫播放、鳥鳴水泡 432（2026-10-10）
+
+使用者要求：呼吸時長可自訂（靜坐 30 分鐘、一小時）；確認所有聲音都是 432Hz。
+
+- **自訂時長**（`breath_setup_sheet.dart`）：時長列多一個「自訂」（會員；非會員顯示鎖頭，點了走解鎖流程），滑桿 5–60 分鐘、每格 5 分鐘，記住上次值。
+- **分段播放**：60 分鐘整檔約 300 MB，不可行。呼吸段的所有聲音都剛好以 P＝`SessionRenderer.loopSeconds`＝200 秒為週期（上下卦音景 40／50 秒、呼吸 10 秒、和弦 40 秒、長音墊 LFO 為 1/200 的倍數、整數 Hz、7.83×200＝1566），所以只算三段：開頭 [0, leadIn＋P)、循環 [leadIn＋P, leadIn＋2P) 重複 n−1 次、結尾 [leadIn＋nP, total)，n＝floor(呼吸秒數／P)；n＝0 時單檔。`SessionSpec.parts`、`renderPart`（15 秒預熱不寫出、絕對取樣索引）；快取鍵 `v4_<音>_head`／`_loop`／`_<m>m_end`。just_audio `setAudioSources` 無縫串接，進度＝offsets[index]＋position（通知列與鎖屏同）。測試：循環接縫 ≤2 LSB、分段結果與整段渲染一致。60 分鐘立體聲約 13 秒算完。
+- **432 檢查**：有音高的聲音全在 432 系統；風、雨、水、火等噪音型自然聲沒有音高。原本隨機的鳥鳴改為 1944／2160／2592／2880／3456Hz（長音墊五聲音階的高八度）之間滑音；水泡起始音改 270–648Hz 的 432 系統音。
+- **功能介紹**：第 1 頁改寫首頁四個按鈕（抽一卦、三枚銅錢、蓍草、卦記），第 3 頁加「或自訂最長 60 分鐘」。
+- **首頁底部文字被三鍵導覽列蓋住**（使用者 Redmi 實機、會員測試版）：Scaffold 有 `bottomNavigationBar` 時會把底部系統列高度從 body 拿掉，而會員版沒有橫幅（`SizedBox.shrink`），於是沒人留這段高度。`AdBanner` 改包 `SafeArea(top: false)`；`adaptive_layout_test` 加斷言（六種螢幕×繁中／阿拉伯文）。
+- 商店說明 11 語同步更新（iching-content `store/listing-*.md`）；版本資訊 `release-notes/0.2.0+48.txt`。
+
 ## 15. 字體打包（2026-10-03，0.1.0+17）
 
 - 字型：Google Fonts 的 Noto Sans TC（思源黑體）、Noto Serif TC（思源宋體）可變字型，SIL OFL 1.1，可商用、可隨 App 散布。CI 從 google/fonts 固定 commit `9710da1e` 下載（`actions/cache` 快取），更新字型＝改 workflow 的 `NOTO_COMMIT` 與 cache key。
@@ -752,6 +763,7 @@ checkout 本 repo → 以 `BUILDS_REPO_TOKEN` sparse-checkout iching-content 的
 - 2026-10-09（續）：使用者要求剩餘候選全部完成。0.2.0+46：首頁選單「分享匿名使用統計與當機報告」勾選開關（`core/telemetry/usage_sharing.dart`，存 `usage_sharing.json`，關掉即 `setAnalyticsCollectionEnabled(false)`＋Crashlytics 停收；隱私權政策已補寫）；蓍草起卦（`YarrowStalks`，擲錢與蓍草共用 `shared/cast/stepwise_cast_page.dart`，`methodId` = `yarrow`）；分享卡片卦象文字依高度決定行數；商店截圖 11 語重渲染（第 4 張＝分享卡片、第 5 張標題加蓍草，繁中也改用渲染）；iOS 準備見 §24。
 
 - 2026-10-09（續）：使用者要求「功能介紹要修改」「要有意見回饋」。0.2.0+47：功能介紹改五頁（第 1 頁補蓍草、第 2 頁補卦記備份、新第 5 頁＝右上角選單：重看介紹、意見回饋、使用統計開關）；意見回饋＝App 內表單寫 Firestore `qg_feedback`（§18.5，使用者需在 Firebase 加規則）。
+- 2026-10-10：Firestore `qg_feedback` 規則已發布、實機測試成功。使用者要求自訂呼吸時長、確認 432、功能介紹改寫首頁按鈕、11 語商店說明更新（正式版直接上 11 語版）、首頁底部文字避開導覽列 → 0.2.0+48（§14.9）。Play 資料安全性（PLAY_CONSOLE §6 8b）待使用者準備好時一步步帶。
 
 ### 19.3 需要使用者做的事（Claude 會在對應階段提醒）
 - Firebase：確認 Analytics 即時報表看得到 `qg_reading_shown`、Crashlytics 不再「等待中」（§18.4，記得先篩選謙卦 App）。

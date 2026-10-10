@@ -79,13 +79,13 @@ class _BreathPageState extends State<BreathPage> with SingleTickerProviderStateM
       return;
     }
     try {
-      final path = await svc.files.prepare(widget.spec);
+      final parts = await svc.files.prepare(widget.spec);
       final art = await _artFile();
       if (!mounted) return;
       final p = svc.playback;
       final l = context.l10n;
       await p.load(
-        path,
+        parts,
         id: 'breath-${widget.spec.key}',
         title: l.breathMediaTitle(l.hexFullName(_info)),
         subtitle: l.breathMediaSubtitle(_soundNames(l), l.minutes(widget.spec.minutes)),

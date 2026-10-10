@@ -449,6 +449,8 @@
     "description": "只描述做法，不寫療效（Google Play 健康宣稱政策，HANDOFF §14.2）"
   },
   "breathDuration": "時長",
+  "breathCustom": "自訂",
+  "breathLongNote": "長時間靜坐時，可以關掉「換氣時輕敲鈴聲」，只留音景。",
   "minutes": "{m, plural, other{{m} 分鐘}}",
   "@minutes": {
     "placeholders": {

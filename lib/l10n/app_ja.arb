@@ -115,6 +115,8 @@
   "breathSoundLower": "下卦 {trigram}・{nature}：{sound}",
   "breathSetupNote": "4秒吸って6秒吐きます（1分間に6回）。音は呼吸に合わせて満ち引きし、持続音と鈴は432Hzで調律しています。",
   "breathDuration": "長さ",
+  "breathCustom": "カスタム",
+  "breathLongNote": "長く座るときは、鈴をオフにして周りの音だけにできます。",
   "minutes": "{m, plural, other{{m} 分}}",
   "breathBells": "息の切り替えで鈴を鳴らす",
   "breathBellsSub": "目を閉じたままでも吸う・吐くを追えます",

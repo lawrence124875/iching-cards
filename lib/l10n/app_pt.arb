@@ -115,6 +115,8 @@
   "breathSoundLower": "Embaixo: {nature} ({trigram}), {sound}",
   "breathSetupNote": "Inspire por 4 segundos e expire por 6 (6 respirações por minuto). A paisagem sonora sobe e desce com a sua respiração; os tons e os sinos estão afinados em 432 Hz.",
   "breathDuration": "Duração",
+  "breathCustom": "Personalizar",
+  "breathLongNote": "Para sessões longas, você pode desligar o sino e deixar só a paisagem sonora.",
   "minutes": "{m, plural, =1{1 minuto} other{{m} minutos}}",
   "breathBells": "Sino suave ao mudar a respiração",
   "breathBellsSub": "Para acompanhar de olhos fechados",

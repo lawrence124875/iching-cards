@@ -115,6 +115,8 @@
   "breathSoundLower": "하괘 {trigram} · {nature}: {sound}",
   "breathSetupNote": "4초 들이쉬고 6초 내쉽니다(1분에 6회). 소리는 호흡에 맞춰 차오르고 잦아들며, 지속음과 종소리는 432Hz로 조율했습니다.",
   "breathDuration": "길이",
+  "breathCustom": "직접 설정",
+  "breathLongNote": "오래 앉아 있을 때는 종소리를 끄고 배경 소리만 들을 수 있습니다.",
   "minutes": "{m, plural, other{{m}분}}",
   "breathBells": "숨이 바뀔 때 종소리 울리기",
   "breathBellsSub": "눈을 감고도 들숨과 날숨을 따라갈 수 있습니다",

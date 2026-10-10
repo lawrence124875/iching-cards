@@ -13,10 +13,18 @@ import 'dsp.dart';
 /// 0.1.0+10 調得更柔和：整體削弱高頻、突發聲（雷、劈啪、拍岸、雨滴）壓低並放緩起音、
 /// 起伏放慢；泛音長鳴改以 432Hz 為基準（108Hz＝432÷4，泛音含 216、324、432Hz）。
 /// 0.2.x：泛音長鳴與蟲鳴都是精準的 432Hz 系統頻率，可用調音器量測。
+/// 0.2.0+48：艮卦鳥鳴改在 432Hz 系統的音之間滑音（滑音只在兩個音之間）、坎卦水泡的起始音取自 432Hz 系統（[birdNotes]、[bubbleNotes]）。
+/// 風、雨、水流、火、雷等雜訊沒有音高，不需調音。
 class SynthBedSource extends BedSource {
   const SynthBedSource({this.seed = 1});
 
   final int seed;
+
+  /// 艮卦鳥鳴用的音（Hz）：和長音墊同一組 A 大調五聲音階（A＝432Hz）的高八度：B 1944、C# 2160、E 2592、F# 2880、A 3456。
+  static const birdNotes = [1944.0, 2160.0, 2592.0, 2880.0, 3456.0];
+
+  /// 坎卦水泡的起始音（Hz）：同一組五聲音階的 C# 270、E 324、F# 360、A 432、B 486、C# 540、E 648。
+  static const bubbleNotes = [270.0, 324.0, 360.0, 432.0, 486.0, 540.0, 648.0];
 
   /// 循環接縫的交叉淡化長度（秒）。
   static const crossfadeSeconds = 3.0;
@@ -82,7 +90,7 @@ List<Float32List> _water(Rng r, int sr, int n) {
   var t = 0;
   while (t < n) {
     t += (r.range(0.02, 0.2) * sr).round(); // 平均約每秒 9 個
-    final f0 = r.range(250, 700), tau = r.range(0.01, 0.025), amp = r.range(0.2, 1.0);
+    final f0 = SynthBedSource.bubbleNotes[r.nextInt(SynthBedSource.bubbleNotes.length)], tau = r.range(0.01, 0.025), amp = r.range(0.2, 1.0);
     final len = (tau * 6 * sr).round();
     var phase = 0.0, f = f0;
     for (var j = 0; j < len && t + j < n; j++) {
@@ -201,12 +209,18 @@ List<Float32List> _mountain(Rng r, int sr, int n) {
     return bp.process(pink.next()) * (0.4 + 0.6 * a.next());
   });
 
-  // 兩種鳥，各有固定的音高、滑音方向與節奏
+  // 兩種鳥，各有固定的音高、滑音方向與節奏；起音與終音都是 432Hz 系統的音
+  const notes = SynthBedSource.birdNotes;
+  ({double f, double ratio}) pick() {
+    final from = r.nextInt(notes.length);
+    final to = (from + r.nextInt(5) - 2).clamp(0, notes.length - 1); // 最多滑兩個音
+    return (f: notes[from], ratio: notes[to] / notes[from]);
+  }
+
   final species = [
     for (var s = 0; s < 2; s++)
       (
-        f: r.range(2200, 3400),
-        ratio: r.range(0.7, 1.3),
+        note: pick(),
         dur: r.range(0.06, 0.14),
         gap: r.range(0.06, 0.16),
         count: 2 + r.nextInt(4),
@@ -223,7 +237,7 @@ List<Float32List> _mountain(Rng r, int sr, int n) {
       var phase = 0.0;
       for (var j = 0; j < d && s + j < n; j++) {
         final tau = j / d;
-        final f = sp.f * powd(sp.ratio, tau) * (1 + 0.03 * math.sin(2 * math.pi * 25 * j / sr));
+        final f = sp.note.f * powd(sp.note.ratio, tau) * (1 + 0.01 * math.sin(2 * math.pi * 25 * j / sr));
         phase += 2 * math.pi * f / sr;
         final e = powd(math.sin(math.pi * tau), 2);
         birds[s + j] += amp * e * (math.sin(phase) + 0.2 * math.sin(2 * phase));

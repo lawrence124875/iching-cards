@@ -9,7 +9,7 @@ import '../../core/soundscape/session_renderer.dart';
 import 'breath_page.dart';
 import '../../l10n/l10n.dart';
 
-/// 開始前的設定：時長 1／2／3／5 分鐘、換氣鈴聲、雙耳節拍（皆預設關閉；雙耳節拍可選 128Hz 或 216Hz）。
+/// 開始前的設定：時長 1／2／3／5 分鐘或自訂 5–60 分鐘（0.2.0+48，會員）、換氣鈴聲、雙耳節拍（皆預設關閉；雙耳節拍可選 128Hz 或 216Hz）。
 /// 文案只描述做法，不寫任何療效（Google Play 健康宣稱政策，HANDOFF §14.2）。
 /// 選擇只在這次開啟 App 期間記住（不另存檔）。
 Future<void> showBreathSetup(BuildContext context, int hexagram) async {
@@ -37,6 +37,12 @@ class _SetupSheet extends StatefulWidget {
 class _SetupSheetState extends State<_SetupSheet> {
   static const _choices = [1, 2, 3, 5];
   static int _lastMinutes = 3;
+
+  /// 自訂時長：5–60 分鐘，每格 5 分鐘（長時間靜坐用）。
+  static const _customMin = 5, _customMax = 60, _customStep = 5;
+  static int _lastCustom = 20;
+  bool _custom = !_choices.contains(_lastMinutes);
+  int _customMinutes = _lastCustom;
   static bool _lastBells = false; // 預設關閉（2026-10-02 使用者決定）
 
   int _minutes = _lastMinutes;
@@ -56,10 +62,23 @@ class _SetupSheetState extends State<_SetupSheet> {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (!mounted || _s.isPremium) return;
       setState(() {
-        if (_locked(_minutes)) _minutes = 2;
+        if (_locked(_minutes)) {
+          _minutes = 2;
+          _custom = false;
+        }
         _binaural = false;
       });
     });
+  }
+
+  void _pick(int m) {
+    _custom = false;
+    _minutes = m;
+  }
+
+  void _pickCustom() {
+    _custom = true;
+    _minutes = _customMinutes;
   }
 
   /// 點了會員功能：開訂閱頁，訂閱成功就套用。
@@ -100,11 +119,33 @@ class _SetupSheetState extends State<_SetupSheet> {
                   ChoiceChip(
                     avatar: _locked(m) ? const Icon(Icons.lock_outline, size: 16) : null,
                     label: Text(l.minutes(m)),
-                    selected: _minutes == m,
-                    onSelected: (_) => _locked(m) ? _unlock(() => _minutes = m) : setState(() => _minutes = m),
+                    selected: !_custom && _minutes == m,
+                    onSelected: (_) => _locked(m) ? _unlock(() => _pick(m)) : setState(() => _pick(m)),
                   ),
+                ChoiceChip(
+                  avatar: _s.isPremium ? null : const Icon(Icons.lock_outline, size: 16),
+                  label: Text(l.breathCustom),
+                  selected: _custom,
+                  onSelected: (_) => _s.isPremium ? setState(_pickCustom) : _unlock(_pickCustom),
+                ),
               ],
             ),
+            if (_custom) ...[
+              Row(children: [
+                Expanded(
+                  child: Slider(
+                    value: _customMinutes.toDouble(),
+                    min: _customMin.toDouble(),
+                    max: _customMax.toDouble(),
+                    divisions: (_customMax - _customMin) ~/ _customStep,
+                    label: l.minutes(_customMinutes),
+                    onChanged: (v) => setState(() => _minutes = _customMinutes = v.round()),
+                  ),
+                ),
+                SizedBox(width: 72, child: Text(l.minutes(_customMinutes), style: t.bodyMedium)),
+              ]),
+              Text(l.breathLongNote, style: t.bodySmall),
+            ],
             const SizedBox(height: 8),
             SwitchListTile(
               dense: true,
@@ -151,6 +192,7 @@ class _SetupSheetState extends State<_SetupSheet> {
               child: FilledButton(
                 onPressed: () {
                   _lastMinutes = _minutes;
+                  _lastCustom = _customMinutes;
                   _lastBells = _bells;
                   _lastBinaural = _binaural;
                   _lastCarrier = _carrier;

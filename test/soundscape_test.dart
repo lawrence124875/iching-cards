@@ -107,7 +107,7 @@ void main() {
     final d = ByteData.sublistView(bytes);
     expect(d.getUint32(24, Endian.little), 8000);
     expect(d.getInt16(44, Endian.little).abs(), lessThan(10)); // 從無聲淡入
-    expect(spec.key, 'v3_kun_gen_1m_b');
+    expect(spec.key, 'v4_kun_gen_b_1m');
     expect(d.getUint16(22, Endian.little), 1);
   });
 
@@ -118,7 +118,7 @@ void main() {
     final samples = (spec.timeline.totalSeconds * 8000).round();
     expect(bytes.length, 44 + samples * 4);
     expect(d.getUint16(22, Endian.little), 2);
-    expect(spec.key, 'v3_qian_qian_1m_q_bi128');
+    expect(spec.key, 'v4_qian_qian_q_bi128_1m');
     var diff = 0;
     for (var i = 8000 * 10; i < 8000 * 11; i++) {
       diff += (d.getInt16(44 + i * 4, Endian.little) - d.getInt16(46 + i * 4, Endian.little)).abs();
@@ -179,6 +179,20 @@ void main() {
       }
     });
 
+    test('鳥鳴與水泡的音也是同一組五聲音階', () {
+      const pitchClasses = [432.0, 486.0, 540.0, 648.0, 720.0];
+      for (final f in [...SynthBedSource.birdNotes, ...SynthBedSource.bubbleNotes]) {
+        var x = f;
+        while (x < 432) {
+          x *= 2;
+        }
+        while (x >= 864) {
+          x /= 2;
+        }
+        expect(pitchClasses.any((p) => (p - x).abs() < 1e-9), isTrue, reason: '$f Hz');
+      }
+    });
+
     test('鈴聲：吸氣 432Hz', () {
       const spec = SessionSpec(upper: Trigram.gen, lower: Trigram.gen, minutes: 1, bells: true);
       const sr = 8000;
@@ -189,6 +203,64 @@ void main() {
       final at432 = amp(x, sr, 432);
       expect(at432, greaterThan(amp(x, sr, 428) * 3));
       expect(at432, greaterThan(amp(x, sr, 436) * 3));
+    });
+  });
+
+  group('分段播放（自訂時長，0.2.0+48）', () {
+    test('短練習一個檔；60 分鐘＝開頭＋循環 17 次＋結尾，總長不變', () {
+      const short = SessionSpec(upper: Trigram.kan, lower: Trigram.li, minutes: 3, bells: true);
+      expect(short.parts, hasLength(1));
+      expect(short.parts.single.seconds, short.timeline.totalSeconds);
+
+      const long = SessionSpec(upper: Trigram.kan, lower: Trigram.li, minutes: 60, bells: true);
+      final parts = long.parts;
+      expect(parts, hasLength(19)); // 3600 ÷ 200 ＝ 18：開頭 1＋循環 17＋結尾 1
+      expect(parts.skip(1).take(17).map((p) => p.key).toSet(), hasLength(1));
+      expect(parts.map((p) => p.key).toSet(), hasLength(3)); // 只要三個檔
+      expect(parts.fold<double>(0, (a, p) => a + p.seconds), closeTo(long.timeline.totalSeconds, 1e-9));
+      for (var i = 1; i < parts.length; i++) {
+        if (i < parts.length - 1) expect(parts[i].seconds, SessionRenderer.loopSeconds);
+      }
+      // 換時長時開頭段、循環段可沿用
+      const other = SessionSpec(upper: Trigram.kan, lower: Trigram.li, minutes: 30, bells: true);
+      expect(other.parts.first.key, parts.first.key);
+      expect(other.parts[1].key, parts[1].key);
+      expect(other.parts.last.key, isNot(parts.last.key));
+    });
+
+    test('循環段首尾無縫：播完循環段接回開頭，聲音和連續播放一模一樣', () {
+      const spec = SessionSpec(
+          upper: Trigram.gen, lower: Trigram.kan, minutes: 10, bells: true, binaural: true, carrier: BinauralCarrier.a216);
+      const sr = 4000;
+      const r = SessionRenderer(sampleRate: sr);
+      final loop = spec.parts[1];
+      // 循環段之後接著的 1 秒（連續播放時的樣子）與循環段開頭的 1 秒
+      final after = r.renderPart(spec, loop.end, loop.end + 1);
+      final head = r.renderPart(spec, loop.start, loop.start + 1);
+      final a = ByteData.sublistView(after), b = ByteData.sublistView(head);
+      var maxDiff = 0;
+      for (var i = 0; i < sr * 2; i++) {
+        maxDiff = math.max(maxDiff, (a.getInt16(44 + i * 2, Endian.little) - b.getInt16(44 + i * 2, Endian.little)).abs());
+      }
+      expect(maxDiff, lessThanOrEqualTo(2)); // 只差浮點誤差
+    });
+
+    test('各段接起來＝整段一次算完', () {
+      const spec = SessionSpec(upper: Trigram.zhen, lower: Trigram.dui, minutes: 7, bells: true);
+      const sr = 2000;
+      const r = SessionRenderer(sampleRate: sr);
+      final whole = ByteData.sublistView(r.renderWav(spec));
+      var at = 0;
+      for (final p in spec.parts) {
+        final part = ByteData.sublistView(r.renderPart(spec, p.start, p.end));
+        final n = (part.lengthInBytes - 44) ~/ 2;
+        for (var i = 0; i < n; i += 97) {
+          expect((part.getInt16(44 + i * 2, Endian.little) - whole.getInt16(44 + (at + i) * 2, Endian.little)).abs(),
+              lessThanOrEqualTo(2));
+        }
+        at += n;
+      }
+      expect(at, (whole.lengthInBytes - 44) ~/ 2);
     });
   });
 }

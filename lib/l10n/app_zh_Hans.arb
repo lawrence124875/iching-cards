@@ -115,6 +115,8 @@
   "breathSoundLower": "下卦 {trigram}·{nature}：{sound}",
   "breathSetupNote": "吸气 4 秒、吐气 6 秒（每分钟 6 次）。音景会跟着呼吸起伏，长鸣与铃声以 432Hz 调音。",
   "breathDuration": "时长",
+  "breathCustom": "自定义",
+  "breathLongNote": "长时间静坐时，可以关掉“换气时轻敲铃声”，只留音景。",
   "minutes": "{m, plural, other{{m} 分钟}}",
   "breathBells": "换气时轻敲铃声",
   "breathBellsSub": "闭上眼睛也能跟着吸吐",

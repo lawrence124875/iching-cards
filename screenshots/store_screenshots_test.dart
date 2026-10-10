@@ -340,7 +340,7 @@ class _ScriptedRandom implements Random {
 
 class _NoFiles implements SoundscapeFiles {
   @override
-  Future<String> prepare(SessionSpec spec) async => 'silent.wav';
+  Future<List<AudioPart>> prepare(SessionSpec spec) async => const [AudioPart('silent.wav', Duration(minutes: 3))];
 }
 
 /// 不出聲的播放器：播放位置固定在 3 秒準備＋6 個完整呼吸（60 秒）＋吸氣 2.6 秒。
@@ -348,7 +348,7 @@ class _SilentPlayback implements AudioPlayback {
   final _playing = StreamController<bool>.broadcast();
 
   @override
-  Future<Duration?> load(String filePath,
+  Future<Duration?> load(List<AudioPart> parts,
           {required String id, required String title, String subtitle = '', String? artFilePath}) async =>
       const Duration(minutes: 3, seconds: 8);
 

@@ -13,6 +13,9 @@ class BreathAudioHandler extends BaseAudioHandler {
   }
 
   final AudioPlayer player = AudioPlayer();
+
+  /// 整段練習中的播放位置（分段播放時由 JustAudioPlayback 換算），通知列進度條用。
+  Duration Function()? positionOf;
   final _externalStops = StreamController<void>.broadcast();
 
   /// 使用者在通知列、鎖定畫面或耳機按了「停止」，或把 App 從最近使用列表滑掉。
@@ -32,7 +35,7 @@ class BreathAudioHandler extends BaseAudioHandler {
         ProcessingState.completed => AudioProcessingState.completed,
       },
       playing: playing,
-      updatePosition: player.position,
+      updatePosition: positionOf?.call() ?? player.position,
       bufferedPosition: player.bufferedPosition,
       speed: player.speed,
     ));

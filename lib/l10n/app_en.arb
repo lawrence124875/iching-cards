@@ -415,6 +415,8 @@
   },
   "breathSetupNote": "Breathe in for 4 seconds and out for 6 (6 breaths a minute). The soundscape rises and falls with your breath; tones and bells are tuned to 432 Hz.",
   "breathDuration": "Length",
+  "breathCustom": "Custom",
+  "breathLongNote": "For a longer sit, you can turn off the soft bell and keep just the soundscape.",
   "minutes": "{m, plural, =1{1 minute} other{{m} minutes}}",
   "@minutes": {
     "placeholders": {

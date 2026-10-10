@@ -130,14 +130,14 @@ Future<void> _settle(WidgetTester tester, {int frames = 20}) async {
 
 class _NoFiles implements SoundscapeFiles {
   @override
-  Future<String> prepare(SessionSpec spec) async => 'silent.wav';
+  Future<List<AudioPart>> prepare(SessionSpec spec) async => const [AudioPart('silent.wav', Duration(minutes: 3, seconds: 8))];
 }
 
 class _SilentPlayback implements AudioPlayback {
   final _playing = StreamController<bool>.broadcast();
 
   @override
-  Future<Duration?> load(String filePath,
+  Future<Duration?> load(List<AudioPart> parts,
           {required String id, required String title, String subtitle = '', String? artFilePath}) async =>
       const Duration(minutes: 3, seconds: 8);
 

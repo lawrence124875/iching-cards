@@ -115,6 +115,8 @@
   "breathSoundLower": "Abajo: {nature} ({trigram}), {sound}",
   "breathSetupNote": "Inhala 4 segundos y exhala 6 (6 respiraciones por minuto). El paisaje sonoro sube y baja con tu respiración; los tonos y las campanas están afinados a 432 Hz.",
   "breathDuration": "Duración",
+  "breathCustom": "Personalizar",
+  "breathLongNote": "Para sesiones largas, puedes apagar la campana y dejar solo el paisaje sonoro.",
   "minutes": "{m, plural, =1{1 minuto} other{{m} minutos}}",
   "breathBells": "Campana suave al cambiar la respiración",
   "breathBellsSub": "Para seguir con los ojos cerrados",

@@ -415,6 +415,8 @@
   },
   "breathSetupNote": "Tarik napas selama 4 detik dan embuskan selama 6 detik (6 napas per menit). Lanskap suara naik dan turun mengikuti napasmu; nada dan lonceng disetel pada 432 Hz.",
   "breathDuration": "Durasi",
+  "breathCustom": "Atur sendiri",
+  "breathLongNote": "Untuk duduk tenang lebih lama, kamu bisa mematikan lonceng dan hanya mendengar lanskap suara.",
   "minutes": "{m, plural, =1{1 menit} other{{m} menit}}",
   "@minutes": {
     "placeholders": {

@@ -115,6 +115,8 @@
   "breathSoundLower": "Quẻ hạ {trigram} · {nature}: {sound}",
   "breathSetupNote": "Hít vào 4 giây, thở ra 6 giây (6 nhịp mỗi phút). Âm thanh dâng lên và lắng xuống theo hơi thở; tiếng ngân và tiếng chuông được chỉnh theo 432 Hz.",
   "breathDuration": "Thời lượng",
+  "breathCustom": "Tùy chỉnh",
+  "breathLongNote": "Khi ngồi tĩnh lâu, bạn có thể tắt chuông và chỉ giữ âm thanh nền.",
   "minutes": "{m, plural, other{{m} phút}}",
   "breathBells": "Chuông nhẹ khi đổi hơi thở",
   "breathBellsSub": "Có thể nhắm mắt mà vẫn theo được nhịp thở",

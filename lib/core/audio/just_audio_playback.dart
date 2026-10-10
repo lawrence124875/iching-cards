@@ -31,15 +31,27 @@ class JustAudioPlayback implements AudioPlayback {
 
   late final AudioPlayer _player = _handler?.player ?? AudioPlayer();
 
+  /// 每一段開始時，在整個清單中的位置。
+  var _offsets = <Duration>[Duration.zero];
+
   @override
   Future<Duration?> load(
-    String filePath, {
+    List<AudioPart> parts, {
     required String id,
     required String title,
     String subtitle = '',
     String? artFilePath,
   }) async {
-    final d = await _player.setFilePath(filePath);
+    var at = Duration.zero;
+    _offsets = [];
+    for (final p in parts) {
+      _offsets.add(at);
+      at += p.length;
+    }
+    final sources = {for (final p in parts) p.path: AudioSource.file(p.path)};
+    await _player.setAudioSources([for (final p in parts) sources[p.path]!]);
+    final d = at;
+    _handler?.positionOf = () => position;
     _handler?.mediaItem.add(MediaItem(
       id: id,
       title: title,
@@ -71,7 +83,10 @@ class JustAudioPlayback implements AudioPlayback {
   }
 
   @override
-  Duration get position => _player.position;
+  Duration get position {
+    final i = _player.currentIndex ?? 0;
+    return (i < _offsets.length ? _offsets[i] : Duration.zero) + _player.position;
+  }
 
   @override
   Stream<bool> get playingChanges => _player.playingStream;

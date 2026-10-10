@@ -684,6 +684,7 @@ checkout 本 repo → 以 `BUILDS_REPO_TOKEN` sparse-checkout iching-content 的
     }
 ```
   （message 上限 4000：App 限 2000 個字，表情符號在規則裡可能算 2 個字元，留餘裕。）
+- ✅ 2026-10-10 使用者已發布合併後規則（英文 App `feedback` 段原封不動：`allow create: if true; allow read, update, delete: if false;`），0.2.0+47 實機送出測試成功（appVersion 0.2.0+47、locale zh-Hant、platform android）。
 - 查看：Firestore → 資料 → `qg_feedback`。Play「資料安全性」要加：**應用程式活動 → 其他使用者產生的內容**、**個人資訊 → 電子郵件地址**（選填），用途「應用程式功能」，不分享、傳輸加密、可要求刪除（來信）。隱私權政策已補「意見回饋」段與刪除方式。
 
 ### 18.4 待辦

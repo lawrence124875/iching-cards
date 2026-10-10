@@ -75,6 +75,9 @@ void main() {
         final l = lookupAppLocalizations(L10n.language.locale);
         NavigatorState nav() => tester.state<NavigatorState>(find.byType(Navigator).first);
 
+        // 首頁免責聲明不可落在系統導覽列（三鍵列）底下：會員版沒有廣告橫幅時也一樣
+        expect(tester.getBottomLeft(find.text(l.homeDisclaimer)).dy, lessThanOrEqualTo(size.height - padding.bottom));
+
         // 首頁 → 抽一卦 → 翻牌 → 解讀（捲到底）
         await tester.tap(find.text(l.featureDraw));
         await _settle(tester);

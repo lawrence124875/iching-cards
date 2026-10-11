@@ -540,6 +540,7 @@ checkout 本 repo → 以 `BUILDS_REPO_TOKEN` sparse-checkout iching-content 的
 - **功能介紹**：第 1 頁改寫首頁四個按鈕（抽一卦、三枚銅錢、蓍草、卦記），第 3 頁加「或自訂最長 60 分鐘」。
 - **首頁底部文字被三鍵導覽列蓋住**（使用者 Redmi 實機、會員測試版）：Scaffold 有 `bottomNavigationBar` 時會把底部系統列高度從 body 拿掉，而會員版沒有橫幅（`SizedBox.shrink`），於是沒人留這段高度。`AdBanner` 改包 `SafeArea(top: false)`；`adaptive_layout_test` 加斷言（六種螢幕×繁中／阿拉伯文）。
 - 商店說明 11 語同步更新（iching-content `store/listing-*.md`）；版本資訊 `release-notes/0.2.0+48.txt`。
+- **0.2.0+49 全部頁面避開底部導覽列**（使用者回報 +48 解讀頁、音景頁底部仍被三鍵列蓋住）：改在 `app.dart` 的 MaterialApp `builder` 統一包 `SafeArea(top: false, left: false, right: false)`＋墨色底，所有頁面、對話框、底部面板都停在導覽列上方；`AdBanner` 不再自己包 SafeArea。`adaptive_layout_test` 檢查 Navigator 底邊在導覽列上方（改前 12 項失敗）。
 
 ## 15. 字體打包（2026-10-03，0.1.0+17）
 

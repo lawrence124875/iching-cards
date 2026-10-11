@@ -82,7 +82,17 @@ class _IchingAppState extends State<IchingApp> {
       builder: (context, child) {
         final fonts = AppFonts.forLanguage(Localizations.localeOf(context).languageCode);
         AppFonts.current = fonts;
-        return Theme(data: buildTheme(fonts), child: child!);
+        // 底部系統導覽列（三鍵列、手勢條）：所有頁面、對話框、底部面板都停在它上方，不畫在它後面。
+        // 頁面各自留邊容易漏（2026-10-10 實機：首頁、解讀、音景底部被三鍵列蓋住），所以在這裡統一處理；
+        // SafeArea 會把底部高度從下層的 MediaQuery 拿掉，各頁的 SafeArea／readablePadding 不會重複留白。
+        // 頂端狀態列維持無邊框（AppBar 自己處理）；鍵盤開啟時底部高度由 viewInsets 處理。
+        return Theme(
+          data: buildTheme(fonts),
+          child: ColoredBox(
+            color: QianColors.ink,
+            child: SafeArea(top: false, left: false, right: false, child: child!),
+          ),
+        );
       },
       home: const HomePage(),
     );

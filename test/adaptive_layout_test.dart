@@ -75,7 +75,10 @@ void main() {
         final l = lookupAppLocalizations(L10n.language.locale);
         NavigatorState nav() => tester.state<NavigatorState>(find.byType(Navigator).first);
 
-        // 首頁免責聲明不可落在系統導覽列（三鍵列）底下：會員版沒有廣告橫幅時也一樣
+        // 所有頁面都不可畫在系統導覽列（三鍵列）底下：頁面都在 Navigator 裡，Navigator 的底邊要在導覽列上方
+        void aboveNavBar() =>
+            expect(tester.getBottomLeft(find.byType(Navigator).first).dy, lessThanOrEqualTo(size.height - padding.bottom));
+        aboveNavBar();
         expect(tester.getBottomLeft(find.text(l.homeDisclaimer)).dy, lessThanOrEqualTo(size.height - padding.bottom));
 
         // 首頁 → 抽一卦 → 翻牌 → 解讀（捲到底）

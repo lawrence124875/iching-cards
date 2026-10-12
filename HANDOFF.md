@@ -9,13 +9,15 @@
 
 > 已完成的舊紀錄（開發路線、修正日誌、執行計畫、商業模式提案等）已從本檔刪除，需要時看 git 歷史。
 
+> **省 token 原則（使用者 2026-10-12）**：重複、可確定的重活（下載與處理音檔、建置、批次產生檔案）寫成腳本交給 GitHub Actions 跑，輸出放 artifact／Release 或 commit 回分支；對話裡只看 log 摘要（tail／grep），不讀整份輸出。
+
 ### 0.1 版本現況
 - **iching-cards main**：0.2.0+49（commit dcd3ca5）。run #90 一般版、#91 force_premium 皆成功，APK 在 iching-content Releases。11 語內容與介面全部完成；+48、+49 內容見 §14.9。
 - **分支 `claude/project-thread-ywj4gn`**：main 加上 commit **f203ad0**（528Hz 會員選項，132 項測試通過），**尚未合併 main**，預定跟錄音音景一起出 0.2.0+50。
 - **iching-content main**：11 語商店資訊 `store/listing-*.md`、`store/release-notes/0.2.0+48.txt`／`0.2.0+49.txt`（內容相同）、`store/PLAY_CONSOLE.md` §6 指向 +49。
 
 ### 0.2 待辦清單（每項可各開一個新討論串）
-1. **音景改真實錄音（八經卦全部）**：使用者 2026-10-12 決定全部改錄音版，規格見 §0.3。步驟：補齊其餘 6 卦錄音 → 依 §0.3 處理 → App 改讀音檔資產並輸出立體聲 → 加 `assets/audio/CREDITS.md` → 先做試聽檔給使用者確認 → 合併 528（f203ad0）→ 升 0.2.0+50、寫 release notes。
+1. **音景改真實錄音（八經卦全部）**：使用者 2026-10-12 決定全部改錄音版，規格見 §0.3。進度：八卦錄音、處理腳本、資產與 CREDITS 已在分支 `claude/project-thread-7dxapg`，第二版試聽檔等使用者確認。剩下：App 改讀音檔資產並輸出立體聲 → 合併 528（f203ad0）→ 升 0.2.0+50、寫 release notes → 合併 main。
 2. **528Hz 會員選項上線**：程式已在分支（§0.4），隨第 1 項一起出 +50；release notes 與商店說明可提 528Hz。
 3. **回答使用者「音景是依卦象產生的嗎？」並交付塔羅提示詞**：答案見 §0.5；提示詞要點見 §0.6。使用者說「等您確認」，要在錄音品質經使用者認可後才交付。
 4. **Play Console 資料安全性（PLAY_CONSOLE §6 第 8b 項）**：使用者要逐步帶著填，等使用者準備好再開始。
@@ -23,31 +25,21 @@
 6. **iOS**：等 Apple 開發者帳號（§24）。
 
 ### 0.3 錄音音景規格（2026-10-12）
-- **使用者要求**：聲音柔和、有身歷其境感，**不要耳邊近距離的吵雜聲**。試聽回饋：「新的自然很多，只是有些近的聲音有點吵雜」。
-- **授權**：只用 CC0 或公有領域（PD），每個檔案記錄來源、授權、作者，寫入 `assets/audio/CREDITS.md`。
-- **下載**：Wikimedia Commons（網路白名單已加 commons.wikimedia.org、upload.wikimedia.org）。API 要帶 User-Agent，常回 HTTP 429，要重試加延遲；大檔原檔常被擋，改抓轉檔版，例如 `https://upload.wikimedia.org/wikipedia/commons/transcoded/b/b6/X.wav/X.wav.mp3`。
-- **處理方式（計畫）**：每卦取約 56 秒，存 11025 Hz、單聲道、16-bit（每卦約 1.2 MB，全部約 10 MB）。
-  - 包絡限幅／壓縮，壓掉近距離瞬態。試聽版問題：溪流峰值 2.79 對 RMS 0.075；雨聲包絡峰 0.62 對中位數 0.055。
-  - 60 Hz 高通，約 4–5 kHz 柔和低通，讓聲音「變遠」。
-  - 合成立體聲殘響：指數衰減雜訊當 IR，用 numpy FFT 摺積（環境沒有 scipy；ffmpeg、numpy 可用）。
-  - App 端一律輸出立體聲：左右聲道取同一段循環的不同位移（去相關），升頻到 22050 Hz。
-  - 循環沿用 `SynthBedSource.makeLoop(raw, n, m)`，交叉淡化 3 秒（`crossfadeSeconds`）；上卦 40 秒、下卦 50 秒循環。
-  - 合成的長音墊（TonalPad）、鐘聲、雙耳節拍保留，432／528 調音照樣精準；錄音裡的鳥鳴、蟲鳴不調音，使用者已接受。
-- **試聽檔**（第一版，未做柔化）：`/mnt/project-files/audio-samples/recording-trial/` 下的 `kan_new.mp3`／`kan_old.mp3`、`zhen_new.mp3`／`zhen_old.mp3`（2 分鐘、有鐘聲、432 長音墊）。做法：暫時性工具 `RawBedSource` 讀 22050 Hz float32 raw，經 `makeLoop` 再以 `SessionSpec(upper:t, lower:t, minutes:2, bells:true)` 渲染；工具用完已刪。
-- **已選／候選錄音**（Commons 檔名）：
-
-| 卦 | 意象 | 狀態 | 檔案（授權，作者） |
-|---|---|---|---|
-| 坎 | 流水 | ✅ 試聽版已用 | `433589 jackthemurray stream-river-water-up-close.wav`（CC0，jackthemurray，69 秒；偏近，要柔化） |
-| 震 | 遠雷雨 | ✅ 試聽版已用 | `Light Rain Distant Thunder July 5th 2016.wav`（CC0，freesound kvgarlic，110 秒，用轉檔 mp3 下載） |
-| 艮 | 山林鳥 | 候選 | `Dawnchorus-uk.ogg`（PD）、`20090610 0 ambience.ogg`（PD）、`Gentle breeze and birds singing.ogg`（PD）、`Réveil des oiseaux.ogg`（CC0）、`Waidachswald Oberschefflenz Abend 20250616 2005.ogg`（CC0） |
-| 兌 | 湖、水岸 | 候選 | `Waves.ogg`（PD，287 秒）、`On a pebble beach.ogg`（PD，40 秒）、`Water over rocks as tide recedes.ogg`（PD） |
-| 坤 | 大地、夜蟲 | 候選 | `Country night noise.ogg`（PD，34 秒）、`蝉鸣.ogg`（CC0，33 秒）、`Pseudacris triseriata chorus.wav`（CC0）、Spring Peeper Frogs 系列（CC0）；分類「Sounds of grasshoppers and crickets of Northwestern Europe (Odé Collection)」47 檔，授權未查 |
-| 巽 | 林風 | 候選 | `帕卡颱風逼近下的風聲.ogg`（CC0，31 秒，可能太強）、`Gentle breeze and birds singing.ogg`（PD） |
-| 離 | 營火 | 未找到 | 分類「Sounds of burning」（3 檔）未查 |
-| 乾 | 高空、天風 | 未找到 | 需要高空風聲；分類「Sounds of rivers and streams」「Sounds of Sea」也還沒列完 |
-
-其他水聲備用：`Forest lawn creek.ogg`（PD，449 秒）、`Snowmelt flowing into lake at Okanagan Mountain Provincial Park.flac`（CC0）。
+- **使用者要求**：聲音柔和、有身歷其境感，**不要耳邊近距離的吵雜聲**。第一版試聽回饋：「新的自然很多，只是有些近的聲音有點吵雜」。
+- **授權**：只用 CC0 或公有領域（PD）；腳本會檢查授權，來源寫入 `assets/audio/CREDITS.md`（腳本自動產生）。
+- **工具**：`tools/soundscape/build_beds.py`（ffmpeg＋numpy，無 scipy），GitHub Actions `soundscape_beds.yml`（手動執行，產生資產與試聽 mp3 的 artifact，`commit=true` 時 commit 回分支）。
+- **下載**：Wikimedia Commons，帶 User-Agent、429 重試；先抓轉檔 mp3（`.../transcoded/a/ab/X.ogg/X.ogg.mp3`）。這個雲端環境只連得到 Wikimedia（freesound、archive.org 被擋）。
+- **處理流程與參數（第二版，待使用者核准）**，每卦參數在腳本 `BEDS`：
+  1. 解碼成 11025 Hz 單聲道；原檔太短（坤、離）時隨機取 4 秒小段、1 秒等功率交叉淡化接長（`shuffle`）。
+  2. 零相位 FFT 濾波：60 Hz 高通（2 階）、低通 3.2–4.5 kHz（4 階，每卦 `lp`）、1 kHz 以上每八度 −1.5 dB（空氣吸收，聲音變遠）。
+  3. 壓瞬態：5 ms 框均方根，門檻＝中位數 ×1.5、壓縮比 3–5（`ratio`），超過中位數 3 倍一律壓到 3 倍；往前看 30 ms、80 ms 平滑。再以 3 秒尺度把忽大忽小拉平（`ride` 0.5–0.6，增益限 ±6 dB）。
+  4. 合成殘響：指數衰減雜訊 IR（RT60 2.4 秒、預延遲 25 ms、IR 本身低通 2.5 kHz 並每八度 −3 dB），FFT 摺積；乾濕等功率混合，濕 45–55%（`wet`）。
+  5. 殘響後再輕壓一次（壓縮比 3），前 4 秒預處理丟掉，截 56 秒，正規化到均方根 0.04–0.06（`rms`；合成版主音層約 0.06）。結果 5 ms 峰值／中位數約 1.5–2.0（原錄音 3–50）。
+  6. 存 16-bit WAV（每卦 1.2 MB，共 9.9 MB）。App 端（待做）：升頻 22050 Hz，左右聲道取同一循環的不同位移（上卦 0.37、下卦 0.61 個循環）做去相關立體聲；循環沿用 `makeLoop`、交叉淡化 3 秒，上卦 40 秒、下卦 50 秒。
+  - 合成的長音墊、鐘聲、雙耳節拍保留，432／528 調音照樣精準；錄音裡的鳥鳴、蟲鳴不調音（使用者已接受）。
+- **選用錄音**：乾 `Howling wind.ogg`（CC0，40 秒起）；坤 `Country night noise.ogg`（PD，重排接長）；震 `Light Rain Distant Thunder July 5th 2016.wav`（CC0，20 秒起）；巽 `Killiney Hill Storm Floris 20250804 1537.ogg`（CC0，6 秒起）；坎 `Forest lawn creek.ogg`（PD，70 秒起；取代第一版較近的 jackthemurray 溪流）；離 `Dry grass burning in open fireplace.ogg`（PD，重排接長）；艮 `20090610 0 ambience.ogg`（PD，10 秒起）；兌 `17650 thoschi issyk-kul.ogg`（CC0，伊塞克湖岸，60 秒起）。
+- **其他 CC0／PD 備用**：風 `帕卡颱風逼近下的風聲.ogg`、`Breeze birds and geese.ogg`、`Storm in Quebec on August 10, 2023.flac`；火 `Bones breaking wood fire ice crackling.ogg`（瞬態極多）；鳥 `Réveil des oiseaux.ogg`、`Waidachswald Oberschefflenz Abend 20250616 2005.ogg`；水 `Waves.ogg`、`On a pebble beach.ogg`、`433589 jackthemurray stream-river-water-up-close.wav`；夜 `蝉鸣.ogg`、`Pseudacris triseriata chorus.wav`。
+- **試聽檔第二版**：`/mnt/project-files/audio-samples/recording-v2/`，八卦各 60 秒（模擬 App 的 40 秒循環與去相關立體聲）＋兩段合奏（謙、既濟，含近似的長音墊與鐘聲）。第一版在 `recording-trial/`。
 
 ### 0.4 528Hz 會員選項（commit f203ad0，在分支上）
 - 使用者 2026-10-12 決定：**528Hz 是會員選項**，與 432Hz 二選一，不同時播放。

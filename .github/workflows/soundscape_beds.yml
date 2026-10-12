@@ -1,0 +1,44 @@
+name: Build soundscape beds
+
+# 重新產生八經卦錄音音景（tools/soundscape/build_beds.py）：下載 CC0／PD 錄音、柔化、截 56 秒。
+# 輸出 assets/audio/beds/*.wav、assets/audio/CREDITS.md 與 60 秒試聽 mp3，打包成 artifact；
+# commit=true 時直接把資產 commit 回目前分支（[skip ci]）。在 Actions 跑可省對話 token（HANDOFF §0）。
+on:
+  workflow_dispatch:
+    inputs:
+      only:
+        description: '只重做某幾卦（例如 kan,li），留空＝全部'
+        required: false
+        default: ''
+      commit:
+        description: '填 true 把產生的資產 commit 回此分支'
+        required: false
+        default: ''
+
+permissions:
+  contents: write
+
+jobs:
+  beds:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - name: 安裝 ffmpeg、numpy
+        run: |
+          sudo apt-get update -qq && sudo apt-get install -y -qq ffmpeg > /dev/null
+          python3 -m pip install -q numpy
+      - name: 產生音景
+        run: python3 tools/soundscape/build_beds.py --cache build/cache --preview build/preview ${{ inputs.only && format('--only {0}', inputs.only) || '' }}
+      - uses: actions/upload-artifact@v4
+        with:
+          name: soundscape-beds
+          path: |
+            assets/audio/
+            build/preview/
+      - name: Commit 資產
+        if: inputs.commit == 'true'
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898283+github-actions[bot]@users.noreply.github.com"
+          git add assets/audio
+          git diff --cached --quiet || git commit -m "音景資產重新產生 [skip ci]" && git push

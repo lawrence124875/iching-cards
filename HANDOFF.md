@@ -1,7 +1,74 @@
 # HANDOFF — 易經卦卡 App（名稱未定）
 
 > 新對話接續時請先讀本檔。本檔記錄已確定的決策、內容規格與待討論事項。
-> 最後更新：2026-10-07（巴西葡萄牙文、印尼文、泰文商店資訊備妥，見 §21.2）。2026-10-05（英文商店截圖改為渲染 App 真實畫面、修正內容資產清單永不完成的潛在問題 0.2.0+28；run #58（+27）使用者實機確認可正常開啟；修正 +23 起啟動閃退 0.2.0+27；簡中完成 0.2.0+26；英文 30 離～37 家人完成，下一卦 38 睽；英文測試 run #47 建置成功）。2026-10-04（**Play Console 首版設定全部填完，待使用者按「送審 14 項變更」**：封閉測試－外部測試 22 (0.1.0)（run #40 AAB，無廣告無訂閱）、177 國、測試人員名單「測試一」（需 ≥12 人連續 14 天）；應用程式內容全部完成（實填紀錄與差異見 iching-content `store/PLAY_CONSOLE.md` §5，「廣告」聲明已選「是」）；商店資訊：名稱改 ASO 版「謙卦｜易經六十四卦卡・抽卦解卦」、簡短／完整說明 ASO 版（`store/listing-zh-Hant.md`）、圖示、主題圖片、8 張截圖（`store/screenshots-zh-Hant/`，使用者 Redmi 實機截圖＋`make.py` 排版）；AI 素材聲明：主題圖片與截圖 01、02、06、07 標示 AI（Gemini 牌面），圖示不標；類別生活品味、標記：自我成長、冥想、生活品味。商業模式 §21.1；英文 01～24 完成，下一卦 25 无妄）
+> 最後更新：2026-10-12。目前狀態與待辦見 §0；已完成的舊紀錄已刪除（看 git 歷史）。
+
+---
+
+## 0. 目前狀態與待辦（2026-10-12 更新；新對話先讀本節）
+
+> 已完成的舊紀錄（開發路線、修正日誌、執行計畫、商業模式提案等）已從本檔刪除，需要時看 git 歷史。
+
+### 0.1 版本現況
+- **iching-cards main**：0.2.0+49（commit dcd3ca5）。run #90 一般版、#91 force_premium 皆成功，APK 在 iching-content Releases。11 語內容與介面全部完成；+48、+49 內容見 §14.9。
+- **分支 `claude/project-thread-ywj4gn`**：main 加上 commit **f203ad0**（528Hz 會員選項，132 項測試通過），**尚未合併 main**，預定跟錄音音景一起出 0.2.0+50。
+- **iching-content main**：11 語商店資訊 `store/listing-*.md`、`store/release-notes/0.2.0+48.txt`／`0.2.0+49.txt`（內容相同）、`store/PLAY_CONSOLE.md` §6 指向 +49。
+
+### 0.2 待辦清單（每項可各開一個新討論串）
+1. **音景改真實錄音（八經卦全部）**：使用者 2026-10-12 決定全部改錄音版，規格見 §0.3。步驟：補齊其餘 6 卦錄音 → 依 §0.3 處理 → App 改讀音檔資產並輸出立體聲 → 加 `assets/audio/CREDITS.md` → 先做試聽檔給使用者確認 → 合併 528（f203ad0）→ 升 0.2.0+50、寫 release notes。
+2. **528Hz 會員選項上線**：程式已在分支（§0.4），隨第 1 項一起出 +50；release notes 與商店說明可提 528Hz。
+3. **回答使用者「音景是依卦象產生的嗎？」並交付塔羅提示詞**：答案見 §0.5；提示詞要點見 §0.6。使用者說「等您確認」，要在錄音品質經使用者認可後才交付。
+4. **Play Console 資料安全性（PLAY_CONSOLE §6 第 8b 項）**：使用者要逐步帶著填，等使用者準備好再開始。
+5. **上傳 +49（或之後的 +50）到 Play**：正式版發佈 11 語版本；阿拉伯文是否開放中東北非由使用者決定。
+6. **iOS**：等 Apple 開發者帳號（§24）。
+
+### 0.3 錄音音景規格（2026-10-12）
+- **使用者要求**：聲音柔和、有身歷其境感，**不要耳邊近距離的吵雜聲**。試聽回饋：「新的自然很多，只是有些近的聲音有點吵雜」。
+- **授權**：只用 CC0 或公有領域（PD），每個檔案記錄來源、授權、作者，寫入 `assets/audio/CREDITS.md`。
+- **下載**：Wikimedia Commons（網路白名單已加 commons.wikimedia.org、upload.wikimedia.org）。API 要帶 User-Agent，常回 HTTP 429，要重試加延遲；大檔原檔常被擋，改抓轉檔版，例如 `https://upload.wikimedia.org/wikipedia/commons/transcoded/b/b6/X.wav/X.wav.mp3`。
+- **處理方式（計畫）**：每卦取約 56 秒，存 11025 Hz、單聲道、16-bit（每卦約 1.2 MB，全部約 10 MB）。
+  - 包絡限幅／壓縮，壓掉近距離瞬態。試聽版問題：溪流峰值 2.79 對 RMS 0.075；雨聲包絡峰 0.62 對中位數 0.055。
+  - 60 Hz 高通，約 4–5 kHz 柔和低通，讓聲音「變遠」。
+  - 合成立體聲殘響：指數衰減雜訊當 IR，用 numpy FFT 摺積（環境沒有 scipy；ffmpeg、numpy 可用）。
+  - App 端一律輸出立體聲：左右聲道取同一段循環的不同位移（去相關），升頻到 22050 Hz。
+  - 循環沿用 `SynthBedSource.makeLoop(raw, n, m)`，交叉淡化 3 秒（`crossfadeSeconds`）；上卦 40 秒、下卦 50 秒循環。
+  - 合成的長音墊（TonalPad）、鐘聲、雙耳節拍保留，432／528 調音照樣精準；錄音裡的鳥鳴、蟲鳴不調音，使用者已接受。
+- **試聽檔**（第一版，未做柔化）：`/mnt/project-files/audio-samples/recording-trial/` 下的 `kan_new.mp3`／`kan_old.mp3`、`zhen_new.mp3`／`zhen_old.mp3`（2 分鐘、有鐘聲、432 長音墊）。做法：暫時性工具 `RawBedSource` 讀 22050 Hz float32 raw，經 `makeLoop` 再以 `SessionSpec(upper:t, lower:t, minutes:2, bells:true)` 渲染；工具用完已刪。
+- **已選／候選錄音**（Commons 檔名）：
+
+| 卦 | 意象 | 狀態 | 檔案（授權，作者） |
+|---|---|---|---|
+| 坎 | 流水 | ✅ 試聽版已用 | `433589 jackthemurray stream-river-water-up-close.wav`（CC0，jackthemurray，69 秒；偏近，要柔化） |
+| 震 | 遠雷雨 | ✅ 試聽版已用 | `Light Rain Distant Thunder July 5th 2016.wav`（CC0，freesound kvgarlic，110 秒，用轉檔 mp3 下載） |
+| 艮 | 山林鳥 | 候選 | `Dawnchorus-uk.ogg`（PD）、`20090610 0 ambience.ogg`（PD）、`Gentle breeze and birds singing.ogg`（PD）、`Réveil des oiseaux.ogg`（CC0）、`Waidachswald Oberschefflenz Abend 20250616 2005.ogg`（CC0） |
+| 兌 | 湖、水岸 | 候選 | `Waves.ogg`（PD，287 秒）、`On a pebble beach.ogg`（PD，40 秒）、`Water over rocks as tide recedes.ogg`（PD） |
+| 坤 | 大地、夜蟲 | 候選 | `Country night noise.ogg`（PD，34 秒）、`蝉鸣.ogg`（CC0，33 秒）、`Pseudacris triseriata chorus.wav`（CC0）、Spring Peeper Frogs 系列（CC0）；分類「Sounds of grasshoppers and crickets of Northwestern Europe (Odé Collection)」47 檔，授權未查 |
+| 巽 | 林風 | 候選 | `帕卡颱風逼近下的風聲.ogg`（CC0，31 秒，可能太強）、`Gentle breeze and birds singing.ogg`（PD） |
+| 離 | 營火 | 未找到 | 分類「Sounds of burning」（3 檔）未查 |
+| 乾 | 高空、天風 | 未找到 | 需要高空風聲；分類「Sounds of rivers and streams」「Sounds of Sea」也還沒列完 |
+
+其他水聲備用：`Forest lawn creek.ogg`（PD，449 秒）、`Snowmelt flowing into lake at Okanagan Mountain Provincial Park.flac`（CC0）。
+
+### 0.4 528Hz 會員選項（commit f203ad0，在分支上）
+- 使用者 2026-10-12 決定：**528Hz 是會員選項**，與 432Hz 二選一，不同時播放。
+- `session_renderer.dart`：`enum Tuning { a432(432, 1.0), c528(528, 11/9) }`。432 系統的頻率都是 9 的倍數，乘 11/9 仍是整數 Hz，200 秒段落照樣無縫。`SessionSpec.tuning` 預設 a432；快取鍵在非 432 時加 `_t528`，432 的鍵不變。pitch 傳給 bed、`TonalPad`、`_Bell`（鐘聲 = pitch × 432／324）。
+- `synth_bed_source.dart`：水泡、鳥鳴、天籟、蟲鳴頻率都乘 pitch（改錄音後只剩長音墊與鐘聲需要 pitch）。
+- `breath_setup_sheet.dart`：調音選擇晶片，528 對非會員顯示鎖頭並走 `_unlock`；非會員一律重設為 432。
+- ARB（11 語）新增 `breathTuning`、`breathTuningSub`、`breathTuningHz`（`{hz}Hz`，zh 有 `@breathTuningHz` int placeholder）；`breathSetupNote` 拿掉 432Hz 那句。
+- 測試：`test/soundscape_test.dart` 群組「528Hz 調音（0.2.0+50）」。
+
+### 0.5 「音景是依卦象產生的嗎？」的答案（尚未回覆使用者）
+是。抽到的卦，上卦決定一段自然聲（40 秒循環），下卦決定另一段（50 秒循環；上下卦相同時只用一段）。兩段疊在一起，再加上 432 或 528Hz 長音墊和弦、呼吸鐘聲，以及可選的雙耳節拍。
+
+### 0.6 塔羅提示詞（使用者要貼到塔羅 App 的對話）
+- 之前已在本討論串貼過初稿。使用者說「等您確認」，要等錄音品質經使用者認可後再交付更新版。
+- 更新版要加入的經驗：
+  - 壓掉近距離瞬態，聲音要遠、要柔，不要在耳邊吵；
+  - 加殘響，左右聲道去相關，做出身歷其境感；
+  - 只用 CC0／PD，並記錄 CREDITS；
+  - Wikimedia 下載用轉檔網址避開 429；
+  - 合成的調音元素保留，確保頻率精準；
+  - 對應方式依塔羅 App 自己的設計（例如依牌或元素），不要照搬八卦。
 
 ---
 
@@ -202,20 +269,7 @@ Pure untouched nature: no people, no buildings, no houses, no lights, no roads, 
 
 謙卦已產出 1536×2752 版本（仍有山稜偏雄偉、地平線有細小建築的小瑕疵，量產時可重產）。
 
-## 7. 待討論事項
-
-1. App 名稱（→ 決定後再定 applicationId）
-   - 方向：像「鼎泰豐」以吉卦卦名組成；使用者喜歡的意象：象、謙、光明、無限、豐盛。
-   - 候選：謙泰恆、謙益恆、謙益、觀謙益、晉豐、謙光萬象。
-   - 避開：含「泰豐」「恆泰」的組合（與鼎泰豐及其大陸經營公司「恆泰豐」近似）；既濟（初吉終亂）、噬嗑（刑獄之象）不適合作療癒品牌。
-   - 「謙益恆」的可靠出處：《繫辭下》第七章「三陳九卦」，謙、恆、益同列九卦——「謙，德之柄也；恆，德之固也；益，德之裕也」「謙尊而光……恆雜而不厭……益長裕而不設」「謙以制禮……恆以一德……益以興利」。另：恆（雷風）與益（風雷）上下卦互換。注意：網路流傳「益卦由謙卦錯卦／變卦而來」有誤（謙之錯卦為履、綜卦為豫）；「謙益恆三卦」也非傳統固定稱法，品牌故事以《繫辭》九卦為準。
-   - 選定後查 Play 商店與商標撞名，再定 applicationId。
-2. ~~呼吸與音景~~ → 2026-10-02 已實作（0.1.0+8，見第 14 節）。原構想：2026-09-30 決定**納入**（曾一度暫緩，後改回）。構想：八經卦對應八種自然音景（水＝流水、雷＝遠雷雨、風＝林風、火＝營火、山＝山林寂靜、澤＝湖畔、天、地待定），抽到的卦以上下經卦組合音景，搭配 2–3 分鐘引導呼吸。音源待定，只考慮不花錢且可商用的來源：程式合成（雨、風、流水等噪音類效果佳），或 CC0 授權自然錄音；每個音檔需記錄來源與授權。呼吸節奏待定。
-3. 商業模式（免費與付費內容劃分、廣告、訂閱）
-4. ~~牌面採有框版或滿版版~~ → 已決定有框版（見 6.3）
-5. ~~解讀內容的保護~~ → 2026-10-01 決定：解讀內容另放**私人 repo**（見 4.6），本 repo 不放任何解讀內容。
-
-### 安全原則
+## 7. 安全原則
 
 repo 裡永遠不寫任何金鑰、密碼或權杖（含文件、commit 訊息、Issue）。簽署金鑰與 Firebase 設定檔一律存 GitHub Secrets。
 任何 APK／AAB／IPA 都不可上傳到公開 repo 的 Artifacts，一律發佈到私人 repo iching-content 的 Release（見 10.4）。
@@ -254,21 +308,6 @@ repo 裡永遠不寫任何金鑰、密碼或權杖（含文件、commit 訊息�
 ## 10. 開發路線圖（2026-10-01 決定）
 
 原則：「內容」與「程式」並行；App 名稱不必先定（applicationId 只在第一次上傳 Play 時鎖死，個人測試階段先用暫定 ID，封閉測試前定名再改；Firebase 屆時在同一專案新增 App 即可）。每個對話只做內容或程式其中一項，節省 token。
-
-### 10.1 第一階段：手機可裝的最小版本（MVP，只做繁中）
-
-> 2026-10-01：1–5 項初版皆已完成並建置成功（run #1），待使用者實機試用回饋；上傳金鑰 Secrets 待使用者設定（11.4）。
-1. Flutter 專案骨架，依第 9 節架構原則搭好功能註冊表、內容來源介面、起卦策略介面。
-2. CI 自動建置 APK：建立新的上傳金鑰（存 Secrets）；建置時以 `BUILDS_REPO_TOKEN` 從私人 repo 抓內容；**APK 發佈到私人 repo 的 Release**（見 10.4）。
-3. 核心流程：抽一卦 → 翻牌 → 解讀頁（三組隨機一組）→ 詳細頁（經文、六爻）。
-4. 擲錢起卦：變爻、之卦，套用朱熹規則（4.3）。
-5. 牌面與牌背：有框版；尚無圖的卦用佔位圖；尚未寫內容的卦顯示「內容撰寫中」。
-
-### 10.2 第二階段：完整體驗
-呼吸音景、紀錄與收藏、Firebase（Analytics、Crashlytics、Remote Config）、英文版。
-
-### 10.3 第三階段：上架準備
-App 名稱與 applicationId、商業模式（廣告與付費內容）、隱私權政策（本 repo GitHub Pages）、商店資訊、封閉測試（9.2）。
 
 ### 10.4 ⚠️ 建置產物一律發佈到私人 repo 的 Release（永久原則，英文 App 與易經 App 共同適用）
 
@@ -322,17 +361,6 @@ App 名稱與 applicationId、商業模式（廣告與付費內容）、隱私�
 - **授權（2026-10-01 查證）**：商業使用大致可行——Google 服務條款不主張生成內容的所有權，Gemini 生成內容一般可用於商業用途；但條款沒有明文的商業授權，Google 也不提供侵權擔保（可接受）。純 AI 生成圖可能不受著作權保護，他人可能照用（可接受）。Gemini 對話本身回答「可以用」不算依據，以條款為準。
 - **可見浮水印（2026-10-01 已確認）**：Gemini App（Pro 方案）電腦下載的乾卦原圖（1536×2752 JPG）右下角無星芒 → 繼續用 Gemini App 產圖，不必改用 AI Studio。乾卦圖已定案，存於 iching-content `images/raw/01-qian.jpg`。以下為原先查證：
 - **可見浮水印（背景）**：依 Nano Banana Pro 發表時的說明，免費與 Google AI Pro 方案的圖會保留右下角 Gemini 星芒浮水印，Ultra 與 Google AI Studio 則不加。使用者為 Pro 方案，需檢查已產出的圖是否帶星芒。如有，不自行裁切、修除或用牌框遮住，改評估以 Google AI Studio 產圖。所有圖另含不可見的 SynthID 浮水印，不影響使用。
-
-### 10.6 下一步
-1. ~~設定上傳金鑰~~、~~首頁置中與桌面圖示~~（0.1.0+3，run #4 完成）。使用者實機試用中（APK：https://github.com/lawrence124875/iching-content/releases ）。
-2. 乾、坤卦：使用者看過實機後同意開始量產內容，格式沿用；之後有回饋再回頭修。
-3. **內容量產**（2026-10-02 起）：**01～64 中文初稿全部完成**（2026-10-02，run 由 workflow_dispatch 觸發）。01–36 東西相映名人優先檢查已完成（2026-10-02，換 8 項，見 4.5）。經文版本差異（iching-content README）2026-10-02 使用者決定全部照王弼本採用，不再核對。**下一步**：使用者以手機逐卦審閱（另提供審閱用 Excel：64 卦東西相映、今日更動、經文差異，含「我的意見／狀態」欄，存於私人 repo iching-content `review/謙卦_64卦審閱表.xlsx`，不進本公開 repo），使用者回傳意見後修改；未提意見者視為定稿，再依第 12 節開始英文版。以下流程仍適用於修改既有卦：一個對話寫 4～5 卦（單一對話的長度上限，寫不完 62 卦），格式同 `01-qian.json`、`02-kun.json`。`art.prompt` 從 iching-content `prompts/art-prompts.md` 搬入（圖已定案，`art.status` 填「已定案」）。每批完成後更新 iching-content README 進度。流程：clone iching-content（sparse：zh-Hant、prompts、tools）→ 寫 `zh-Hant/NN-slug.json`（不含 `art`）→ `python3 tools/finalize_hexagram.py NN` 自動填入提示詞並檢查結構 → 每完成一卦就 commit＋push。參考經文（簡體，僅比對用、不進 repo）：`curl -sL https://raw.githubusercontent.com/NanBox/PiPiName/master/data/%E5%91%A8%E6%98%93.txt`（容器網路無法連維基文庫）。比對時以 opencc（`pip install opencc-python-reimplemented`）簡轉繁、切出 `NN.md` 給 `REF_DIR`；轉換造成的假差異（于／於、干／幹、斗／鬥、征凶／徵兇、為／爲）可忽略。卦辭不以「卦名：」開頭者（履、同人、艮）腳本會報錯，需人工比對。整批完成後以 workflow_dispatch 觸發建置（只改 .md 不會自動建置）。經文與參考本不同處記在 iching-content README「待人工核對」。
-4. **審閱期間並行的工作（2026-10-02 使用者同意，依序各開一個新對話）**：
-   1. ✅ 2026-10-02 完成（0.1.0+8，見第 14 節）【程式】呼吸音景（§7 第 2 項）：音源採程式合成（不用錄音檔，免授權追蹤）；**已決定（2026-10-02）**：呼吸節奏固定「吸 4 秒、吐 6 秒」（每分鐘 6 次）；時長由使用者選 1／2／3／5 分鐘。音景依抽到的卦以上下經卦組合（§7 第 2 項；天、地兩種音景仍待定，開工時提案）。
-   2. 【程式】✅ 字體打包 2026-10-03 完成（0.1.0+17，見第 15 節）。✅ Firebase（Analytics、Crashlytics、Remote Config）2026-10-03 完成（0.1.0+20，見第 18 節）：因帳號專案數已滿，**改加進智慧聽覺巡航的 Firebase 專案**（第二個 Android App `com.lclab.qiangua`），Secret `GOOGLE_SERVICES_JSON_BASE64` 由使用者建立，CI 每次檢查。✅ run #38（workflow_dispatch）驗證通過：Secret 可解碼、含 `com.lclab.qiangua`，Release 說明「Firebase：已啟用」。
-   3. ✅ 2026-10-03 定稿（見第 17 節）【內容】11 語術語表：64 卦名、八經卦、爻位、易學術語的固定譯法，存 iching-content `glossary/`。使用者審閱無意見。⏳ **下一個程式工作**：App 端套用（改 `lib/l10n/terms.dart` 與 ARB，§16、§17）。
-   4. ✅ 2026-10-03 完成（0.1.0+19，run #36，見第 16 節）【程式】介面翻譯：Flutter 多語系架構（ARB），全部介面文字移到 ARB，已有繁中＋英文介面；依 §12，英文內容完成前不開放。
-5. 程式待辦（有空檔或回饋時）：~~術語表套用到 App~~（0.1.0+21 完成）；牌面細節；上架前：隱私權政策與 Play「資料安全性」表單要寫明 Firebase 收集項目（§18）。
 
 ## 11. 程式現況（2026-10-01 骨架完成）
 
@@ -425,7 +453,7 @@ checkout 本 repo → 以 `BUILDS_REPO_TOKEN` sparse-checkout iching-content 的
 
 ## 14. 呼吸音景（2026-10-02 加入，0.1.0+8）
 
-**已決定**（§7 第 2 項、§10.6 第 4 項）
+**已決定**
 - 音源全部**程式合成**，不用錄音檔（免授權追蹤）。呼吸節奏固定**吸 4 秒、吐 6 秒**（每分鐘 6 次）；時長由使用者選 1／2／3／5 分鐘。
 - 入口：解讀頁「以此卦靜心呼吸」（卦記回看時也有）→ 設定面板（時長、換氣鈴聲開關）→ 練習頁。不放首頁（音景依抽到的卦決定）。
 - 音景＝本卦上卦＋下卦兩種經卦音景疊加（八純卦只用一種）。之卦不參與。
@@ -459,63 +487,6 @@ checkout 本 repo → 以 `BUILDS_REPO_TOKEN` sparse-checkout iching-content 的
 - `test/soundscape_test.dart`：節奏與時間軸、音量曲線連續、鈴聲數量、八種音景數值與音量範圍、可重現、循環接縫、WAV 格式。
 
 **待使用者實機回饋**：各音景好不好聽（特別是天、地兩個提案）、音量平衡、鈴聲大小、第一次合成等待時間（5 分鐘的音檔最久）。
-
-### 14.1 0.1.0+9 實機回饋修正（2026-10-02）
-
-- **起卦頁標題**：抽一卦、三枚銅錢起卦兩頁上方不再顯示標題（首頁按鈕已寫），只留返回鍵。
-- **想問的事**：翻牌後（擲錢則是擲完六次後）不能再寫；已填的問題仍顯示。存進卦記時照舊可改。
-- **滿版看圖**：下方提示只留「點一下返回」（點兩下切換完整畫面仍可用，不另提示）。
-- **記下這一卦**：面板改為可捲動，鍵盤升起時「儲存」不會被擋住；點空白處收起鍵盤，鍵盤右下角為「完成」。App 內所有輸入框點外面都會收起鍵盤（`onTapOutside`）。
-- **卦記提醒設定失敗**：原因判斷為 release 版 R8 壓縮砍掉 Gson 泛型資訊，`zonedSchedule` 拋例外（智慧聽覺巡航早已加同樣規則）。`patch_android.sh` 加入 flutter_local_notifications／Gson 的 ProGuard 規則。另外：已允許通知就不再跳權限對話框；啟動時初始化失敗會在排程時重試；失敗時提示會帶上原因（未允許通知，或錯誤訊息），方便回報。⚠️ 待使用者實機確認是否修好；若仍失敗，請把提示裡的原因文字傳回來。
-- **通知小圖示**：新增單色謙卦卦象 `ic_stat_qian`（`branding/android/res/drawable-*`，`raw/keep.xml` 防止被資源壓縮移除），卦記提醒與音景播放通知共用。
-- **呼吸音景**：
-  - 換氣鈴聲預設**關閉**。
-  - 練習頁下方改為三個細金線圓形按鈕：看圖／暫停・繼續（較大）／結束，各附小字。
-  - 「看圖」開啟此卦滿版牌面圖，音景持續播放，畫面下方疊一個小呼吸圓（吸／吐），點一下返回練習頁。完成後也可「再看一次卦圖」。
-  - **背景播放**：離開 App 或關閉螢幕仍繼續播放；通知列與鎖定畫面顯示「卦名・呼吸音景」、音景名稱與時長、牌面圖，可暫停／播放，畫面同步。播完或離開練習頁即停止並移除通知。
-  - 實作：`AudioPlayback` 改為全 App 單一播放器（`Services.breath.playback`，套件只支援單一播放器），新增 `stop()`、`playingChanges`、`completed`；`main.dart` 先 `JustAudioPlayback.initBackground()`（失敗只是沒有通知控制）。`ContentSource.cardArtBytes()` 提供鎖定畫面用的圖（寫到暫存 `art_NN.webp`）。
-  - Android 設定（`patch_android.sh`）：前景服務權限、`AudioService` 與 `MediaButtonReceiver`、MainActivity 改繼承 `AudioServiceActivity`、`launchMode=singleTask`（AudioServiceActivity 共用引擎，點通知若另建第二個 Activity 畫面會卡住，智慧聽覺巡航 2026-09-29 的教訓）。
-  - iOS 上架時：Info.plist 加 `UIBackgroundModes` → `audio`。
-
-### 14.2 0.1.0+10 柔和版、432Hz 調音、雙耳節拍（2026-10-02）
-
-使用者回饋：以卦生成的音景不錯，希望更柔和放鬆；詢問 528Hz／432Hz／7.83Hz。討論後**選定 432Hz**（兩套調音並存會互相衝突，只取一個基準）。
-
-- **研究現況（與使用者確認過的說法）**：528Hz「修復 DNA」、432Hz「與宇宙共振」之類說法沒有可靠研究支持，只當美感上的調音選擇；7.83Hz（舒曼共振）低於人耳可聽範圍，只能以雙耳節拍呈現，需戴耳機，相關研究結果不一；證據最紮實的是每分鐘 6 次的慢呼吸本身（HRV）。
-- **⚠️ 文案原則（Google Play 健康宣稱政策）**：App 與商店頁只可描述做法（「以 432Hz 調音」「雙耳節拍 7.83Hz（需耳機）」），**不可寫任何療效**（修復、療癒 DNA、降低焦慮、提升腦波等）。
-- **柔和化**：各音景削弱高頻（雨改為帶通 400–2500Hz、樹葉與劈啪改為帶通、風的中心頻率降低）；突發聲壓低並放緩（雷聲峰值 0.4→0.25、起音 1–2 秒、間隔 12–20 秒；劈啪峰值 0.45→0.2、頻率減半；拍岸 0.22→0.12 並緩起；鳥鳴更少更輕）；陣風、水流變化放慢；最後整體再過 5kHz 低通；呼吸起伏深度 0.4→0.35。
-- **432Hz 調音**：天的泛音長鳴基頻 98Hz→108Hz（432÷4，泛音含 216、324、432Hz）；鈴聲吸氣 432Hz、吐氣與結束 324Hz（純四度），起音放緩、餘音拉長、音量降低。
-- **雙耳節拍**：設定面板新增開關「雙耳節拍 7.83Hz」（預設關閉）。開啟時輸出立體聲：左耳 216Hz、右耳 223.83Hz 的輕柔正弦，只隨準備淡入、結束淡出，不跟呼吸起伏。立體聲檔案大一倍（5 分鐘約 27 MB）。
-- 快取鍵改為 `v2`，舊版音檔自動重新生成。
-
-### 14.3 0.1.0+12 版面修正（2026-10-02 實機截圖回饋，Redmi 三鍵導覽列）
-
-- **卦記單筆頁**：110 寬的牌面縮圖原本直接排版，字擠成一團（英文換行、上下經卦壓到「想問的事」）。改為以 240 寬原尺寸排版後 `FittedBox` 等比縮小。「當時的解讀」改成小標＋下一行標題，不再斷成「宜日／中」。
-- **底部被系統導覽列擋住**：App 是 edge-to-edge（看圖頁離開時設 `SystemUiMode.edgeToEdge`），清單底部要自己讓出導覽列。解讀頁、經文詳細頁、卦記列表、卦記單筆頁的 ListView 底部 padding 加上 `MediaQuery.viewPaddingOf(context).bottom`；「記下這一卦」面板同樣處理。⚠️ 之後新增可捲動頁面或底部面板都要照做。
-- **呼吸音景設定面板**：內容超過螢幕高度時「開始」被截掉。改為可捲動並讓出導覽列；兩個開關改 dense、雙耳節拍說明縮短。
-
-### 14.4 0.1.0+13 鎖定畫面控制、桌面圖示（2026-10-02 實機截圖回饋）
-
-- **鎖定畫面與通知列沒有暫停、停止鍵**（Redmi／MIUI）：just_audio_background 只送出預設按鈕，MIUI 媒體卡片只顯示進度條。改為直接用 audio_service：`lib/core/audio/breath_audio_handler.dart`（`BreathAudioHandler`）包住 just_audio 播放器，明確指定按鈕「暫停／播放、停止」並設為精簡按鈕（`androidCompactActionIndices [0, 1]`），播放狀態隨播放器事件同步；`mediaItem` 帶 duration 顯示進度。
-  - 通知或鎖定畫面按「停止」→ `AudioPlayback.stoppedExternally` → 練習頁顯示「已結束・已從通知列停止」。App 自己停止（播完、離開頁面）走 `stopFromApp()`，不觸發此事件。
-  - 從最近使用列表滑掉 App → `onTaskRemoved` 停止並收掉卡片（智慧聽覺巡航的教訓）。
-  - `main.dart` 的 `JustAudioPlayback.initBackground()` 改為 `AudioService.init`（5 秒逾時；失敗退回一般播放器，只是沒有通知控制）。Android 設定沿用 14.1（AudioService、AudioServiceActivity、singleTask），不必改。
-- **桌面圖示比 icon-1024.png 擁擠**：自適應圖示的可見範圍約為前景畫布 66.7%，原本卦卡高度為畫布 60%，在桌面上佔滿可見高度約 89%。`draw_icon.py` 改為 52%（約 78%，與 icon-1024.png 比例相同），重新產生各密度 `ic_launcher_foreground.png`；傳統圖示外觀不變。MIUI 可能快取舊圖示，若沒變可重新開機或移除重裝。
-- **0.1.0+14 再改：無框滿版**（使用者看預覽圖後選 A 版：卦象約佔可見範圍 62%；B 版 72% 在圓形桌面會切到四角，未採用）。之後又預覽「A＋細金邊」（圓角方形邊在圓形桌面會被切斷；圓形邊在方形桌面四角留白），使用者確認**維持 A 原樣、不加金邊**。`draw_icon.py` 改寫為一次產生各密度前景、傳統圖示與 `icon-1024.png`。
-
-### 14.6 0.1.0+15 鎖屏與通知中心沒有暫停／停止鍵的真正原因（2026-10-02）
-
-- 使用者確認：智慧聽覺巡航在同一支小米手機上**也一樣沒有按鈕**，所以不是按鈕組合（+13 的推測不成立）。
-- 下載 run #30 的 APK 檢查資源表：裡面**完全沒有** audio_service 的 `audio_service_pause／play_arrow／stop` 等按鈕圖示。audio_service 是用名稱字串查這些圖示，release 版資源壓縮（shrinkResources）判斷沒人用就刪掉，按鈕圖示變成 0，小米卡片就整排不顯示。
-- 修法：`branding/android/res/raw/keep.xml` 的 `tools:keep` 加上 `@drawable/audio_service_*`。
-- ⚠️ **智慧聽覺巡航要做同樣修正**（它的 raw/keep.xml 或 res/raw 加 `tools:keep="@drawable/audio_service_*"`），需在英文 App 對話處理（本對話的權杖只能寫 iching-cards）。
-- ✅ 2026-10-02 使用者實機確認（小米）：鎖屏與通知中心已出現暫停、停止鍵；測試提醒準時跳出，桌面圖示右上角也出現數字角標。卦記提醒問題（ProGuard＋準時模式）結案。
-- 卦記單筆頁「回顧提醒」下方曾有暫時按鈕「測試：1 分鐘後提醒」，用來實機驗證提醒與桌面圖示角標。✅ 0.1.0+21 已移除（含 ARB 的 `journalTestReminder*`）。
-
-### 14.7 0.1.0+16 首頁一屏顯示完（2026-10-02）
-
-- 使用者回報：小米上首頁要往下滑才看得到「內容僅供自我探索與娛樂參考」（非刻意設計，是內容高度超過螢幕）。
-- 修法：首頁不再捲動。主內容（牌背、標題、按鈕）放進 `FittedBox(scaleDown)`，螢幕矮或系統字體放大時等比縮小；免責聲明移出主內容，固定貼在畫面底部，字級 13→11、顏色略淡。
 
 ### 14.8 0.2.0+44 432Hz 長音墊、雙耳節拍兩組頻率、功能介紹、分享（2026-10-06）
 
@@ -699,80 +670,7 @@ checkout 本 repo → 以 `BUILDS_REPO_TOKEN` sparse-checkout iching-content 的
 - ✅ 2026-10-10 使用者已發布合併後規則（英文 App `feedback` 段原封不動：`allow create: if true; allow read, update, delete: if false;`），0.2.0+47 實機送出測試成功（appVersion 0.2.0+47、locale zh-Hant、platform android）。
 - 查看：Firestore → 資料 → `qg_feedback`。Play「資料安全性」要加：**應用程式活動 → 其他使用者產生的內容**、**個人資訊 → 電子郵件地址**（選填），用途「應用程式功能」，不分享、傳輸加密、可要求刪除（來信）。隱私權政策已補「意見回饋」段與刪除方式。
 
-### 18.4 待辦
-- ✅ **2026-10-03 run #38 解決**：使用者重設 Secret 後手動重建，CI 檢查通過，APK 已含 Firebase（Release 說明「Firebase：已啟用」）。以下為 run #37 當時的紀錄：run #37 Secret 讀不到。程式與 CI 都已通過（analyze、test、release 建置成功，沒有 Firebase 也能正常執行），但 workflow 收到的 `GOOGLE_SERVICES_JSON_BASE64` 是空的，所以這個 APK 不含 Firebase。請使用者到 iching-cards → Settings → Secrets and variables → **Actions** → 「Repository secrets」確認：名稱完全是 `GOOGLE_SERVICES_JSON_BASE64`、建在 iching-cards（不是 english-learning-app）、不是放在 Environment／Dependabot／Codespaces 分頁。改好後到 Actions → Build Android APK → Run workflow 手動重建；Release 說明應顯示「Firebase：已啟用」，若內容不對，CI 會以 annotation 說明（例如沒有 `com.lclab.qiangua`）。容器權杖無法列出 Secret 名稱（403），只能由建置結果判斷。
-- ⏳ 使用者實機確認：Firebase 主控台 → Analytics → **DebugView** 或「即時」報表（選謙卦 App）看得到 `qg_reading_shown` 等事件（一般報表要等 24 小時）；Crashlytics 頁面在第一次啟動回報後會從「等待中」變成正常。
-- 上架前：隱私權政策（GitHub Pages）與 Play「資料安全性」表單要寫明 Analytics（應用程式互動、裝置 ID）、Crashlytics（當機紀錄、診斷資料）；Firebase Analytics 會自動加入廣告 ID 權限（`AD_ID`），Play 的「廣告 ID」聲明要勾選（日後接 AdMob 也需要）。
-- 是否加「不分享使用統計」的開關：上架前與商業模式一起討論。
-
-## 19. 全力執行計畫（2026-10-03 使用者決定）
-
-### 19.1 使用者的決定
-- **所有待審閱項目都沒有意見**：64 卦中文內容（`review/謙卦_64卦審閱表.xlsx`）、術語表皆視為**定稿**。上架後累積一段時間的使用者回饋，再整體檢視修正。
-- **多語言無人審閱**：使用者無法審閱外語，也沒有可協助的母語者 → 翻譯品質完全由 Claude 負責。原則：
-  1. 嚴格套用術語表（`glossary/glossary.json`），不自創譯名。
-  2. 經文參考公有領域正統譯本（英：Legge 1882；德：Wilhelm 1924），名句從原著語言直接翻譯（§12）。
-  3. **不可有不雅、粗俗、雙關歧義或宗教／政治冒犯的字詞**；每批完成後以回譯抽查，並逐語檢查敏感詞（例如卦名意譯在當地語言的俚俗含義）。
-  4. 泰文、阿拉伯文原規劃的母語者校閱改為：Claude 加強自我檢查（回譯＋敏感詞），在 iching-content README 記錄檢查結果；風險較高之處寧可用保守直譯。阿拉伯文、印尼文市場對占卜類內容較敏感（§12），上架前再評估是否開放。
-- **Claude 自行依序執行以下所有工作項目**，需要使用者動手、下載測試或做決定時，在對話中明確列出。
-
-### 19.2 執行順序（每個對話做一項或一批，完成後更新本節勾選）
-1. ✅ 2026-10-03（0.1.0+21）【程式】術語表套用到 App（§17）；移除測試提醒鈕；CI 加建 **AAB**（與 APK 同一個 iching-content Release，§10.4）。
-2. 🔶 2026-10-03 Claude 部分完成，等使用者操作（見第 20 節）【上架準備，繁中先上】**先用繁中版跑封閉測試**，讓 14 天的計時盡早開始，翻譯同時進行（§12 上線原則：未完整翻譯的語言不開放，繁中可單獨上架）：隱私權政策（本 repo GitHub Pages，寫明 Firebase Analytics／Crashlytics 收集項目）、Play 商店資訊文案（繁中）、截圖規劃、Data safety 與內容分級填答說明、廣告 ID 聲明（§18.4）。
-3. ✅ 2026-10-03 使用者定案（§21.1：廣告＋月訂／年訂）【決定】商業模式（免費／付費內容、廣告、訂閱；§7 第 3 項）：選定前封閉測試先以全免費版進行。
-4. ✅ 2026-10-05 完成【內容】英文版 64 卦（重新為英文讀者撰寫，非逐句翻譯；§12）：`check_translation.py en` 64 卦 OK、約 15.1 萬字；`en.contentReady = true`（0.2.0+24，run #53 正式版）；回譯抽查與名句來源記在 iching-content `en/README.md` §5。英文商店資訊、主題圖片已完成，截圖等使用者實機截圖（§21.2）。
-5. 🔶【內容】其餘 9 語分批（簡中 → 日 → 韓 → 越 → 西 → 葡 → 印尼 → 泰 → 阿），各語字型（§15）與 ARB 介面同步。
-   - ✅ 2026-10-05 **簡中**（0.2.0+26，run #56 ✅）：iching-content `tools/to_hans.py` 自繁中轉出 64 卦（OpenCC tw2sp＋「乾」鎖定＋大陸譯名＋標點，說明 `zh-Hans/README.md`；**繁中改動後要重跑**）；`app_zh_Hans.arb` 同一函式轉出；`AppLanguages.zhHans`（contentReady true）；字型見 §15「簡中補字」。⏳ 使用者實機確認（手機語言改簡體中文，或 force_lang=zh-Hans）。
-   - ✅ **日文**（2026-10-05；**64 卦完成**，0.2.0+30 起 `contentReady: true`，run #63 ✅）：App 端（0.2.0+29）：`app_ja.arb`、`AppLanguages.ja`、JP 字型（§15）、牌面卦序用漢數字「第十五卦」、CI／import／pubspec 加 `ja`。內容格式 iching-content `ja/README.md`（**經文用書き下し文**、爻階段固定譯法、新字体；`check_translation.py ja` 擋舊字体／差別語／保證語）；64 卦全數通過檢查（約 31 萬字）。待辦：① ~~日文母語者審閱~~（同上，由 Claude 回譯檢核負責）；② ✅ 東西相映重複名句已四語一起換（2026-10-05：37 家人→塞內卡《書信》6.5、41 損→伊比鳩魯殘篇 135；09、14 保留原句）；③ 日文商店資訊已備妥（§21.2），待使用者上傳。
-   - ✅ **韓文**（2026-10-05；**64 卦完成**，0.2.0+33 起 `contentReady: true`）：App 端（0.2.0+32）：`app_ko.arb`、`AppLanguages.ko`、KR 字型（§15）、牌面卦序「제15괘」（ARB `cardOrdinal`）、CI／import／pubspec 加 `ko`、截圖測試加韓文卦記範例。內容格式 iching-content `ko/README.md`（**經文用現代韓文翻譯**、漢字只放括號內、半形標點、爻階段固定譯法；`check_translation.py ko` 擋括號外漢字／日式標點／비하어／保證語／무속字眼）；64 卦全數通過檢查（約 38.5 萬字），每卦回譯抽查與保守處理記在 ko/README §5。待辦：① ~~韓文母語者審閱~~（使用者沒有母語審閱者，見 §19.4「翻譯原則」，由 Claude 回譯檢核負責）；② 使用者實機測試（只看功能與版面）（手機語言改韓文，或 Run workflow `force_lang=ko`）；③ ✅ 韓文商店資訊已備妥（§21.2），待使用者上傳。run #66（0.2.0+33）✅：Release `謙卦 0.2.0+33（run 66）`（tag `iching-android-run66`，APK＋AAB，**測試廣告**、訂閱尚未開放）。
-   - ✅ **越南文**（2026-10-05；**64 卦完成**，0.2.0+35 起 `contentReady: true`，run #68）：使用者確認經文**只放現代越南文意譯（dịch nghĩa）**、不放漢越音讀（phiên âm），漢字原文由 App 顯示在上方。App 端 0.2.0+34：`app_vi.arb`（App 名「Quẻ Khiêm」、副標「Kinh Dịch · Bộ thẻ 64 quẻ」；擲錢頁爻位用「Hào 1…6」，「Hào sơ／thượng」太長會被截斷）、`AppLanguages.vi`（0.2.0+34 時 contentReady false）、CI／import／pubspec 加 `vi`、截圖測試加越南文卦記範例；字型見 §15。內容格式 iching-content `vi/README.md`，進度看該檔 §5。
-   - ✅ **西班牙文**（2026-10-06 完成，0.2.0+38 起開放）：App 端 0.2.0+37：`app_es.arb`（App 名沿用「Qiangua」、副標「I Ching · 64 cartas de hexagramas」；中性拉丁美洲／西班牙皆通用的 tú 體、避免性別化形容詞（「cuando quieras」「Tu suscripción está activa」）；牌面卦序「N.º 15」；引號 “ ”）、`AppLanguages.es`（0.2.0+38 起 contentReady **true**）、CI sparse-checkout／import／pubspec 加 `es`、截圖測試加西文卦記範例。字型不用加（¿¡ñáéíóúü 都在 TC 子集的 Latin-1 範圍）。內容格式 iching-content `es/README.md`、`check_translation.py es`、`tools/es_fill.py`。⚠️ 西文術語**一律照術語表** `terms.es`（彖＝Comentario al Dictamen、凶＝infortunio、无咎＝sin falta、貞＝perseverancia recta、變爻＝línea mutante、本卦＝hexagrama original；ARB sectionForYou＝Para ti, ahora），第一批曾自創用字已改回。草稿流程同越南文：scratchpad 寫內容 JSON → `python3 tools/es_fill.py NN 草稿`。進度：**64 卦全部完成**（2026-10-06，約 15.2 萬字，`check_translation.py es` 全數通過；每卦處理要點與回譯抽查在 es/README §6）。尚缺：無。下一語言：pt-BR（見下一項）。
-   - ✅ **巴西葡萄牙文**（2026-10-06 完成，0.2.0+40 起開放）：App 端 0.2.0+39：`app_pt.arb`（você 體；App 名「Qiangua」、副標「I Ching · 64 cartas de hexagramas」；避開巴西粗俗字 gozar／pau／saco／rapariga 等）、`AppLanguages.pt`（代碼 `pt-BR` 與術語表一致、locale `pt`、contentFolder `pt-BR`，`resolve` 把任何 `pt` 手機（含葡萄牙）對到 pt-BR；0.2.0+40 起 contentReady **true**）、CI sparse-checkout／import／pubspec 加 `pt-BR`、截圖測試加葡文卦記範例、l10n_test 加葡文測試。內容格式 iching-content `pt-BR/README.md`、`check_translation.py pt-BR`（粗話與禁用字清單在 BANNED['pt-BR']）、`tools/pt_fill.py`。進度：**64 卦全部完成**（2026-10-06，約 14.9 萬字，`check_translation.py pt-BR` 全數通過；工作分支 `pt-BR-wip` 已快轉併入 iching-content main；每卦處理要點與回譯抽查在 pt-BR/README §6）。版本資訊 `0.2.0+40.txt` 已寫（各語提到葡文版；葡文商店資訊未做，所以還沒有 `<pt-BR>` 段）。✅ 2026-10-07 已備妥（§21.2），待使用者上傳：葡文商店資訊（listing-pt-BR、主題圖片、截圖）。下一語言：印尼文 id。
-   - ✅ **印尼文 id**（2026-10-06 完成，0.2.0+41 起開放）：App 端 0.2.0+41（run #74 ✅）：`app_id.arb`（標準印尼文 kamu 體；App 名「Qiangua」、副標「I Ching · 64 Kartu Heksagram」；首頁標語不用 meramal，寫「bukan untuk menebak nasib」；術語照術語表：garis berubah、heksagram utama、heksagram hasil perubahan、Putusan；提醒時間「pukul {hour} malam」）、`AppLanguages.id`（代碼／locale／contentFolder 皆 `id`，contentReady **true**）、CI sparse-checkout／import／pubspec 加 `id`、截圖測試加印尼文卦記範例、l10n_test 加印尼文測試。內容格式 iching-content `id/README.md`（kamu 體；君子＝orang budiman；上帝不用 Tuhan／Allah；中國寫 Tiongkok；酒寫 jamuan 並註明非勸酒）；`check_translation.py id`（禁用字在 BANNED['id']）、`tools/id_fill.py`。進度：**64 卦全部完成**（2026-10-06，約 13.1 萬字，`check_translation.py id` 全數通過；工作分支 `id-wip` 已快轉併入 iching-content main；每卦處理要點與回譯抽查在 id/README §6）。保守處理重點：18 蠱、42 益、54 歸妹東西相映不沿用英文版馬克思引文（改歌德、愛比克泰德、塞內卡）；婚姻／性別爻、跛眇等身體爻皆改寫並加古代比喻說明；征伐爻（63 既濟、64 未濟伐鬼方）意象不寫戰事；60 節、61 中孚、64 未濟的飲酒意象改寫或註明非勸酒。版本資訊 `0.2.0+41.txt` 已寫（各語提到印尼文版；印尼文商店資訊未做，所以還沒有 `<id>` 段）。✅ 2026-10-07 已備妥（§21.2），待使用者上傳：印尼文商店資訊（listing-id、主題圖片、截圖）。HANDOFF §12 提醒印尼市場對占卜類內容較敏感，上架前使用者可再評估。下一語言：泰文 th。
-   - ✅ **泰文 th**（2026-10-06 完成，0.2.0+42 起開放）：App 端 0.2.0+42（run #76 ✅；run #75 編譯與測試通過，但上傳 Release 時 GitHub 回 500，留下一個 run75 草稿 Release 可刪）：`app_th.arb`（讀者稱 คุณ；App 名「Qiangua」、副標「อี้จิง · ไพ่ 64 เฮกซะแกรม」；首頁標語寫「ไม่ได้มีไว้ทำนายอนาคต」；提醒時間直接寫「เวลา 20.00 น.」，不用 {hour}（泰文 12 小時制晚上 8 點是 สองทุ่ม，無法由 hour12 的 8 組出））、`AppLanguages.th`（代碼／locale／contentFolder 皆 `th`，contentReady **true**）、Noto Sans/Serif Thai 字型（§15）、CI sparse-checkout／import／pubspec 加 `th`、截圖測試加泰文卦記範例、l10n_test 加泰文測試。內容格式 iching-content `th/README.md`（讀者稱 คุณ、不用 ครับ／ค่ะ；君子＝ผู้มีคุณธรรม、大人＝ผู้ยิ่งใหญ่、小人＝คนใจแคบ；**王室**：王／天子／大君寫 ผู้ปกครอง／ผู้นำสูงสุด，不用 กษัตริย์ 與王室敬語；上帝不用 พระเจ้า；酒寫 อาหารและเครื่องดื่ม 並註明非勸酒）；`check_translation.py th`（子字串比對，禁用字在 BANNED['th']，以字元計數）、`tools/th_fill.py`。進度：**64 卦全部完成**（2026-10-06，約 70.1 萬字元，`check_translation.py th` 全數通過；工作分支 `th-wip` 已快轉併入 iching-content main；回譯抽查在 th/README §6）。用字補充：尊位寫 ตำแหน่งอันมีเกียรติ（避開 ทรง）、獻給上位者不用 ถวาย（寫 มอบ）、祭天不用 บูชา、鬼神寫 พลังที่มองไม่เห็น、命運類引文避開 โชคชะตา、ชะตากรรม（fata 寫 วิถีของสรรพสิ่ง）、有力寫 มีพลัง（避開 ทรงพลัง）、宮人寫 ผู้คนในที่พำนักของผู้ปกครอง（不用 วัง、ราชสำนัก）；25–32 補充：「中道」避開佛教詞 ทางสายกลาง（寫 วิถีแห่งความพอดี、รักษาความสมดุล）、荒地避開 รกร้าง（ดินรกร้าง 會中 นรก）、旭日寫 ดวงอาทิตย์（避開 พระอาทิตย์）、มึนเมา 為禁用字（富蘭克林 drink not to elevation 寫 ลอยเคลิ้ม）；33–40 補充：tyrannous 寫 การกดขี่（避開禁用字 เผด็จการ）、Aufklärung 寫 ความเรืองปัญญา（避開佛教味 การรู้แจ้ง）、商朝寫 ยุคซาง（避開 ราชวงศ์）、箕子佯狂寫 ทำทีว่าไม่รู้เรื่องรู้ราว（避開 บ้า）、載鬼一車寫 ภาพหลอน、赦過宥罪寫 ให้อภัย／ยกโทษ（避開王室赦免 อภัยโทษ）、fortune 寫 โชค；家人、睽的男女分工與蹇的「跛行」本義皆加古代比喻說明；41–48 補充：中行寫 ดำเนินตามวิถีแห่งความพอดี、帝寫 ฟ้า、遷國寫 ย้ายถิ่นฐานของแคว้น、宗廟寫 ศาลบรรพบุรุษ（不用 วัด）、天命寫 วิถีของฟ้า、宮殿石階改為古老建築石階、臀无膚與劓刖只作古代比喻不寫傷、困于酒食註明非勸酒、蘇格拉底判死寫 ถูกตัดสินลงโทษถึงชีวิต；49–56 補充：湯武革命寫 เปลี่ยนแปลงยุคสมัย（避開泰文常指政變的 ปฏิวัติ），**49 革東西相映泰文版改用奧理略《沉思錄》7.18**（洛克 §225 談人民推翻統治者，泰國政治語境風險高）；得妾、娣、須寫 หญิงผู้มีฐานะรองในบ้าน／น้องสาวที่ติดตาม／ผู้ติดตามที่ฐานะต่ำ（不用 อนุภรรยา）；匕鬯、宗廟社稷寫 เครื่องดื่มหอมสำหรับพิธีเซ่น（註明非勸酒）、ศาลบรรพบุรุษและแท่นเซ่นไหว้ของแผ่นดิน；婦孕不育、婦三歲不孕只作古代比喻、不評判任何人；刲羊无血不寫宰殺；54 沿用塞內卡替換馬克思；57–64 補充：史巫寫 ผู้จดบันทึกและผู้ประกอบพิธี（避開占卜）、渙卦廟改為村中 ศาลากลางหมู่บ้าน、60 節宿醉意象改為購物與熬夜、61 中孚好爵與 64 未濟飲酒寫 เครื่องดื่ม／อาหารและเครื่องดื่ม 並註明非勸酒、63／64 伐鬼方意象不寫戰事、東鄰殺牛不寫宰殺；說卦＝บทอรรถาธิบายไตรแกรม、序卦＝บทลำดับเฮกซะแกรม；62 小過洛克引文照錄）。版本資訊 `0.2.0+42.txt` 已寫（各語提到泰文版；泰文商店資訊未做，所以還沒有 `<th>` 段）。✅ 2026-10-07 已備妥（§21.2），待使用者上傳：泰文商店資訊（listing-th、主題圖片、截圖）；術語表泰文仍標 needsNativeReview，上架前宜請母語者校閱。下一語言：阿拉伯文 ar。
-   - ✅ **阿拉伯文 ar**（2026-10-07 完成，0.2.0+43 起開放；ar-wip 已併入 iching-content main）：內容格式 iching-content `ar/README.md`（現代標準阿拉伯文、讀者稱 أنت，第二人稱儘量用不分性別的 يمكنك／عليك＋動名詞；標點 ، ؛ ؟、引號 « »、數字 0–9；君子＝الإنسان النبيل、大人＝الإنسان العظيم、小人＝الإنسان ضيّق الأفق；**宗教**：不寫 الله／إله／ربّ 等神名與宗教詞，上帝寫 السماء，不用占卜星象與命定論字眼；**術語表吉凶改為 عاقبة حسنة／عاقبة سيّئة**（原 حُسن الطالع 的 الطالع 是星象算命用語，ar-wip 上已改）；**王**寫 الحاكم（君主國讀者，不用 الملك、جلالة）；酒食寫 الطعام والضيافة 並註明、豬不寫 خنزير、妾類不用 محظيّة／جارية）；`check_translation.py ar`（去音符、統一字形、剝前接詞與代名詞後綴後整詞比對 BANNED['ar']，另擋延長符、方向控制字元、東阿拉伯數字、半形 , ; ?、“ ”）、`tools/ar_fill.py`。進度：**64 卦完成**（2026-10-07；01–56 約 10 萬詞，回譯抽查在 ar/README §6）。09–16 補充：跛眇寫 يمشي بصعوبة／يرى بعين واحدة 並註明古代比喻；后、帝乙、天子寫 الحاكم／الحاكم الأعلى；鬼神寫 القوى الخفيّة التي لا تُرى；祭上帝配祖考寫「感謝上天與先人」並註明古代慶典；檢查器另擋下 انقلاب（政變，傾否改寫）、و＋زنا（وزنًا）、معاق；尼采《偶像的黃昏》只寫德文書名（避開 أصنام／أوثان）；**14 大有術語表名 الملك العظيم 無母音時易讀成「偉大的國王」，正文暫寫 المُلك 並加註，術語表已改 الوفرة العظيمة（使用者同意，iching-content 1e97c84）**。17–24 補充：fata 寫 مجرى الأمور（避開 القدر）；盥而不薦註明古代典禮、不用 وضوء；闚觀女貞、宮人只作古代描寫（宮人寫 أهل القصر，不寫女子）；刑具（屨校、何校）註明古代刑罰、不寫細節；冬至寫 منتصف الشتاء، أقصر أيّام السنة（الانقلاب الشتويّ 會被 انقلاب 擋下）；المضمون（內容）會被「保證」字根擋下，改 الجوهر；不用 يُسكر 形容讚美；18 蠱沿用印尼文改歌德《浮士德》。25–32 補充：无妄之疾、坎上六等只作古代意象（註明非描述疾病、forYou 請身體不適者看醫生）；26 豶豕寫 حيوان برّيّ هُذّبت شراسته（不寫豬）；29 樽酒寫 إناء من الشراب 並註明是古代簡單供品、非勸人飲用，富蘭克林 drink not to elevation 寫「不過量飲用以致失衡」；聖人寫 الحكيم；王公寫 الحكّام وحكّام الأقاليم；30 王用出征折首寫「制服主謀」並註明非號召作戰；28 老夫女妻、32 婦人夫子註明是古代比喻、不評判任何婚姻或性別；31 咸身體部位意象保持在湖水中；「陷阱」不寫 الشرك（改 فخّ）、「分量」不寫 وزنًا、注定不寫 مقدّر；32 出處《福音的預備》只寫拉丁文書名（避開 إنجيل）。33–40 補充：文王寫 الحاكم Wén من سلالة Zhōu、箕子寫 Jīzǐ（佯狂寫 التظاهر بأنّه فقد صوابه，不用 جنون）；康侯、公沿用諸侯譯法 حاكم الإقليم；畜臣妾寫 رعاية من يعملون في البيت（不寫僕婢、妾）；有疾厲寫 إنهاك 並註明非描述疾病；37 家人男女分工、婦子嘻嘻與 38 睽男女睽而其志通皆註明是古代比喻、不評判任何人；38 見豕負塗載鬼一車寫 حيوانًا صغيرًا ملطّخًا بالطين، وعربة مليئة بأطياف（不寫豬、不寫 جنّ），註明幻影是猜疑所生；40 公用射隼寫 طائرًا جارحًا（不寫 صقر，避開海灣地區珍視的獵鷹）並註明非號召傷害；赦過宥罪寫 يعفو عن الأخطاء، ويصفح عن الإساءات（不用 خطيئة）；新誤中：كفأر（ك＋فأر 讀成 كفار，改 مثل فأر）、مضمون 再次（「言有物」改 جوهر）、لـKūn 含延長符（改 جهة Kūn）。41–48 補充：十朋之龜只寫「古代的徵詢儀式」不寫占卜；懲忿窒欲的欲寫 رغبات（不用 شهوة）；42 王用享于帝寫 تقدمة إلى السماء，供桌不寫 مذبح；告公、遷國的公沿用 حاكم الإقليم；42 沿用印尼文改愛比克泰德；43 夬、44 姤「臀无膚」只作古代意象；44 女壯勿用取女註明以女喻陰、不評判女性，羸豕寫 حيوان صغير هزيل；45 王假有廟寫 قاعة أسلافه、用大牲寫 تقدمة كبيرة（不寫宰牲），除戎器註明意在預防；46 柏拉圖的第俄提瑪不寫女祭司（寫 الحكيمة من مانتينيا），南征、王用亨于岐山同 17 隨處理；47 致命遂志寫 يكرّس حياته كلّها（不寫捐軀），困于酒食註明非勸飲，不見其妻註明是陪伴者的意象，劓刖註明古代刑罰不寫細節；新誤中：جارية（流淚的 دموع جارية）、أعمى（盲目攀爬）、رسول（使者，改 مبعوث），另避開 فأل（占兆）、الضلال（宗教味的迷途）、تقرير المصير（自我決定論改 التحديد الذاتيّ）。49–56 補充：49 革卦名 التحوّل、全篇不用 ثورة／انقلاب，湯武革命寫 جدّدا التكليف بالحكم（更新治理的天命），改命寫「改變舊的方向」，未占有孚寫「還沒徵詢就已有信任」，**東西相映同泰文改用奧理略 7.18**（洛克 §225 談推翻統治者）；50 享上帝寫 السماء 並註明，得妾以其子寫「地位卑微的人因其所能帶來的而被接納」並註明古代比喻，佛洛伊德書名含「性」只寫德文；51 匕鬯寫 المغرفة والتقدمة العطِرة（不寫酒），宗廟社稷不用 مذبح；52「雞尾酒會效應」改述為「擁擠聚會效應」；53 女歸、婦孕不育、婦三歲不孕只作古代意象、不評判任何人，μακάριον 不用 مبارك；54 娣寫 أخت صغرى في موكب العروس（不用 محظيّة／جارية／ضرّة），刲羊无血不寫宰殺，沿用塞內卡 9.6（amatorium 不寫巫術）；55 鬼神沿用 القوى الخفيّة，日中見斗註明是大熊座（天文非星象），Zarathustra 只寫德文書名、note 不提其名，enantiodromia 寫 التحوّل إلى الضدّ；56 童僕寫 مرافق شابّ مخلص（不用 عبد／خادم）；新誤中：معاقة（معاق，改 مسدودة）、مضمون 再次、مقدّر 再次。57–64 補充：57 巽的史巫寫 الكتبة ومن يتولّون المراسم；61 豚魚寫 الحيوانات الصغيرة（不寫豬），鳴鶴「我有好爵」寫 إناء طيّب من الضيافة（不寫酒）；64 飲酒、濡首寫宴飲過度並註明非勸飲；63 高宗伐鬼方寫拼音 Guǐfāng 並註明非號召作戰；63 東鄰殺牛寫 تقدمة كبيرة（不寫宰牛）；62 過其祖遇其妣寫「越過祖父，遇見祖母」不寫牌位；新誤中：延長符 لـ«、وزنًا 再次、جارية（改 على ما يرام）。**App 端 0.2.0+43**（run #79 ✅）：`app_ar.arb`（讀者稱 أنت；複數用 =1／=2／few／many／other）、`AppLanguages.ar`（contentReady = true）、`AppFonts.arabic`＝Noto Naskh Arabic（內文）／Noto Sans Arabic（介面）＋TC、SC 補，**`tracking: false`**（連寫體加字距會拆開連筆，同泰文 PR #7 作法）；版面 RTL 由 MaterialApp 依 ar locale 自動切換，寫死左右的 `EdgeInsets.only(left:)`、`Border(left:)`、`Positioned(right:)` 改成 Directional 版本（閱讀頁、詳解頁、卦記頁、卡面、首頁）；`AssetContentSource.isolateForeignQuotes()` 在載入 ar 內容時把含拉丁／希臘字母的 «…» 引文包進 LRI…PDI，避免德文、英文原文在 RTL 段落裡標點錯位；新增測試涵蓋 ar 解析、字型、引文隔離與 RTL 方向。HANDOFF §12：阿拉伯文市場對占卜類內容較敏感，上架商店資訊前再評估；HANDOFF §12：阿拉伯文市場對占卜類內容較敏感，上架前再評估是否開放。
-6. 🔶 2026-10-04 程式完成（0.2.0+23，§23），等使用者建 AdMob／RevenueCat／Play 訂閱與 Secrets；正式版申請。
-7. 之後：iOS（§9.1，需另決定 Apple 年費）。
-
-### 19.4 對話紀錄（英文內容批次）
-- 2026-10-05：寫 38 睽～45 萃（每卦 `check_translation.py` 通過後單獨 push）。檢查器禁用詞實際擋下兩處並已改寫：39 蹇「跛足」lame→limping；43 夬「談話治療」英文慣稱 talking cure 含 cure→名稱 Talk therapy、引安娜・O「chimney sweeping」。**寫作時注意**：check 腳本禁用詞含 lame、cure、sin、hell、devil、guaranteed、destined 等（見腳本 BANNED），常見誤觸：lame foot、talking cure、cure-all。
-- 2026-10-05（第二批）：寫 46 升～52 艮，每卦 `check_translation.py` 通過後單獨 push；46–49 後觸發 run #50（✅ 成功，含至 49），52 後觸發 run #51（✅ 成功，含至 52）。全語檢查 `check_translation.py en` 52 卦 OK、共約 12.1 萬字。保守處理：47 劓刖、52 列其夤不寫刑罰／身體細節；50 得妾以其子不用 concubine、享上帝＝heaven above；47 致命遂志譯 gives their whole life to（不譯捨命）；52 維根斯坦第 7 條自譯、避開 Pears/McGuinness 有版權譯句。
-- 同一對話：使用者說之後有空會建立 AdMob App、RevenueCat 專案、Play 訂閱並截圖，由 Claude 逐欄回覆（依 §23.3）；本對話尚未收到截圖。
-- 2026-10-05（第三批）：寫 53 漸～64 未濟，全語檢查 64 卦 OK（約 15.1 萬字），`en.contentReady = true`、版本 0.2.0+24。保守處理：54 士刲羊无血＝no blood is shed、須不用 concubine；55 折其右肱照經文不寫傷勢；59 渙其血＝dispersing the hurt；61 議獄緩死＝slow to impose the gravest penalty；63 東鄰殺牛＝offers up an ox；58 柏拉圖〈第七書信〉note 註明真偽爭議。
-- 2026-10-05（第四個對話）：run #52（force_lang=en）✅、run #53（正式版 0.2.0+24，push 觸發）✅（Release 含 APK＋AAB）；之後手動觸發 force_lang=en run #54 ✅（Release iching-android-run54，0.2.0+24 介面 en，只有 APK）。en/README §5 補 53–64 回譯抽查與名句來源。§21.2 英文商店資訊：iching-content `store/listing-en.md`（名稱 Qiangua: I Ching Oracle Cards 29 字、簡短說明 80 字、完整說明 3421 字，依英文搜尋詞重寫；另附加上廣告／訂閱後要補的段落）、`store/feature-graphic-en-1024x500.png`（右側三牌右緣留 64px；`store/feature_graphic_en.py` 重製，字型 Cormorant Garamond）、`store/screenshots-en/make.py`（8 張，順序與要截的畫面寫在腳本 ITEMS；等使用者貼英文介面截圖）。
-- 同一對話：使用者問卦記 10 則會不會太多、刪舊可重複用 → 維持 10、不防刪舊（理由記在 §23.1）；新增卦記達上限可看獎勵廣告存一則，0.2.0+25 run #55 ✅（隱私權政策已同步）。
-- 下一步：使用者貼英文截圖 → 執行 make.py；使用者貼 AdMob／RevenueCat／Play 訂閱截圖 → 依 §23.3 逐欄回覆；之後 §19.2 第 5 項（簡中起）。
-- 2026-10-05（第五個對話）：尚未收到截圖時先做 §19.2 第 5 項簡中（0.2.0+26，見該項）；英文截圖、AdMob／RevenueCat／Play 訂閱仍等使用者貼圖。
-- 同一對話：使用者回報 run #54 無法開啟——研判是**降版**（#54＝0.2.0+24，手機上已裝 +25／+26，Android 不允許裝較低的 versionCode）。⚠️ **以後測試版一律從最新 commit 重建，不要叫使用者裝舊 run**。改建 run #57（force_lang=en＋force_premium=true，0.2.0+26，✅），商店截圖用這版：無廣告橫幅、無次數限制。
-- ⚠️ 使用者回報 **run #57 點圖示立刻閃退**（#54 也打不開，兩者共同點是 force_lang=en）。#56 與 #57 的 AndroidManifest 完全相同（androguard 比對），差別只在 dart-define。使用者確認一直從 Releases 裝 APK；最後能開的是 run #40（0.1.0+22）。
-- **閃退原因已找到（2026-10-05）**：0.2.0+23 加入 AdMob，SDK 帶入 WorkManager，啟動時由 androidx.startup 以反射建立 Room 的 `WorkDatabase_Impl`；我們的 ProGuard 沒有 WorkManager／Room keep 規則，R8 把它的建構子與 RoomDatabase 父類別砍掉（androguard 檢查 run #56 APK 確認），所以 **+23～+26 正式版與測試版全部一開就閃退**（run #54 打不開也是這個原因，不是降版）。修正：`scripts/patch_ads.sh` 加入與智慧聽覺巡航相同的 WorkManager／Room 規則（沒加到會讓 CI 失敗），0.2.0+27。⚠️ **教訓**：新增原生 SDK 時，對照智慧聽覺巡航 `scripts/patch_firebase_proguard.sh` 的 keep 規則；CI 建置成功不代表能開啟，要請使用者實機確認。
-
-- 2026-10-05（第六個對話）：使用者確認 run #58（+27）正常開啟。英文商店截圖改為雲端渲染（§21.2）。渲染時發現 `AssetContentSource._assetList()` 的 `.then().catchError()` 在資產清單已快取（SynchronousFuture）時永遠不完成→牌面圖與解讀一直載入中；實機只要有別處先讀過資產清單就會發生，改用 async try/catch（0.2.0+28）。⚠️ 寫 Flutter 程式：不要對可能是 SynchronousFuture 的 Future 用 `.catchError`。下一步：日文（§19.2 第 5 項）。
-
-- 2026-10-05（第七個對話）：§19.2 第 5 項日文。App 端 0.2.0+29（run #60 ✅）；內容 01–64 依 ja/README 撰寫，每卦跑 check_translation、每 2–3 卦 commit；64 卦完成後 `ja.contentReady = true`、0.2.0+30。日文商店資訊也已備妥（§21.2）。下一步：使用者裝 +30 用日文介面試抽幾卦（字形、書き下し排版、爻名讀音）、上傳日文商店資訊；其餘見第 5 項待辦。
-
-- 2026-10-05（第七個對話，續）：重複名句四語一起換（37、41），升 0.2.0+31 建置帶入新內容。⚠️ 使用者要求：**與使用者對話一律用繁體中文**。
-
-- **翻譯原則（2026-10-05 使用者指示，所有非中文語言適用）**：使用者沒有中文以外的母語測試者，**不要請使用者看譯文內容**。Claude 全權負責謹慎翻譯與檢核：① 不可有不文雅、冒犯、迷信或保證語（各語 `check_translation.py` 黑名單＋逐卦回譯抽查）；② **經文（卦辭、彖、象、爻辭、小象）以市面通行版本為準**（通行本《周易》文字、程頤／朱熹的通行解讀；日文用通行書き下し、韓文依傳統諺解／《周易傳義》讀法譯成現代韓文），不可因翻譯偏離通行版本；有異說時並列或取通行說。使用者只測**功能是否正常、版面是否跑掉**。
-- 2026-10-05（第八個對話）：§19.2 第 5 項韓文。App 端 0.2.0+32（run #65 ✅）；內容依 ko/README 撰寫（以繁中為準、日文版的保守處理為參考，經文自譯現代韓文），每卦跑 `check_translation.py ko`、每 3 卦 commit。草稿流程：在 scratchpad 寫只含內容欄位的 JSON，再用 iching-content `tools/ko_fill.py NN 草稿路徑` 從術語表／繁中補 id、name、爻名、stage 等固定欄位並跑檢查。進度看 ko/README §5。64 卦完成後 `ko.contentReady = true`、0.2.0+33。使用者會另找時間實機測試（+31 日文、+33 韓文）。下一步：韓文商店資訊（§21.2 照日文作法）→ §19.2 第 5 項下一語（越南文）。
-- 2026-10-05（第九個對話）：run #66（0.2.0+33）✅，Release `謙卦 0.2.0+33（run 66）`，測試廣告；韓文商店資訊完成（§21.2）。截圖在雲端環境渲染：Flutter 用 `git clone --depth 1 -b stable https://github.com/flutter/flutter.git`，字型原檔下載到 iching-cards `_fonts_src/`（已 gitignore），其餘照 `screenshots/README.md`。下一步：越南文（計畫待使用者確認）。
-- 同一對話：使用者確認 run #66 各語言正常、上傳封閉測試；越南文經文選 A（只放意譯）。App 端 0.2.0+34（run #67）；iching-content `vi/README.md`、`check_translation.py vi`（NFC、粗話／差別語／迷信／保證／政治字眼；曾擋下：虞的漢越音「Ngu」＝笨、cam kết、bảo đảm、bùa、解讀中的 Thượng đế）、`tools/vi_fill.py`（用法同 ko_fill）。內容進度：01–24 完成（看 vi/README §5）。
-- 同一對話（續）：越南文 25–64 完成（共 160,063 字；`check_translation.py vi` 全過；每卦處理要點與回譯抽查記在 vi/README §5）。檢查器另擋下：「chính quyền」（洛克書名改 việc cai trị）、「cave」（Robbers Cave 只寫越文 hang Robbers）、「bảo đảm」「cam kết」；鬼方只在經文用 Quỷ Phương、上帝只在經文用 Thượng đế，解讀改寫。`vi.contentReady = true`、0.2.0+35（run #68），版本資訊 `store/release-notes/0.2.0+35.txt`（含 vi-VN）。越南文商店資訊完成（§21.2）。
-
-- 2026-10-09：使用者要求接續開發。完成：版本資訊 `0.2.0+44.txt`、`0.2.0+45.txt`（iching-content，首次加 zh-CN 區塊）；`store/PLAY_CONSOLE.md` §6 正式版申請前核對表（使用者待做：AdMob 敏感類別、AdMob GDPR 訊息、國家／地區決定）；卦記備份與還原（0.2.0+45，見 §13）。剩下的候選：商店截圖補新功能、蓍草法起卦、「不分享使用統計」開關、iOS。
-
-- 2026-10-09（續）：使用者要求剩餘候選全部完成。0.2.0+46：首頁選單「分享匿名使用統計與當機報告」勾選開關（`core/telemetry/usage_sharing.dart`，存 `usage_sharing.json`，關掉即 `setAnalyticsCollectionEnabled(false)`＋Crashlytics 停收；隱私權政策已補寫）；蓍草起卦（`YarrowStalks`，擲錢與蓍草共用 `shared/cast/stepwise_cast_page.dart`，`methodId` = `yarrow`）；分享卡片卦象文字依高度決定行數；商店截圖 11 語重渲染（第 4 張＝分享卡片、第 5 張標題加蓍草，繁中也改用渲染）；iOS 準備見 §24。
-
-- 2026-10-09（續）：使用者要求「功能介紹要修改」「要有意見回饋」。0.2.0+47：功能介紹改五頁（第 1 頁補蓍草、第 2 頁補卦記備份、新第 5 頁＝右上角選單：重看介紹、意見回饋、使用統計開關）；意見回饋＝App 內表單寫 Firestore `qg_feedback`（§18.5，使用者需在 Firebase 加規則）。
-- 2026-10-10：Firestore `qg_feedback` 規則已發布、實機測試成功。使用者要求自訂呼吸時長、確認 432、功能介紹改寫首頁按鈕、11 語商店說明更新（正式版直接上 11 語版）、首頁底部文字避開導覽列 → 0.2.0+48（§14.9）。Play 資料安全性（PLAY_CONSOLE §6 8b）待使用者準備好時一步步帶。
-
-### 19.3 需要使用者做的事（Claude 會在對應階段提醒）
-- Firebase：確認 Analytics 即時報表看得到 `qg_reading_shown`、Crashlytics 不再「等待中」（§18.4，記得先篩選謙卦 App）。
-- 每次新版：從 iching-content Releases 下載 APK 覆蓋安裝試用，有問題回報。
-- 階段 2：在 Play Console 建立新 App「謙卦」、上傳 Claude 產生的 AAB、貼上商店文案與隱私權政策網址、填 Data safety／內容分級（Claude 提供逐題答案）、安排付費外部測試服務湊 12 位測試者連續 14 天。
-- 階段 3：選定商業模式；若有廣告或付費，在 AdMob、RevenueCat 新增 App。
-
-## 20. 上架準備（2026-10-03，§19.2 第 2 項）
+## 20. 上架準備（2026-10-03）
 
 **Claude 已完成**
 - **隱私權政策**：本 repo `docs/privacy.html`（繁中＋英文，同一頁；謙卦玄底配色，淺色模式自動切換）、`docs/index.html`（簡單首頁）。網址（開 Pages 後）：`https://lawrence124875.github.io/iching-cards/privacy.html`，資料刪除段落 `#data-deletion`。內容依 0.1.0+21 實際行為：卦記與想問的事只在本機；Firebase Analytics（`qg_` 事件與參數，§18）、Crashlytics、Remote Config；廣告 ID 權限（目前無廣告）；通知／準時鬧鐘／前景服務的用途；不適合 13 歲以下；非專業建議。⚠️ 加廣告、付費、Firestore、新統計事件或新權限時**必須先改這頁**。`docs/**` 不觸發建置。
@@ -791,19 +689,7 @@ checkout 本 repo → 以 `BUILDS_REPO_TOKEN` sparse-checkout iching-content 的
 
 **重產主題圖片**：Python＋Pillow，字型用 google/fonts 固定 commit（§15）的 NotoSerifTC／NotoSansTC 可變字型；1024×500 玄底 `#1C1B22`，左側「謙卦」112px 稻金 `#D8B56A`、「易經六十四卦卡」30px、「抽一卦　看見此刻的象」22px 灰穗；右側三張有框牌面（164×292，地黃框）取 `images/webp/15、52、11`，置中裁切（cover）。
 
-## 21. 商業模式提案（2026-10-03，§19.2 第 3 項，⏳ 待使用者選擇）
-
-前提：封閉測試先以**全免費、無廣告**進行（Play 上「免費」App 之後仍可加內購與廣告）。解讀內容（卦、爻、東西相映）**一律不鎖**——鎖住「象」與 App 定位（給人希望、安靜反思）衝突，也會讓評論變差。
-
-| 方案 | 做法 | 優點 | 缺點 |
-|---|---|---|---|
-| **A 完全免費＋隨喜支持** | 不放廣告；設定頁一個「支持開發者」一次性內購（例：NT$30／90／150 三檔，買了只多一句感謝與牌背小印記） | 最符合謙卦精神與「安靜」定位；實作最簡單（Play Billing 或 RevenueCat，免後端）；評論最好 | 收入低、難預估 |
-| **B 免費核心＋一次買斷「完整版」**（Claude 建議） | 免費：抽卦、擲錢、全部解讀、卦記（最多 10 則）、呼吸 1／2 分鐘。完整版一次買斷（建議 NT$150 左右）：卦記無上限、呼吸 3／5 分鐘與雙耳節拍、日後新增的延伸功能（例如牌背樣式、卦記匯出）。無廣告 | 不鎖內容、不打擾，付費的是「深度使用者才需要」的工具；一次買斷比訂閱更不招反感；RevenueCat 已有帳號、日後 iOS 同一套 | 需設計功能開關（Remote Config `qg_` 參數＋RevenueCat entitlement），工作量中等；免費額度要拿捏 |
-| **C 獎勵式廣告＋去廣告買斷** | 不放橫幅與插頁；只在「想多看一組解讀」或「延長呼吸」時可選擇看一支獎勵廣告；另售去廣告／完整版 | 有廣告收入、使用者自願 | 廣告與靜心情境衝突；需 AdMob 審核、隱私權政策與資料安全性都要改（廣告 ID 改成廣告用途、分享＝是）；若目標對象有未成年要更多限制 |
-
-不建議：訂閱制（內容不常更新，訂閱理由薄弱）、橫幅／插頁廣告（破壞閱讀與呼吸體驗）。
-
-選定後的工作：§19.2 第 6 項（RevenueCat／AdMob 實作）、隱私權政策與 Play 資料安全性同步更新（§20）。
+## 21. 商業模式
 
 ### 21.1 使用者定案（2026-10-03）
 
@@ -811,7 +697,7 @@ checkout 本 repo → 以 `BUILDS_REPO_TOKEN` sparse-checkout iching-content 的
 - 免費版限制內容使用者無偏好，由 Claude 提案（待使用者確認）：抽卦／擲錢每日 3 次，用完可看獎勵廣告再抽（每日上限）；卦記免費 10 則；呼吸 1／2 分鐘與預設音色，3／5 分鐘、雙耳節拍屬訂閱；**解讀內容（三組、爻、東西相映）不鎖**。
 - 廣告位置原則：插頁限頻（例：每 3 次解讀最多 1 次、間隔 ≥3 分鐘），**不在開啟 App、呼吸音景播放中、閱讀解讀中跳出**；呼吸頁不放橫幅。符合 Google 干擾性廣告政策。
 - **送審前必改清單見 iching-content `store/PLAY_CONSOLE.md` §5（2026-10-03 首版應用程式內容已填完，「廣告」聲明已選「是」）。**
-- **順序**：先以目前 0.1.0+22（免費、無廣告）上傳封閉測試讓 14 天先計時；同時實作 AdMob＋RevenueCat（§19.2 第 6 項）。送正式版前必須先改：隱私權政策（AdMob、訂閱）、Play「含廣告＝是」、資料安全性（廣告 ID 用於廣告、與 AdMob 分享＝是）、`store/PLAY_CONSOLE.md`。
+- **順序**：先以目前 0.1.0+22（免費、無廣告）上傳封閉測試讓 14 天先計時；同時實作 AdMob＋RevenueCat。送正式版前必須先改：隱私權政策（AdMob、訂閱）、Play「含廣告＝是」、資料安全性（廣告 ID 用於廣告、與 AdMob 分享＝是）、`store/PLAY_CONSOLE.md`。
 - 使用者需先做：Play Console 建立「謙卦」、設定**付款資料**（銀行與稅務，訂閱必需）；在 AdMob、RevenueCat 新增 App。Console 每頁截圖貼回對話，Claude 逐欄回覆。
 - **商店截圖由 Claude 製作**：以 CI 算繪 App 真實畫面（Flutter 測試輸出 PNG，載入打包字型與牌面），再加標題文字與背景排版；效果不佳時改由使用者手機截原圖、Claude 排版。
 
@@ -858,15 +744,8 @@ checkout 本 repo → 以 `BUILDS_REPO_TOKEN` sparse-checkout iching-content 的
 ### 23.2 CI 與 Secrets（iching-cards，皆未設定時自動用 Google 測試 ID、訂閱頁顯示「尚未開放」）
 `ADMOB_APP_ID`（`scripts/patch_ads.sh` 寫入 Manifest；沒有會閃退，所以預設測試 App ID）、`ADMOB_BANNER_AD_UNIT_ID`、`ADMOB_INTERSTITIAL_AD_UNIT_ID`、`ADMOB_REWARDED_AD_UNIT_ID`、`REVENUECAT_ANDROID_API_KEY`（goog_ 開頭）。Release 說明顯示「廣告：測試廣告／正式廣告單元；訂閱：已設定／未設定」。workflow 新增輸入 `force_premium`（填 true＝會員測試版，只建 APK）。
 
-### 23.3 待使用者做（2026-10-05 更新）
-1. ✅ AdMob：App 謙卦與三個廣告單元已建（ID 已設進 Secrets）。封鎖敏感類別、GDPR 訊息本次紀錄未提，之後再確認。
-2. ✅ RevenueCat：另開專案 qiangua 完成（見 §23.4）。
-3. ✅ Play Console：訂閱 `qg_premium_monthly`、`qg_premium_yearly` 已建立並啟用（見 §23.4）。
-4. 🔶 5 個 Secrets 已設齊 → ✅ 正式建置 run #69（0.2.0+36，commit c1e8381）成功，iching-content Release「謙卦 0.2.0+36（run 69）」說明顯示「廣告：正式廣告單元；訂閱：已設定」（Secrets 讀取正常），檔案 `iching_0.2.0+36_run69.apk`／`.aab` → ⏳ 使用者上傳 AAB 到封閉測試並實機測試（正式廣告、訂閱頁月 NT$99／年 NT$590、授權測試帳號購買解鎖、恢復購買、日韓越版面）。
-5. ✅ 隱私權政策已於 2026-10-04 更新（AdMob、Play 結帳、RevenueCat）。
-   - 2026-10-06 再更新（生效日 10/6）：廣告段逐項列出 AdMob 蒐集的資料類型（裝置或其他 ID、大略位置〔IP 推得，不用 GPS〕、應用程式互動、當機記錄與診斷、裝置與 App 資訊）與用途（廣告或行銷、數據分析、詐欺防範／安全性／法規遵循）；訂閱段寫明 RevenueCat 匿名使用者 ID 與購買記錄欄位；「刪除資料」段（錨點 `#data-deletion`／`#data-deletion-en` 不變，Play「資料刪除網址」可直接用）重寫：App 名稱謙卦（com.lclab.qiangua）＋開發者 LC Lab、本機資料解除安裝即刪、Android 設定重設／刪除廣告 ID 路徑、訂閱資料來信 lawrence124875@gmail.com（附 GPA. 訂單編號，30 天內向 RevenueCat 申請刪除）、Google Play 購買記錄依 Google 政策保留、刪資料不等於取消訂閱。中英文同步。⚠️ Play Console 資料安全性表單要與此一致（AdMob 的應用程式互動、當機記錄、診斷資訊也要勾「分享」，用途含詐欺防範）。
-   - ✅ 2026-10-06 使用者已補好資料安全性表單（AdMob 應用程式互動／當機記錄／診斷資訊＝分享，用途含詐欺防範）、確認線上隱私權頁面正常，並送審。⏳ 等審查結果；被拒的話把原因貼回對話。
-6. ⏳ RevenueCat 商品目前顯示 Could not check：Google 權限同步最長約 36 小時，憑證驗證通過後應變 Published；在那之前實機購買可能失敗或訂閱頁抓不到商品，屬正常。
+### 23.3 待使用者做
+見 iching-content `store/PLAY_CONSOLE.md` §6：AdMob 封鎖敏感類別、AdMob GDPR 訊息、國家／地區、資料安全性（8b）。
 
 ### 23.4 後台設定紀錄（2026-10-05，聊天端逐欄確認完成）
 - **Play 訂閱**：`qg_premium_monthly`（基本方案 `monthly`，台灣 NT$99）、`qg_premium_yearly`（基本方案 `yearly`，台灣 NT$590）已啟用；手動設價 20 國，其餘依 US$3.99／US$24.99 自動換算；年齡分級 18+、允許重新訂閱。

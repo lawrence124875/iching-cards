@@ -444,13 +444,23 @@
       }
     }
   },
-  "breathSetupNote": "吸氣 4 秒、吐氣 6 秒（每分鐘 6 次）。音景會跟著呼吸起伏，長鳴與鈴聲以 432Hz 調音。",
+  "breathSetupNote": "吸氣 4 秒、吐氣 6 秒（每分鐘 6 次）。音景會跟著呼吸起伏。",
   "@breathSetupNote": {
     "description": "只描述做法，不寫療效（Google Play 健康宣稱政策，HANDOFF §14.2）"
   },
   "breathDuration": "時長",
   "breathCustom": "自訂",
   "breathLongNote": "長時間靜坐時，可以關掉「換氣時輕敲鈴聲」，只留音景。",
+  "breathTuning": "調音",
+  "breathTuningSub": "長鳴、鈴聲、鳥鳴與水泡都依所選頻率調音，可用調音器量測。",
+  "breathTuningHz": "{hz}Hz",
+  "@breathTuningHz": {
+    "placeholders": {
+      "hz": {
+        "type": "int"
+      }
+    }
+  },
   "minutes": "{m, plural, other{{m} 分鐘}}",
   "@minutes": {
     "placeholders": {

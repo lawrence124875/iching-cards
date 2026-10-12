@@ -30,12 +30,12 @@ class SynthBedSource extends BedSource {
   static const crossfadeSeconds = 3.0;
 
   @override
-  Float32List bed(Trigram trigram, {required int sampleRate, required double seconds}) {
+  Float32List bed(Trigram trigram, {required int sampleRate, required double seconds, double pitch = 1}) {
     final n = (seconds * sampleRate).round();
     final m = math.min((crossfadeSeconds * sampleRate).round(), n ~/ 2);
     final total = n + m;
     final rng = Rng(seed * 7919 + trigram.index * 104729 + 17);
-    final layers = _recipe(trigram)(rng, sampleRate, total);
+    final layers = _recipe(trigram)(rng, sampleRate, total, pitch);
 
     final raw = Float32List(total);
     for (final l in layers) {
@@ -71,10 +71,10 @@ class SynthBedSource extends BedSource {
       };
 }
 
-typedef _Recipe = List<Float32List> Function(Rng r, int sr, int n);
+typedef _Recipe = List<Float32List> Function(Rng r, int sr, int n, double pitch);
 
 /// 坎・水：山澗流水——快速變化的帶通雜訊（水流）＋細小氣泡音。
-List<Float32List> _water(Rng r, int sr, int n) {
+List<Float32List> _water(Rng r, int sr, int n, double pitch) {
   final rushBp = Biquad.bandpass(sr, 1200, 0.9);
   final body = Biquad.bandpass(sr, 420, 0.7);
   final fast = SmoothRandom(r, 3, sr);
@@ -90,7 +90,7 @@ List<Float32List> _water(Rng r, int sr, int n) {
   var t = 0;
   while (t < n) {
     t += (r.range(0.02, 0.2) * sr).round(); // 平均約每秒 9 個
-    final f0 = SynthBedSource.bubbleNotes[r.nextInt(SynthBedSource.bubbleNotes.length)], tau = r.range(0.01, 0.025), amp = r.range(0.2, 1.0);
+    final f0 = pitch * SynthBedSource.bubbleNotes[r.nextInt(SynthBedSource.bubbleNotes.length)], tau = r.range(0.01, 0.025), amp = r.range(0.2, 1.0);
     final len = (tau * 6 * sr).round();
     var phase = 0.0, f = f0;
     for (var j = 0; j < len && t + j < n; j++) {
@@ -103,7 +103,7 @@ List<Float32List> _water(Rng r, int sr, int n) {
 }
 
 /// 震・雷：遠雷春雨——粉紅雜訊雨聲＋雨滴＋每隔 9–16 秒一次低沉遠雷。
-List<Float32List> _thunderRain(Rng r, int sr, int n) {
+List<Float32List> _thunderRain(Rng r, int sr, int n, double pitch) {
   final pink = PinkNoise(r);
   final rainHp = Biquad.highpass(sr, 400), rainLp = Biquad.lowpass(sr, 2500);
   final rain = renderSamples(n, () => rainLp.process(rainHp.process(pink.next())));
@@ -141,7 +141,7 @@ List<Float32List> _thunderRain(Rng r, int sr, int n) {
 }
 
 /// 巽・風：林間風——中心頻率緩慢游移的帶通粉紅雜訊（陣風）＋高頻樹葉沙沙聲。
-List<Float32List> _wind(Rng r, int sr, int n) {
+List<Float32List> _wind(Rng r, int sr, int n, double pitch) {
   final pink = PinkNoise(r);
   final bp = Biquad.bandpass(sr, 500, 0.8);
   final centre = SmoothRandom(r, 0.05, sr);
@@ -166,7 +166,7 @@ List<Float32List> _wind(Rng r, int sr, int n) {
 }
 
 /// 離・火：營火——低沉的火焰呼呼聲＋成串的劈啪聲與偶爾的木柴爆裂。
-List<Float32List> _fire(Rng r, int sr, int n) {
+List<Float32List> _fire(Rng r, int sr, int n, double pitch) {
   final brown = BrownNoise(r);
   final roarLp = Biquad.lowpass(sr, 350);
   final roarLfo = SmoothRandom(r, 0.6, sr);
@@ -194,7 +194,7 @@ List<Float32List> _fire(Rng r, int sr, int n) {
 }
 
 /// 艮・山：山林寂靜——很輕的山間空氣聲，偶爾遠處幾聲鳥鳴。刻意比其他音景安靜。
-List<Float32List> _mountain(Rng r, int sr, int n) {
+List<Float32List> _mountain(Rng r, int sr, int n, double pitch) {
   final brown = BrownNoise(r);
   final airLp = Biquad.lowpass(sr, 400);
   final air = renderSamples(n, () => airLp.process(brown.next()));
@@ -214,7 +214,7 @@ List<Float32List> _mountain(Rng r, int sr, int n) {
   ({double f, double ratio}) pick() {
     final from = r.nextInt(notes.length);
     final to = (from + r.nextInt(5) - 2).clamp(0, notes.length - 1); // 最多滑兩個音
-    return (f: notes[from], ratio: notes[to] / notes[from]);
+    return (f: pitch * notes[from], ratio: notes[to] / notes[from]);
   }
 
   final species = [
@@ -250,7 +250,7 @@ List<Float32List> _mountain(Rng r, int sr, int n) {
 }
 
 /// 兌・澤：湖畔水波——一波波緩慢起伏的低頻水聲，每波推到最高時輕拍岸邊。
-List<Float32List> _lake(Rng r, int sr, int n) {
+List<Float32List> _lake(Rng r, int sr, int n, double pitch) {
   final swell = Float32List(n);
   final lapEnv = Float32List(n);
   var t = 0.0;
@@ -288,7 +288,7 @@ List<Float32List> _lake(Rng r, int sr, int n) {
 }
 
 /// 乾・天：高空清風——高處輕薄的風聲，加上緩慢起伏的泛音長鳴（以 432Hz 為基準的自然泛音）。
-List<Float32List> _sky(Rng r, int sr, int n) {
+List<Float32List> _sky(Rng r, int sr, int n, double pitch) {
   final pink = PinkNoise(r);
   final bp = Biquad.bandpass(sr, 1800, 0.6);
   final c = SmoothRandom(r, 0.05, sr), a = SmoothRandom(r, 0.1, sr);
@@ -305,7 +305,7 @@ List<Float32List> _sky(Rng r, int sr, int n) {
   final partials = [
     for (var p = 0; p < ratios.length; p++)
       (
-        f: base * ratios[p], // 精準的 432Hz 系統頻率（不再加隨機偏移）
+        f: pitch * base * ratios[p], // 精準的 432Hz 系統頻率（不再加隨機偏移）
         a: amps[p],
         lfo: SmoothRandom(r, r.range(0.03, 0.08), sr),
         phase: r.range(0, 2 * math.pi),
@@ -325,7 +325,7 @@ List<Float32List> _sky(Rng r, int sr, int n) {
 }
 
 /// 坤・地：夜野蟲鳴——大地低沉的嗡鳴，加上三隻遠近不同的蟋蟀。
-List<Float32List> _earth(Rng r, int sr, int n) {
+List<Float32List> _earth(Rng r, int sr, int n, double pitch) {
   final brown = BrownNoise(r);
   final humLp = Biquad.lowpass(sr, 150);
   final hum = renderSamples(n, () => humLp.process(brown.next()));
@@ -336,7 +336,7 @@ List<Float32List> _earth(Rng r, int sr, int n) {
   final crickets = [
     for (var c = 0; c < 3; c++)
       (
-        f: const [3240.0, 3456.0, 3888.0][c], // 432Hz 系統的高音（324×10、432×8、432×9）
+        f: pitch * const [3240.0, 3456.0, 3888.0][c], // 432Hz 系統的高音（324×10、432×8、432×9）
         period: r.range(0.5, 0.9),
         pulses: 3 + r.nextInt(2),
         pulseRate: r.range(26, 34),

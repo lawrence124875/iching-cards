@@ -17,6 +17,7 @@ class SessionSpec {
     required this.bells,
     this.binaural = false,
     this.carrier = BinauralCarrier.c128,
+    this.tuning = Tuning.a432,
   });
 
   final Trigram upper;
@@ -30,6 +31,9 @@ class SessionSpec {
   /// 雙耳節拍左耳的頻率（使用者可選 128Hz 或 216Hz）。
   final BinauralCarrier carrier;
 
+  /// 調音：432Hz（預設）或 528Hz（會員）。雙耳節拍的頻率不受影響。
+  final Tuning tuning;
+
   SessionTimeline get timeline => SessionTimeline(minutes: minutes);
 
   /// 快取檔名用。改了合成方式請把版本往上加，舊快取自然失效
@@ -39,7 +43,8 @@ class SessionSpec {
 
   /// 不含時長的部分：開頭段與循環段只跟音景、鈴聲、雙耳節拍有關，換時長可以沿用。
   String get _soundKey =>
-      '${upper.name}_${lower.name}_${bells ? 'b' : 'q'}${binaural ? '_bi${carrier.left.round()}' : ''}';
+      '${upper.name}_${lower.name}_${bells ? 'b' : 'q'}${binaural ? '_bi${carrier.left.round()}' : ''}'
+      '${tuning == Tuning.a432 ? '' : '_t${tuning.reference.round()}'}';
 
   /// 播放清單（依序播放，循環段重複 n−1 次）。整段 [0, totalSeconds) 被切成：
   /// 開頭 [0, leadIn+P)、循環 [leadIn+P, leadIn+2P) × (n−1)、結尾 [leadIn+nP, totalSeconds)，
@@ -55,6 +60,23 @@ class SessionSpec {
     final tail = SessionPart('v4_${_soundKey}_${minutes}m_end', tl.leadIn + n * p, tl.totalSeconds);
     return [head, for (var i = 1; i < n; i++) loop, tail];
   }
+}
+
+/// 調音（0.2.0+50）：所有有音高的聲音（長音墊、鈴聲、長鳴、蟲鳴、鳥鳴、水泡）一起移調。
+/// 528Hz＝432Hz × 11/9：原本 432 系統的每個音（都是 9 的倍數）乘上 11/9 後仍是整數赫茲，
+/// 所以 528 版一樣可用調音器量到精準頻率，200 秒循環也一樣無縫。432→528、324→396、216→264、108→132。
+/// 兩組不同時播放：528 和 432 系統最近的音（512、540）相差太小，疊在一起會有明顯拍頻、聽來走音。
+enum Tuning {
+  a432(432.0, 1.0),
+  c528(528.0, 11 / 9);
+
+  const Tuning(this.reference, this.pitch);
+
+  /// 主音（吸氣鈴聲的頻率）。
+  final double reference;
+
+  /// 相對 432Hz 版的音高比例。
+  final double pitch;
 }
 
 /// 練習音檔的一段：時間軸上的 [start, end) 秒，[key] 相同的段內容相同（共用一個檔）。
@@ -116,8 +138,9 @@ class SessionRenderer {
     final pre = math.min(from, (15 * sr).round());
 
     final same = spec.upper == spec.lower;
-    final lower = source.bed(spec.lower, sampleRate: sr, seconds: lowerSeconds);
-    final upper = same ? null : source.bed(spec.upper, sampleRate: sr, seconds: upperSeconds);
+    final pitch = spec.tuning.pitch;
+    final lower = source.bed(spec.lower, sampleRate: sr, seconds: lowerSeconds, pitch: pitch);
+    final upper = same ? null : source.bed(spec.upper, sampleRate: sr, seconds: upperSeconds, pitch: pitch);
     // 兩段不相關的音景相加，均方根約放大 √2，各乘 0.75 讓總音量與單一音景相近
     final g = same ? 1.0 : 0.75;
 
@@ -131,7 +154,7 @@ class SessionRenderer {
 
     final ch = spec.binaural ? 2 : 1;
     final soften = Biquad.lowpass(sr, softenCutoff, 0.6);
-    final pad = TonalPad(tl);
+    final pad = TonalPad(tl, pitch: pitch);
     final left = spec.carrier.left, right = spec.carrier.right;
     final data = ByteData(44 + n * 2 * ch);
     _writeHeader(data, n, sr, ch);
@@ -144,7 +167,7 @@ class SessionRenderer {
       v = (soften.process(v) + pad.valueAt(t)) * tl.bedGain(t);
 
       while (nextBell < bells.length && bells[nextBell].time <= t) {
-        active.add(_Bell(bells[nextBell].kind, bells[nextBell].time));
+        active.add(_Bell(bells[nextBell].kind, bells[nextBell].time, pitch));
         nextBell++;
       }
       if (active.isNotEmpty) {
@@ -210,9 +233,12 @@ class SessionRenderer {
 ///
 /// 用到的音：E 81／162／324、F# 90／180／360、A 108／216／432、B 243、C# 270（Hz）。
 class TonalPad {
-  TonalPad(this.timeline);
+  TonalPad(this.timeline, {this.pitch = 1});
 
   final SessionTimeline timeline;
+
+  /// 調音比例（[Tuning.pitch]）：528Hz 版每個音乘 11/9，仍是整數赫茲。
+  final double pitch;
 
   /// 整體音量：和各卦音景差不多大小（均方根約 0.03）。
   static const level = 0.06;
@@ -242,7 +268,7 @@ class TonalPad {
     final c = chords[index];
     var v = 0.0;
     for (var k = 0; k < c.length; k++) {
-      final w = 2 * math.pi * c[k] * t;
+      final w = 2 * math.pi * pitch * c[k] * t;
       final swell = 0.75 + 0.25 * math.sin(2 * math.pi * _lfo[k] * t + k);
       v += _amps[k] * swell * (math.sin(w) + 0.12 * math.sin(2 * w));
     }
@@ -263,16 +289,19 @@ class TonalPad {
 
 /// 頌缽般的柔和鈴聲：三個泛音（整數倍）、各自指數衰減。432Hz 調音：吸氣 432Hz（A4）、吐氣與結束 324Hz（其下純四度）。
 class _Bell {
-  _Bell(this.kind, this.start);
+  _Bell(this.kind, this.start, [this.pitch = 1]);
 
   final BellKind kind;
   final double start;
+  final double pitch;
 
   static const _ratios = [1.0, 2.0, 3.0];
   static const _amps = [1.0, 0.35, 0.15];
   static const _decays = [2.4, 1.2, 0.7];
 
-  double get _freq => switch (kind) {
+  double get _freq =>
+      pitch *
+      switch (kind) {
         BellKind.inhale => 432.0,
         BellKind.exhale => 324.0,
         BellKind.end => 324.0,

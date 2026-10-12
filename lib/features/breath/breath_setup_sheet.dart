@@ -51,6 +51,8 @@ class _SetupSheetState extends State<_SetupSheet> {
   bool _binaural = _lastBinaural;
   static BinauralCarrier _lastCarrier = BinauralCarrier.c128;
   BinauralCarrier _carrier = _lastCarrier;
+  static Tuning _lastTuning = Tuning.a432;
+  Tuning _tuning = _lastTuning;
 
   // 免費版（§23）：只有 1／2 分鐘、沒有雙耳節拍；其餘點了開訂閱頁
   late final Services _s = AppServices.of(context);
@@ -67,6 +69,7 @@ class _SetupSheetState extends State<_SetupSheet> {
           _custom = false;
         }
         _binaural = false;
+        _tuning = Tuning.a432;
       });
     });
   }
@@ -146,6 +149,25 @@ class _SetupSheetState extends State<_SetupSheet> {
               ]),
               Text(l.breathLongNote, style: t.bodySmall),
             ],
+            const SizedBox(height: 12),
+            // 調音（0.2.0+50）：432Hz 免費、528Hz 會員；兩組不同時播放（見 Tuning）
+            Text(l.breathTuning, style: t.bodyMedium),
+            const SizedBox(height: 8),
+            Wrap(
+              spacing: 10,
+              children: [
+                for (final tu in Tuning.values)
+                  ChoiceChip(
+                    avatar: tu != Tuning.a432 && !_s.isPremium ? const Icon(Icons.lock_outline, size: 16) : null,
+                    label: Text(l.breathTuningHz(tu.reference.round())),
+                    selected: _tuning == tu,
+                    onSelected: (_) => tu != Tuning.a432 && !_s.isPremium
+                        ? _unlock(() => _tuning = tu)
+                        : setState(() => _tuning = tu),
+                  ),
+              ],
+            ),
+            Text(l.breathTuningSub, style: t.bodySmall),
             const SizedBox(height: 8),
             SwitchListTile(
               dense: true,
@@ -196,6 +218,7 @@ class _SetupSheetState extends State<_SetupSheet> {
                   _lastBells = _bells;
                   _lastBinaural = _binaural;
                   _lastCarrier = _carrier;
+                  _lastTuning = _tuning;
                   Navigator.of(context).pop(SessionSpec(
                     upper: info.upper,
                     lower: info.lower,
@@ -203,6 +226,7 @@ class _SetupSheetState extends State<_SetupSheet> {
                     bells: _bells,
                     binaural: _binaural,
                     carrier: _carrier,
+                    tuning: _tuning,
                   ));
                 },
                 child: Text(l.breathStart),

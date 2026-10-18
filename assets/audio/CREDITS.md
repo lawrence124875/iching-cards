@@ -4,7 +4,7 @@
 
 | 卦 | 檔案 | 來源 | 作者 | 授權 |
 |---|---|---|---|---|
-| 乾・天 | `qian.wav` | [Howling wind.ogg](https://commons.wikimedia.org/wiki/File%3AHowling_wind.ogg) | Tvabutzku1234 | CC0 |
+| 乾・天 | `qian.wav` | [Vento fisterra.ogg](https://commons.wikimedia.org/wiki/File%3AVento_fisterra.ogg) | Escoitar.org | Public domain |
 | 坤・地 | `kun.wav` | [Country night noise.ogg](https://commons.wikimedia.org/wiki/File%3ACountry_night_noise.ogg) | hc | Public domain |
 | 震・雷 | `zhen.wav` | [Light Rain Distant Thunder July 5th 2016.wav](https://commons.wikimedia.org/wiki/File%3ALight_Rain_Distant_Thunder_July_5th_2016.wav) | https://freesound.org/people/kvgarlic/ | CC0 |
 | 巽・風 | `xun.wav` | [Killiney Hill Storm Floris 20250804 1537.ogg](https://commons.wikimedia.org/wiki/File%3AKilliney_Hill_Storm_Floris_20250804_1537.ogg) | Karlunun | CC0 |

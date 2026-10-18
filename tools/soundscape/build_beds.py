@@ -19,7 +19,7 @@ PRE = 4.0           # 前面多處理 4 秒再丟掉，殘響與增益控制才�
 #  rms：最後的均方根音量（合成版主要音層約 0.06）；lp：低通頻率；wet：殘響比例（越大越遠）
 #  ratio：瞬態壓縮比（越大越平）；ride：慢速音量平整程度（0＝不動，1＝完全拉平）
 BEDS = {
-    'qian': dict(title='Howling wind.ogg', start=40, rms=0.055, lp=3200, wet=0.45, ratio=3, ride=0.6),
+    'qian': dict(title='Vento fisterra.ogg', start=110, rms=0.05, lp=2400, wet=0.55, ratio=3, ride=0.7),
     'kun': dict(title='Country night noise.ogg', shuffle=True, rms=0.045, lp=4200, wet=0.55, ratio=4, ride=0.6),
     'zhen': dict(title='Light Rain Distant Thunder July 5th 2016.wav', start=20, rms=0.06, lp=3800, wet=0.5, ratio=4, ride=0.5),
     'xun': dict(title='Killiney Hill Storm Floris 20250804 1537.ogg', start=6, rms=0.05, lp=3500, wet=0.5, ratio=4, ride=0.6),

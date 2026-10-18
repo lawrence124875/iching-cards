@@ -206,6 +206,49 @@ void main() {
     });
   });
 
+  group('528Hz 調音（0.2.0+50）', () {
+    test('所有有音高的聲音乘 11/9 後仍是整數赫茲（200 秒循環照樣無縫）', () {
+      final p = Tuning.c528.pitch;
+      expect(432 * p, closeTo(528, 1e-9));
+      for (final f in [...TonalPad.frequencies, ...SynthBedSource.birdNotes, ...SynthBedSource.bubbleNotes, 108.0, 324.0]) {
+        final g = f * p;
+        expect((g - g.roundToDouble()).abs(), lessThan(1e-9), reason: '$f → $g Hz');
+      }
+    });
+
+    test('快取鍵：432Hz 版不變，528Hz 版另成一組', () {
+      const a = SessionSpec(upper: Trigram.kun, lower: Trigram.gen, minutes: 1, bells: true);
+      const b = SessionSpec(upper: Trigram.kun, lower: Trigram.gen, minutes: 1, bells: true, tuning: Tuning.c528);
+      expect(a.key, 'v4_kun_gen_b_1m');
+      expect(b.key, 'v4_kun_gen_b_t528_1m');
+      const long = SessionSpec(upper: Trigram.kan, lower: Trigram.li, minutes: 30, bells: true, tuning: Tuning.c528);
+      expect(long.parts.first.key, 'v4_kan_li_b_t528_head');
+    });
+
+    test('鈴聲：吸氣 528Hz，量不到 432Hz', () {
+      double amp(List<double> x, int sr, double f) {
+        var re = 0.0, im = 0.0;
+        for (var i = 0; i < x.length; i++) {
+          final w = 2 * math.pi * f * i / sr;
+          re += x[i] * math.cos(w);
+          im += x[i] * math.sin(w);
+        }
+        return 2 * math.sqrt(re * re + im * im) / x.length;
+      }
+
+      const spec = SessionSpec(upper: Trigram.gen, lower: Trigram.gen, minutes: 1, bells: true, tuning: Tuning.c528);
+      const sr = 8000;
+      final bytes = const SessionRenderer(sampleRate: sr).renderWav(spec);
+      final d = ByteData.sublistView(bytes);
+      final start = ((spec.timeline.leadIn + 10) * sr).round();
+      final x = [for (var i = start; i < start + 2 * sr; i++) d.getInt16(44 + i * 2, Endian.little) / 32768];
+      final at528 = amp(x, sr, 528);
+      expect(at528, greaterThan(amp(x, sr, 524) * 3));
+      expect(at528, greaterThan(amp(x, sr, 532) * 3));
+      expect(at528, greaterThan(amp(x, sr, 432) * 3));
+    });
+  });
+
   group('分段播放（自訂時長，0.2.0+48）', () {
     test('短練習一個檔；60 分鐘＝開頭＋循環 17 次＋結尾，總長不變', () {
       const short = SessionSpec(upper: Trigram.kan, lower: Trigram.li, minutes: 3, bells: true);

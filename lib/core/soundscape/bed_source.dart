@@ -8,5 +8,7 @@ abstract class BedSource {
   const BedSource();
 
   /// 長度＝round(seconds × sampleRate)，最後一個樣本接回第一個樣本時不會有接縫。
-  Float32List bed(Trigram trigram, {required int sampleRate, required double seconds});
+  /// [pitch]：有音高的聲音（長鳴、蟲鳴、鳥鳴、水泡）一律乘上這個比例（調音，見 [Tuning]）；
+  /// 風、雨、水、火等雜訊型的聲音沒有音高，不受影響。
+  Float32List bed(Trigram trigram, {required int sampleRate, required double seconds, double pitch = 1});
 }

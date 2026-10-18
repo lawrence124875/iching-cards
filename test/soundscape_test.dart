@@ -1,3 +1,4 @@
+import 'dart:io';
 import 'dart:math' as math;
 import 'dart:typed_data';
 
@@ -5,6 +6,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:iching_cards/core/iching/trigram.dart';
 import 'package:iching_cards/core/soundscape/breath_timeline.dart';
 import 'package:iching_cards/core/soundscape/dsp.dart';
+import 'package:iching_cards/core/soundscape/recorded_bed_source.dart';
 import 'package:iching_cards/core/soundscape/session_renderer.dart';
 import 'package:iching_cards/core/soundscape/synth_bed_source.dart';
 
@@ -107,7 +109,7 @@ void main() {
     final d = ByteData.sublistView(bytes);
     expect(d.getUint32(24, Endian.little), 8000);
     expect(d.getInt16(44, Endian.little).abs(), lessThan(10)); // 從無聲淡入
-    expect(spec.key, 'v4_kun_gen_b_1m');
+    expect(spec.key, 'v5_kun_gen_b_1m');
     expect(d.getUint16(22, Endian.little), 1);
   });
 
@@ -118,7 +120,7 @@ void main() {
     final samples = (spec.timeline.totalSeconds * 8000).round();
     expect(bytes.length, 44 + samples * 4);
     expect(d.getUint16(22, Endian.little), 2);
-    expect(spec.key, 'v4_qian_qian_q_bi128_1m');
+    expect(spec.key, 'v5_qian_qian_q_bi128_1m');
     var diff = 0;
     for (var i = 8000 * 10; i < 8000 * 11; i++) {
       diff += (d.getInt16(44 + i * 4, Endian.little) - d.getInt16(46 + i * 4, Endian.little)).abs();
@@ -219,10 +221,10 @@ void main() {
     test('快取鍵：432Hz 版不變，528Hz 版另成一組', () {
       const a = SessionSpec(upper: Trigram.kun, lower: Trigram.gen, minutes: 1, bells: true);
       const b = SessionSpec(upper: Trigram.kun, lower: Trigram.gen, minutes: 1, bells: true, tuning: Tuning.c528);
-      expect(a.key, 'v4_kun_gen_b_1m');
-      expect(b.key, 'v4_kun_gen_b_t528_1m');
+      expect(a.key, 'v5_kun_gen_b_1m');
+      expect(b.key, 'v5_kun_gen_b_t528_1m');
       const long = SessionSpec(upper: Trigram.kan, lower: Trigram.li, minutes: 30, bells: true, tuning: Tuning.c528);
-      expect(long.parts.first.key, 'v4_kan_li_b_t528_head');
+      expect(long.parts.first.key, 'v5_kan_li_b_t528_head');
     });
 
     test('鈴聲：吸氣 528Hz，量不到 432Hz', () {
@@ -304,6 +306,54 @@ void main() {
         at += n;
       }
       expect(at, (whole.lengthInBytes - 44) ~/ 2);
+    });
+  });
+
+  group('錄音音景（0.2.0+50）', () {
+    Map<Trigram, Uint8List> loadAll() => {
+          for (final t in Trigram.values) t: File(RecordedBedSource.assetOf(t)).readAsBytesSync(),
+        };
+
+    test('八卦錄音都在：11025Hz、至少 56 秒、音量合理', () {
+      for (final e in loadAll().entries) {
+        final (:rate, :samples) = RecordedBedSource.decodeWav16(e.value);
+        expect(rate, 11025, reason: e.key.name);
+        expect(samples.length, greaterThanOrEqualTo(56 * 11025), reason: e.key.name);
+        final r = rmsOf(samples);
+        expect(r, inInclusiveRange(0.02, 0.1), reason: e.key.name);
+        expect(peakOf(samples), lessThan(0.9), reason: e.key.name);
+      }
+    });
+
+    test('換取樣率後循環長度正確（40／50 秒）', () {
+      final source = RecordedBedSource(loadAll());
+      for (final t in [Trigram.qian, Trigram.kan]) {
+        final b = source.bed(t, sampleRate: 22050, seconds: 50);
+        expect(b.length, 50 * 22050);
+        expect(b.every((v) => v.isFinite), isTrue);
+      }
+    });
+
+    test('錄音音景輸出立體聲，左右聲道不同（去相關）', () {
+      final beds = loadAll();
+      const spec = SessionSpec(upper: Trigram.kun, lower: Trigram.gen, minutes: 1, bells: false);
+      final bytes = SessionRenderer(source: RecordedBedSource(beds), sampleRate: 8000).renderWav(spec);
+      final d = ByteData.sublistView(bytes);
+      expect(d.getUint16(22, Endian.little), 2);
+      var diff = 0.0;
+      for (var i = 8000 * 20; i < 8000 * 21; i++) {
+        diff += (d.getInt16(44 + i * 4, Endian.little) - d.getInt16(46 + i * 4, Endian.little)).abs();
+      }
+      expect(diff / 8000, greaterThan(100));
+    });
+
+    test('分段播放仍然無縫（錄音、立體聲）', () {
+      final r = SessionRenderer(source: RecordedBedSource(loadAll()), sampleRate: 2000);
+      const spec = SessionSpec(upper: Trigram.li, lower: Trigram.kan, minutes: 10, bells: true);
+      final loop = spec.parts[1];
+      final after = r.renderPart(spec, loop.end, loop.end + 1);
+      final head = r.renderPart(spec, loop.start, loop.start + 1);
+      expect(after, head);
     });
   });
 }

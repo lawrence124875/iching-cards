@@ -4,6 +4,7 @@ import 'dart:typed_data';
 
 import '../iching/trigram.dart';
 import 'bed_source.dart';
+import 'recorded_bed_source.dart';
 import 'dsp.dart';
 import 'breath_timeline.dart';
 import 'synth_bed_source.dart';
@@ -38,8 +39,9 @@ class SessionSpec {
 
   /// 快取檔名用。改了合成方式請把版本往上加，舊快取自然失效
   /// （v2：0.1.0+10 柔和版＋432Hz；v3：432Hz 長音墊、精準頻率、雙耳節拍可選 128／216Hz；
-  /// v4：0.2.0+48 分段播放、音景循環 40／50 秒、鳥鳴與水泡改用 432Hz 系統的音）。
-  String get key => 'v4_${_soundKey}_${minutes}m';
+  /// v4：0.2.0+48 分段播放、音景循環 40／50 秒、鳥鳴與水泡改用 432Hz 系統的音；
+  /// v5：0.2.0+50 錄音音景、立體聲）。
+  String get key => 'v5_${_soundKey}_${minutes}m';
 
   /// 不含時長的部分：開頭段與循環段只跟音景、鈴聲、雙耳節拍有關，換時長可以沿用。
   String get _soundKey =>
@@ -54,10 +56,10 @@ class SessionSpec {
     const p = SessionRenderer.loopSeconds;
     final tl = timeline;
     final n = (tl.breathSeconds / p).floor();
-    if (n == 0) return [SessionPart('v4_${_soundKey}_${minutes}m', 0, tl.totalSeconds)];
-    final head = SessionPart('v4_${_soundKey}_head', 0, tl.leadIn + p);
-    final loop = SessionPart('v4_${_soundKey}_loop', tl.leadIn + p, tl.leadIn + 2 * p);
-    final tail = SessionPart('v4_${_soundKey}_${minutes}m_end', tl.leadIn + n * p, tl.totalSeconds);
+    if (n == 0) return [SessionPart('v5_${_soundKey}_${minutes}m', 0, tl.totalSeconds)];
+    final head = SessionPart('v5_${_soundKey}_head', 0, tl.leadIn + p);
+    final loop = SessionPart('v5_${_soundKey}_loop', tl.leadIn + p, tl.leadIn + 2 * p);
+    final tail = SessionPart('v5_${_soundKey}_${minutes}m_end', tl.leadIn + n * p, tl.totalSeconds);
     return [head, for (var i = 1; i < n; i++) loop, tail];
   }
 }
@@ -102,7 +104,7 @@ enum BinauralCarrier {
   double get right => left + SessionRenderer.binauralBeat;
 }
 
-/// 合成整段練習音檔（16-bit WAV，單聲道；開雙耳節拍時立體聲）：上卦、下卦兩種音景疊加，
+/// 合成整段練習音檔（16-bit WAV；錄音音景或開雙耳節拍時立體聲，否則單聲道）：上卦、下卦兩種音景疊加，
 /// 柔化高頻後加上 432Hz 調音的長音墊（[TonalPad]），依呼吸時間軸起伏音量，再加上換氣鈴聲（432Hz 調音）。
 /// 所有有音高的聲音都是精準頻率的正弦波，可用調音器或頻譜 App 量測。純計算，可在背景 isolate 或單元測試中執行。
 class SessionRenderer {
@@ -152,8 +154,12 @@ class SessionRenderer {
     }
     final active = <_Bell>[];
 
-    final ch = spec.binaural ? 2 : 1;
+    final wide = source.stereo;
+    final ch = spec.binaural || wide ? 2 : 1;
     final soften = Biquad.lowpass(sr, softenCutoff, 0.6);
+    final softenR = Biquad.lowpass(sr, softenCutoff, 0.6);
+    final lowerShift = (lower.length * 0.61).round();
+    final upperShift = upper == null ? 0 : (upper.length * 0.37).round();
     final pad = TonalPad(tl, pitch: pitch);
     final left = spec.carrier.left, right = spec.carrier.right;
     final data = ByteData(44 + n * 2 * ch);
@@ -163,8 +169,17 @@ class SessionRenderer {
       final t = i / sr;
       var v = lower[i % lower.length] * g;
       if (upper != null) v += upper[i % upper.length] * g;
+      // 去相關立體聲：右聲道取同一循環的另一個位置（上卦錯開 0.37 圈、下卦 0.61 圈）
+      var w = 0.0;
+      if (wide) {
+        w = lower[(i + lowerShift) % lower.length] * g;
+        if (upper != null) w += upper[(i + upperShift) % upper.length] * g;
+      }
       // 長音墊加在低通之後：純正弦波不受濾波影響，頻率保持精準
-      v = (soften.process(v) + pad.valueAt(t)) * tl.bedGain(t);
+      final common = pad.valueAt(t);
+      final gain = tl.bedGain(t);
+      v = (soften.process(v) + common) * gain;
+      if (wide) w = (softenR.process(w) + common) * gain;
 
       while (nextBell < bells.length && bells[nextBell].time <= t) {
         active.add(_Bell(bells[nextBell].kind, bells[nextBell].time, pitch));
@@ -172,7 +187,9 @@ class SessionRenderer {
       }
       if (active.isNotEmpty) {
         for (final b in active) {
-          v += b.valueAt(t);
+          final x = b.valueAt(t);
+          v += x;
+          w += x;
         }
         active.removeWhere((b) => t - b.start > b.length);
       }
@@ -182,11 +199,14 @@ class SessionRenderer {
         // 柔性限幅：一般音量幾乎不受影響，避免雷聲或劈啪聲爆音
         data.setInt16(44 + k * 2, _pcm(v), Endian.little);
       } else {
-        // 雙耳節拍只隨準備淡入、結束淡出，不跟呼吸起伏（保持穩定的差頻）
-        final e = binauralLevel * tl.bedGain(t) / (1 - tl.depth).clamp(0.01, 1.0);
-        final env = math.min(e, binauralLevel);
-        final l = v + env * math.sin(2 * math.pi * left * t);
-        final r = v + env * math.sin(2 * math.pi * right * t);
+        var l = v, r = wide ? w : v;
+        if (spec.binaural) {
+          // 雙耳節拍只隨準備淡入、結束淡出，不跟呼吸起伏（保持穩定的差頻）
+          final e = binauralLevel * tl.bedGain(t) / (1 - tl.depth).clamp(0.01, 1.0);
+          final env = math.min(e, binauralLevel);
+          l += env * math.sin(2 * math.pi * left * t);
+          r += env * math.sin(2 * math.pi * right * t);
+        }
         data.setInt16(44 + k * 4, _pcm(l), Endian.little);
         data.setInt16(46 + k * 4, _pcm(r), Endian.little);
       }
@@ -330,8 +350,10 @@ class _Bell {
 }
 
 /// 在背景 isolate 執行：產生一段音檔並寫入 [path]（先寫暫存檔再改名，避免留下半個檔案）。
-Future<void> renderSessionToFile(SessionSpec spec, SessionPart part, String path) async {
-  final bytes = const SessionRenderer().renderPart(spec, part.start, part.end);
+/// [beds]：錄音音景的 WAV 內容（[RecordedBedSource]）；不給就用程式合成。
+Future<void> renderSessionToFile(SessionSpec spec, SessionPart part, String path, {Map<Trigram, Uint8List>? beds}) async {
+  final source = beds == null ? const SynthBedSource() : RecordedBedSource(beds);
+  final bytes = SessionRenderer(source: source).renderPart(spec, part.start, part.end);
   final tmp = File('$path.part');
   await tmp.writeAsBytes(bytes, flush: true);
   await tmp.rename(path);

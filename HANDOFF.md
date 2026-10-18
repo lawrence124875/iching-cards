@@ -17,8 +17,7 @@
 - **iching-content main**：11 語商店資訊 `store/listing-*.md`、`store/release-notes/0.2.0+48.txt`／`0.2.0+49.txt`（內容相同）、`store/PLAY_CONSOLE.md` §6 指向 +49。
 
 ### 0.2 待辦清單（每項可各開一個新討論串）
-1. **音景改真實錄音（八經卦全部）**：使用者 2026-10-12 決定全部改錄音版，規格見 §0.3。進度：八卦錄音、處理腳本、資產與 CREDITS 已在分支 `claude/project-thread-7dxapg`，第二版試聽檔等使用者確認。剩下：App 改讀音檔資產並輸出立體聲 → 合併 528（f203ad0）→ 升 0.2.0+50、寫 release notes → 合併 main。
-2. **528Hz 會員選項上線**：程式已在分支（§0.4），隨第 1 項一起出 +50；release notes 與商店說明可提 528Hz。
+1. **音景改真實錄音＋528Hz（0.2.0+50）**：使用者 2026-10-12 認可七卦錄音，乾卦（原 Howling wind）不滿意，2026-10-18 給三個新版本（`/mnt/project-files/audio-samples/recording-v3-qian/`），先用 A（`Vento fisterra.ogg`）。分支 `claude/project-thread-7dxapg`：錄音資產、`RecordedBedSource`（App 讀錄音、立體聲）、合併 528（f203ad0）、升 0.2.0+50；iching-content 同名分支有 `release-notes/0.2.0+50.txt` 與 PLAY_CONSOLE §6 改指 +50。剩下：CI 綠燈 → 使用者確定乾卦 → 兩個 repo 合併 main。
 3. **回答使用者「音景是依卦象產生的嗎？」並交付塔羅提示詞**：答案見 §0.5；提示詞要點見 §0.6。使用者說「等您確認」，要在錄音品質經使用者認可後才交付。
 4. **Play Console 資料安全性（PLAY_CONSOLE §6 第 8b 項）**：使用者要逐步帶著填，等使用者準備好再開始。
 5. **上傳 +49（或之後的 +50）到 Play**：正式版發佈 11 語版本；阿拉伯文是否開放中東北非由使用者決定。
@@ -35,9 +34,9 @@
   3. 壓瞬態：5 ms 框均方根，門檻＝中位數 ×1.5、壓縮比 3–5（`ratio`），超過中位數 3 倍一律壓到 3 倍；往前看 30 ms、80 ms 平滑。再以 3 秒尺度把忽大忽小拉平（`ride` 0.5–0.6，增益限 ±6 dB）。
   4. 合成殘響：指數衰減雜訊 IR（RT60 2.4 秒、預延遲 25 ms、IR 本身低通 2.5 kHz 並每八度 −3 dB），FFT 摺積；乾濕等功率混合，濕 45–55%（`wet`）。
   5. 殘響後再輕壓一次（壓縮比 3），前 4 秒預處理丟掉，截 56 秒，正規化到均方根 0.04–0.06（`rms`；合成版主音層約 0.06）。結果 5 ms 峰值／中位數約 1.5–2.0（原錄音 3–50）。
-  6. 存 16-bit WAV（每卦 1.2 MB，共 9.9 MB）。App 端（待做）：升頻 22050 Hz，左右聲道取同一循環的不同位移（上卦 0.37、下卦 0.61 個循環）做去相關立體聲；循環沿用 `makeLoop`、交叉淡化 3 秒，上卦 40 秒、下卦 50 秒。
+  6. 存 16-bit WAV（每卦 1.2 MB，共 9.9 MB）。App 端（`lib/core/soundscape/recorded_bed_source.dart`，0.2.0+50）：升頻 22050 Hz，左右聲道取同一循環的不同位移（上卦 0.37、下卦 0.61 個循環）做去相關立體聲；循環沿用 `makeLoop`、交叉淡化 3 秒，上卦 40 秒、下卦 50 秒。
   - 合成的長音墊、鐘聲、雙耳節拍保留，432／528 調音照樣精準；錄音裡的鳥鳴、蟲鳴不調音（使用者已接受）。
-- **選用錄音**：乾 `Howling wind.ogg`（CC0，40 秒起）；坤 `Country night noise.ogg`（PD，重排接長）；震 `Light Rain Distant Thunder July 5th 2016.wav`（CC0，20 秒起）；巽 `Killiney Hill Storm Floris 20250804 1537.ogg`（CC0，6 秒起）；坎 `Forest lawn creek.ogg`（PD，70 秒起；取代第一版較近的 jackthemurray 溪流）；離 `Dry grass burning in open fireplace.ogg`（PD，重排接長）；艮 `20090610 0 ambience.ogg`（PD，10 秒起）；兌 `17650 thoschi issyk-kul.ogg`（CC0，伊塞克湖岸，60 秒起）。
+- **選用錄音**：乾 `Vento fisterra.ogg`（PD，西班牙海角長風，110 秒起；`lp` 2400、`wet` 0.55、`ride` 0.7；原 `Howling wind.ogg` 使用者不滿意）；坤 `Country night noise.ogg`（PD，重排接長）；震 `Light Rain Distant Thunder July 5th 2016.wav`（CC0，20 秒起）；巽 `Killiney Hill Storm Floris 20250804 1537.ogg`（CC0，6 秒起）；坎 `Forest lawn creek.ogg`（PD，70 秒起；取代第一版較近的 jackthemurray 溪流）；離 `Dry grass burning in open fireplace.ogg`（PD，重排接長）；艮 `20090610 0 ambience.ogg`（PD，10 秒起）；兌 `17650 thoschi issyk-kul.ogg`（CC0，伊塞克湖岸，60 秒起）。
 - **其他 CC0／PD 備用**：風 `帕卡颱風逼近下的風聲.ogg`、`Breeze birds and geese.ogg`、`Storm in Quebec on August 10, 2023.flac`；火 `Bones breaking wood fire ice crackling.ogg`（瞬態極多）；鳥 `Réveil des oiseaux.ogg`、`Waidachswald Oberschefflenz Abend 20250616 2005.ogg`；水 `Waves.ogg`、`On a pebble beach.ogg`、`433589 jackthemurray stream-river-water-up-close.wav`；夜 `蝉鸣.ogg`、`Pseudacris triseriata chorus.wav`。
 - **試聽檔第二版**：`/mnt/project-files/audio-samples/recording-v2/`，八卦各 60 秒（模擬 App 的 40 秒循環與去相關立體聲）＋兩段合奏（謙、既濟，含近似的長音墊與鐘聲）。第一版在 `recording-trial/`。
 

@@ -12,23 +12,21 @@
 > **省 token 原則（使用者 2026-10-12）**：重複、可確定的重活（下載與處理音檔、建置、批次產生檔案）寫成腳本交給 GitHub Actions 跑，輸出放 artifact／Release 或 commit 回分支；對話裡只看 log 摘要（tail／grep），不讀整份輸出。
 
 ### 0.1 版本現況
-- **iching-cards main**：0.2.0+49（commit dcd3ca5）。run #90 一般版、#91 force_premium 皆成功，APK 在 iching-content Releases。11 語內容與介面全部完成；+48、+49 內容見 §14.9。
-- **分支 `claude/project-thread-ywj4gn`**：main 加上 commit **f203ad0**（528Hz 會員選項，132 項測試通過），**尚未合併 main**，預定跟錄音音景一起出 0.2.0+50。
-- **iching-content main**：11 語商店資訊 `store/listing-*.md`、`store/release-notes/0.2.0+48.txt`／`0.2.0+49.txt`（內容相同）、`store/PLAY_CONSOLE.md` §6 指向 +49。
+- **iching-cards main**：0.2.0+50（2026-10-19）：呼吸音景改用八經卦 CC0／PD 自然錄音（§0.3，`RecordedBedSource`，立體聲）＋528Hz 會員選項（§0.4）。分支測試建置 run #92 成功；合併 main 後的正式建置見 Actions。
+- **iching-content main**：11 語商店資訊 `store/listing-*.md`、`store/release-notes/0.2.0+50.txt`（11 語，各 ≤500 字）、`store/PLAY_CONSOLE.md` §6 指向 +50。
 
 ### 0.2 待辦清單（每項可各開一個新討論串）
-1. **音景改真實錄音＋528Hz（0.2.0+50）**：使用者 2026-10-12 認可七卦錄音，乾卦（原 Howling wind）不滿意，2026-10-18 給三個新版本（`/mnt/project-files/audio-samples/recording-v3-qian/`），先用 A（`Vento fisterra.ogg`）。分支 `claude/project-thread-7dxapg`：錄音資產、`RecordedBedSource`（App 讀錄音、立體聲）、合併 528（f203ad0）、升 0.2.0+50；iching-content 同名分支有 `release-notes/0.2.0+50.txt` 與 PLAY_CONSOLE §6 改指 +50。剩下：CI 綠燈 → 使用者確定乾卦 → 兩個 repo 合併 main。
-3. **回答使用者「音景是依卦象產生的嗎？」並交付塔羅提示詞**：答案見 §0.5；提示詞要點見 §0.6。使用者說「等您確認」，要在錄音品質經使用者認可後才交付。
-4. **Play Console 資料安全性（PLAY_CONSOLE §6 第 8b 項）**：使用者要逐步帶著填，等使用者準備好再開始。
-5. **上傳 +49（或之後的 +50）到 Play**：正式版發佈 11 語版本；阿拉伯文是否開放中東北非由使用者決定。
-6. **iOS**：等 Apple 開發者帳號（§24）。
+1. **回答使用者「音景是依卦象產生的嗎？」並交付塔羅提示詞**：答案見 §0.5；提示詞要點見 §0.6。錄音品質已於 2026-10-19 經使用者認可，可以交付。
+2. **Play Console 資料安全性（PLAY_CONSOLE §6 第 8b 項）**：使用者要逐步帶著填，等使用者準備好再開始。
+3. **上傳 +50 到 Play**：正式版發佈 11 語版本；阿拉伯文是否開放中東北非由使用者決定。
+4. **iOS**：等 Apple 開發者帳號（§24）。
 
 ### 0.3 錄音音景規格（2026-10-12）
 - **使用者要求**：聲音柔和、有身歷其境感，**不要耳邊近距離的吵雜聲**。第一版試聽回饋：「新的自然很多，只是有些近的聲音有點吵雜」。
 - **授權**：只用 CC0 或公有領域（PD）；腳本會檢查授權，來源寫入 `assets/audio/CREDITS.md`（腳本自動產生）。
 - **工具**：`tools/soundscape/build_beds.py`（ffmpeg＋numpy，無 scipy），GitHub Actions `soundscape_beds.yml`（手動執行，產生資產與試聽 mp3 的 artifact，`commit=true` 時 commit 回分支）。
 - **下載**：Wikimedia Commons，帶 User-Agent、429 重試；先抓轉檔 mp3（`.../transcoded/a/ab/X.ogg/X.ogg.mp3`）。這個雲端環境只連得到 Wikimedia（freesound、archive.org 被擋）。
-- **處理流程與參數（第二版，待使用者核准）**，每卦參數在腳本 `BEDS`：
+- **處理流程與參數（使用者 2026-10-12／10-19 核准，0.2.0+50 採用）**，每卦參數在腳本 `BEDS`：
   1. 解碼成 11025 Hz 單聲道；原檔太短（坤、離）時隨機取 4 秒小段、1 秒等功率交叉淡化接長（`shuffle`）。
   2. 零相位 FFT 濾波：60 Hz 高通（2 階）、低通 3.2–4.5 kHz（4 階，每卦 `lp`）、1 kHz 以上每八度 −1.5 dB（空氣吸收，聲音變遠）。
   3. 壓瞬態：5 ms 框均方根，門檻＝中位數 ×1.5、壓縮比 3–5（`ratio`），超過中位數 3 倍一律壓到 3 倍；往前看 30 ms、80 ms 平滑。再以 3 秒尺度把忽大忽小拉平（`ride` 0.5–0.6，增益限 ±6 dB）。
@@ -40,13 +38,8 @@
 - **其他 CC0／PD 備用**：風 `帕卡颱風逼近下的風聲.ogg`、`Breeze birds and geese.ogg`、`Storm in Quebec on August 10, 2023.flac`；火 `Bones breaking wood fire ice crackling.ogg`（瞬態極多）；鳥 `Réveil des oiseaux.ogg`、`Waidachswald Oberschefflenz Abend 20250616 2005.ogg`；水 `Waves.ogg`、`On a pebble beach.ogg`、`433589 jackthemurray stream-river-water-up-close.wav`；夜 `蝉鸣.ogg`、`Pseudacris triseriata chorus.wav`。
 - **試聽檔第二版**：`/mnt/project-files/audio-samples/recording-v2/`，八卦各 60 秒（模擬 App 的 40 秒循環與去相關立體聲）＋兩段合奏（謙、既濟，含近似的長音墊與鐘聲）。第一版在 `recording-trial/`。
 
-### 0.4 528Hz 會員選項（commit f203ad0，在分支上）
-- 使用者 2026-10-12 決定：**528Hz 是會員選項**，與 432Hz 二選一，不同時播放。
-- `session_renderer.dart`：`enum Tuning { a432(432, 1.0), c528(528, 11/9) }`。432 系統的頻率都是 9 的倍數，乘 11/9 仍是整數 Hz，200 秒段落照樣無縫。`SessionSpec.tuning` 預設 a432；快取鍵在非 432 時加 `_t528`，432 的鍵不變。pitch 傳給 bed、`TonalPad`、`_Bell`（鐘聲 = pitch × 432／324）。
-- `synth_bed_source.dart`：水泡、鳥鳴、天籟、蟲鳴頻率都乘 pitch（改錄音後只剩長音墊與鐘聲需要 pitch）。
-- `breath_setup_sheet.dart`：調音選擇晶片，528 對非會員顯示鎖頭並走 `_unlock`；非會員一律重設為 432。
-- ARB（11 語）新增 `breathTuning`、`breathTuningSub`、`breathTuningHz`（`{hz}Hz`，zh 有 `@breathTuningHz` int placeholder）；`breathSetupNote` 拿掉 432Hz 那句。
-- 測試：`test/soundscape_test.dart` 群組「528Hz 調音（0.2.0+50）」。
+### 0.4 528Hz 會員選項（0.2.0+50 已上 main）
+- `enum Tuning { a432, c528 }`（`session_renderer.dart`），528 = 432 系統頻率 × 11/9；會員才能選，非會員重設為 432。快取鍵非 432 時加 `_t528`。ARB 11 語有 `breathTuning*`。測試群組「528Hz 調音（0.2.0+50）」。
 
 ### 0.5 「音景是依卦象產生的嗎？」的答案（尚未回覆使用者）
 是。抽到的卦，上卦決定一段自然聲（40 秒循環），下卦決定另一段（50 秒循環；上下卦相同時只用一段）。兩段疊在一起，再加上 432 或 528Hz 長音墊和弦、呼吸鐘聲，以及可選的雙耳節拍。

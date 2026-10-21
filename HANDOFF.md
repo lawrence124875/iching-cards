@@ -17,12 +17,11 @@
 
 ### 0.2 待辦清單（每項可各開一個新討論串）
 1. **回答使用者「音景是依卦象產生的嗎？」並交付塔羅提示詞**：答案見 §0.5；提示詞要點見 §0.6。錄音品質已於 2026-10-19 經使用者認可，可以交付。
-2. **Play Console 資料安全性（PLAY_CONSOLE §6 第 8b 項）**：使用者要逐步帶著填，等使用者準備好再開始。
-3. **上傳 +50 到 Play**：2026-10-20 +50 已送封閉測試審查；同日已申請正式版權限（問卷照實作答，Google 約 7 天內 email 回覆）。核准後：正式版 → 建立新版本 → 加入 +50 → 貼版本資訊 → 國家／地區 → 送審。商店資訊要補 7 語翻譯（vi、es-ES、es-419、pt-BR、id、th、ar；檔案在 iching-content `store/`）。
-4. **iOS**：等 Apple 開發者帳號（§24）。
-5. **AdMob 後台（使用者做，PLAY_CONSOLE §6 第 6、7 項）**：封鎖敏感廣告類別；發布 GDPR 同意訊息（11 語）。
-6. **RevenueCat 確認**：Products 兩個商品狀態應已從 Could not check 變 Published（§23.4，2026-10-05 時尚在同步）；不是的話截圖回來。
-7. **正式上架後**：AdMob → 應用程式 → 連結 Play 商店資訊（讓 app-ads.txt 驗證通過）；`lawrence124875.github.io` 首頁謙卦卡片補 Play 連結（§20）。
+2. **上傳 +50 到 Play**：2026-10-20 +50 已送封閉測試審查；同日已申請正式版權限（問卷照實作答，Google 約 7 天內 email 回覆）。核准後：正式版 → 建立新版本 → 加入 +50 → 貼版本資訊 → 國家／地區 → 送審。商店資訊要補 7 語翻譯（vi、es-ES、es-419、pt-BR、id、th、ar；檔案在 iching-content `store/`）。
+3. **iOS**：等 Apple 開發者帳號（§24）。
+4. **AdMob 後台（使用者做，PLAY_CONSOLE §6 第 6、7 項）**：封鎖敏感廣告類別；發布 GDPR 同意訊息（11 語）。
+5. **RevenueCat 確認**：Products 兩個商品狀態應已從 Could not check 變 Published（§23.4，2026-10-05 時尚在同步）；不是的話截圖回來。
+6. **正式上架後**：AdMob → 應用程式 → 連結 Play 商店資訊（讓 app-ads.txt 驗證通過）；`lawrence124875.github.io` 首頁謙卦卡片補 Play 連結（§20）。
 
 ### 0.3 錄音音景規格（2026-10-12）
 - **使用者要求**：聲音柔和、有身歷其境感，**不要耳邊近距離的吵雜聲**。第一版試聽回饋：「新的自然很多，只是有些近的聲音有點吵雜」。
@@ -732,7 +731,7 @@ checkout 本 repo → 以 `BUILDS_REPO_TOKEN` sparse-checkout iching-content 的
 `ADMOB_APP_ID`（`scripts/patch_ads.sh` 寫入 Manifest；沒有會閃退，所以預設測試 App ID）、`ADMOB_BANNER_AD_UNIT_ID`、`ADMOB_INTERSTITIAL_AD_UNIT_ID`、`ADMOB_REWARDED_AD_UNIT_ID`、`REVENUECAT_ANDROID_API_KEY`（goog_ 開頭）。Release 說明顯示「廣告：測試廣告／正式廣告單元；訂閱：已設定／未設定」。workflow 新增輸入 `force_premium`（填 true＝會員測試版，只建 APK）。
 
 ### 23.3 待使用者做
-見 iching-content `store/PLAY_CONSOLE.md` §6：AdMob 封鎖敏感類別、AdMob GDPR 訊息、國家／地區、資料安全性（8b）。
+見 iching-content `store/PLAY_CONSOLE.md` §6：AdMob 封鎖敏感類別、AdMob GDPR 訊息、國家／地區（資料安全性 8b 已於 2026-10-21 送審）。
 
 ### 23.4 後台設定紀錄（2026-10-05，聊天端逐欄確認完成）
 - **Play 訂閱**：`qg_premium_monthly`（基本方案 `monthly`，台灣 NT$99）、`qg_premium_yearly`（基本方案 `yearly`，台灣 NT$590）已啟用；手動設價 20 國，其餘依 US$3.99／US$24.99 自動換算；年齡分級 18+、允許重新訂閱。

@@ -13,15 +13,14 @@
 
 ### 0.1 版本現況
 - **2026-10-25 已在 Google Play 正式上架**，版本 0.2.0+50（11 語內容、八卦自然錄音音景、528Hz 會員選項）。
-- 上架前設定都已完成：資料安全性（含意見回饋 email／使用者內容）、AdMob 真實廣告單元與 RevenueCat secrets、Play 訂閱與 entitlement `premium`、Firestore `qg_feedback` 規則、AdMob 敏感類別封鎖（宗教、政治、交友、快速致富、減重、整形、性、社交賭場；賭博與酒精）、GDPR 訊息（三個 App 共用一則；App 已整合 UMP）。
+- 上架前設定都已完成：資料安全性（含意見回饋 email／使用者內容）、AdMob 真實廣告單元與 RevenueCat secrets、Play 訂閱與 entitlement `premium`、Firestore `qg_feedback` 規則、AdMob 敏感類別封鎖（宗教、政治、交友、快速致富、減重、整形、性、社交賭場；賭博與酒精）、GDPR 訊息（三個 App 共用一則；App 已整合 UMP）。上架後 AdMob 已連結 Play 商店資訊並驗證（2026-10-25，審查 2–3 天），網站首頁已有 Play 連結。
 - **iching-content main**：11 語商店資訊 `store/listing-*.md`、版本資訊 `store/release-notes/`、`store/PLAY_CONSOLE.md`。
 
 ### 0.2 待辦清單（每項可各開一個新討論串）
-1. **AdMob 連結 Play**（使用者操作，2026-10-25 已給步驟）：AdMob → 應用程式 → 謙卦 → 應用程式設定 → 應用程式商店詳細資料「新增」→ 搜 `com.lclab.qiangua`；之後確認 app-ads.txt 轉為「已驗證」。網站 Play 連結已上線。
-2. **Play 商店資訊 7 語翻譯**：vi、es-ES、es-419、pt-BR、id、th、ar（檔案在 iching-content `store/`）；上架時是否已補未確認，請使用者看一下 Play Console。
-3. **RevenueCat 確認**：Products 兩個商品狀態應為 Published（§23.4）；不是的話截圖回來。
-4. **iOS**：等 Apple 開發者帳號（§24）。
-5. （選用，未決定）In-App Review 評分提示。
+1. **Play 商店資訊 7 語翻譯**：vi、es-ES、es-419、pt-BR、id、th、ar（檔案在 iching-content `store/`）；上架時是否已補未確認，請使用者看一下 Play Console。
+2. **RevenueCat 確認**：Products 兩個商品狀態應為 Published（§23.4）；不是的話截圖回來。
+3. **iOS**：等 Apple 開發者帳號（§24）。
+4. （選用，未決定）In-App Review 評分提示。
 
 ### 0.3 錄音音景規格（2026-10-12）
 - **使用者要求**：聲音柔和、有身歷其境感，**不要耳邊近距離的吵雜聲**。第一版試聽回饋：「新的自然很多，只是有些近的聲音有點吵雜」。

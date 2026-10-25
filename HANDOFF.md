@@ -17,7 +17,7 @@
 - **iching-content main**：11 語商店資訊 `store/listing-*.md`、版本資訊 `store/release-notes/`、`store/PLAY_CONSOLE.md`。
 
 ### 0.2 待辦清單（每項可各開一個新討論串）
-1. **上架後連結**：AdMob → 應用程式 → 連結 Play 商店資訊（讓 app-ads.txt 驗證通過）；`lawrence124875.github.io` 首頁謙卦卡片補 Play 連結（§20）。
+1. **AdMob 連結 Play**（使用者操作，2026-10-25 已給步驟）：AdMob → 應用程式 → 謙卦 → 應用程式設定 → 應用程式商店詳細資料「新增」→ 搜 `com.lclab.qiangua`；之後確認 app-ads.txt 轉為「已驗證」。網站 Play 連結已上線。
 2. **Play 商店資訊 7 語翻譯**：vi、es-ES、es-419、pt-BR、id、th、ar（檔案在 iching-content `store/`）；上架時是否已補未確認，請使用者看一下 Play Console。
 3. **RevenueCat 確認**：Products 兩個商品狀態應為 Published（§23.4）；不是的話截圖回來。
 4. **iOS**：等 Apple 開發者帳號（§24）。

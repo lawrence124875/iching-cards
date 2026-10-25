@@ -13,14 +13,13 @@
 
 ### 0.1 版本現況
 - **2026-10-25 已在 Google Play 正式上架**，版本 0.2.0+50（11 語內容、八卦自然錄音音景、528Hz 會員選項）。
-- 上架前設定都已完成：資料安全性（含意見回饋 email／使用者內容）、AdMob 真實廣告單元與 RevenueCat secrets、Play 訂閱與 entitlement `premium`、Firestore `qg_feedback` 規則、AdMob 敏感類別封鎖（宗教、政治、交友、快速致富、減重、整形、性、社交賭場；賭博與酒精）、GDPR 訊息（三個 App 共用一則；App 已整合 UMP）。上架後 AdMob 已連結 Play 商店資訊並驗證（2026-10-25，審查 2–3 天），網站首頁已有 Play 連結。
+- 上架前設定都已完成：資料安全性（含意見回饋 email／使用者內容）、AdMob 真實廣告單元與 RevenueCat secrets、Play 訂閱與 entitlement `premium`（RevenueCat 商品 2026-10-25 確認 Published）、Firestore `qg_feedback` 規則、AdMob 敏感類別封鎖（宗教、政治、交友、快速致富、減重、整形、性、社交賭場；賭博與酒精）、GDPR 訊息（三個 App 共用一則；App 已整合 UMP）。上架後 AdMob 已連結 Play 商店資訊並驗證（2026-10-25，審查 2–3 天），網站首頁已有 Play 連結。
 - **Play 商店資訊 11 語已全部上傳**（7 語翻譯使用者 2026-10-25 補完）。
 - **iching-content main**：11 語商店資訊 `store/listing-*.md`、版本資訊 `store/release-notes/`、`store/PLAY_CONSOLE.md`。
 
 ### 0.2 待辦清單（每項可各開一個新討論串）
-1. **RevenueCat 確認**：Products 兩個商品狀態應為 Published（§23.4）；不是的話截圖回來。
-2. **iOS**：等 Apple 開發者帳號（§24）。
-3. （選用，未決定）In-App Review 評分提示。
+1. **iOS**：等 Apple 開發者帳號（§24）。
+2. （選用，未決定）In-App Review 評分提示。
 
 ### 0.3 錄音音景規格（2026-10-12）
 - **使用者要求**：聲音柔和、有身歷其境感，**不要耳邊近距離的吵雜聲**。第一版試聽回饋：「新的自然很多，只是有些近的聲音有點吵雜」。
@@ -721,7 +720,7 @@ checkout 本 repo → 以 `BUILDS_REPO_TOKEN` sparse-checkout iching-content 的
 ### 23.4 後台設定紀錄（2026-10-05，聊天端逐欄確認完成）
 - **Play 訂閱**：`qg_premium_monthly`（基本方案 `monthly`，台灣 NT$99）、`qg_premium_yearly`（基本方案 `yearly`，台灣 NT$590）已啟用；手動設價 20 國，其餘依 US$3.99／US$24.99 自動換算；年齡分級 18+、允許重新訂閱。
 - **RevenueCat**：專案 qiangua（與英文 App 分開）；App `com.lclab.qiangua`，上傳與英文 App 共用的服務帳戶 JSON（revenuecat@learning-english-5ea8b.iam.gserviceaccount.com，Play「帳戶權限」已授權）；購買驗證等 Google 權限同步中（最長約 36 小時）。
-- **Products**：`qg_premium_monthly:monthly`、`qg_premium_yearly:yearly`（狀態 Could not check，憑證驗證通過後會變 Published）。
+- **Products**：`qg_premium_monthly:monthly`、`qg_premium_yearly:yearly`（2026-10-25 截圖確認兩個都是 Published）。
 - **Entitlement** `premium` 掛兩個商品；**Offering** `default`（Current）：`$rc_annual` → `qg_premium_yearly:yearly`，`$rc_monthly` → `qg_premium_monthly:monthly`。沒有建 Test Store 商品、沒有 Lifetime。
 - **GitHub Secrets** 5 個已設齊：`ADMOB_APP_ID`、`ADMOB_BANNER_AD_UNIT_ID`、`ADMOB_INTERSTITIAL_AD_UNIT_ID`、`ADMOB_REWARDED_AD_UNIT_ID`、`REVENUECAT_ANDROID_API_KEY`。
 - **正式建置**（2026-10-06 確認）：run #69 ✅，0.2.0+36，廣告＝正式廣告單元、訂閱＝已設定；版本資訊含 zh-TW／en-US／ja-JP／ko-KR／vi-VN（`store/release-notes/0.2.0+36.txt`）。

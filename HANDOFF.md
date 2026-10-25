@@ -1,26 +1,27 @@
 # HANDOFF — 易經卦卡 App（名稱未定）
 
 > 新對話接續時請先讀本檔。本檔記錄已確定的決策、內容規格與待討論事項。
-> 最後更新：2026-10-12。目前狀態與待辦見 §0；已完成的舊紀錄已刪除（看 git 歷史）。
+> 最後更新：2026-10-25。目前狀態與待辦見 §0；已完成的舊紀錄已刪除（看 git 歷史）。
 
 ---
 
-## 0. 目前狀態與待辦（2026-10-12 更新；新對話先讀本節）
+## 0. 目前狀態與待辦（2026-10-25 更新；新對話先讀本節）
 
-> 已完成的舊紀錄（開發路線、修正日誌、執行計畫、商業模式提案等）已從本檔刪除，需要時看 git 歷史。
+> 已完成的舊紀錄（開發路線、修正日誌、翻譯進度、上架前設定等）已從本檔刪除，需要時看 git 歷史。
 
 > **省 token 原則（使用者 2026-10-12）**：重複、可確定的重活（下載與處理音檔、建置、批次產生檔案）寫成腳本交給 GitHub Actions 跑，輸出放 artifact／Release 或 commit 回分支；對話裡只看 log 摘要（tail／grep），不讀整份輸出。
 
 ### 0.1 版本現況
-- **iching-cards main**：0.2.0+50（2026-10-19）：呼吸音景改用八經卦 CC0／PD 自然錄音（§0.3，`RecordedBedSource`，立體聲）＋528Hz 會員選項（§0.4）。分支測試建置 run #92 成功；合併 main 後的正式建置見 Actions。
-- **iching-content main**：11 語商店資訊 `store/listing-*.md`、`store/release-notes/0.2.0+50.txt`（11 語，各 ≤500 字）、`store/PLAY_CONSOLE.md` §6 指向 +50。
+- **2026-10-25 已在 Google Play 正式上架**，版本 0.2.0+50（11 語內容、八卦自然錄音音景、528Hz 會員選項）。
+- 上架前設定都已完成：資料安全性（含意見回饋 email／使用者內容）、AdMob 真實廣告單元與 RevenueCat secrets、Play 訂閱與 entitlement `premium`、Firestore `qg_feedback` 規則、AdMob 敏感類別封鎖（宗教、政治、交友、快速致富、減重、整形、性、社交賭場；賭博與酒精）、GDPR 訊息（三個 App 共用一則；App 已整合 UMP）。
+- **iching-content main**：11 語商店資訊 `store/listing-*.md`、版本資訊 `store/release-notes/`、`store/PLAY_CONSOLE.md`。
 
 ### 0.2 待辦清單（每項可各開一個新討論串）
-1. **回答使用者「音景是依卦象產生的嗎？」並交付塔羅提示詞**：答案見 §0.5；提示詞要點見 §0.6。錄音品質已於 2026-10-19 經使用者認可，可以交付。
-2. **上傳 +50 到 Play**：2026-10-20 +50 已送封閉測試審查；同日已申請正式版權限（問卷照實作答，Google 約 7 天內 email 回覆）。核准後：正式版 → 建立新版本 → 加入 +50 → 貼版本資訊 → 國家／地區 → 送審。商店資訊要補 7 語翻譯（vi、es-ES、es-419、pt-BR、id、th、ar；檔案在 iching-content `store/`）。
-3. **iOS**：等 Apple 開發者帳號（§24）。
-4. **RevenueCat 確認**：Products 兩個商品狀態應已從 Could not check 變 Published（§23.4，2026-10-05 時尚在同步）；不是的話截圖回來。
-5. **正式上架後**：AdMob → 應用程式 → 連結 Play 商店資訊（讓 app-ads.txt 驗證通過）；`lawrence124875.github.io` 首頁謙卦卡片補 Play 連結（§20）。
+1. **上架後連結**：AdMob → 應用程式 → 連結 Play 商店資訊（讓 app-ads.txt 驗證通過）；`lawrence124875.github.io` 首頁謙卦卡片補 Play 連結（§20）。
+2. **Play 商店資訊 7 語翻譯**：vi、es-ES、es-419、pt-BR、id、th、ar（檔案在 iching-content `store/`）；上架時是否已補未確認，請使用者看一下 Play Console。
+3. **RevenueCat 確認**：Products 兩個商品狀態應為 Published（§23.4）；不是的話截圖回來。
+4. **iOS**：等 Apple 開發者帳號（§24）。
+5. （選用，未決定）In-App Review 評分提示。
 
 ### 0.3 錄音音景規格（2026-10-12）
 - **使用者要求**：聲音柔和、有身歷其境感，**不要耳邊近距離的吵雜聲**。第一版試聽回饋：「新的自然很多，只是有些近的聲音有點吵雜」。
@@ -37,23 +38,9 @@
   - 合成的長音墊、鐘聲、雙耳節拍保留，432／528 調音照樣精準；錄音裡的鳥鳴、蟲鳴不調音（使用者已接受）。
 - **選用錄音**：乾 `Vento fisterra.ogg`（PD，西班牙海角長風，110 秒起；`lp` 2400、`wet` 0.55、`ride` 0.7；原 `Howling wind.ogg` 使用者不滿意）；坤 `Country night noise.ogg`（PD，重排接長）；震 `Light Rain Distant Thunder July 5th 2016.wav`（CC0，20 秒起）；巽 `Killiney Hill Storm Floris 20250804 1537.ogg`（CC0，6 秒起）；坎 `Forest lawn creek.ogg`（PD，70 秒起；取代第一版較近的 jackthemurray 溪流）；離 `Dry grass burning in open fireplace.ogg`（PD，重排接長）；艮 `20090610 0 ambience.ogg`（PD，10 秒起）；兌 `17650 thoschi issyk-kul.ogg`（CC0，伊塞克湖岸，60 秒起）。
 - **其他 CC0／PD 備用**：風 `帕卡颱風逼近下的風聲.ogg`、`Breeze birds and geese.ogg`、`Storm in Quebec on August 10, 2023.flac`；火 `Bones breaking wood fire ice crackling.ogg`（瞬態極多）；鳥 `Réveil des oiseaux.ogg`、`Waidachswald Oberschefflenz Abend 20250616 2005.ogg`；水 `Waves.ogg`、`On a pebble beach.ogg`、`433589 jackthemurray stream-river-water-up-close.wav`；夜 `蝉鸣.ogg`、`Pseudacris triseriata chorus.wav`。
-- **試聽檔第二版**：`/mnt/project-files/audio-samples/recording-v2/`，八卦各 60 秒（模擬 App 的 40 秒循環與去相關立體聲）＋兩段合奏（謙、既濟，含近似的長音墊與鐘聲）。第一版在 `recording-trial/`。
 
 ### 0.4 528Hz 會員選項（0.2.0+50 已上 main）
 - `enum Tuning { a432, c528 }`（`session_renderer.dart`），528 = 432 系統頻率 × 11/9；會員才能選，非會員重設為 432。快取鍵非 432 時加 `_t528`。ARB 11 語有 `breathTuning*`。測試群組「528Hz 調音（0.2.0+50）」。
-
-### 0.5 「音景是依卦象產生的嗎？」的答案（尚未回覆使用者）
-是。抽到的卦，上卦決定一段自然聲（40 秒循環），下卦決定另一段（50 秒循環；上下卦相同時只用一段）。兩段疊在一起，再加上 432 或 528Hz 長音墊和弦、呼吸鐘聲，以及可選的雙耳節拍。
-
-### 0.6 塔羅提示詞（使用者要貼到塔羅 App 的對話）
-- 之前已在本討論串貼過初稿。使用者說「等您確認」，要等錄音品質經使用者認可後再交付更新版。
-- 更新版要加入的經驗：
-  - 壓掉近距離瞬態，聲音要遠、要柔，不要在耳邊吵；
-  - 加殘響，左右聲道去相關，做出身歷其境感；
-  - 只用 CC0／PD，並記錄 CREDITS；
-  - Wikimedia 下載用轉檔網址避開 429；
-  - 合成的調音元素保留，確保頻率精準；
-  - 對應方式依塔羅 App 自己的設計（例如依牌或元素），不要照搬八卦。
 
 ---
 

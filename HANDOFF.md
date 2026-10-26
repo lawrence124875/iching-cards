@@ -1,4 +1,4 @@
-# HANDOFF — 易經卦卡 App（名稱未定）
+# HANDOFF — 謙卦 Qiangua（易經六十四卦卡 App）
 
 > 新對話接續時請先讀本檔。本檔記錄已確定的決策、內容規格與待討論事項。
 > 最後更新：2026-10-25。目前狀態與待辦見 §0；已完成的舊紀錄已刪除（看 git 歷史）。
@@ -332,7 +332,7 @@ repo 裡永遠不寫任何金鑰、密碼或權杖（含文件、commit 訊息�
 - **可見浮水印（2026-10-01 已確認）**：Gemini App（Pro 方案）電腦下載的乾卦原圖（1536×2752 JPG）右下角無星芒 → 繼續用 Gemini App 產圖，不必改用 AI Studio。乾卦圖已定案，存於 iching-content `images/raw/01-qian.jpg`。以下為原先查證：
 - **可見浮水印（背景）**：依 Nano Banana Pro 發表時的說明，免費與 Google AI Pro 方案的圖會保留右下角 Gemini 星芒浮水印，Ultra 與 Google AI Studio 則不加。使用者為 Pro 方案，需檢查已產出的圖是否帶星芒。如有，不自行裁切、修除或用牌框遮住，改評估以 Google AI Studio 產圖。所有圖另含不可見的 SynthID 浮水印，不影響使用。
 
-## 11. 程式現況（2026-10-01 骨架完成）
+## 11. 程式架構
 
 ### 11.1 目錄結構（依第 9 節架構原則）
 
@@ -350,10 +350,9 @@ repo 裡永遠不寫任何金鑰、密碼或權杖（含文件、commit 訊息�
 | `scripts/import_content.sh`、`patch_android.sh` | CI 用：匯入私人內容（只印數量）；設定桌面名稱、桌面圖示與簽署 |
 | `branding/` | 桌面圖示：`draw_icon.py`（Pillow 繪製，改設計就改這支再重產）、`icon-1024.png`（上架用大圖）、`android/res/`（各密度 mipmap＋Android 8+ 自適應圖示，CI 複製進 `android/`）。設計（0.1.0+14 起）：**無框滿版**——玄底上直接畫謙卦 ䷎ 六爻，卦象高度約為可見範圍 62%（圓角方形、圓形桌面都不切到），九三陽爻用較亮的稻金。原本的金框卦卡版已停用 |
 
-### 11.2 暫定設定
-- **定名（2026-10-01）**：開發者 **LC Lab**；App 名 **謙卦**（英文 Qiangua）。桌面名稱「謙卦」；首頁大標「謙卦」、副標「易經六十四卦卡」；Google Play 標題預定「謙卦｜易經六十四卦卡」。2026-10-01 使用者已在 Google Play／App Store 搜尋，確認沒有名為「謙卦」的 App（商標可在上架前另查）。
+### 11.2 設定與慣例
+- **定名**：開發者 **LC Lab**；App 名 **謙卦**（英文 Qiangua），Play 標題「謙卦｜易經六十四卦卡」。
 - **套件名稱 `com.lclab.qiangua`**（0.1.0+5 起；上傳 Play 後永遠不能改）。由 `patch_android.sh` 改 applicationId；`flutter create --org com.lclab`，namespace 維持產生值。舊版 `tw.bcc.iching_cards` 是不同 App，測試機需手動移除。
-- 版本 `0.1.0+21`（+21：術語表套用（§17）、移除測試提醒鈕、CI 加建 AAB；+20：Firebase，見第 18 節；+19：介面翻譯架構（ARB）、想問的事連結字體縮小，見第 16 節、15.2；+18：置中提示語去標點；+17：思源字體子集，見第 15 節；+16：首頁一屏顯示完；+15：鎖屏按鈕圖示保留、測試提醒鈕；+14：桌面圖示無框滿版；+13：鎖定畫面控制改用 audio_service、桌面圖示留白；+12：卦記縮圖、底部被導覽列擋住、音景設定面板；+11：卦記提醒準時模式；+10：音景柔和版、432Hz、雙耳節拍，見 14.2；+9：實機回饋修正、音景背景播放與通知控制，見 14.1；+8：呼吸音景，見第 14 節；+7：卦記與回顧提醒，見第 13 節；+3：首頁水平置中修正、桌面圖示；+4：固定直向；+5：定名謙卦、套件名稱 com.lclab.qiangua；+6：擲錢頁收斂在一個畫面、點牌面圖滿版看象）。
 - **滿版看圖**（0.1.0+6，`shared/widgets/card_art_viewer.dart`）：`CardFace(zoomable: true)` 時點風景圖開啟；預設 cover 填滿螢幕、隱藏系統列，點兩下切換完整畫面（contain），兩指縮放，點一下返回。目前用於抽卡翻牌後與解讀頁。
 - **擲錢頁版面**（0.1.0+6）：不再捲動；六爻列固定保留（未擲顯示「—」），中段以 FittedBox 等比縮小以適應小螢幕或大字體，按鈕固定在底部。
 - **固定直向**：卦卡為 9:16 直式，`main.dart` 以 `SystemChrome` 鎖直向，Android 另由 `patch_android.sh` 在 AndroidManifest 加 `screenOrientation="portrait"`。iOS 上架時需在 Info.plist 只留 Portrait。平板若要支援橫向，再另做雙欄版面。
@@ -366,13 +365,10 @@ repo 裡永遠不寫任何金鑰、密碼或權杖（含文件、commit 訊息�
 checkout 本 repo → 以 `BUILDS_REPO_TOKEN` sparse-checkout iching-content 的 `zh-Hant/`、`images/webp/`、`glossary/`（不抓 raw 原圖）→ 匯入內容 → 產生術語表（`scripts/gen_glossary.py`，§17）→ `flutter create` → 套用名稱與簽署 → `flutter analyze`（只有 error 會失敗）→ `flutter test` → `flutter build apk --release` → `flutter build appbundle --release`（0.1.0+21 起；`force_lang` 測試版不建）→ `gh release create iching-android-run<N>`（APK＋AAB）到 iching-content → 自動刪除舊建置 Release，**只保留最近 5 個**（依 run 編號排序；createdAt 會相同，不可用來排序）。
 - 失敗時錯誤行會轉成 annotation，Claude 以 `GET /repos/lawrence124875/iching-cards/check-runs/<id>/annotations` 讀取（容器無法下載完整日誌）。
 - APK 為通用版（含三種 CPU 架構），約 58 MB，給手機直接安裝；同一個 Release 另附 AAB（`iching_<版本>_run<N>.aab`），上傳 Play 用，Play 會依裝置拆分。
-- run #1（2026-10-01）全部步驟成功，以除錯金鑰簽署。
 
-### 11.4 上傳金鑰（2026-10-01 已產生並設定完成）
+### 11.4 上傳金鑰
 - 新建、與智慧聽覺巡航分開：PKCS12、別名 `upload`、RSA 2048、有效至 2054 年。憑證 SHA-256 指紋開頭 `80:9A:C2:C1`。
 - 檔案與密碼已交給使用者下載，由使用者備份到 Google 雲端硬碟；**Claude 與 repo 都不保留**。遺失＝上架後無法更新。
-- 使用者需在 iching-cards 的 Settings → Secrets → Actions 建立：`ANDROID_KEYSTORE_BASE64`、`ANDROID_KEYSTORE_PASSWORD`、`ANDROID_KEY_PASSWORD`、`ANDROID_KEY_ALIAS`。
-- ✅ 2026-10-01 使用者已建好 4 個 Secrets；run #3（0.1.0+2）起以上傳金鑰簽署，之後的 APK 可直接覆蓋安裝。
 - 若 Secrets 遺失，CI 會自動改用除錯金鑰並在 annotation 警告；除錯金鑰每次建置不同，裝新版前須先移除舊版。設定後的 Release 說明會顯示「簽署：上傳金鑰」。
 
 ## 12. 多語言規劃（2026-10-02 討論）
@@ -640,24 +636,10 @@ checkout 本 repo → 以 `BUILDS_REPO_TOKEN` sparse-checkout iching-content 的
 - ✅ 2026-10-10 使用者已發布合併後規則（英文 App `feedback` 段原封不動：`allow create: if true; allow read, update, delete: if false;`），0.2.0+47 實機送出測試成功（appVersion 0.2.0+47、locale zh-Hant、platform android）。
 - 查看：Firestore → 資料 → `qg_feedback`。Play「資料安全性」要加：**應用程式活動 → 其他使用者產生的內容**、**個人資訊 → 電子郵件地址**（選填），用途「應用程式功能」，不分享、傳輸加密、可要求刪除（來信）。隱私權政策已補「意見回饋」段與刪除方式。
 
-## 20. 上架準備（2026-10-03）
-
-**Claude 已完成**
-- **隱私權政策**：本 repo `docs/privacy.html`（繁中＋英文，同一頁；謙卦玄底配色，淺色模式自動切換）、`docs/index.html`（簡單首頁）。網址（開 Pages 後）：`https://lawrence124875.github.io/iching-cards/privacy.html`，資料刪除段落 `#data-deletion`。內容依 0.1.0+21 實際行為：卦記與想問的事只在本機；Firebase Analytics（`qg_` 事件與參數，§18）、Crashlytics、Remote Config；廣告 ID 權限（目前無廣告）；通知／準時鬧鐘／前景服務的用途；不適合 13 歲以下；非專業建議。⚠️ 加廣告、付費、Firestore、新統計事件或新權限時**必須先改這頁**。`docs/**` 不觸發建置。
-- **LC Lab 開發者首頁**（2026-10-05）：repo `lawrence124875/lawrence124875.github.io`（使用者站台）根目錄 `index.html`，網址 `https://lawrence124875.github.io/`（Play Console 帳戶網站已填這個）。兩張 App 卡片（智慧聽覺巡航、謙卦）各連隱私權政策；同 repo 根目錄 `app-ads.txt` 與英文 App 共用，**內容不可改動或刪除**。⚠️ **正式上架後回來補 Play 商店連結**：卡片目前是「Google Play 即將推出」佔位（封閉測試期間非測試者點開會找不到），謙卦連結 `https://play.google.com/store/apps/details?id=com.lclab.qiangua`（已寫在 index.html 註解）。
-- **商店素材**（私人 repo iching-content `store/`，含牌面圖所以不放公開 repo）：
-  - `listing-zh-Hant.md`：名稱「謙卦｜易經六十四卦卡」、簡短說明、完整說明、類別建議（生活品味）、網址。
-  - `feature-graphic-1024x500.png`：主題圖片（謙卦大字＋謙、艮、泰三張牌面）；`icon-512.png`：商店圖示。重產：Pillow 腳本寫法見本節末。
-  - `PLAY_CONSOLE.md`：建立 App、Play 應用程式簽署、封閉測試、**應用程式內容逐題答案**（廣告：否；內容分級問卷；目標年齡只勾 18+；健康應用程式；廣告 ID：是／分析；**資料安全性**：應用程式互動、當機記錄、診斷資訊、裝置或其他 ID，全部收集＝是、分享＝否、必要、用途數據分析；前景服務媒體播放的說明文字與錄影要求；準確鬧鐘）與**截圖規劃**（6 張）。
-- Pages 無法由 Claude 開啟（權杖無 Pages 權限，API 403）；✅ 2026-10-03 使用者已開啟，網址可用。
-
-**等使用者做**（順序）
-1. ✅ 2026-10-03 已完成：GitHub Pages 開啟（`main`／`/docs`），使用者確認隱私權政策網址可正常顯示。
-2. 安裝 run #39（0.1.0+21）APK 試用：詳細頁爻名、牌面小字（乾＝Creative Force、坤＝Receptivity）、卦記單筆頁已無測試鈕。
-3. 依 iching-content `store/PLAY_CONSOLE.md` 在 Play Console 建立「謙卦」、上傳同一 Release 的 AAB 到**封閉測試**、填應用程式內容、貼商店文案與圖、手機截 6 張圖、錄前景服務影片、安排外部測試服務（12 人、14 天）。
-4. 送審有問題（例如拒絕原因、Console 要求的額外問題）貼回對話。
-
-**重產主題圖片**：Python＋Pillow，字型用 google/fonts 固定 commit（§15）的 NotoSerifTC／NotoSansTC 可變字型；1024×500 玄底 `#1C1B22`，左側「謙卦」112px 稻金 `#D8B56A`、「易經六十四卦卡」30px、「抽一卦　看見此刻的象」22px 灰穗；右側三張有框牌面（164×292，地黃框）取 `images/webp/15、52、11`，置中裁切（cover）。
+## 20. 對外網址（上架已完成）
+- **隱私權政策**：`https://lawrence124875.github.io/iching-cards/privacy.html`（資料刪除 `#data-deletion`），Play 已登記，網址不可變。來源本 repo `docs/privacy.html`、`docs/index.html`。⚠️ 加廣告、付費、新統計事件或新權限時**必須先改這頁**。`docs/**` 不觸發建置。
+- **LC Lab 開發者首頁**：repo `lawrence124875.github.io` 根目錄 `index.html`（Play 帳戶網站）；同 repo `app-ads.txt` 與英文 App 共用，**內容不可改動或刪除**。
+- **商店素材、Play Console 逐題答案**：私人 repo iching-content `store/`（含 `PLAY_CONSOLE.md`）。
 
 ## 21. 商業模式
 
@@ -671,24 +653,11 @@ checkout 本 repo → 以 `BUILDS_REPO_TOKEN` sparse-checkout iching-content 的
 - 使用者需先做：Play Console 建立「謙卦」、設定**付款資料**（銀行與稅務，訂閱必需）；在 AdMob、RevenueCat 新增 App。Console 每頁截圖貼回對話，Claude 逐欄回覆。
 - **商店截圖由 Claude 製作**：以 CI 算繪 App 真實畫面（Flutter 測試輸出 PNG，載入打包字型與牌面），再加標題文字與背景排版；效果不佳時改由使用者手機截原圖、Claude 排版。
 
-### 21.2 Play Console 進度（2026-10-04）
-- 2026-10-04：使用者之後自行付費 testerscommunity 安排 12 位外部測試者（尚未開始，14 天未計時）；期間 Claude 繼續開發（英文內容、其餘語言）。
-- ✅ **2026-10-04 21:43 送審通過、已發布**：提交項目 1（封閉測試－外部測試、商店資訊、應用程式內容、商店設定），版本 22（0.1.0+22，免費無廣告）。下一步：取得加入連結、湊滿 12 位測試者並持續 14 天。
-- 已完成並列入「發布總覽」待送審：封閉測試版本、商店資訊、商店設定、應用程式內容全部聲明。使用者下一步：快速檢查跑完後按「送審 14 項變更」；確認「測試一」名單 ≥12 個 Gmail。
-- 審查通過後：取得封閉測試加入連結，請測試人員接受邀請並安裝；14 天計時開始。
-- 下一版（含 AdMob＋訂閱）送審前必改：iching-content `store/PLAY_CONSOLE.md` §5（6 項）＋商店完整說明補「含廣告、可訂閱」＋AI 素材聲明若新增素材再標。
-- 英文商店資訊（2026-10-05）：✅ `store/listing-en.md`、✅ `store/feature-graphic-en-1024x500.png`；✅ 截圖 8 張 `store/screenshots-en/screenshot-01～08.png`（1080×1920）——**不再用手機截圖**：本 repo `screenshots/store_screenshots_test.dart` 以 widget test 渲染 App 真實畫面（英文、會員、1080×2400／密度 2.625、打包的思源字型、正式內容與牌面；照使用者操作點按鈕走到各畫面，亂數固定所以每次相同），再跑 make.py 排版。步驟見 `screenshots/README.md`（約 15 秒）。原始畫面含私人內容，輸出放 repo 外。其他語言照同一支測試換 Locale。AI 素材聲明：截圖 01、07 含 Gemini 牌面要標 AI。⚠️ 已知外觀：英文內文的 “ ” ’ 用思源（CJK 全形）字形，前後空白較寬，實機相同，日後可評估補一個拉丁字型。上傳位置：Play Console 主要商店資訊 → 管理翻譯 → 新增 English (United States)，英文圖像要在該語言的圖像區另外上傳（未上傳會顯示繁中圖）。
-
-- 2026-10-05 使用者已完成：run #59（0.2.0+28，測試廣告、訂閱未開放）上傳**內部測試**；前景服務權限聲明重交；內容分級重做（可購買數位商品＝是）；資料安全性（裝置 ID 分享＝是／廣告或行銷、大概位置加廣告或行銷、新增購買記錄）；廣告 ID 加廣告或行銷；商店資訊新增英文、簡中（zh-CN，`store/listing-zh-Hans.md`、`feature-graphic-zh-Hans-1024x500.png`、`screenshots-zh-Hans/`），繁簡英完整說明加「免費下載，會員可選」段。版本資訊見 `store/release-notes/`（封閉測試用的版本寫明「測試廣告、會員即將開放」）。
-- 日文商店資訊（2026-10-05）：✅ `store/listing-ja.md`（名稱「謙卦：易経・六十四卦カード」，不加讀音以免與「喧嘩」同音）、✅ `feature-graphic-ja-1024x500.png`、✅ `screenshots-ja/`（`SCREENSHOT_LANG=ja` 渲染）；版本資訊 `0.2.0+30.txt` 加 `<ja-JP>`。使用者上傳：管理翻譯 → 新增日本語（ja-JP），圖像在日文的圖像區另外上傳。建議上架前請日文母語者看過。
-- 韓文商店資訊（2026-10-05）：✅ `store/listing-ko.md`（名稱「겸괘: 주역 64괘 카드」13 字、簡短說明 51 字、完整說明 1910 字；「운세」只用在否定句，不用 적중／개운／부적 等字眼）、✅ `feature-graphic-ko-1024x500.png`（`feature_graphic_ko.py`）、✅ `screenshots-ko/`（`SCREENSHOT_LANG=ko` 渲染）；版本資訊 `0.2.0+33.txt` 加 `<ko-KR>`。⚠️ run #66 建置時 `0.2.0+33.txt` 還沒進 iching-content，所以 Release 說明顯示「尚未撰寫」——**版本資訊直接從 `store/release-notes/0.2.0+33.txt` 複製**。使用者上傳：管理翻譯 → 新增 한국어（ko-KR），圖像在韓文的圖像區另外上傳。
-- 2026-10-05：✅ 使用者實機測過 run #66（0.2.0+33）各語言沒問題，將 AAB 上傳封閉測試，開始付費外部測試 14 天。
-- 越南文商店資訊（2026-10-05）：✅ `store/listing-vi.md`（名稱「Quẻ Khiêm: Kinh Dịch 64 quẻ」27 字、簡短說明 79 字、完整說明 3613 字；不用 xem bói／bói toán／cầu may／đổi vận 等字，「đoán vận hạn」只用在否定句）、`feature-graphic-vi-1024x500.png`（`feature_graphic_vi.py`，Cormorant Garamond）、`screenshots-vi/` 8 張（`SCREENSHOT_LANG=vi` 渲染，`make.py` 用 Noto Serif）。Play Console「管理翻譯」新增 Tiếng Việt – vi 貼上；0.2.0+35 版本資訊的 `<vi-VN>` 段在越南文商店資訊上架後才貼。
-- 西班牙文商店資訊（2026-10-06）：✅ `store/listing-es.md`（名稱「Qiangua: I Ching 64 hexagramas」30 字、簡短說明 74 字、完整說明 3942 字；tú 體、拉美與西班牙通用；不用 adivinación／oráculo／tarot／suerte／destino 等字，「predecir el futuro」只用在否定句）、`feature-graphic-es-1024x500.png`（`feature_graphic_es.py`）、`screenshots-es/` 8 張（`SCREENSHOT_LANG=es` 渲染）；版本資訊 `0.2.0+38.txt` 加 `<es-ES>` 與 `<es-419>`（同文）。使用者上傳：管理翻譯 → 新增 Español (España) es-ES 與 Español (Latinoamérica) es-419，兩者貼同一份文字，圖像兩邊各傳一次；版本資訊的西文段在西文商店資訊上架後才貼。
-- 巴西葡萄牙文、印尼文、泰文商店資訊（2026-10-07）：✅ `store/listing-pt-BR.md`（名稱「Qiangua: I Ching 64 hexagramas」30 字、簡短說明 74 字、完整說明 3860 字；você 體；不用 adivinhação／oráculo／sorte／destino／garantia 等字，「prever o futuro」只用在否定句）、✅ `store/listing-id.md`（名稱「Qiangua: I Ching 64 Heksagram」29 字、簡短說明 75 字、完整說明 3971 字；kamu 體；不用 ramalan／meramal／takdir／hoki／jaminan，「menebak nasib」只用在否定句，與首頁標語一致）、✅ `store/listing-th.md`（名稱「Qiangua: อี้จิง 64 เฮกซะแกรม」28 字、簡短說明 63 字、完整說明 3132 字；คุณ、不用 ครับ／ค่ะ；不用 ดูดวง／โชคชะตา／รับประกัน 等字，「ทำนายอนาคต」只用在否定句）；三份都跑過該語 `check_translation.py` 的 BANNED 清單。主題圖片 `feature-graphic-{pt-BR,id,th}-1024x500.png`（`feature_graphic_{pt_br,id,th}.py`；泰文用 Noto Serif Thai）、截圖 `screenshots-{pt-BR,id,th}/` 各 8 張（`SCREENSHOT_LANG` 渲染，泰文 make.py 用 Noto Serif Thai）；版本資訊 `0.2.0+42.txt` 加 `<pt-BR>`、`<id>`、`<th>`（各 ≤500 字元）。使用者上傳：管理翻譯 → 新增 Português (Brasil) pt-BR、Indonesia id、ไทย th，圖像在各語言的圖像區另外上傳；版本資訊的三語段在該語商店資訊上架後才貼。泰文與印尼文上架前宜請母語者看過（泰文術語表仍 needsNativeReview；印尼市場對占卜類內容較敏感，§12）。阿拉伯文商店資訊等阿拉伯文 App 端併入 main 後再做。渲染泰文截圖時發現兩個泰文介面問題並一起修正（同一 PR，沒有改版本號，隨下一個版本出去）：① 主題與各頁的字距（letterSpacing）會把泰文上方的母音、聲調符號拆離字母（首頁副標、按鈕、標題）→ `AppFonts.tracking`，泰文一律 0，寫新樣式時用 `letterSpacing: tracking(N)`；② 擲錢頁爻位欄固定寬 60，「เส้นที่ 1」折行重疊 → 改最小寬度依字寬伸展。⚠️ 阿拉伯文同理不可加字距（會斷開連寫），加 ar 字族時也要設 `tracking: false`。
-- 阿拉伯文商店資訊（2026-10-08）：✅ `store/listing-ar.md`（名稱「Qiangua: إي تشينغ 64 سداسيّة」28 字、簡短說明 70 字、完整說明 3036 字；讀者稱 أنت；不寫神名、占卜星象命定字（عرافة／الطالع／الحظّ／القدر）、保證字（ضمان／مضمون），「التنبّؤ بالمستقبل」只用在否定句，與首頁標語一致；跑過 `ar_hits` BANNED['ar']）。主題圖片 `feature-graphic-ar-1024x500.png`（`feature_graphic_ar.py`；左右鏡像，文字在右、牌在左，Noto Naskh Arabic，需 Pillow＋libraqm）、截圖 `screenshots-ar/` 8 張（0.2.0+43 RTL 介面以 `SCREENSHOT_LANG=ar` 渲染，`make.py` 用 Naskh）；版本資訊 `0.2.0+43.txt` 加 `<ar>`（476 字元，另含 pt-BR／id／th 段）。葡、印尼、泰三語素材（iching-content PR #1）已一併併入 content main。使用者上傳：管理翻譯 → 新增 العربية ar，圖像另外上傳；§12：是否在中東、北非國家上架由使用者在「國家／地區」決定。
-- **封閉測試建議**：審過後把 #59 從內部測試「升級版本」到封閉測試－外部測試，付費測試者全程用**測試廣告**版（避免真實廣告無效流量）；正式廣告版等 14 天結束、申請正式版時再上傳。
-- 下一步：§23.3 四個平台（AdMob → Play 訂閱 → RevenueCat → 5 個 Secrets），使用者截圖、Claude 逐欄回覆並**附操作路徑**。
+### 21.2 商店資訊與截圖（11 語已上架；細節見 iching-content `store/`）
+- 每語一份 `store/listing-<語言>.md`、主題圖片 `feature-graphic-*`（`feature_graphic_*.py`）、截圖 `screenshots-<語言>/`；版本資訊 `store/release-notes/<版本>.txt`。
+- 截圖不用手機截：本 repo `screenshots/store_screenshots_test.dart` 以 widget test 渲染真實畫面（`SCREENSHOT_LANG` 換語言），再跑該語 `make.py` 排版，步驟見 `screenshots/README.md`。
+- 商店文案一律避開占卜、運勢、保證類字眼（各語 BANNED 清單在 iching-content `tools/check_translation.py`）。
+- ⚠️ 泰文、阿拉伯文不可加字距（letterSpacing 會拆開聲調符號／連寫）：新樣式一律用 `AppFonts.tracking`。
 
 ## 23. 廣告與訂閱（2026-10-04，0.2.0+23，run #44 建置成功）
 
@@ -713,9 +682,6 @@ checkout 本 repo → 以 `BUILDS_REPO_TOKEN` sparse-checkout iching-content 的
 
 ### 23.2 CI 與 Secrets（iching-cards，皆未設定時自動用 Google 測試 ID、訂閱頁顯示「尚未開放」）
 `ADMOB_APP_ID`（`scripts/patch_ads.sh` 寫入 Manifest；沒有會閃退，所以預設測試 App ID）、`ADMOB_BANNER_AD_UNIT_ID`、`ADMOB_INTERSTITIAL_AD_UNIT_ID`、`ADMOB_REWARDED_AD_UNIT_ID`、`REVENUECAT_ANDROID_API_KEY`（goog_ 開頭）。Release 說明顯示「廣告：測試廣告／正式廣告單元；訂閱：已設定／未設定」。workflow 新增輸入 `force_premium`（填 true＝會員測試版，只建 APK）。
-
-### 23.3 待使用者做
-見 iching-content `store/PLAY_CONSOLE.md` §6：AdMob 封鎖敏感類別、AdMob GDPR 訊息、國家／地區（資料安全性 8b 已於 2026-10-21 送審）。
 
 ### 23.4 後台設定紀錄（2026-10-05，聊天端逐欄確認完成）
 - **Play 訂閱**：`qg_premium_monthly`（基本方案 `monthly`，台灣 NT$99）、`qg_premium_yearly`（基本方案 `yearly`，台灣 NT$590）已啟用；手動設價 20 國，其餘依 US$3.99／US$24.99 自動換算；年齡分級 18+、允許重新訂閱。

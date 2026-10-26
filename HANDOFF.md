@@ -18,7 +18,7 @@
 - **iching-content main**：11 語商店資訊 `store/listing-*.md`、版本資訊 `store/release-notes/`、`store/PLAY_CONSOLE.md`。
 
 ### 0.2 待辦清單（每項可各開一個新討論串）
-1. **iOS**：等 Apple 開發者帳號（§24）。
+1. **iOS**：使用者 2026-10-26 決定先不申請 Apple 開發者帳號；只用未簽章 IPA 自行側載到自己的 iPhone 測試（§24）。
 2. （選用，未決定）In-App Review 評分提示。
 
 ### 0.3 錄音音景規格（2026-10-12）
@@ -786,6 +786,8 @@ checkout 本 repo → 以 `BUILDS_REPO_TOKEN` sparse-checkout iching-content 的
 - **`patch_ios.sh`**：Bundle ID `com.lclab.qiangua`（與 Android 相同）、顯示名稱謙卦、`CFBundleLocalizations` 11 語（少了 iOS 一律給英文）、`GADApplicationIdentifier`（Secret `ADMOB_IOS_APP_ID`，沒設用 Google iOS 測試 ID；少了 AdMob 一啟動就當）、`UIBackgroundModes: audio`（呼吸背景播放）、最低 iOS 15（Podfile 先從 Flutter 範本複製再設定）、AppDelegate 設通知代理（前景也顯示卦記提醒）。
 - **程式**：AdMob 測試廣告單元依平台選 iOS／Android；訂閱頁在 iOS 顯示 App Store 版續訂說明（`premiumTermsIos`）、「使用條款」（Apple 標準 EULA）與隱私權政策連結（App Store 審查 3.1.2 要求），管理訂閱開 apps.apple.com；分享連結 iOS 用 dart-define `IOS_STORE_URL`（上架後才有，未設定時仍用 Google Play 連結）。
 - **Firebase**：iOS 尚未在 Firebase 專案新增 iOS App（沒有 GoogleService-Info.plist），App 會照現有設計退回不統計、遠端開關用預設值，不影響使用。
+
+- **自行側載測試（2026-10-26）**：`build_ios.yml` 跑完會把 `iching_<版本>_ios_run<N>_unsigned.ipa` 發佈到 iching-content Release（tag `iching-ios-run<N>`，只留最近 3 個）。使用者用電腦上的 Sideloadly＋免費 Apple ID 簽章安裝；iPhone 要開「開發者模式」並在「VPN 與裝置管理」信任該 Apple ID。免費帳號限制：7 天到期要重新簽、最多 3 個 App；訂閱無法測（沒有 iOS RevenueCat 金鑰與 App Store 商品）、廣告是 Google 測試廣告、Firebase 不統計。
 
 **決定開 iOS 之後要做的事**（使用者）：付 Apple 開發者年費 → App Store Connect 建 App（Bundle ID com.lclab.qiangua）→ 訂閱商品（與 Play 同名、同價位）→ RevenueCat 加 iOS App（取 `appl_` 金鑰）→ AdMob 加 iOS App 與三個廣告單元 → Firebase 加 iOS App。
 **Claude 接著做**：簽章（App Store Connect API 金鑰存 Secrets）＋上傳 TestFlight 的 CI、Secrets `REVENUECAT_IOS_API_KEY`／`ADMOB_IOS_*`、GoogleService-Info.plist 注入、App Store 商店資訊與 iPhone 截圖尺寸（6.9 吋 1320×2868）、隱私權「營養標籤」逐題答案、`IOS_STORE_URL`。

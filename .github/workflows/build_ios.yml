@@ -1,7 +1,7 @@
 name: Build iOS (no codesign)
 
-# iOS 準備（HANDOFF §24）：驗證同一份程式能編出 iOS 版。不簽章、不產生可安裝檔，
-# 也不上傳任何東西；簽章與 TestFlight 要等 Apple 開發者帳號（年費 US$99）。
+# iOS 準備（HANDOFF §24）：驗證同一份程式能編出 iOS 版，並把未簽章 IPA 發佈到 iching-content Release
+# （自行側載測試用）；正式簽章與 TestFlight 要等 Apple 開發者帳號（年費 US$99）。
 # macOS 執行環境對公開 repo 免費。
 on:
   workflow_dispatch:
@@ -121,3 +121,33 @@ jobs:
         run: |
           du -sh build/ios/iphoneos/Runner.app
           echo "::notice::iOS 不簽章建置成功（Runner.app $(du -sh build/ios/iphoneos/Runner.app | cut -f1)）"
+
+      # 未簽章 IPA：給使用者用免費 Apple ID 以 Sideloadly 等工具自行簽章、裝到自己的 iPhone 測試（HANDOFF §24）。
+      - name: 打包未簽章 IPA 並發佈到私人 repo 的 Release
+        env:
+          GH_TOKEN: ${{ secrets.BUILDS_REPO_TOKEN }}
+        run: |
+          set -euo pipefail
+          ver=$(grep '^version:' pubspec.yaml | awk '{print $2}')
+          n=${{ github.run_number }}
+          f="iching_${ver}_ios_run${n}_unsigned.ipa"
+          mkdir -p ipa/Payload
+          cp -R build/ios/iphoneos/Runner.app ipa/Payload/
+          (cd ipa && zip -qry "../$f" Payload)
+          du -sh "$f"
+          printf '%s\n' "commit ${{ github.sha }}；未簽章 IPA，需用 Sideloadly 等工具以 Apple ID 簽章後安裝（HANDOFF §24）。" > notes.md
+          gh release create "iching-ios-run${n}" "$f" \
+            --repo lawrence124875/iching-content \
+            --title "謙卦 ${ver} iOS 未簽章（run ${n}）" \
+            --notes-file notes.md
+
+      - name: 只保留最近 3 個 iOS Release
+        env:
+          GH_TOKEN: ${{ secrets.BUILDS_REPO_TOKEN }}
+        run: |
+          set -euo pipefail
+          gh release list --repo lawrence124875/iching-content --limit 100 --json tagName \
+            --jq '[.[] | select(.tagName | startswith("iching-ios-run"))] | sort_by(.tagName | ltrimstr("iching-ios-run") | tonumber) | reverse | .[3:] | .[].tagName' |
+          while IFS= read -r tag; do
+            gh release delete "$tag" --repo lawrence124875/iching-content --yes --cleanup-tag
+          done

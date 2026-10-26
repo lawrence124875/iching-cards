@@ -175,6 +175,25 @@ jobs:
 
       # 上架用 AAB（HANDOFF §19.2 第 1 項）：Play 依裝置自動拆分，使用者下載較小。
       # 強制介面語言的測試版不建 AAB（不會上傳 Play）。
+      # 上架用 AAB 不可混入 Google 測試廣告：AdMob App ID 與三個廣告單元任一沒設定就停止。
+      - name: 檢查 AdMob 正式 ID
+        if: ${{ inputs.force_lang == '' && inputs.force_premium == '' }}
+        env:
+          ADMOB_APP_ID: ${{ secrets.ADMOB_APP_ID }}
+          ADMOB_BANNER_AD_UNIT_ID: ${{ secrets.ADMOB_BANNER_AD_UNIT_ID }}
+          ADMOB_INTERSTITIAL_AD_UNIT_ID: ${{ secrets.ADMOB_INTERSTITIAL_AD_UNIT_ID }}
+          ADMOB_REWARDED_AD_UNIT_ID: ${{ secrets.ADMOB_REWARDED_AD_UNIT_ID }}
+        run: |
+          missing=0
+          for name in ADMOB_APP_ID ADMOB_BANNER_AD_UNIT_ID ADMOB_INTERSTITIAL_AD_UNIT_ID ADMOB_REWARDED_AD_UNIT_ID; do
+            value="$(printf '%s' "${!name}" | tr -d '[:space:]')"
+            if [ -z "$value" ]; then
+              echo "::error::Secret $name 沒有設定（或只有空白），AAB 會用測試廣告，停止建置"
+              missing=1
+            fi
+          done
+          exit $missing
+
       - name: 建置 AAB（release）
         if: ${{ inputs.force_lang == '' && inputs.force_premium == '' }}
         env:

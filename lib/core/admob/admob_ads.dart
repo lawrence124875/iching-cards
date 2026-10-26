@@ -16,24 +16,25 @@ import '../monetization/ad_service.dart';
 class AdMobAds implements AdService {
   AdMobAds._(this._pacer);
 
-  static const _bannerId = String.fromEnvironment('ADMOB_BANNER_AD_UNIT_ID');
-  static const _interstitialId = String.fromEnvironment('ADMOB_INTERSTITIAL_AD_UNIT_ID');
-  static const _rewardedId = String.fromEnvironment('ADMOB_REWARDED_AD_UNIT_ID');
+  // trim：Secret 若誤存空白或換行，視同沒設定（不拿無效 ID 去請求）。
+  static final _bannerId = const String.fromEnvironment('ADMOB_BANNER_AD_UNIT_ID').trim();
+  static final _interstitialId = const String.fromEnvironment('ADMOB_INTERSTITIAL_AD_UNIT_ID').trim();
+  static final _rewardedId = const String.fromEnvironment('ADMOB_REWARDED_AD_UNIT_ID').trim();
 
   // Google 官方測試廣告單元（Android 與 iOS 各一組）。正式單元由 CI 以 dart-define 傳入（iOS 建置傳 iOS 的單元）。
+  // 每個單元各自防呆：沒注入的那個用測試 ID；上架用的 AAB 由 CI 檢查三個都有值。
   static bool get _ios => defaultTargetPlatform == TargetPlatform.iOS;
-  static String get bannerUnit => _bannerId.isNotEmpty
-      ? _bannerId
-      : (_ios ? 'ca-app-pub-3940256099942544/2934735716' : 'ca-app-pub-3940256099942544/6300978111');
-  static String get _interstitialUnit => _interstitialId.isNotEmpty
-      ? _interstitialId
-      : (_ios ? 'ca-app-pub-3940256099942544/4411468910' : 'ca-app-pub-3940256099942544/1033173712');
-  static String get _rewardedUnit => _rewardedId.isNotEmpty
-      ? _rewardedId
-      : (_ios ? 'ca-app-pub-3940256099942544/1712485313' : 'ca-app-pub-3940256099942544/5224354917');
+  static String _unit(String id, {required String ios, required String android}) =>
+      id.isNotEmpty ? id : (_ios ? ios : android);
+  static String get bannerUnit => _unit(_bannerId,
+      ios: 'ca-app-pub-3940256099942544/2934735716', android: 'ca-app-pub-3940256099942544/6300978111');
+  static String get _interstitialUnit => _unit(_interstitialId,
+      ios: 'ca-app-pub-3940256099942544/4411468910', android: 'ca-app-pub-3940256099942544/1033173712');
+  static String get _rewardedUnit => _unit(_rewardedId,
+      ios: 'ca-app-pub-3940256099942544/1712485313', android: 'ca-app-pub-3940256099942544/5224354917');
 
-  /// 是否用正式廣告單元（Release 說明顯示用）。
-  static bool get usingRealUnits => _bannerId.isNotEmpty;
+  /// 三個廣告單元都用正式 ID（Release 說明顯示用）。
+  static bool get usingRealUnits => _bannerId.isNotEmpty && _interstitialId.isNotEmpty && _rewardedId.isNotEmpty;
 
   final InterstitialPacer _pacer;
   bool _started = false;

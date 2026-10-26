@@ -783,7 +783,7 @@ checkout 本 repo → 以 `BUILDS_REPO_TOKEN` sparse-checkout iching-content 的
 使用者要求先把 iOS 能做的都做好；Apple 開發者帳號（年費 US$99）尚未決定，所以只做到「同一份程式能編出 iOS 版」。
 
 - **建置**：`.github/workflows/build_ios.yml`（只手動觸發，macOS 執行環境對公開 repo 免費）：匯入內容、字型子集 → `flutter create --platforms=ios`（`ios/` 不進 repo，與 android/ 相同做法）→ `scripts/patch_ios.sh` → `flutter build ios --release --no-codesign`。不簽章、不產生可安裝檔、不上傳任何東西。
-- **`patch_ios.sh`**：Bundle ID `com.lclab.qiangua`（與 Android 相同）、顯示名稱謙卦、`CFBundleLocalizations` 11 語（少了 iOS 一律給英文）、`GADApplicationIdentifier`（Secret `ADMOB_IOS_APP_ID`，沒設用 Google iOS 測試 ID；少了 AdMob 一啟動就當）、`UIBackgroundModes: audio`（呼吸背景播放）、最低 iOS 15（Podfile 先從 Flutter 範本複製再設定）、AppDelegate 設通知代理（前景也顯示卦記提醒）。
+- **`patch_ios.sh`**：Bundle ID `com.lclab.qiangua`（與 Android 相同）、顯示名稱謙卦、`CFBundleLocalizations` 11 語（少了 iOS 一律給英文）、`GADApplicationIdentifier`（Secret `ADMOB_IOS_APP_ID`，沒設用 Google iOS 測試 ID；少了 AdMob 一啟動就當）、`UIBackgroundModes: audio`（呼吸背景播放）、App 圖示（`branding/ios/AppIcon.appiconset`，單一 1024 不透明）、最低 iOS 15（Podfile 先從 Flutter 範本複製再設定）、AppDelegate 設通知代理（前景也顯示卦記提醒）。
 - **程式**：AdMob 測試廣告單元依平台選 iOS／Android；訂閱頁在 iOS 顯示 App Store 版續訂說明（`premiumTermsIos`）、「使用條款」（Apple 標準 EULA）與隱私權政策連結（App Store 審查 3.1.2 要求），管理訂閱開 apps.apple.com；分享連結 iOS 用 dart-define `IOS_STORE_URL`（上架後才有，未設定時仍用 Google Play 連結）。
 - **Firebase**：iOS 尚未在 Firebase 專案新增 iOS App（沒有 GoogleService-Info.plist），App 會照現有設計退回不統計、遠端開關用預設值，不影響使用。
 

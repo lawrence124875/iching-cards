@@ -1,6 +1,6 @@
 import 'package:flutter/foundation.dart';
 
-/// 訂閱（HANDOFF §23）。畫面只認這個介面；RevenueCat 只出現在
+/// 訂閱（REFERENCE §23）。畫面只認這個介面；RevenueCat 只出現在
 /// `lib/core/revenuecat/revenuecat_premium.dart`（依 §9 依賴反轉）。
 ///
 /// 權限（entitlement）一律叫 `premium`：月訂、年訂都掛在它底下。

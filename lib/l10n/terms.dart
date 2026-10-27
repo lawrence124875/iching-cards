@@ -7,7 +7,7 @@ import '../core/soundscape/breath_timeline.dart';
 import 'app_localizations.dart';
 import 'glossary.dart';
 
-/// 易學名稱與 core 層代碼 → 介面文字（HANDOFF §16、§17）。core 不放介面文字，只回傳代碼（enum）。
+/// 易學名稱與 core 層代碼 → 介面文字（REFERENCE §16、§17）。core 不放介面文字，只回傳代碼（enum）。
 ///
 /// 卦名、經卦名與象、傳統爻名一律依 11 語術語表（[Glossary]，來源 iching-content/glossary）。
 /// 牌面上的大字卦名屬於牌面設計，各語言都保留漢字（見 CardFace）。

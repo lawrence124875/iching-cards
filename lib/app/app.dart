@@ -63,7 +63,7 @@ class _IchingAppState extends State<IchingApp> {
       navigatorKey: _navigatorKey,
       onGenerateTitle: (context) => context.l10n.appTitle,
       debugShowCheckedModeBanner: false,
-      // 介面語言（HANDOFF §16）：只開放內容已完整翻譯的語言（AppLanguages.enabled），
+      // 介面語言（REFERENCE §16）：只開放內容已完整翻譯的語言（AppLanguages.enabled），
       // 依手機語言設定選擇；同步給 L10n.language，讓通知等沒有 context 的地方用同一語言。
       supportedLocales: [for (final l in AppLanguages.enabled) l.locale],
       localizationsDelegates: const [
@@ -78,7 +78,7 @@ class _IchingAppState extends State<IchingApp> {
         return lang.locale;
       },
       theme: buildTheme(),
-      // 字族依介面語言（日文用思源 JP，HANDOFF §15）：Localizations 決定語言後才知道，所以在 builder 換主題。
+      // 字族依介面語言（日文用思源 JP，REFERENCE §15）：Localizations 決定語言後才知道，所以在 builder 換主題。
       builder: (context, child) {
         final fonts = AppFonts.forLanguage(Localizations.localeOf(context).languageCode);
         AppFonts.current = fonts;

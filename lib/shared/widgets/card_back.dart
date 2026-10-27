@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import '../../app/theme.dart';
 import '../../core/iching/trigram.dart';
 
-/// 牌背：先天八卦環（不用太極圖，HANDOFF §6.3）。
+/// 牌背：先天八卦環（不用太極圖，REFERENCE §6.3）。
 class CardBack extends StatelessWidget {
   const CardBack({super.key});
 

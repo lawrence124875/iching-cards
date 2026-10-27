@@ -21,7 +21,7 @@ import 'l10n/l10n.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  // Firebase（Analytics、Crashlytics、Remote Config，HANDOFF §18）放最前面，才接得到啟動中的當機；
+  // Firebase（Analytics、Crashlytics、Remote Config，REFERENCE §18）放最前面，才接得到啟動中的當機；
   // 失敗不影響 App（統計不送、遠端開關全照預設）。
   final sharingStore = FileUsageSharingStore();
   final sharing = await sharingStore.load();
@@ -38,7 +38,7 @@ Future<void> main() async {
   // 通知類別名稱跟著手機語言（L10n 在 MaterialApp 決定語言前先依手機設定判斷）
   final l = L10n.current;
   await JustAudioPlayback.initBackground(channelName: l.breathChannelName, album: l.appTitle);
-  // 訂閱與廣告（HANDOFF §23）：訂閱戶不載入任何廣告；廣告同意表單在 runApp 之後才跑，不拖慢啟動
+  // 訂閱與廣告（REFERENCE §23）：訂閱戶不載入任何廣告；廣告同意表單在 runApp 之後才跑，不拖慢啟動
   final limits = FreeLimits.from(telemetry.flags.intValue);
   final premium = await RevenueCatPremium.init();
   final ads = AdMobAds.create(

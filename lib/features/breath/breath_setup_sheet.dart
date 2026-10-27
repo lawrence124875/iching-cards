@@ -10,7 +10,7 @@ import 'breath_page.dart';
 import '../../l10n/l10n.dart';
 
 /// 開始前的設定：時長 1／2／3／5 分鐘或自訂 5–60 分鐘（0.2.0+48，會員）、換氣鈴聲、雙耳節拍（皆預設關閉；雙耳節拍可選 128Hz 或 216Hz）。
-/// 文案只描述做法，不寫任何療效（Google Play 健康宣稱政策，HANDOFF §14.2）。
+/// 文案只描述做法，不寫任何療效（Google Play 健康宣稱政策，REFERENCE §14.2）。
 /// 選擇只在這次開啟 App 期間記住（不另存檔）。
 Future<void> showBreathSetup(BuildContext context, int hexagram) async {
   final spec = await showModalBottomSheet<SessionSpec>(

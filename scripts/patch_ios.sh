@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# iOS 平台設定（HANDOFF §9.1、§24）：ios/ 由 CI 以 flutter create 產生，這裡套用 App 設定。
+# iOS 平台設定（REFERENCE §9.1、§24）：ios/ 由 CI 以 flutter create 產生，這裡套用 App 設定。
 # 只在 macOS CI 執行（用 PlistBuddy）。目前只做「不簽章建置」驗證能編譯；簽章與上架等 Apple 開發者帳號。
 set -euo pipefail
 PLIST=ios/Runner/Info.plist

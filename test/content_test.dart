@@ -1,7 +1,7 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:iching_cards/core/content/hexagram_content.dart';
 
-/// 非中文語言：譯文檔＋繁中原文（HANDOFF §22）。
+/// 非中文語言：譯文檔＋繁中原文（REFERENCE §22）。
 void main() {
   Map<String, dynamic> hex(String judgment, String line) => {
         'id': 1,

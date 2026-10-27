@@ -5,7 +5,7 @@
   python3 tools/soundscape/build_beds.py [--cache DIR] [--out assets/audio/beds] [--preview DIR]
 
 需要 ffmpeg 與 numpy（不需要 scipy）。同樣的輸入一定產生同樣的輸出（固定亂數種子）。
-處理流程與參數說明見 HANDOFF §0.3。
+處理流程與參數說明見 REFERENCE §0.3。
 """
 import argparse, json, os, subprocess, time, urllib.parse, urllib.request
 import numpy as np

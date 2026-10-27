@@ -16,7 +16,7 @@ class FollowUp {
 }
 
 /// 一筆卦記：抽到的卦、想問的事、當時看到的那一組解讀，以及之後的回顧。
-/// 只存在手機裡（HANDOFF §13）。
+/// 只存在手機裡（REFERENCE §13）。
 class JournalEntry {
   JournalEntry({
     required this.id,

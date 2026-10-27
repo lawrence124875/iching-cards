@@ -6,7 +6,7 @@ import '../../l10n/l10n.dart';
 
 /// 功能介紹：首次開啟時顯示一次（可略過），之後可從首頁右上角選單重看。
 /// 五頁：抽卦／擲錢／蓍草、卦記（含備份）、呼吸音景（432Hz、7.83Hz 雙耳節拍）、分享與會員、選單（意見回饋、使用統計開關）。
-/// 文案只描述做法，不寫任何療效（Google Play 健康宣稱政策，HANDOFF §14.2）。
+/// 文案只描述做法，不寫任何療效（Google Play 健康宣稱政策，REFERENCE §14.2）。
 Future<void> showIntro(NavigatorState navigator) => navigator.push(MaterialPageRoute<void>(
       fullscreenDialog: true,
       builder: (_) => const IntroPage(),

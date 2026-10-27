@@ -1,4 +1,4 @@
-/// 11 語術語表（HANDOFF §17）：卦名、經卦名與象、傳統爻名的固定譯法。
+/// 11 語術語表（REFERENCE §17）：卦名、經卦名與象、傳統爻名的固定譯法。
 ///
 /// 資料來源是私人 repo iching-content 的 `glossary/glossary.json`（唯一來源），
 /// CI 以 `scripts/gen_glossary.py` 產生 `glossary_data.g.dart`（不進 repo）。

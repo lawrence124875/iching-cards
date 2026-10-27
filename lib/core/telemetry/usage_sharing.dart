@@ -4,7 +4,7 @@ import 'dart:io';
 import 'package:flutter/foundation.dart';
 import 'package:path_provider/path_provider.dart';
 
-/// 「分享匿名使用統計與當機報告」開關（HANDOFF §18.4）。預設開；關掉後 Analytics 與 Crashlytics 都停止蒐集。
+/// 「分享匿名使用統計與當機報告」開關（REFERENCE §18.4）。預設開；關掉後 Analytics 與 Crashlytics 都停止蒐集。
 /// 實際開關 Firebase 由 [apply] 處理（main.dart 傳入 FirebaseTelemetry.setSharing），本類別不碰 Firebase。
 class UsageSharing {
   UsageSharing({required bool initial, required UsageSharingStore store, this.apply})

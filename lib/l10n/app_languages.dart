@@ -1,6 +1,6 @@
 import 'dart:ui';
 
-/// App 支援的語言（HANDOFF §16）。
+/// App 支援的語言（REFERENCE §16）。
 ///
 /// - 介面文字放在 lib/l10n/app_<語言>.arb；解讀內容放在私人 repo iching-content/<contentFolder>/。
 /// - **上線原則（§12）**：內容沒有完整翻譯的語言不開放。只有 [contentReady] 為 true 的語言

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
-/// 謙卦主題配色（HANDOFF §6.1）：天玄地黃，玄底黃點綴。
+/// 謙卦主題配色（REFERENCE §6.1）：天玄地黃，玄底黃點綴。
 class QianColors {
   QianColors._();
 
@@ -15,8 +15,8 @@ class QianColors {
   static const paper = Color(0xFFEDE4D0); // 紙白：淺色模式底
 }
 
-/// 字體：卦名、經文、標題用宋體；白話解讀與介面用黑體（HANDOFF §6.2）。
-/// 0.1.0+17 起打包思源宋體／黑體子集（HANDOFF §15）；子集外的罕用字由系統字體補上。
+/// 字體：卦名、經文、標題用宋體；白話解讀與介面用黑體（REFERENCE §6.2）。
+/// 0.1.0+17 起打包思源宋體／黑體子集（REFERENCE §15）；子集外的罕用字由系統字體補上。
 ///
 /// 依介面語言選字族（[AppFonts.current]，MaterialApp 的 builder 依語言設定）：
 /// - 中文、英文…：思源 TC 為主，簡體字由 SC 子集補（只含 TC 缺的字，2026-10-05）。

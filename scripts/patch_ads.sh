@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# 廣告與訂閱（HANDOFF §23）：AdMob App ID、url_launcher 查詢、ProGuard。
+# 廣告與訂閱（REFERENCE §23）：AdMob App ID、url_launcher 查詢、ProGuard。
 # ADMOB_APP_ID（GitHub Secret，ca-app-pub-…~…）沒設定時用 Google 官方測試 App ID：
 # 少了這個 meta-data，google_mobile_ads 一啟動就閃退。
 set -euo pipefail

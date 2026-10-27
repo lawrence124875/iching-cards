@@ -2,7 +2,7 @@
 
 2026-10-05 起，商店截圖不再用手機截：以 Flutter widget test 在雲端／本機渲染 App 真實畫面
 （`store_screenshots_test.dart`），英文介面、會員狀態（無廣告），1080×2400、密度 2.625（Redmi 實機比例），
-字型為 App 打包的思源子集，牌面與解讀為 iching-content 正式內容。HANDOFF §21.2。
+字型為 App 打包的思源子集，牌面與解讀為 iching-content 正式內容。REFERENCE §21.2。
 
 ⚠️ 截圖含私人內容：輸出資料夾放在本 repo 之外，成品只進私人 repo iching-content。
 

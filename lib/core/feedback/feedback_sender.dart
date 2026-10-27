@@ -19,7 +19,7 @@ class FeedbackEntry {
   static const maxEmailLength = 200;
 }
 
-/// 送出意見回饋。Firebase 實作只在 lib/core/firebase/firebase_feedback.dart（HANDOFF §18）。
+/// 送出意見回饋。Firebase 實作只在 lib/core/firebase/firebase_feedback.dart（REFERENCE §18）。
 abstract class FeedbackSender {
   /// 失敗時拋出例外；畫面顯示「送出失敗」。
   Future<void> send(FeedbackEntry entry);

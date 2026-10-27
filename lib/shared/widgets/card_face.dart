@@ -7,8 +7,8 @@ import '../../l10n/l10n.dart';
 import 'card_art_viewer.dart';
 import 'hexagram_glyph.dart';
 
-/// 有框版牌面（HANDOFF §6.3）：風景照置於框內，四周放卦序、卦象、卦名、拼音、卦義與上下經卦（術語表，§17）。
-/// 多語系：牌面中央的大字卦名屬於牌面設計，各語言都保留漢字；卦序與上下經卦依介面語言（HANDOFF §16）。
+/// 有框版牌面（REFERENCE §6.3）：風景照置於框內，四周放卦序、卦象、卦名、拼音、卦義與上下經卦（術語表，§17）。
+/// 多語系：牌面中央的大字卦名屬於牌面設計，各語言都保留漢字；卦序與上下經卦依介面語言（REFERENCE §16）。
 class CardFace extends StatelessWidget {
   const CardFace({super.key, required this.info, this.zoomable = false});
 

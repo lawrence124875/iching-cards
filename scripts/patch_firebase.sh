@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Firebase（HANDOFF §18）：解開 Secret GOOGLE_SERVICES_JSON_BASE64 → android/app/google-services.json，
+# Firebase（REFERENCE §18）：解開 Secret GOOGLE_SERVICES_JSON_BASE64 → android/app/google-services.json，
 # 檢查裡面有本 App 的套件名稱，再加上 google-services 與 Crashlytics 的 Gradle 外掛與 ProGuard 規則。
 #
 # Firebase 專案與智慧聽覺巡航共用（帳號專案數已滿）：google-services.json 內含兩個 App 的設定，
@@ -18,7 +18,7 @@ fi
 
 # PowerShell 產生的 base64 可能帶換行或空白，先去掉
 if ! printf '%s' "$GOOGLE_SERVICES_JSON_BASE64" | tr -d ' \r\n\t' | base64 -d > "$OUT" 2>/dev/null; then
-  echo "::error::GOOGLE_SERVICES_JSON_BASE64 不是有效的 base64，請重新產生（HANDOFF §18）"
+  echo "::error::GOOGLE_SERVICES_JSON_BASE64 不是有效的 base64，請重新產生（REFERENCE §18）"
   rm -f "$OUT"; exit 1
 fi
 

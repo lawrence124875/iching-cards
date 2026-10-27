@@ -1,6 +1,6 @@
 name: Build iOS (no codesign)
 
-# iOS 準備（HANDOFF §24）：驗證同一份程式能編出 iOS 版。不簽章、不產生可安裝檔，
+# iOS 準備（REFERENCE §24）：驗證同一份程式能編出 iOS 版。不簽章、不產生可安裝檔，
 # 也不上傳任何東西；簽章與 TestFlight 要等 Apple 開發者帳號（年費 US$99）。
 # macOS 執行環境對公開 repo 免費。
 on:
@@ -52,7 +52,7 @@ jobs:
       - name: 匯入內容
         run: bash scripts/import_content.sh _content
 
-      # 11 語術語表（HANDOFF §17）→ lib/l10n/glossary_data.g.dart（不進 repo）。在字型子集之前，
+      # 11 語術語表（REFERENCE §17）→ lib/l10n/glossary_data.g.dart（不進 repo）。在字型子集之前，
       # 讓術語表用到的字也進子集。
       - name: 產生術語表
         run: python3 scripts/gen_glossary.py _content/glossary/glossary.json lib/l10n/glossary_data.g.dart

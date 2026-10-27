@@ -4,7 +4,7 @@ import 'package:purchases_flutter/purchases_flutter.dart';
 
 import '../monetization/premium_service.dart';
 
-/// RevenueCat 實作（HANDOFF §23）。**唯一 import purchases_flutter 的檔案**。
+/// RevenueCat 實作（REFERENCE §23）。**唯一 import purchases_flutter 的檔案**。
 ///
 /// - 金鑰：CI 以 --dart-define=REVENUECAT_API_KEY 注入（GitHub Secret `REVENUECAT_ANDROID_API_KEY`，
 ///   RevenueCat 專案「謙卦」的 Google Play 公開 SDK 金鑰，goog_ 開頭）。沒注入＝[FreePremium]。

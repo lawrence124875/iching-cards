@@ -5,7 +5,7 @@ import '../iching/trigram.dart';
 import 'bed_source.dart';
 import 'synth_bed_source.dart';
 
-/// 錄音音景（0.2.0+50，HANDOFF §0.3）：`assets/audio/beds/<卦>.wav`，CC0／公有領域錄音，
+/// 錄音音景（0.2.0+50，REFERENCE §0.3）：`assets/audio/beds/<卦>.wav`，CC0／公有領域錄音，
 /// 由 `tools/soundscape/build_beds.py` 壓掉近距離瞬態、低通、加殘響後截 56 秒（11025 Hz 單聲道 16-bit）。
 ///
 /// 錄音沒有可調的音高，[pitch] 不影響（長音墊與鐘聲仍照調音精準輸出）。

@@ -1,6 +1,6 @@
 import 'package:flutter/widgets.dart';
 
-/// 廣告（HANDOFF §23）。畫面只認這個介面；AdMob 只出現在 `lib/core/admob/admob_ads.dart`。
+/// 廣告（REFERENCE §23）。畫面只認這個介面；AdMob 只出現在 `lib/core/admob/admob_ads.dart`。
 ///
 /// 三種廣告：底部橫幅、插頁（解讀頁關閉回到起卦頁時，依 [InterstitialPacer] 限頻）、
 /// 獎勵（使用者自己選擇觀看，換一次額外起卦）。訂閱戶全部不顯示（[enabled] = false）。

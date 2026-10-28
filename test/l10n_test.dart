@@ -14,7 +14,7 @@ import 'package:iching_cards/core/reminders/reminder_service.dart';
 import 'package:iching_cards/core/soundscape/breath_timeline.dart';
 import 'package:iching_cards/l10n/l10n.dart';
 
-/// 介面翻譯（HANDOFF §16）：每個 ARB 的鍵與參數一致、語言判斷、select 每一種情況都有翻譯。
+/// 介面翻譯（REFERENCE §16）：每個 ARB 的鍵與參數一致、語言判斷、select 每一種情況都有翻譯。
 void main() {
   Map<String, dynamic> arb(String name) =>
       jsonDecode(File('lib/l10n/$name').readAsStringSync()) as Map<String, dynamic>;

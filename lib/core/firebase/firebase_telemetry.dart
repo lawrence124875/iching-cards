@@ -11,7 +11,7 @@ import '../telemetry/analytics.dart';
 import '../monetization/free_limits.dart';
 import '../telemetry/remote_flags.dart';
 
-/// Firebase（Analytics、Crashlytics、Remote Config）只在這個檔案出現（HANDOFF §18）。
+/// Firebase（Analytics、Crashlytics、Remote Config）只在這個檔案出現（REFERENCE §18）。
 /// 其他程式只認得 [Analytics] 與 [RemoteFlags] 介面；拔掉 Firebase＝main.dart 不呼叫 [init]。
 ///
 /// Firebase 專案與智慧聽覺巡航共用（帳號專案數已滿）：本 App 是同專案的第二個 Android App

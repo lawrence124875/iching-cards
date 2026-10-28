@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../app/theme.dart';
 
-/// 經文：非中文語言顯示「漢字原文（小字、灰穗、宋體）＋譯文」（HANDOFF §22）。
+/// 經文：非中文語言顯示「漢字原文（小字、灰穗、宋體）＋譯文」（REFERENCE §22）。
 /// [original] 為空或與譯文相同（中文語言）時只顯示 [text]。
 class Scripture extends StatelessWidget {
   const Scripture({super.key, required this.text, this.original = '', this.style});

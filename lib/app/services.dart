@@ -127,7 +127,7 @@ class Services {
   bool get isPremium => premium.isPremium.value;
 }
 
-/// 呼吸音景用到的服務（HANDOFF §14）。
+/// 呼吸音景用到的服務（REFERENCE §14）。
 class BreathServices {
   BreathServices({required this.files, required this.playback, required this.screenAwake});
 

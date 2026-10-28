@@ -7,7 +7,7 @@ export 'app_languages.dart';
 export 'app_localizations.dart';
 export 'terms.dart';
 
-/// 介面翻譯的入口（HANDOFF §16）。
+/// 介面翻譯的入口（REFERENCE §16）。
 ///
 /// - 畫面裡：`context.l10n.xxx`。
 /// - 沒有 BuildContext 的地方（通知、鎖定畫面、啟動時的背景服務）：`L10n.current.xxx`。
@@ -27,7 +27,7 @@ class L10n {
 
   /// 內容資料夾：該語言內容未完成時退回繁中（正式版不會發生，見 AppLanguages.enabled）。
   /// 測試版 FORCE_LANG 指定的語言即使未完成也讀自己的資料夾（未寫的卦由內容來源退回繁中），
-  /// 方便邊寫邊看（HANDOFF §22）。
+  /// 方便邊寫邊看（REFERENCE §22）。
   static String get contentFolder =>
       language.contentReady || language == AppLanguages.forced
           ? language.contentFolder

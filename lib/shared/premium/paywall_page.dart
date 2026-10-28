@@ -19,7 +19,7 @@ Future<bool> openPaywall(BuildContext context, {required String source}) async {
   return s.isPremium;
 }
 
-/// 訂閱頁（HANDOFF §23）：月訂、年訂；恢復購買；續訂說明（Google Play 訂閱政策要求清楚揭露）。
+/// 訂閱頁（REFERENCE §23）：月訂、年訂；恢復購買；續訂說明（Google Play 訂閱政策要求清楚揭露）。
 class PaywallPage extends StatefulWidget {
   const PaywallPage({super.key});
 

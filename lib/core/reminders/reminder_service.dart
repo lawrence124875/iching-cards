@@ -1,6 +1,6 @@
 import 'dart:async';
 
-/// 定時提醒介面（平台專屬的通知實作包在後面，iOS 只需補設定，HANDOFF §9.1）。
+/// 定時提醒介面（平台專屬的通知實作包在後面，iOS 只需補設定，REFERENCE §9.1）。
 abstract class ReminderService {
   Future<void> init();
 

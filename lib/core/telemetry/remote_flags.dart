@@ -1,4 +1,4 @@
-/// 遠端開關介面（HANDOFF §9 第 4 項、§18）。目前只用來開關功能入口：
+/// 遠端開關介面（REFERENCE §9 第 4 項、§18）。目前只用來開關功能入口：
 /// 參數名稱 `qg_feature_<功能 id>`（布林），App 內預設全部開啟。
 ///
 /// Firebase 專案與智慧聽覺巡航共用，所以參數一律 `qg_` 開頭，
@@ -6,7 +6,7 @@
 abstract class RemoteFlags {
   bool featureEnabled(String featureId);
 
-  /// 整數參數（免費版限制等，HANDOFF §23）；讀不到回傳 [fallback]。
+  /// 整數參數（免費版限制等，REFERENCE §23）；讀不到回傳 [fallback]。
   int intValue(String key, int fallback);
 }
 

@@ -2,7 +2,7 @@ import 'dart:typed_data';
 
 import '../iching/trigram.dart';
 
-/// 音景來源（策略，HANDOFF §9 第 2 點）：給一個經卦，回傳一段可無縫循環的單聲道音景。
+/// 音景來源（策略，REFERENCE §9 第 2 點）：給一個經卦，回傳一段可無縫循環的單聲道音景。
 /// 實作：程式合成（SynthBedSource，測試用）與錄音（RecordedBedSource，0.2.0+50 起 App 使用）。
 abstract class BedSource {
   const BedSource();

@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """CI 用：把思源黑體／宋體（Noto Sans TC／Noto Serif TC，OFL）切成 App 用的子集。
 
-HANDOFF §6.2、§15。完整字型每個 12–17 MB，只保留需要的字：
+REFERENCE §6.2、§15。完整字型每個 12–17 MB，只保留需要的字：
   1. Big5 常用字（第一字面 5,401 字）——使用者輸入「想問的事」、回顧時用得到
   2. 實際用到的字：assets/content/**/*.json（解讀內容）＋ lib/**/*.dart、lib/l10n/*.arb（介面文字）
   3. 英數、標點、全形符號
@@ -26,7 +26,7 @@ WEIGHTS = [
     ("NotoSansTC[wght].ttf", "NotoSansTC", 500),
     ("NotoSerifTC[wght].ttf", "NotoSerifTC", 400),
 ]
-# 簡中補字（2026-10-05，HANDOFF §15）：theme.dart 以 fontFamilyFallback 接在 TC 後面，
+# 簡中補字（2026-10-05，REFERENCE §15）：theme.dart 以 fontFamilyFallback 接在 TC 後面，
 # 只收「需要的字」中 TC 沒有的（GB2312 一級字 3,755 字＋實際用到的字），同一套思源設計，字形一致。
 SC_WEIGHTS = [
     ("NotoSansSC[wght].ttf", "NotoSansSC", 400, "NotoSansTC[wght].ttf"),
@@ -34,7 +34,7 @@ SC_WEIGHTS = [
     ("NotoSerifSC[wght].ttf", "NotoSerifSC", 400, "NotoSerifTC[wght].ttf"),
 ]
 
-# 日文介面的主字型（2026-10-05，HANDOFF §15）：theme.dart 的 AppFonts.japanese 以 JP 為主、TC／SC 為 fallback。
+# 日文介面的主字型（2026-10-05，REFERENCE §15）：theme.dart 的 AppFonts.japanese 以 JP 為主、TC／SC 為 fallback。
 # 收 JIS 第一水準漢字（2,965 字）＋假名、全形符號＋日文內容與介面實際用到的字＋英數標點。
 JP_WEIGHTS = [
     ("NotoSansJP[wght].ttf", "NotoSansJP", 400),
@@ -62,7 +62,7 @@ def used_chars_ja(root: pathlib.Path) -> set[str]:
             chars.update(f.read_text(encoding="utf-8"))
     return chars
 
-# 韓文介面的主字型（2026-10-05，HANDOFF §15）：theme.dart 的 AppFonts.korean 以 KR 為主、TC／SC 為 fallback。
+# 韓文介面的主字型（2026-10-05，REFERENCE §15）：theme.dart 的 AppFonts.korean 以 KR 為主、TC／SC 為 fallback。
 # 收 KS X 1001 非漢字（符號、相容字母）＋常用韓文音節 2,350 字＋韓文內容與介面實際用到的字（含括號內漢字）＋英數標點。
 KR_WEIGHTS = [
     ("NotoSansKR[wght].ttf", "NotoSansKR", 400),
@@ -71,7 +71,7 @@ KR_WEIGHTS = [
 ]
 
 
-# 泰文介面的主字型（2026-10-06，HANDOFF §15）：theme.dart 的 AppFonts.thai 以 Noto Sans/Serif Thai 為主、TC／SC 為 fallback。
+# 泰文介面的主字型（2026-10-06，REFERENCE §15）：theme.dart 的 AppFonts.thai 以 Noto Sans/Serif Thai 為主、TC／SC 為 fallback。
 # 原檔已很小（約 0.2–0.3 MB，含泰文、拉丁字母與標點），只固定字重與寬度（wdth 100），不另做子集。
 TH_WEIGHTS = [
     ("NotoSansThai[wdth,wght].ttf", "NotoSansThai", 400),
@@ -152,7 +152,7 @@ def main() -> None:
     ranges = [(0x20, 0x7E), (0xA0, 0xFF), (0x2000, 0x206F), (0x3000, 0x303F), (0xFF00, 0xFFEF)]
     for a, b in ranges:
         chars.update(chr(c) for c in range(a, b + 1))
-    # 越南文（2026-10-05，HANDOFF §15）：用 TC 的拉丁字形，收全部越南字母（使用者輸入「想問的事」用得到）：
+    # 越南文（2026-10-05，REFERENCE §15）：用 TC 的拉丁字形，收全部越南字母（使用者輸入「想問的事」用得到）：
     # Latin Extended-A（ă đ ĩ ũ）、ơ ư、Latin Extended Additional（ạ…ỹ）、組合附加符號（部分輸入法送分解形式）。
     for a, b in [(0x100, 0x17F), (0x1A0, 0x1B0), (0x300, 0x323), (0x1EA0, 0x1EF9)]:
         chars.update(chr(c) for c in range(a, b + 1))

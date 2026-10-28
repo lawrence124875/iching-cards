@@ -46,10 +46,10 @@ key.properties
 # 介面翻譯由 ARB 自動產生（l10n.yaml）
 /lib/l10n/app_localizations*.dart
 
-# Firebase 設定檔由 CI 從 Secret 產生，不進 repo（HANDOFF §18）
+# Firebase 設定檔由 CI 從 Secret 產生，不進 repo（REFERENCE §18）
 google-services.json
 GoogleService-Info.plist
-# 術語表由 CI 從私人 repo 產生（scripts/gen_glossary.py，HANDOFF §17）
+# 術語表由 CI 從私人 repo 產生（scripts/gen_glossary.py，REFERENCE §17）
 /lib/l10n/glossary_data.g.dart
 # 商店截圖原始畫面含私人內容，不進公開 repo（screenshots/README.md）
 /screenshots/out/

@@ -1,4 +1,4 @@
-/// 免費版限制（HANDOFF §23.1）。數值可由 Remote Config 調整（`qg_` 開頭，只設在謙卦 App 條件下），
+/// 免費版限制（REFERENCE §23.1）。數值可由 Remote Config 調整（`qg_` 開頭，只設在謙卦 App 條件下），
 /// 不設就用這裡的預設值。解讀內容（三組解讀、爻、東西相映、經文）永遠不鎖。
 class FreeLimits {
   const FreeLimits({

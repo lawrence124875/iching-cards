@@ -6,7 +6,7 @@ import 'package:package_info_plus/package_info_plus.dart';
 
 import '../feedback/feedback_sender.dart';
 
-/// 意見回饋寫進 Firestore `qg_feedback` 集合（HANDOFF §18.1 第 7 點）。
+/// 意見回饋寫進 Firestore `qg_feedback` 集合（REFERENCE §18.1 第 7 點）。
 /// Firestore 規則整個專案共用一份：英文 App 用 `feedback`，本 App 一律 `qg_` 開頭；兩個集合都只能新增、不能讀改刪。
 /// 欄位與英文 App 的 `feedback` 相同，後台看起來一致。
 class FirestoreFeedbackSender implements FeedbackSender {

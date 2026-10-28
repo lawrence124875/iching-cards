@@ -7,7 +7,7 @@
   "appSubtitle": "易經六十四卦卡",
   "homeMotto": "易經不是用來算命\n而是練習看象與做決定",
   "@homeMotto": {
-    "description": "置中提示語：不加標點，逗號處換行（HANDOFF §15.1）"
+    "description": "置中提示語：不加標點，逗號處換行（REFERENCE §15.1）"
   },
   "homeDisclaimer": "內容僅供自我探索與娛樂參考",
   "cancel": "取消",
@@ -63,7 +63,7 @@
   "coinsRestart": "重新起卦",
   "lineName": "{position, select, first{初爻} second{二爻} third{三爻} fourth{四爻} fifth{五爻} top{上爻} other{爻}}",
   "@lineName": {
-    "description": "介面爻位（由下而上），用於擲錢頁逐爻顯示；詳細頁改用術語表的傳統爻名（初九、六二…），見 HANDOFF §17",
+    "description": "介面爻位（由下而上），用於擲錢頁逐爻顯示；詳細頁改用術語表的傳統爻名（初九、六二…），見 REFERENCE §17",
     "placeholders": {
       "position": {
         "type": "String"
@@ -172,7 +172,7 @@
   },
   "focusExplanation": "{reason, select, none{沒有變爻，看本卦卦辭。} one{一個變爻，看這一爻的爻辭。} two{兩個變爻，看這兩爻的爻辭，以上面那一爻為主。} three{三個變爻，看本卦與之卦的卦辭。} four{四個變爻，看之卦裡兩個沒有變的爻，以下面那一爻為主。} five{五個變爻，看之卦裡唯一沒有變的那一爻。} allQian{六爻皆變，乾卦看「用九」。} allKun{六爻皆變，坤卦看「用六」。} other{六爻皆變，看之卦卦辭。}}",
   "@focusExplanation": {
-    "description": "變爻取用規則（朱熹，HANDOFF §4.3）的說明；reason 為 FocusCase 的名稱",
+    "description": "變爻取用規則（朱熹，REFERENCE §4.3）的說明；reason 為 FocusCase 的名稱",
     "placeholders": {
       "reason": {
         "type": "String"
@@ -446,7 +446,7 @@
   },
   "breathSetupNote": "吸氣 4 秒、吐氣 6 秒（每分鐘 6 次）。音景會跟著呼吸起伏。",
   "@breathSetupNote": {
-    "description": "只描述做法，不寫療效（Google Play 健康宣稱政策，HANDOFF §14.2）"
+    "description": "只描述做法，不寫療效（Google Play 健康宣稱政策，REFERENCE §14.2）"
   },
   "breathDuration": "時長",
   "breathCustom": "自訂",
@@ -539,7 +539,7 @@
   },
   "soundscapeName": "{key, select, qian{高空清風} kun{夜野蟲鳴} zhen{遠雷春雨} xun{林間風聲} kan{山澗流水} li{營火} gen{山林寂靜} dui{湖畔水波} other{-}}",
   "@soundscapeName": {
-    "description": "八經卦音景名稱（HANDOFF §14）",
+    "description": "八經卦音景名稱（REFERENCE §14）",
     "placeholders": {
       "key": {
         "type": "String"

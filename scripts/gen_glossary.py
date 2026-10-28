@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""術語表 → Dart 常數（HANDOFF §17）。只在 CI 執行。
+"""術語表 → Dart 常數（REFERENCE §17）。只在 CI 執行。
 
 輸入：私人 repo iching-content 的 glossary/glossary.json（唯一來源）。
 輸出：lib/l10n/glossary_data.g.dart（不進 repo，.gitignore 擋住）。

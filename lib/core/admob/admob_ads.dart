@@ -6,7 +6,7 @@ import 'package:google_mobile_ads/google_mobile_ads.dart';
 
 import '../monetization/ad_service.dart';
 
-/// AdMob 實作（HANDOFF §23）。**唯一 import google_mobile_ads 的檔案**；拔除廣告＝
+/// AdMob 實作（REFERENCE §23）。**唯一 import google_mobile_ads 的檔案**；拔除廣告＝
 /// Services 改用 NoAds、移除套件與 patch_android.sh 的 APPLICATION_ID。
 ///
 /// - 同意（Google UMP）：歐洲等地區先顯示同意表單，`canRequestAds` 為 true 才載入廣告；

@@ -4,7 +4,7 @@ import 'package:iching_cards/core/iching/trigram.dart';
 import 'package:iching_cards/l10n/glossary.dart';
 import 'package:iching_cards/l10n/l10n.dart';
 
-/// 術語表套用（HANDOFF §17）：CI 從私人 repo 產生 glossary_data.g.dart，這裡檢查它與 App 原始資料一致。
+/// 術語表套用（REFERENCE §17）：CI 從私人 repo 產生 glossary_data.g.dart，這裡檢查它與 App 原始資料一致。
 void main() {
   final zh = lookupAppLocalizations(AppLanguages.zhHant.locale);
   final en = lookupAppLocalizations(AppLanguages.en.locale);

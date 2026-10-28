@@ -91,7 +91,7 @@ class _LineTile extends StatelessWidget {
   final LineContent line;
   final bool highlighted;
 
-  /// 漢字原文（非中文語言，HANDOFF §22）；中文為 null。
+  /// 漢字原文（非中文語言，REFERENCE §22）；中文為 null。
   final LineContent? original;
 
   @override

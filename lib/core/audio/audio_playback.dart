@@ -6,7 +6,7 @@ class AudioPart {
   final Duration length;
 }
 
-/// 依序無縫播放幾個音檔（HANDOFF §9.1：平台相關的部分包在介面後面）。
+/// 依序無縫播放幾個音檔（REFERENCE §9.1：平台相關的部分包在介面後面）。
 /// 整個 App 只有一個播放器（背景播放與通知控制的套件只支援單一播放器）。
 abstract class AudioPlayback {
   /// 載入播放清單並設定通知／鎖定畫面顯示的資訊，回傳總長度；失敗時拋出例外。

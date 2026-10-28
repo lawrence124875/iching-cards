@@ -33,7 +33,7 @@ abstract class FocusRule {
   FocusResult focus(CastResult cast);
 }
 
-/// 朱熹《易學啟蒙》的變爻取用規則（HANDOFF §4.3）。
+/// 朱熹《易學啟蒙》的變爻取用規則（REFERENCE §4.3）。
 class ZhuXiFocusRule implements FocusRule {
   const ZhuXiFocusRule();
 

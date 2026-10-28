@@ -1,6 +1,6 @@
 name: Build iOS (no codesign)
 
-# iOS 準備（HANDOFF §24）：驗證同一份程式能編出 iOS 版，並把未簽章 IPA 發佈到 iching-content Release
+# iOS 準備（REFERENCE §24）：驗證同一份程式能編出 iOS 版，並把未簽章 IPA 發佈到 iching-content Release
 # （自行側載測試用）；正式簽章與 TestFlight 要等 Apple 開發者帳號（年費 US$99）。
 # macOS 執行環境對公開 repo 免費。
 on:
@@ -52,7 +52,7 @@ jobs:
       - name: 匯入內容
         run: bash scripts/import_content.sh _content
 
-      # 11 語術語表（HANDOFF §17）→ lib/l10n/glossary_data.g.dart（不進 repo）。在字型子集之前，
+      # 11 語術語表（REFERENCE §17）→ lib/l10n/glossary_data.g.dart（不進 repo）。在字型子集之前，
       # 讓術語表用到的字也進子集。
       - name: 產生術語表
         run: python3 scripts/gen_glossary.py _content/glossary/glossary.json lib/l10n/glossary_data.g.dart
@@ -122,7 +122,7 @@ jobs:
           du -sh build/ios/iphoneos/Runner.app
           echo "::notice::iOS 不簽章建置成功（Runner.app $(du -sh build/ios/iphoneos/Runner.app | cut -f1)）"
 
-      # 未簽章 IPA：給使用者用免費 Apple ID 以 Sideloadly 等工具自行簽章、裝到自己的 iPhone 測試（HANDOFF §24）。
+      # 未簽章 IPA：給使用者用免費 Apple ID 以 Sideloadly 等工具自行簽章、裝到自己的 iPhone 測試（REFERENCE §24）。
       - name: 打包未簽章 IPA 並發佈到私人 repo 的 Release
         env:
           GH_TOKEN: ${{ secrets.BUILDS_REPO_TOKEN }}
@@ -135,7 +135,7 @@ jobs:
           cp -R build/ios/iphoneos/Runner.app ipa/Payload/
           (cd ipa && zip -qry "../$f" Payload)
           du -sh "$f"
-          printf '%s\n' "commit ${{ github.sha }}；未簽章 IPA，需用 Sideloadly 等工具以 Apple ID 簽章後安裝（HANDOFF §24）。" > notes.md
+          printf '%s\n' "commit ${{ github.sha }}；未簽章 IPA，需用 Sideloadly 等工具以 Apple ID 簽章後安裝（REFERENCE §24）。" > notes.md
           gh release create "iching-ios-run${n}" "$f" \
             --repo lawrence124875/iching-content \
             --title "謙卦 ${ver} iOS 未簽章（run ${n}）" \

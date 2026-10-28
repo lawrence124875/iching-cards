@@ -5,6 +5,12 @@ name: Build iOS (no codesign)
 # macOS 執行環境對公開 repo 免費。
 on:
   workflow_dispatch:
+    inputs:
+      force_premium:
+        # 個人自用解鎖版：填 true＝一律視為會員（無廣告、無限制）。
+        description: '自用：填 true 視為會員（無廣告），留空為一般版'
+        required: false
+        default: ''
 
 concurrency:
   group: ios-build
@@ -106,9 +112,10 @@ jobs:
           ADMOB_BANNER_AD_UNIT_ID: ${{ secrets.ADMOB_IOS_BANNER_AD_UNIT_ID }}
           ADMOB_INTERSTITIAL_AD_UNIT_ID: ${{ secrets.ADMOB_IOS_INTERSTITIAL_AD_UNIT_ID }}
           ADMOB_REWARDED_AD_UNIT_ID: ${{ secrets.ADMOB_IOS_REWARDED_AD_UNIT_ID }}
+          FORCE_PREMIUM: ${{ inputs.force_premium }}
         run: |
           set +e
-          flutter build ios --release --no-codesign \
+          flutter build ios --release --no-codesign ${FORCE_PREMIUM:+--dart-define=FORCE_PREMIUM=$FORCE_PREMIUM} \
             --dart-define=REVENUECAT_API_KEY="$REVENUECAT_API_KEY" --dart-define=ADMOB_BANNER_AD_UNIT_ID="$ADMOB_BANNER_AD_UNIT_ID" --dart-define=ADMOB_INTERSTITIAL_AD_UNIT_ID="$ADMOB_INTERSTITIAL_AD_UNIT_ID" --dart-define=ADMOB_REWARDED_AD_UNIT_ID="$ADMOB_REWARDED_AD_UNIT_ID" > /tmp/build.log 2>&1
           status=$?
           tail -n 60 /tmp/build.log
@@ -126,19 +133,23 @@ jobs:
       - name: 打包未簽章 IPA 並發佈到私人 repo 的 Release
         env:
           GH_TOKEN: ${{ secrets.BUILDS_REPO_TOKEN }}
+          FORCE_PREMIUM: ${{ inputs.force_premium }}
         run: |
           set -euo pipefail
           ver=$(grep '^version:' pubspec.yaml | awk '{print $2}')
           n=${{ github.run_number }}
-          f="iching_${ver}_ios_run${n}_unsigned.ipa"
+          f="iching_${ver}_ios_run${n}${FORCE_PREMIUM:+_premium}_unsigned.ipa"
           mkdir -p ipa/Payload
           cp -R build/ios/iphoneos/Runner.app ipa/Payload/
           (cd ipa && zip -qry "../$f" Payload)
           du -sh "$f"
           printf '%s\n' "commit ${{ github.sha }}；未簽章 IPA，需用 Sideloadly 等工具以 Apple ID 簽章後安裝（REFERENCE §24）。" > notes.md
-          gh release create "iching-ios-run${n}" "$f" \
+          # 自用解鎖版用另一個 tag 前綴，不會被下方「只保留最近 3 個」刪掉。
+          tag="iching-ios-run${n}"
+          [ -z "${FORCE_PREMIUM}" ] || tag="iching-personal-ios-run${n}"
+          gh release create "$tag" "$f" \
             --repo lawrence124875/iching-content \
-            --title "謙卦 ${ver} iOS 未簽章（run ${n}）" \
+            --title "謙卦 ${ver} iOS 未簽章（run ${n}）${FORCE_PREMIUM:+［自用解鎖版］}" \
             --notes-file notes.md
 
       - name: 只保留最近 3 個 iOS Release

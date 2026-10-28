@@ -4,13 +4,21 @@
 set -euo pipefail
 
 MANIFEST="android/app/src/main/AndroidManifest.xml"
-sed -i 's/android:label="[^"]*"/android:label="謙卦"/' "$MANIFEST"
+# 個人自用解鎖版（PERSONAL_BUILD=1，只在 force_premium 測試建置）：另用套件名稱與桌面名稱，
+# 可與 Play 正式版並存安裝（Play 版由 Google 重新簽署，同套件名稱無法覆蓋安裝）。
+APP_ID="com.lclab.qiangua"
+APP_LABEL="謙卦"
+if [ "${PERSONAL_BUILD:-}" = "1" ]; then
+  APP_ID="com.lclab.qiangua.personal"
+  APP_LABEL="謙卦 自用"
+fi
+sed -i "s/android:label=\"[^\"]*\"/android:label=\"${APP_LABEL}\"/" "$MANIFEST"
 
 # 套件名稱（Google Play 身分，上傳後永遠不能改）：com.lclab.qiangua
 # 只改 applicationId；namespace 維持 flutter create 產生的值，MainActivity 不必搬移
 GRADLE="android/app/build.gradle.kts"
-sed -i 's/applicationId = "[^"]*"/applicationId = "com.lclab.qiangua"/' "$GRADLE"
-grep -q 'applicationId = "com.lclab.qiangua"' "$GRADLE" && echo "套件名稱：com.lclab.qiangua"
+sed -i "s/applicationId = \"[^\"]*\"/applicationId = \"${APP_ID}\"/" "$GRADLE"
+grep -q "applicationId = \"${APP_ID}\"" "$GRADLE" && echo "套件名稱：${APP_ID}" || { echo "::error::套件名稱設定失敗"; exit 1; }
 # 不鎖方向、不限制調整大小（2026-10-07）：Android 16 起大螢幕（平板、摺疊機）會忽略這些限制，
 # Play Console 要求移除；橫放與寬螢幕由 App 版面處理（lib/shared/widgets/adaptive_layout.dart）。
 # 0.2.0+42 以前這裡會加 screenOrientation="portrait"；保險起見，flutter create 範本若帶了也一併移除。

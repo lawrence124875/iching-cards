@@ -48,4 +48,10 @@ if [ -f "$APPDELEGATE" ] && ! grep -q UNUserNotificationCenter "$APPDELEGATE"; t
   grep -q 'UNUserNotificationCenter.current().delegate = self' "$APPDELEGATE"
 fi
 
-echo "iOS 設定完成：com.lclab.qiangua、11 種介面語言、AdMob ${ADMOB_IOS_APP_ID:+正式}${ADMOB_IOS_APP_ID:-測試} App ID、背景播放"
+# App 圖示：換掉 flutter create 的預設圖示。單一 1024 尺寸（Xcode 14+ 編譯時自動產生各尺寸），
+# 不透明底（App Store 不接受透明圖示），來源 branding/icon-1024.png。
+ICONSET=ios/Runner/Assets.xcassets/AppIcon.appiconset
+rm -rf "$ICONSET"
+cp -R branding/ios/AppIcon.appiconset "$ICONSET"
+
+echo "iOS 設定完成：com.lclab.qiangua、11 種介面語言、AdMob ${ADMOB_IOS_APP_ID:+正式}${ADMOB_IOS_APP_ID:-測試} App ID、背景播放、App 圖示"

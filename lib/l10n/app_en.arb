@@ -591,5 +591,9 @@
   "yarrowStep": "Line {n} of 6",
   "yarrowAll": "Cast All Six Lines",
   "premiumTermsIos": "Subscriptions renew automatically. Cancel anytime on your iPhone in Settings → Apple Account → Subscriptions; you keep Premium until the end of the current period.",
-  "termsOfUse": "Terms of Use"
+  "termsOfUse": "Terms of Use",
+  "updateAvailable": "A new version is available",
+  "updateAction": "Update",
+  "updateReady": "The new version is ready",
+  "updateRestart": "Restart"
 }

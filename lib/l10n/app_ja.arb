@@ -236,5 +236,9 @@
   "yarrowStep": "{n} 爻目を求める",
   "yarrowAll": "まとめて求める",
   "premiumTermsIos": "定期購入は自動更新されます。iPhone の「設定 → Apple アカウント → サブスクリプション」からいつでも解約でき、解約後も現在の期間の終わりまでメンバーのままです。",
-  "termsOfUse": "利用規約"
+  "termsOfUse": "利用規約",
+  "updateAvailable": "新しいバージョンがあります",
+  "updateAction": "更新",
+  "updateReady": "新しいバージョンの準備ができました",
+  "updateRestart": "再起動"
 }

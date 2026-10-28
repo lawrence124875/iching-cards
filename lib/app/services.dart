@@ -23,6 +23,8 @@ import '../core/soundscape/soundscape_files.dart';
 import '../core/telemetry/analytics.dart';
 import '../core/telemetry/remote_flags.dart';
 import '../core/telemetry/usage_sharing.dart';
+import '../core/updates/app_updates.dart';
+import '../core/updates/play_app_updates.dart';
 import '../l10n/l10n.dart';
 
 /// App 共用服務。換實作（內容來源、變爻規則…）只改 Services.standard()。
@@ -40,6 +42,7 @@ class Services {
     this.flags = const DefaultRemoteFlags(),
     this.usage,
     this.feedback,
+    this.updates = const NoAppUpdates(),
     PremiumService? premium,
     AdService? ads,
     FreeLimits? limits,
@@ -79,6 +82,7 @@ class Services {
         flags: flags,
         usage: usage,
         feedback: feedback,
+        updates: const PlayAppUpdates(),
         premium: premium,
         ads: ads,
         limits: limits,
@@ -111,6 +115,9 @@ class Services {
 
   /// 意見回饋（Firestore `qg_feedback`）；null＝選單不顯示（測試、Firebase 沒初始化）。
   final FeedbackSender? feedback;
+
+  /// App 更新提示（Google Play In-App Updates）；不傳＝不檢查（測試）。
+  final AppUpdates updates;
 
   /// 訂閱（§23）。不傳＝永遠免費版、不能購買。
   final PremiumService premium;

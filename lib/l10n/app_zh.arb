@@ -715,5 +715,9 @@
   "termsOfUse": "使用條款",
   "@premiumTermsIos": {
     "description": "iOS 版訂閱頁續訂說明（App Store）"
-  }
+  },
+  "updateAvailable": "有新版本可以更新",
+  "updateAction": "更新",
+  "updateReady": "新版本已下載完成",
+  "updateRestart": "重新啟動"
 }

@@ -6,6 +6,7 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import '../l10n/l10n.dart';
 import '../features/intro/intro_page.dart';
 import 'feature_registry.dart';
+import '../shared/widgets/update_prompt.dart';
 import 'home_page.dart';
 import 'services.dart';
 import 'theme.dart';
@@ -94,7 +95,7 @@ class _IchingAppState extends State<IchingApp> {
           ),
         );
       },
-      home: const HomePage(),
+      home: const UpdatePrompt(child: HomePage()), // 開 App 時提示 Play 有新版（HANDOFF §2）
     );
   }
 }

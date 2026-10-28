@@ -236,5 +236,9 @@
   "yarrowStep": "{n}번째 효 구하기",
   "yarrowAll": "한 번에 모두 구하기",
   "premiumTermsIos": "구독은 자동으로 갱신됩니다. iPhone의 ‘설정 → Apple 계정 → 구독’에서 언제든 해지할 수 있으며, 해지한 뒤에도 현재 기간이 끝날 때까지 멤버십이 유지됩니다.",
-  "termsOfUse": "이용 약관"
+  "termsOfUse": "이용 약관",
+  "updateAvailable": "새 버전이 있습니다",
+  "updateAction": "업데이트",
+  "updateReady": "새 버전이 준비되었습니다",
+  "updateRestart": "다시 시작"
 }

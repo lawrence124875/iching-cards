@@ -591,5 +591,9 @@
   "yarrowStep": "Garis {n} dari 6",
   "yarrowAll": "Keenamnya Sekaligus",
   "premiumTermsIos": "Langganan diperpanjang otomatis. Batalkan kapan saja di iPhone melalui Pengaturan → Akun Apple → Langganan; Premium tetap aktif sampai akhir periode yang sedang berjalan.",
-  "termsOfUse": "Ketentuan Penggunaan"
+  "termsOfUse": "Ketentuan Penggunaan",
+  "updateAvailable": "Versi baru tersedia",
+  "updateAction": "Perbarui",
+  "updateReady": "Versi baru sudah siap",
+  "updateRestart": "Mulai ulang"
 }

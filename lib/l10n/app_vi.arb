@@ -236,5 +236,9 @@
   "yarrowStep": "Hào thứ {n}",
   "yarrowAll": "Lập một lần cả sáu",
   "premiumTermsIos": "Gói đăng ký tự động gia hạn. Bạn có thể hủy bất cứ lúc nào trên iPhone trong Cài đặt → Tài khoản Apple → Đăng ký; sau khi hủy, bạn vẫn là thành viên đến hết kỳ hiện tại.",
-  "termsOfUse": "Điều khoản sử dụng"
+  "termsOfUse": "Điều khoản sử dụng",
+  "updateAvailable": "Đã có phiên bản mới",
+  "updateAction": "Cập nhật",
+  "updateReady": "Phiên bản mới đã sẵn sàng",
+  "updateRestart": "Khởi động lại"
 }

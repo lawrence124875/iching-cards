@@ -236,5 +236,9 @@
   "yarrowStep": "Linha {n} de 6",
   "yarrowAll": "As seis de uma vez",
   "premiumTermsIos": "A assinatura é renovada automaticamente. Você pode cancelar quando quiser no iPhone, em Ajustes → Conta Apple → Assinaturas; o Premium continua até o fim do período atual.",
-  "termsOfUse": "Termos de uso"
+  "termsOfUse": "Termos de uso",
+  "updateAvailable": "Há uma nova versão disponível",
+  "updateAction": "Atualizar",
+  "updateReady": "A nova versão está pronta",
+  "updateRestart": "Reiniciar"
 }

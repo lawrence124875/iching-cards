@@ -39,6 +39,45 @@ class BreathCompleted extends AppEvent {
   final int minutes;
 }
 
+/// 這支手機第一次起卦（統計漏斗起點）。
+class FirstCast extends AppEvent {
+  const FirstCast();
+}
+
+/// 碰到免費版上限（type：cast、journal、breath）。
+class HitFreeLimit extends AppEvent {
+  const HitFreeLimit({required this.type});
+
+  final String type;
+}
+
+/// 獎勵廣告有播放（rewarded：是否看完拿到獎勵）。
+class RewardedAdShown extends AppEvent {
+  const RewardedAdShown({required this.source, required this.rewarded});
+
+  final String source;
+  final bool rewarded;
+}
+
+/// 獎勵廣告載入失敗、無填充或播放失敗（仍給這一次）。
+class RewardedAdFailed extends AppEvent {
+  const RewardedAdFailed({required this.source});
+
+  final String source;
+}
+
+/// 解讀前的插頁有播放。
+class InterstitialShown extends AppEvent {
+  const InterstitialShown();
+}
+
+/// 解讀前的插頁沒播成（reason：failed、timeout、unavailable、show_failed），直接顯示解讀。
+class InterstitialFailed extends AppEvent {
+  const InterstitialFailed({required this.reason});
+
+  final String reason;
+}
+
 /// 打開訂閱頁（source：cast_limit、journal_limit、breath、menu）。
 class PaywallShown extends AppEvent {
   const PaywallShown({required this.source});
@@ -46,18 +85,23 @@ class PaywallShown extends AppEvent {
   final String source;
 }
 
-/// 看完一支獎勵廣告並拿到獎勵（source：cast）。
-class RewardedEarned extends AppEvent {
-  const RewardedEarned({required this.source});
+/// 開始免費試用（period：yearly、monthly）。
+class TrialStarted extends AppEvent {
+  const TrialStarted({required this.period});
 
-  final String source;
+  final String period;
 }
 
-/// 購買或恢復訂閱成功（period：monthly、yearly、restore）。
+/// 購買訂閱成功（period：monthly、yearly）。
 class Subscribed extends AppEvent {
   const Subscribed({required this.period});
 
   final String period;
+}
+
+/// 恢復購買成功。
+class Restored extends AppEvent {
+  const Restored();
 }
 
 class EventBus {

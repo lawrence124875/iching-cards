@@ -6,6 +6,7 @@ import '../../core/iching/cast_result.dart';
 import '../../core/iching/divination_method.dart';
 import '../../l10n/l10n.dart';
 import '../../reading/reading_page.dart';
+import '../premium/ad_banner.dart';
 import '../premium/cast_gate.dart';
 import '../widgets/adaptive_layout.dart';
 import '../widgets/hexagram_glyph.dart';
@@ -42,14 +43,19 @@ class _StepwiseCastPageState extends State<StepwiseCastPage> {
 
   bool _checking = false;
 
-  /// 每一卦（六擲）只在第一擲前檢查一次免費次數（§23）。
+  /// 今天第一次免費起卦：看解讀前先播插頁（HANDOFF §2.1），只播一次。
+  bool _adDue = false;
+
+  /// 每一卦（六擲）只在第一擲前檢查一次免費次數（HANDOFF §2.1）。
   Future<bool> _allowed() async {
     if (_tosses.isNotEmpty) return true;
     if (_checking) return false;
     _checking = true;
-    final ok = await ensureCanCast(context);
+    final pass = await ensureCanCast(context);
     _checking = false;
-    return ok && mounted;
+    if (pass == null || !mounted) return false;
+    _adDue = pass.interstitial;
+    return true;
   }
 
   Future<void> _toss() async {
@@ -58,11 +64,14 @@ class _StepwiseCastPageState extends State<StepwiseCastPage> {
   }
 
   Future<void> _openReading(List<LineValue> lines) async {
-    final ads = AppServices.of(context).ads;
+    if (_adDue) {
+      _adDue = false;
+      await pauseBeforeReading(context);
+      if (!mounted) return;
+    }
     await Navigator.of(context).push(MaterialPageRoute<void>(
       builder: (_) => ReadingPage(cast: CastResult(methodId: _method.id, lines: lines), question: _question),
     ));
-    ads.readingClosed(); // 看完解讀回來：依限頻規則可能跳插頁
   }
 
   Future<void> _tossAll() async {
@@ -138,12 +147,18 @@ class _StepwiseCastPageState extends State<StepwiseCastPage> {
           onPressed: () => _openReading(lines),
           child: Text(l.viewReading),
         ),
-        TextButton(onPressed: () => setState(_tosses.clear), child: Text(l.coinsRestart)),
+        TextButton(
+            onPressed: () => setState(() {
+                  _tosses.clear();
+                  _adDue = false;
+                }),
+            child: Text(l.coinsRestart)),
       ],
     ];
 
     return Scaffold(
       appBar: AppBar(), // 首頁連結已寫起卦方式，這裡不再重複標題
+      bottomNavigationBar: const AdBanner(), // 起卦前畫面的橫幅（HANDOFF §2.1）
       body: SafeArea(
         child: LayoutBuilder(
           builder: (context, box) => isShortWide(box.biggest)

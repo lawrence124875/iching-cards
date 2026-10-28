@@ -548,7 +548,7 @@
   },
   "premiumTitle": "謙卦會員",
   "premiumSubtitle": "沒有廣告，所有功能不限次數",
-  "premiumBenefitNoAds": "沒有任何廣告",
+  "premiumBenefitNoAds": "無廣告、直接看解讀",
   "premiumBenefitCasts": "抽卦、擲錢不限次數",
   "premiumBenefitJournal": "卦記不限則數",
   "premiumBenefitBreath": "呼吸 3／5 分鐘與雙耳節拍",
@@ -565,18 +565,44 @@
   "premiumThanks": "訂閱成功，謝謝支持！",
   "premiumPurchaseFailed": "購買沒有完成，不會收取費用。",
   "premiumRestoreNone": "沒有找到可以恢復的訂閱。",
-  "castLimitTitle": "今天的 {count} 次免費起卦已用完",
-  "@castLimitTitle": {
+  "castLimitTitle": "今天的免費起卦已用完",
+  "castLimitBody": "看一支短廣告，可以再起一卦；或成為會員，不限次數、沒有廣告。",
+  "castInterstitialPause": "靜心片刻，解讀即將呈現",
+  "paywallCastLimitNote": "今天的起卦已用完。一日一卦，靜心思考：把今天的卦象放在心上，慢慢體會，明天再來。若想隨時起卦，可以成為會員。",
+  "journalLimitBody": "已記下的卦記都會保留。可以看一支廣告存下這一則，或成為會員，不限則數。",
+  "planTrialYearly": "免費試用 {days} 天，之後 {price}/年",
+  "@planTrialYearly": {
     "placeholders": {
-      "count": {
+      "days": {
         "type": "int"
+      },
+      "price": {
+        "type": "String"
       }
     }
   },
-  "castLimitBody": "看一支短廣告，可以再起一卦；或成為會員，不限次數、沒有廣告。",
-  "castLimitBodyExhausted": "今天的次數都用完了。不妨靜下來，再想想剛才的象，明天再來；或成為會員，不限次數。",
+  "planTrialMonthly": "免費試用 {days} 天，之後 {price}/月",
+  "@planTrialMonthly": {
+    "placeholders": {
+      "days": {
+        "type": "int"
+      },
+      "price": {
+        "type": "String"
+      }
+    }
+  },
+  "planPerMonth": "每月約 {price}",
+  "@planPerMonth": {
+    "placeholders": {
+      "price": {
+        "type": "String"
+      }
+    }
+  },
+  "planTrialNote": "可隨時取消；試用到期前會收到通知。",
+  "premiumStartTrial": "開始免費試用",
   "castWatchAd": "看廣告再起一卦",
-  "castAdNotReady": "廣告暫時無法載入，請稍後再試。",
   "castComeTomorrow": "明天再來",
   "journalLimitTitle": "卦記已達免費版上限 {count} 則",
   "@journalLimitTitle": {
@@ -586,12 +612,10 @@
       }
     }
   },
-  "journalLimitBody": "已記下的卦記都會保留。可以看一支廣告存下這一則，或成為會員，不限則數。",
   "premiumBadge": "會員",
   "menuPremium": "謙卦會員",
   "menuAdPrivacy": "廣告隱私設定",
   "menuPrivacyPolicy": "隱私權政策",
-  "journalWatchAd": "看廣告存這一則",
   "notNow": "先不要",
   "breathCarrier128": "左 128Hz・右 135.83Hz",
   "breathCarrier216": "左 216Hz・右 223.83Hz",

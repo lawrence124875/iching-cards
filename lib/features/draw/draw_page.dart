@@ -11,6 +11,7 @@ import '../../shared/widgets/adaptive_layout.dart';
 import '../../shared/widgets/card_back.dart';
 import '../../shared/widgets/card_face.dart';
 import '../../shared/widgets/flip_card.dart';
+import '../../shared/premium/ad_banner.dart';
 import '../../shared/premium/cast_gate.dart';
 import '../../shared/widgets/question_dialog.dart';
 
@@ -29,24 +30,34 @@ class _DrawPageState extends State<DrawPage> {
 
   bool _checking = false;
 
+  /// 今天第一次免費起卦：看解讀前先播插頁（HANDOFF §2.1），只播一次。
+  bool _adDue = false;
+
   Future<void> _draw() async {
     if (_cast != null || _checking) return;
     _checking = true;
-    final ok = await ensureCanCast(context); // 免費版每日次數（§23）
+    final pass = await ensureCanCast(context); // 免費版每日次數（HANDOFF §2.1）
     _checking = false;
-    if (!ok || !mounted) return;
+    if (pass == null || !mounted) return;
+    _adDue = pass.interstitial;
     setState(() => _cast = _method.cast(AppServices.of(context).random));
   }
 
   Future<void> _openReading(CastResult cast) async {
-    final ads = AppServices.of(context).ads;
+    if (_adDue) {
+      _adDue = false;
+      await pauseBeforeReading(context);
+      if (!mounted) return;
+    }
     await Navigator.of(context).push(
       MaterialPageRoute<void>(builder: (_) => ReadingPage(cast: cast, question: _question)),
     );
-    ads.readingClosed(); // 看完解讀回來：依限頻規則可能跳插頁（不在閱讀中跳出）
   }
 
-  void _reset() => setState(() => _cast = null);
+  void _reset() => setState(() {
+        _cast = null;
+        _adDue = false;
+      });
 
   @override
   Widget build(BuildContext context) {
@@ -97,6 +108,7 @@ class _DrawPageState extends State<DrawPage> {
     ];
     return Scaffold(
       appBar: AppBar(), // 首頁按鈕已寫「抽一卦」，這裡不再重複標題
+      bottomNavigationBar: const AdBanner(), // 起卦前畫面的橫幅（HANDOFF §2.1）
       body: SafeArea(
         child: LayoutBuilder(
           builder: (context, box) => isShortWide(box.biggest)

@@ -53,12 +53,42 @@ class RevenueCatPremium implements PremiumService {
       final current = (await Purchases.getOfferings()).current;
       if (current == null) return const [];
       return [
-        if (current.monthly case final m?) SubscriptionPlan(period: PlanPeriod.monthly, price: m.storeProduct.priceString, handle: m),
-        if (current.annual case final a?) SubscriptionPlan(period: PlanPeriod.yearly, price: a.storeProduct.priceString, handle: a),
+        if (current.monthly case final m?) await _plan(PlanPeriod.monthly, m),
+        if (current.annual case final a?) await _plan(PlanPeriod.yearly, a),
       ];
     } catch (e) {
       debugPrint('讀取訂閱方案失敗：$e');
       return const [];
+    }
+  }
+
+  /// 價格全用商店回傳的當地字串（priceString、pricePerMonthString），不寫死幣別。
+  static Future<SubscriptionPlan> _plan(PlanPeriod period, Package pkg) async {
+    final p = pkg.storeProduct;
+    return SubscriptionPlan(
+      period: period,
+      price: p.priceString,
+      monthlyEquivalent: period == PlanPeriod.yearly ? p.pricePerMonthString : null,
+      trialDays: await _trialDays(p),
+      handle: pkg,
+    );
+  }
+
+  /// 免費試用天數。Google Play 只回傳使用者有資格的優惠（defaultOption 的 freePhase）；
+  /// iOS 另外查資格。查不到就當沒有試用（不顯示試用文字）。
+  static Future<int?> _trialDays(StoreProduct p) async {
+    try {
+      if (defaultTargetPlatform == TargetPlatform.android) {
+        final period = p.defaultOption?.freePhase?.billingPeriod;
+        return period == null ? null : trialLengthDays(period.unit.name, period.value);
+      }
+      final intro = p.introductoryPrice;
+      if (intro == null || intro.price != 0) return null;
+      final e = await Purchases.checkTrialOrIntroductoryPriceEligibility([p.identifier]);
+      if (e[p.identifier]?.status != IntroEligibilityStatus.introEligibilityStatusEligible) return null;
+      return trialLengthDays(intro.periodUnit.name, intro.periodNumberOfUnits * (intro.cycles < 1 ? 1 : intro.cycles));
+    } catch (_) {
+      return null;
     }
   }
 

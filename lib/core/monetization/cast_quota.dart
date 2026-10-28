@@ -17,6 +17,17 @@ enum CastAllowance {
   exhausted,
 }
 
+/// 一次起卦的紀錄結果（[CastQuota.recordCast]）。
+class CastRecord {
+  const CastRecord({required this.firstEver, required this.dailyFree});
+
+  /// 這支手機第一次起卦（統計 `qg_first_cast`）。
+  final bool firstEver;
+
+  /// 用的是今天的免費次數（不是獎勵換來的、也不是訂閱戶）：解讀前要播插頁（HANDOFF §2.1）。
+  final bool dailyFree;
+}
+
 /// 每日起卦次數（本機計數，跨日自動歸零；以手機當地日期為準）。
 /// 計數只存在本機檔案，不上傳；重裝 App 會歸零，這是可接受的寬鬆。
 class CastQuota {
@@ -31,6 +42,7 @@ class CastQuota {
   String _day = '';
   int _used = 0; // 今天已起卦次數（含用獎勵換來的）
   int _rewarded = 0; // 今天看獎勵廣告換到的次數
+  bool _everCast = false; // 曾經起過卦（不隨日期歸零）
   bool _loaded = false;
 
   String _today() {
@@ -44,6 +56,8 @@ class CastQuota {
       _day = m['day'] as String? ?? '';
       _used = (m['used'] as num?)?.toInt() ?? 0;
       _rewarded = (m['rewarded'] as num?)?.toInt() ?? 0;
+      // 舊版存檔沒有 ever，但有 day＝以前起過卦（升級的使用者不算第一次）
+      _everCast = m['ever'] == true || m.containsKey('day');
       _loaded = true;
     }
     final today = _today();
@@ -54,7 +68,8 @@ class CastQuota {
     }
   }
 
-  Future<void> _persist() => _storage.write({'day': _day, 'used': _used, 'rewarded': _rewarded});
+  Future<void> _persist() =>
+      _storage.write({'day': _day, 'used': _used, 'rewarded': _rewarded, 'ever': _everCast});
 
   /// 可用次數＝免費次數＋今天看廣告換到的次數。
   Future<CastAllowance> check() async {
@@ -70,11 +85,15 @@ class CastQuota {
     return left < 0 ? 0 : left;
   }
 
-  /// 起卦成功時呼叫一次（訂閱戶不呼叫）。
-  Future<void> recordCast() async {
+  /// 起卦成功時呼叫一次。訂閱戶傳 [counted] = false：不扣次數，只記「曾經起過卦」。
+  Future<CastRecord> recordCast({bool counted = true}) async {
     await _ensure();
-    _used++;
-    await _persist();
+    final first = !_everCast;
+    _everCast = true;
+    final dailyFree = counted && _used < limits.castsPerDay;
+    if (counted) _used++;
+    if (counted || first) await _persist();
+    return CastRecord(firstEver: first, dailyFree: dailyFree);
   }
 
   /// 使用者看完獎勵廣告：多一次起卦。

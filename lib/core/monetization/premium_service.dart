@@ -26,14 +26,24 @@ enum PlanPeriod { monthly, yearly }
 enum PurchaseOutcome { success, cancelled, failed }
 
 /// 一個可購買的方案。[price] 是商店回傳、已在地化的價格字串（例：NT$90）。
+/// 價格一律用商店回傳的當地價格字串，不寫死幣別（HANDOFF §2.1）。
 class SubscriptionPlan {
-  const SubscriptionPlan({required this.period, required this.price, this.monthlyEquivalent, this.handle});
+  const SubscriptionPlan({
+    required this.period,
+    required this.price,
+    this.monthlyEquivalent,
+    this.trialDays,
+    this.handle,
+  });
 
   final PlanPeriod period;
   final String price;
 
-  /// 年訂換算每月（例：NT$50），商店有提供才顯示。
+  /// 年訂換算每月（RevenueCat `pricePerMonthString`，例：NT$50），商店有提供才顯示。
   final String? monthlyEquivalent;
+
+  /// 這位使用者可用的免費試用天數；沒有試用（或已用過）為 null。
+  final int? trialDays;
 
   /// 實作端自己的物件（RevenueCat 的 Package），畫面不使用。
   final Object? handle;
@@ -57,4 +67,16 @@ class FreePremium implements PremiumService {
 
   @override
   Future<bool> restore() async => isPremium.value;
+}
+
+/// 試用期長度換成天數（unit：day、week、month、year）；不認得或不合理回傳 null。
+int? trialLengthDays(String unit, int count) {
+  if (count <= 0) return null;
+  return switch (unit) {
+    'day' => count,
+    'week' => count * 7,
+    'month' => count * 30,
+    'year' => count * 365,
+    _ => null,
+  };
 }

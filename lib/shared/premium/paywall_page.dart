@@ -11,17 +11,20 @@ import '../../l10n/l10n.dart';
 import '../widgets/adaptive_layout.dart';
 
 /// 開啟訂閱頁。[source]：從哪裡進來（統計用：cast_limit、journal_limit、breath、menu）。
-/// 回傳離開時是否為訂閱戶。
-Future<bool> openPaywall(BuildContext context, {required String source}) async {
+/// [note]：頁首的說明（例：今天的起卦次數用完）。回傳離開時是否為訂閱戶。
+Future<bool> openPaywall(BuildContext context, {required String source, String? note}) async {
   final s = AppServices.of(context);
   s.events.emit(PaywallShown(source: source));
-  await Navigator.of(context).push(MaterialPageRoute<void>(builder: (_) => const PaywallPage()));
+  await Navigator.of(context).push(MaterialPageRoute<void>(builder: (_) => PaywallPage(note: note)));
   return s.isPremium;
 }
 
-/// 訂閱頁（REFERENCE §23）：月訂、年訂；恢復購買；續訂說明（Google Play 訂閱政策要求清楚揭露）。
+/// 訂閱頁（REFERENCE §23、HANDOFF §2.1）：月訂、年訂（預設選年訂，標示每月約多少、免費試用）；
+/// 恢復購買；續訂說明（Google Play 訂閱政策要求清楚揭露）。價格全用商店回傳的當地字串。
 class PaywallPage extends StatefulWidget {
-  const PaywallPage({super.key});
+  const PaywallPage({super.key, this.note});
+
+  final String? note;
 
   @override
   State<PaywallPage> createState() => _PaywallPageState();
@@ -60,7 +63,7 @@ class _PaywallPageState extends State<PaywallPage> {
     final l = context.l10n;
     switch (r) {
       case PurchaseOutcome.success:
-        _s.events.emit(Subscribed(period: plan.period.name));
+        _s.events.emit(plan.trialDays != null ? TrialStarted(period: plan.period.name) : Subscribed(period: plan.period.name));
         _toast(l.premiumThanks);
         Navigator.of(context).pop();
       case PurchaseOutcome.failed:
@@ -77,7 +80,7 @@ class _PaywallPageState extends State<PaywallPage> {
     setState(() => _busy = false);
     final l = context.l10n;
     if (ok) {
-      _s.events.emit(const Subscribed(period: 'restore'));
+      _s.events.emit(const Restored());
       _toast(l.premiumThanks);
       Navigator.of(context).pop();
     } else {
@@ -97,6 +100,10 @@ class _PaywallPageState extends State<PaywallPage> {
           builder: (context, premium, _) => ListView(
             padding: readablePadding(context, horizontal: 28, bottom: 24, maxWidth: 560),
             children: [
+              if (widget.note case final note?) ...[
+                Text(note, style: t.bodyLarge, textAlign: TextAlign.center),
+                const SizedBox(height: 24),
+              ],
               Text(l.premiumTitle, style: t.headlineSmall, textAlign: TextAlign.center),
               const SizedBox(height: 6),
               Text(l.premiumSubtitle,
@@ -145,6 +152,7 @@ class _PaywallPageState extends State<PaywallPage> {
         ),
       ];
     }
+    final trial = plans.where((p) => p.period == _selected).firstOrNull?.trialDays != null;
     return [
       for (final p in plans)
         Padding(
@@ -152,16 +160,25 @@ class _PaywallPageState extends State<PaywallPage> {
           child: _PlanTile(
             title: p.period == PlanPeriod.monthly ? l.planMonthly : l.planYearly,
             price: p.price,
+            notes: [
+              if (p.trialDays case final days?)
+                p.period == PlanPeriod.yearly ? l.planTrialYearly(days, p.price) : l.planTrialMonthly(days, p.price),
+              if (p.monthlyEquivalent case final m?) l.planPerMonth(m),
+            ],
             selected: _selected == p.period,
             onTap: () => setState(() => _selected = p.period),
           ),
         ),
+      if (trial) ...[
+        Text(l.planTrialNote, style: t.bodySmall?.copyWith(color: QianColors.textSub), textAlign: TextAlign.center),
+        const SizedBox(height: 8),
+      ],
       const SizedBox(height: 8),
       FilledButton(
         onPressed: _busy ? null : _buy,
         child: _busy
             ? const SizedBox(width: 18, height: 18, child: CircularProgressIndicator(strokeWidth: 2))
-            : Text(l.premiumSubscribe),
+            : Text(trial ? l.premiumStartTrial : l.premiumSubscribe),
       ),
       TextButton(onPressed: _busy ? null : _restore, child: Text(l.premiumRestore)),
       const SizedBox(height: 8),
@@ -187,10 +204,19 @@ class _PaywallPageState extends State<PaywallPage> {
 }
 
 class _PlanTile extends StatelessWidget {
-  const _PlanTile({required this.title, required this.price, required this.selected, required this.onTap});
+  const _PlanTile({
+    required this.title,
+    required this.price,
+    this.notes = const [],
+    required this.selected,
+    required this.onTap,
+  });
 
   final String title;
   final String price;
+
+  /// 方案下方的小字：免費試用、每月約多少。
+  final List<String> notes;
   final bool selected;
   final VoidCallback onTap;
 
@@ -216,7 +242,13 @@ class _PlanTile extends StatelessWidget {
             Icon(selected ? Icons.radio_button_checked : Icons.radio_button_off,
                 size: 20, color: selected ? QianColors.earth : QianColors.textSub),
             const SizedBox(width: 12),
-            Expanded(child: Text(title, style: t.titleMedium)),
+            Expanded(
+              child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+                Text(title, style: t.titleMedium),
+                for (final n in notes) Text(n, style: t.bodySmall?.copyWith(color: QianColors.textSub)),
+              ]),
+            ),
+            const SizedBox(width: 8),
             Text(price, style: t.titleMedium),
           ]),
         ),

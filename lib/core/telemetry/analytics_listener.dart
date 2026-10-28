@@ -25,9 +25,17 @@ class AnalyticsListener {
             {'hexagram': b.hexagram, 'minutes': b.minutes, 'silent': b.silent ? 1 : 0, 'binaural': b.binaural ? 1 : 0},
           ),
         BreathCompleted b => ('qg_breath_completed', {'hexagram': b.hexagram, 'minutes': b.minutes}),
-        PaywallShown p => ('qg_paywall_shown', {'source': p.source}),
-        RewardedEarned r => ('qg_rewarded_earned', {'source': r.source}),
-        Subscribed s => ('qg_subscribed', {'period': s.period}),
+        // 付費漏斗（HANDOFF §2.1）；與智慧聽覺巡航共用 Firebase，一律 qg_ 前綴區分
+        FirstCast _ => ('qg_first_cast', const <String, Object>{}),
+        HitFreeLimit h => ('qg_hit_free_limit', {'type': h.type}),
+        RewardedAdShown r => ('qg_rewarded_ad_shown', {'source': r.source, 'rewarded': r.rewarded ? 1 : 0}),
+        RewardedAdFailed r => ('qg_rewarded_ad_failed', {'source': r.source}),
+        InterstitialShown _ => ('qg_interstitial_shown', const <String, Object>{}),
+        InterstitialFailed i => ('qg_interstitial_failed', {'reason': i.reason}),
+        PaywallShown p => ('qg_paywall_view', {'source': p.source}),
+        TrialStarted t => ('qg_trial_start', {'period': t.period}),
+        Subscribed s => ('qg_purchase', {'period': s.period}),
+        Restored _ => ('qg_restore', const <String, Object>{}),
         _ => null,
       };
 

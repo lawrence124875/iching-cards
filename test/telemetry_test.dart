@@ -30,9 +30,16 @@ void main() {
     const JournalSaved(hasReminder: true),
     const BreathStarted(hexagram: 15, minutes: 3, silent: false, binaural: true),
     const BreathCompleted(hexagram: 15, minutes: 3),
+    const FirstCast(),
+    const HitFreeLimit(type: 'cast'),
+    const RewardedAdShown(source: 'cast', rewarded: true),
+    const RewardedAdFailed(source: 'cast'),
+    const InterstitialShown(),
+    const InterstitialFailed(reason: 'timeout'),
     const PaywallShown(source: 'cast_limit'),
-    const RewardedEarned(source: 'cast'),
+    const TrialStarted(period: 'yearly'),
     const Subscribed(period: 'yearly'),
+    const Restored(),
   ];
 
   test('統計事件一律 qg_ 開頭、名稱合規、參數只有字串或數字', () {
@@ -60,11 +67,22 @@ void main() {
       'qg_journal_saved',
       'qg_breath_started',
       'qg_breath_completed',
-      'qg_paywall_shown',
-      'qg_rewarded_earned',
-      'qg_subscribed',
+      'qg_first_cast',
+      'qg_hit_free_limit',
+      'qg_rewarded_ad_shown',
+      'qg_rewarded_ad_failed',
+      'qg_interstitial_shown',
+      'qg_interstitial_failed',
+      'qg_paywall_view',
+      'qg_trial_start',
+      'qg_purchase',
+      'qg_restore',
     ]);
     expect(rec.logged.first.$2, {'method': 'coins', 'hexagram': 15, 'has_changed': 1});
+    final byName = {for (final e in rec.logged) e.$1: e.$2};
+    expect(byName['qg_hit_free_limit'], {'type': 'cast'});
+    expect(byName['qg_paywall_view'], {'source': 'cast_limit'});
+    expect(byName['qg_rewarded_ad_shown'], {'source': 'cast', 'rewarded': 1});
     await listener.dispose();
   });
 

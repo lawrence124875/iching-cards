@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 
+import '../core/events/event_bus.dart';
 import '../l10n/l10n.dart';
 import '../features/intro/intro_page.dart';
 import 'feature_registry.dart';
@@ -21,6 +22,7 @@ class IchingApp extends StatefulWidget {
 class _IchingAppState extends State<IchingApp> {
   final _navigatorKey = GlobalKey<NavigatorState>();
   StreamSubscription<String>? _taps;
+  StreamSubscription<ReadingShown>? _readings;
 
   @override
   void didChangeDependencies() {
@@ -29,18 +31,27 @@ class _IchingAppState extends State<IchingApp> {
     final services = AppServices.of(context);
     final reminders = services.reminders;
     _taps = reminders.taps.listen(_open);
+    // 看到解讀＝今天起過卦：每日一卦提醒改從明天開始
+    _readings = services.events.on<ReadingShown>().listen((_) => _refreshDaily(services));
     WidgetsBinding.instance.addPostFrameCallback((_) async {
       final p = reminders.takeLaunchPayload();
       if (p != null) {
         _open(p);
-        return;
+      } else {
+        // 首次開啟顯示功能介紹（從通知打開時不打斷）
+        final intro = services.intro;
+        final nav = _navigatorKey.currentState;
+        if (intro != null && nav != null && !await intro.seen()) await showIntro(nav);
       }
-      // 首次開啟顯示功能介紹（從通知打開時不打斷）
-      final intro = services.intro;
-      if (intro == null || await intro.seen()) return;
-      final nav = _navigatorKey.currentState;
-      if (nav != null) await showIntro(nav);
+      // 介紹看完才排每日一卦提醒：第一次會請求通知權限（預設開啟）
+      await _refreshDaily(services);
     });
+  }
+
+  Future<void> _refreshDaily(Services services) async {
+    final daily = services.dailyReminder;
+    if (daily == null) return;
+    await daily.refresh(castToday: await services.quota.castToday(), message: L10n.current.dailyMessage);
   }
 
   /// 通知帶來的 payload 交給認得它的功能（例如卦記開啟該筆紀錄）。
@@ -55,6 +66,7 @@ class _IchingAppState extends State<IchingApp> {
   @override
   void dispose() {
     _taps?.cancel();
+    _readings?.cancel();
     super.dispose();
   }
 

@@ -92,6 +92,9 @@ extension IchingTerms on AppLocalizations {
         ReminderFailureKind.unsupported => reminderUnsupported,
       };
 
+  /// 每日一卦提醒的通知。
+  ({String title, String body}) get dailyMessage => (title: dailyReminderNotifTitle, body: dailyReminderNotifBody);
+
   /// 卦記回顧通知（內文不放想問的事）。
   ({String title, String body}) reviewMessage(int hexagram, int days) {
     final name = hexName(HexagramTable.byNumber(hexagram));

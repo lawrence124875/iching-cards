@@ -13,7 +13,7 @@ class _MapBundle extends CachingAssetBundle {
   @override
   Future<ByteData> load(String key) async {
     final s = files[key];
-    if (s == null) throw FlutterError('missing $key');
+    if (s == null) throw Exception('missing $key');
     return ByteData.sublistView(Uint8List.fromList(utf8.encode(s)));
   }
 }

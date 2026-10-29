@@ -25,6 +25,26 @@
   "featureCoins": "用三枚銅錢起卦",
   "featureJournal": "卦記",
   "featureBreath": "呼吸音景",
+  "featureLearn": "學習課程",
+  "learnLessonNumber": "第 {n} 課",
+  "@learnLessonNumber": {
+    "placeholders": {
+      "n": {
+        "type": "int"
+      }
+    }
+  },
+  "learnFree": "免費",
+  "learnLocked": "需要會員",
+  "learnPaywallNote": "前兩課免費試讀。成為會員即可解鎖全部 8 課：讀象、互錯綜卦、變爻與之卦，一步步學會自己讀卦。",
+  "@learnPaywallNote": {
+    "description": "課程付費牆說明（前 2 課免費，其餘 6 課會員解鎖）"
+  },
+  "learnKeyPoints": "本課重點",
+  "learnPractice": "練習",
+  "learnNext": "下一課",
+  "learnMissing": "這一課暫時無法載入。",
+  "learnFallbackNote": "這一課的譯文準備中，暫以其他語言顯示。",
   "readingActionBreath": "以此卦靜心呼吸",
   "methodDraw": "抽一卦",
   "methodCoins": "三枚銅錢起卦",

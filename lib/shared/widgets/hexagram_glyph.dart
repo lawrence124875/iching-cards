@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import '../../app/theme.dart';
 import '../../l10n/l10n.dart';
 
-/// 畫六爻（由下而上）。changing 為變爻位置（1–6），以稻金色並加圓點標示。
+/// 畫六爻（由下而上；學習課程也用來畫三爻的經卦，高度依爻數等比）。changing 為變爻位置（1–6），以稻金色並加圓點標示。
 class HexagramGlyph extends StatelessWidget {
   const HexagramGlyph({
     super.key,
@@ -29,7 +29,7 @@ class HexagramGlyph extends StatelessWidget {
     return Semantics(
       label: changing.isEmpty ? l.glyphLabel : l.glyphLabelChanging(sorted.join(l.listSeparator)),
       child: CustomPaint(
-        size: Size(width * 1.25, width * 0.9),
+        size: Size(width * 1.25, width * 0.9 * lines.length / 6),
         painter: _GlyphPainter(lines, changing, color, visibleCount),
       ),
     );
@@ -47,9 +47,10 @@ class _GlyphPainter extends CustomPainter {
   @override
   void paint(Canvas canvas, Size size) {
     final w = size.width / 1.25;
-    final step = size.height / 6;
+    final n = lines.length;
+    final step = size.height / n;
     final barH = step * 0.55;
-    for (var i = 0; i < 6; i++) {
+    for (var i = 0; i < n; i++) {
       final y = size.height - (i + 1) * step + (step - barH) / 2;
       if (i >= visibleCount) {
         final ghost = Paint()

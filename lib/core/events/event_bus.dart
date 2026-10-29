@@ -78,7 +78,7 @@ class InterstitialFailed extends AppEvent {
   final String reason;
 }
 
-/// 打開訂閱頁（source：cast_limit、journal_limit、breath、menu）。
+/// 打開訂閱頁（source：cast_limit、journal_limit、breath、menu、lesson）。
 class PaywallShown extends AppEvent {
   const PaywallShown({required this.source});
 

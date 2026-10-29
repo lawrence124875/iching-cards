@@ -8,6 +8,7 @@ src="${1:?用法：import_content.sh <iching-content 路徑>}"
 LANGS="zh-Hant en zh-Hans ja ko vi es pt-BR id th ar"
 mkdir -p assets/cards
 summary=""
+n_lesson=0
 for lang in $LANGS; do
   mkdir -p "assets/content/$lang"
   n=0
@@ -15,6 +16,12 @@ for lang in $LANGS; do
     [ -e "$f" ] || continue
     cp "$f" "assets/content/$lang/$(basename "$f" | cut -c1-2).json"
     n=$((n + 1))
+  done
+  # 學習課程（<語言>/lessons/NN.json → lesson-NN.json；放在同一資料夾，pubspec 與字型子集不必另列）
+  for f in "$src/$lang"/lessons/[0-9][0-9].json; do
+    [ -e "$f" ] || continue
+    cp "$f" "assets/content/$lang/lesson-$(basename "$f")"
+    n_lesson=$((n_lesson + 1))
   done
   summary="$summary $lang=$n"
 done
@@ -33,4 +40,4 @@ for pass in normal redo; do
   done
 done
 
-echo "已匯入解讀（${summary# }）、牌面圖 ${n_img} 張"
+echo "已匯入解讀（${summary# }）、課程 ${n_lesson} 檔、牌面圖 ${n_img} 張"

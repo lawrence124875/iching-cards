@@ -17,6 +17,7 @@ import '../core/monetization/free_limits.dart';
 import '../core/monetization/premium_service.dart';
 import '../core/journal/journal_store.dart';
 import '../core/iching/focus_rule.dart';
+import '../core/reminders/daily_reminder.dart';
 import '../core/reminders/local_notification_reminders.dart';
 import '../core/reminders/reminder_service.dart';
 import '../core/soundscape/soundscape_files.dart';
@@ -36,6 +37,7 @@ class Services {
     required this.random,
     required this.reminders,
     this.journal,
+    this.dailyStore,
     this.breath,
     this.intro,
     this.analytics = const NoopAnalytics(),
@@ -61,33 +63,38 @@ class Services {
     FreeLimits limits = const FreeLimits(),
     UsageSharing? usage,
     FeedbackSender? feedback,
-  }) =>
-      Services(
-        content: AssetContentSource(folder: () => L10n.contentFolder),
-        events: EventBus(),
-        focusRule: const ZhuXiFocusRule(),
-        random: Random.secure(),
-        reminders: LocalNotificationReminders(
-          channelName: () => L10n.current.reminderChannelName,
-          channelDescription: () => L10n.current.reminderChannelDescription,
-        ),
-        journal: FileJournalStore(),
-        intro: FileIntroStore(),
-        breath: BreathServices(
-          files: CachedSoundscapeFiles(),
-          playback: JustAudioPlayback(),
-          screenAwake: WakelockScreenAwake(),
-        ),
-        analytics: analytics,
-        flags: flags,
-        usage: usage,
-        feedback: feedback,
-        updates: const PlayAppUpdates(),
-        premium: premium,
-        ads: ads,
-        limits: limits,
-        quota: CastQuota(limits: limits),
-      );
+  }) {
+    final reminders = LocalNotificationReminders(
+      channelName: () => L10n.current.reminderChannelName,
+      channelDescription: () => L10n.current.reminderChannelDescription,
+      dailyChannelName: () => L10n.current.dailyReminderChannelName,
+      dailyChannelDescription: () => L10n.current.dailyReminderChannelDescription,
+    );
+    return Services(
+      content: AssetContentSource(folder: () => L10n.contentFolder),
+      events: EventBus(),
+      focusRule: const ZhuXiFocusRule(),
+      random: Random.secure(),
+      reminders: reminders,
+      journal: FileJournalStore(),
+      dailyStore: FileDailyReminderStore(),
+      intro: FileIntroStore(),
+      breath: BreathServices(
+        files: CachedSoundscapeFiles(),
+        playback: JustAudioPlayback(),
+        screenAwake: WakelockScreenAwake(),
+      ),
+      analytics: analytics,
+      flags: flags,
+      usage: usage,
+      feedback: feedback,
+      updates: const PlayAppUpdates(),
+      premium: premium,
+      ads: ads,
+      limits: limits,
+      quota: CastQuota(limits: limits),
+    );
+  }
 
   final ContentSource content;
   final EventBus events;
@@ -97,6 +104,14 @@ class Services {
 
   /// 卦記；為 null 時（拔除卦記功能）解讀頁不顯示「記下這一卦」。
   final JournalStore? journal;
+
+  /// 每日一卦提醒的設定；為 null 時（測試）不排提醒、選單不顯示。
+  final DailyReminderStore? dailyStore;
+
+  DailyReminder? get dailyReminder {
+    final store = dailyStore;
+    return store == null ? null : DailyReminder(reminders: reminders, store: store);
+  }
 
   /// 呼吸音景；為 null 時練習頁直接提供無聲引導。拔除功能請移出註冊表。
   final BreathServices? breath;

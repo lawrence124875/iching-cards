@@ -343,6 +343,14 @@
   "reminderUnsupported": "Pengingat belum didukung di platform ini",
   "reminderChannelName": "Pengingat jurnal",
   "reminderChannelDescription": "Mengingatkanmu untuk menengok kembali bacaan yang kamu simpan",
+  "menuDailyReminder": "Pengingat harian",
+  "dailyReminderSwitch": "Ingatkan saya setiap hari",
+  "dailyReminderTime": "Waktu pengingat",
+  "dailyReminderHint": "Tidak ada pengingat pada hari kamu sudah membuka heksagram.",
+  "dailyReminderNotifTitle": "Heksagram hari ini",
+  "dailyReminderNotifBody": "Luangkan waktu sejenak dengan tenang dan buka heksagram hari ini.",
+  "dailyReminderChannelName": "Pengingat harian",
+  "dailyReminderChannelDescription": "Pengingat harian untuk membuka heksagram dan merenung",
   "reviewNotificationTitle": "Tengok kembali: {name}",
   "@reviewNotificationTitle": {
     "placeholders": {

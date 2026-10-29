@@ -5,12 +5,15 @@ abstract class ReminderService {
   Future<void> init();
 
   /// 排定一次性提醒；回傳 false 表示沒有權限或排程失敗。
+  /// [askPermission] 為 false 時沒有權限就直接失敗，不跳權限對話框（背景重排用）。
   Future<bool> schedule({
     required int id,
     required DateTime at,
     required String title,
     required String body,
     required String payload,
+    ReminderKind kind = ReminderKind.review,
+    bool askPermission = true,
   });
 
   Future<void> cancel(int id);
@@ -24,6 +27,9 @@ abstract class ReminderService {
   /// App 是被點通知啟動的：取出該通知的 payload（只能取一次）。
   String? takeLaunchPayload();
 }
+
+/// 通知類別：卦記回顧（準時）、每日一卦（可延後，不要求「鬧鐘與提醒」權限）。
+enum ReminderKind { review, daily }
 
 enum ReminderFailureKind { permissionDenied, initFailed, scheduleFailed, unsupported }
 
@@ -47,6 +53,8 @@ class NoopReminderService implements ReminderService {
     required String title,
     required String body,
     required String payload,
+    ReminderKind kind = ReminderKind.review,
+    bool askPermission = true,
   }) async =>
       false;
 

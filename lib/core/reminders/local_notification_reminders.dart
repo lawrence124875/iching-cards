@@ -19,12 +19,20 @@ import 'reminder_service.dart';
 ///  （scripts/patch_android.sh 處理），少了 receiver 排程會成功但永遠不會跳出。
 class LocalNotificationReminders implements ReminderService {
   /// [channelName]、[channelDescription]：通知類別在系統設定中顯示的文字（由 l10n 提供，跟著 App 語言）。
-  LocalNotificationReminders({required this.channelName, required this.channelDescription});
+  LocalNotificationReminders({
+    required this.channelName,
+    required this.channelDescription,
+    required this.dailyChannelName,
+    required this.dailyChannelDescription,
+  });
 
   static const _channelId = 'com.lclab.qiangua.review';
+  static const _dailyChannelId = 'com.lclab.qiangua.daily';
 
   final String Function() channelName;
   final String Function() channelDescription;
+  final String Function() dailyChannelName;
+  final String Function() dailyChannelDescription;
 
   final _plugin = FlutterLocalNotificationsPlugin();
   final _taps = StreamController<String>.broadcast();
@@ -65,9 +73,11 @@ class LocalNotificationReminders implements ReminderService {
     }
   }
 
-  Future<bool> _requestPermission() async {
+  Future<bool> _requestPermission({required bool ask}) async {
     try {
       if (Platform.isIOS) {
+        final ios = _plugin.resolvePlatformSpecificImplementation<IOSFlutterLocalNotificationsPlugin>();
+        if (!ask) return (await ios?.checkPermissions())?.isEnabled ?? false;
         return await _plugin
                 .resolvePlatformSpecificImplementation<IOSFlutterLocalNotificationsPlugin>()
                 ?.requestPermissions(alert: true, sound: true) ??
@@ -77,6 +87,7 @@ class LocalNotificationReminders implements ReminderService {
       if (android == null) return false;
       // 已允許就不再跳權限對話框
       if (await android.areNotificationsEnabled() ?? false) return true;
+      if (!ask) return false;
       return await android.requestNotificationsPermission() ?? false;
     } catch (_) {
       return false;
@@ -114,15 +125,19 @@ class LocalNotificationReminders implements ReminderService {
     required String title,
     required String body,
     required String payload,
+    ReminderKind kind = ReminderKind.review,
+    bool askPermission = true,
   }) async {
     if (!_ready) await init(); // 啟動時失敗就再試一次
     if (!_ready) return false;
-    if (!await _requestPermission()) {
+    if (!await _requestPermission(ask: askPermission)) {
       _lastFailure = const ReminderFailure(ReminderFailureKind.permissionDenied);
       return false;
     }
-    final mode = await _scheduleMode();
-    lastExact = mode == AndroidScheduleMode.exactAllowWhileIdle;
+    final daily = kind == ReminderKind.daily;
+    // 每日一卦晚幾分鐘無妨：不要求「鬧鐘與提醒」權限，也不開系統設定頁
+    final mode = daily ? AndroidScheduleMode.inexactAllowWhileIdle : await _scheduleMode();
+    if (!daily) lastExact = mode == AndroidScheduleMode.exactAllowWhileIdle;
     try {
       await _plugin.zonedSchedule(
         id,
@@ -131,9 +146,9 @@ class LocalNotificationReminders implements ReminderService {
         tz.TZDateTime.from(at, tz.UTC),
         NotificationDetails(
           android: AndroidNotificationDetails(
-            _channelId,
-            channelName(),
-            channelDescription: channelDescription(),
+            daily ? _dailyChannelId : _channelId,
+            daily ? dailyChannelName() : channelName(),
+            channelDescription: daily ? dailyChannelDescription() : channelDescription(),
             importance: Importance.high,
             priority: Priority.high,
           ),

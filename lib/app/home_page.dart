@@ -9,6 +9,7 @@ import '../shared/premium/paywall_page.dart';
 
 import '../shared/widgets/adaptive_layout.dart';
 import '../shared/widgets/card_back.dart';
+import '../shared/widgets/daily_reminder_dialog.dart';
 import '../l10n/l10n.dart';
 import 'feature_registry.dart';
 import 'services.dart';
@@ -105,9 +106,9 @@ class HomePage extends StatelessWidget {
   }
 }
 
-enum _MenuItem { premium, intro, shareApp, feedback, usage, adPrivacy, privacyPolicy }
+enum _MenuItem { premium, dailyReminder, intro, shareApp, feedback, usage, adPrivacy, privacyPolicy }
 
-/// 首頁右上角選單：謙卦會員、功能介紹、推薦給朋友、意見回饋、分享使用統計（勾選開關）、廣告隱私設定（需要同意的地區才出現）、隱私權政策。
+/// 首頁右上角選單：謙卦會員、每日一卦提醒、功能介紹、推薦給朋友、意見回饋、分享使用統計（勾選開關）、廣告隱私設定（需要同意的地區才出現）、隱私權政策。
 class _HomeMenu extends StatelessWidget {
   const _HomeMenu();
 
@@ -121,6 +122,8 @@ class _HomeMenu extends StatelessWidget {
         switch (item) {
           case _MenuItem.premium:
             openPaywall(context, source: 'menu');
+          case _MenuItem.dailyReminder:
+            showDailyReminderDialog(context);
           case _MenuItem.intro:
             showIntro(Navigator.of(context));
           case _MenuItem.shareApp:
@@ -138,6 +141,7 @@ class _HomeMenu extends StatelessWidget {
       },
       itemBuilder: (_) => [
         PopupMenuItem(value: _MenuItem.premium, child: Text(l.menuPremium)),
+        if (s.dailyStore != null) PopupMenuItem(value: _MenuItem.dailyReminder, child: Text(l.menuDailyReminder)),
         PopupMenuItem(value: _MenuItem.intro, child: Text(l.menuIntro)),
         PopupMenuItem(value: _MenuItem.shareApp, child: Text(l.menuShareApp)),
         if (s.feedback != null) PopupMenuItem(value: _MenuItem.feedback, child: Text(l.menuFeedback)),

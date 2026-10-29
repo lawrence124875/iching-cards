@@ -343,6 +343,14 @@
   "reminderUnsupported": "Reminders are not supported on this platform yet",
   "reminderChannelName": "Journal review reminders",
   "reminderChannelDescription": "Reminds you to look back at readings you saved",
+  "menuDailyReminder": "Daily hexagram reminder",
+  "dailyReminderSwitch": "Remind me to cast each day",
+  "dailyReminderTime": "Reminder time",
+  "dailyReminderHint": "No reminder on days you've already cast.",
+  "dailyReminderNotifTitle": "Today's hexagram",
+  "dailyReminderNotifBody": "Take a quiet moment and cast today's hexagram.",
+  "dailyReminderChannelName": "Daily hexagram reminder",
+  "dailyReminderChannelDescription": "A daily reminder to cast a hexagram and reflect",
   "reviewNotificationTitle": "Look back: {name}",
   "@reviewNotificationTitle": {
     "placeholders": {

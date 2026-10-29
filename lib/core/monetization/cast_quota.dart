@@ -78,6 +78,14 @@ class CastQuota {
     return _rewarded < limits.rewardedPerDay ? CastAllowance.needsReward : CastAllowance.exhausted;
   }
 
+  /// 今天起過卦了嗎（每日一卦提醒用；訂閱戶不扣次數，另記起卦日期）。
+  Future<bool> castToday() async {
+    await _ensure();
+    return _used > 0 || _castDay == _day;
+  }
+
+  String _castDay = ''; // 訂閱戶起卦的日期（只在記憶體，重開 App 會忘記，可接受）
+
   /// 今天剩幾次免費（不含獎勵）；顯示用。
   Future<int> freeLeft() async {
     await _ensure();
@@ -90,6 +98,7 @@ class CastQuota {
     await _ensure();
     final first = !_everCast;
     _everCast = true;
+    _castDay = _day;
     final dailyFree = counted && _used < limits.castsPerDay;
     if (counted) _used++;
     if (counted || first) await _persist();

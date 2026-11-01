@@ -274,8 +274,8 @@ class _ForecastCard extends StatelessWidget {
       const SizedBox(height: 12),
       Text(mc.fill('levelDesc', const {}, sub: level.name)),
       const SizedBox(height: 8),
-      Text('${mc.fill('relation', args, sub: c.relation.name)}'
-          '${mc.fill('strength', {'month': mc.element(c.monthElement.name)}, sub: c.tiStrength.name)}'),
+      Text(_joinSentences(mc.fill('relation', args, sub: c.relation.name),
+          mc.fill('strength', {'month': mc.element(c.monthElement.name)}, sub: c.tiStrength.name))),
       const SizedBox(height: 8),
       Text(
         mc.fill('timingWhy', {
@@ -287,4 +287,12 @@ class _ForecastCard extends StatelessWidget {
       ),
     ]);
   }
+}
+
+/// 兩句相接：中日文（全形標點、漢字、假名）直接相接，其他語言（含泰文）補一個空格。
+String _joinSentences(String a, String b) {
+  if (a.isEmpty || b.isEmpty || a.endsWith(' ')) return '$a$b';
+  final last = a.codeUnitAt(a.length - 1);
+  final cjk = (last >= 0x3000 && last <= 0x9FFF) || (last >= 0xFF00 && last <= 0xFFEF);
+  return cjk ? '$a$b' : '$a $b';
 }

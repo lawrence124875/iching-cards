@@ -164,7 +164,7 @@ class _JournalEntryPageState extends State<JournalEntryPage> {
     return ListView(
       padding: readablePadding(context, top: 8, bottom: 40),
       children: [
-        Text('${formatDateTime(e.createdAt)}${l.separator}${l.methodName(e.methodId)}',
+        Text('${formatDateTime(e.createdAt)}${l.separator}${l.journalMethodLabel(e.methodId)}',
             textAlign: TextAlign.center, style: t.bodySmall),
         const SizedBox(height: 16),
         Row(

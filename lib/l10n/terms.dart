@@ -86,6 +86,10 @@ extension IchingTerms on AppLocalizations {
         _ => methodDraw,
       };
 
+  /// 卦記上的起卦方式：梅花起卦前面加「梅花易數」，一眼分得出來（如「梅花易數・時間起卦」）。
+  String journalMethodLabel(String methodId) =>
+      methodId.startsWith('meihua_') ? '$featureMeihua$separator${methodName(methodId)}' : methodName(methodId);
+
   /// 提醒失敗的原因（給使用者看）。
   String reminderFailureText(ReminderFailure? f) => switch (f?.kind) {
         null => '',

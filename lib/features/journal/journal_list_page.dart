@@ -91,6 +91,7 @@ class _Tile extends StatelessWidget {
           Text(
             [
               formatDate(entry.createdAt),
+              l.journalMethodLabel(entry.methodId),
               if (reviews > 0) l.journalReviewCount(reviews),
               if (pending) l.journalReminderOn(formatDate(entry.reminderAt!)),
             ].join(l.separator),

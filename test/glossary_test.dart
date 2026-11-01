@@ -78,4 +78,11 @@ void main() {
     expect(zh.glossaryCode, 'zh-Hant');
     expect(en.glossaryCode, 'en');
   });
+
+  test('卦記標示梅花起卦方式', () {
+    expect(zh.journalMethodLabel('meihua_time'), '梅花易數・時間起卦');
+    expect(zh.journalMethodLabel('meihua_words'), '梅花易數・字數起卦');
+    expect(zh.journalMethodLabel('coins'), '三枚銅錢起卦');
+    expect(en.journalMethodLabel('meihua_number'), contains('By numbers'));
+  });
 }

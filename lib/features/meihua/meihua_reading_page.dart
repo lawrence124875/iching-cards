@@ -8,6 +8,7 @@ import '../../core/events/event_bus.dart';
 import '../../core/iching/hexagram_table.dart';
 import '../../core/iching/trigram.dart';
 import '../../core/meihua/meihua_cast.dart';
+import '../../core/meihua/meihua_forecast.dart';
 import '../../l10n/l10n.dart';
 import '../../reading/reading_page.dart';
 import '../../reading/save_reading_sheet.dart';
@@ -16,8 +17,9 @@ import '../../shared/premium/paywall_page.dart';
 import '../../shared/widgets/adaptive_layout.dart';
 import '../../shared/widgets/hexagram_glyph.dart';
 
-/// 梅花解卦，以象為核心，順序固定：本卦之象（現況）→ 體用之象 → 互卦之象（過程）→ 變卦之象（走向）
-/// → 動爻（沿用 64 卦爻解讀）→ 畫面總結＋今日小行動＋反思提問；五行生剋與月令旺衰只附一行趨勢。
+/// 梅花解卦，象與預測並重，順序固定：象（本卦之象 → 體用 → 互卦 → 變卦 → 動爻 → 畫面總結）
+/// → 趨勢與應期（五級趨勢、生剋與旺衰、應期區間）→ 可以怎麼做（小阻／阻附化解方向＋今日小行動）
+/// → 反思提問 → 頁底「僅供參考與自我覺察」。規則見 HANDOFF §2.2、lib/core/meihua/meihua_forecast.dart。
 /// [review] 為 true 時是從卦記回看：不發事件、不顯示儲存。
 class MeihuaReadingPage extends StatefulWidget {
   const MeihuaReadingPage({super.key, required this.cast, this.question = '', this.review = false});
@@ -96,6 +98,12 @@ class _MeihuaReadingPageState extends State<MeihuaReadingPage> {
                 )),
                 child: Text(l.meihuaFullReading(l.hexName(primary))),
               ),
+              const SizedBox(height: 28),
+              Text(
+                mc.fill('disclaimer', const {}),
+                textAlign: TextAlign.center,
+                style: Theme.of(context).textTheme.bodySmall?.copyWith(color: QianColors.textSub),
+              ),
             ],
           );
         },
@@ -141,17 +149,28 @@ class _MeihuaReadingPageState extends State<MeihuaReadingPage> {
           'cLower': tri(c.changedLower).image,
         })),
       ),
-      Section(title: mc.heading('action'), child: Text(ti.action)),
-      Section(title: mc.heading('question'), child: Text(mc.fill('question', const {}, sub: c.relation.name))),
       Section(
-        title: mc.heading('trend'),
+        title: mc.heading('forecast'),
+        child: _ForecastCard(cast: c, content: mc, args: args),
+      ),
+      Section(
+        title: mc.heading('doing'),
         child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-          Text('${mc.fill('relation', args, sub: c.relation.name)}'
-              '${mc.fill('strength', {'month': mc.element(c.monthElement.name)}, sub: c.tiStrength.name)}'),
-          const SizedBox(height: 6),
-          Text(mc.fill('note', const {}), style: t.bodySmall?.copyWith(color: QianColors.textSub)),
+          Text(mc.fill('advice', const {}, sub: c.trend.name)),
+          if (MeihuaForecast.needsRemedy(c.trend)) ...[
+            const SizedBox(height: 8),
+            Text(
+              mc.fill('remedy', {'element': mc.element(c.remedyElement.name)}) +
+                  mc.fill('remedyBy', const {}, sub: c.remedyElement.name),
+            ),
+          ],
+          const SizedBox(height: 8),
+          Text(mc.heading('action'), style: t.labelLarge?.copyWith(color: QianColors.earth)),
+          const SizedBox(height: 4),
+          Text(ti.action),
         ]),
       ),
+      Section(title: mc.heading('question'), child: Text(mc.fill('question', const {}, sub: c.relation.name))),
     ];
   }
 
@@ -205,6 +224,65 @@ class _GlyphRow extends StatelessWidget {
       Text(
         l.meihuaTiYong(l.trigramLabel(cast.ti), l.trigramLabel(cast.yong)),
         textAlign: TextAlign.center,
+        style: t.bodySmall?.copyWith(color: QianColors.textSub),
+      ),
+    ]);
+  }
+}
+
+/// 趨勢與應期：五級趨勢標籤（醒目）、說明、生剋與旺衰兩句、應期區間與推算依據。
+class _ForecastCard extends StatelessWidget {
+  const _ForecastCard({required this.cast, required this.content, required this.args});
+
+  final MeihuaCast cast;
+  final MeihuaContent content;
+  final Map<String, String> args;
+
+  @override
+  Widget build(BuildContext context) {
+    final t = Theme.of(context).textTheme;
+    final mc = content;
+    final c = cast;
+    final level = c.trend;
+    final color = switch (level) {
+      TrendLevel.great || TrendLevel.good => QianColors.rice,
+      TrendLevel.even => QianColors.text,
+      TrendLevel.minorBlock || TrendLevel.block => QianColors.mountain,
+    };
+    Widget chip(String label, String value) => Expanded(
+          child: Container(
+            padding: const EdgeInsets.symmetric(vertical: 14, horizontal: 8),
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(12),
+              border: Border.all(color: color.withValues(alpha: 0.7)),
+            ),
+            child: Column(children: [
+              Text(label, style: t.bodySmall?.copyWith(color: QianColors.textSub)),
+              const SizedBox(height: 4),
+              Text(value,
+                  textAlign: TextAlign.center,
+                  style: t.headlineSmall?.copyWith(color: color, fontWeight: FontWeight.w600)),
+            ]),
+          ),
+        );
+    return Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+      Row(children: [
+        chip(mc.heading('trendLabel'), mc.fill('level', const {}, sub: level.name)),
+        const SizedBox(width: 12),
+        chip(mc.heading('timingLabel'), mc.fill('timing', const {}, sub: c.timing.name)),
+      ]),
+      const SizedBox(height: 12),
+      Text(mc.fill('levelDesc', const {}, sub: level.name)),
+      const SizedBox(height: 8),
+      Text('${mc.fill('relation', args, sub: c.relation.name)}'
+          '${mc.fill('strength', {'month': mc.element(c.monthElement.name)}, sub: c.tiStrength.name)}'),
+      const SizedBox(height: 8),
+      Text(
+        mc.fill('timingWhy', {
+          'sum': '${MeihuaForecast.numberSum(c.ti, c.yong)}',
+          'pace': mc.fill('pace', const {}, sub: c.tiStrength.name),
+          'window': mc.fill('timing', const {}, sub: c.timing.name),
+        }),
         style: t.bodySmall?.copyWith(color: QianColors.textSub),
       ),
     ]);

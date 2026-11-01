@@ -7,6 +7,7 @@ import 'package:iching_cards/core/iching/trigram.dart';
 import 'package:iching_cards/core/meihua/lunar_moment.dart';
 import 'package:iching_cards/core/meihua/meihua_cast.dart';
 import 'package:iching_cards/core/meihua/meihua_engine.dart';
+import 'package:iching_cards/core/meihua/meihua_forecast.dart';
 import 'package:iching_cards/core/meihua/wuxing.dart';
 
 LunarMoment at(int year, int month, int day, int hour, {int monthBranch = 2}) =>
@@ -150,6 +151,66 @@ void main() {
     });
   });
 
+  group('趨勢與應期', () {
+    test('書中例：觀梅占小阻、數日內；牡丹占阻、數週內', () {
+      final a = MeihuaEngine.byTime(at(5, 12, 17, 9, monthBranch: 1));
+      expect(a.trend, TrendLevel.minorBlock); // 用克體 −2，丑月相 +1
+      expect(a.timing, TimingWindow.days); // 兌2＋離3＝5，相
+      expect(a.remedyElement, WuXing.earth); // 土生金，也通火金之關
+      final b = MeihuaEngine.byTime(at(6, 3, 16, 4, monthBranch: 4));
+      expect(b.trend, TrendLevel.block); // 用克體 −2，辰月囚 −1
+      expect(b.timing, TimingWindow.weeks); // 巽5＋乾1＝6，囚
+      expect(b.remedyElement, WuXing.water);
+    });
+
+    test('五級判斷：生剋＋旺衰', () {
+      final r = TiYongRelation.values;
+      final cases = {
+        (TiYongRelation.yongGeneratesTi, SeasonalStrength.prosperous): TrendLevel.great,
+        (TiYongRelation.yongGeneratesTi, SeasonalStrength.resting): TrendLevel.great,
+        (TiYongRelation.yongGeneratesTi, SeasonalStrength.dead): TrendLevel.good,
+        (TiYongRelation.sameElement, SeasonalStrength.strong): TrendLevel.great,
+        (TiYongRelation.sameElement, SeasonalStrength.resting): TrendLevel.good,
+        (TiYongRelation.sameElement, SeasonalStrength.dead): TrendLevel.even,
+        (TiYongRelation.tiOvercomesYong, SeasonalStrength.confined): TrendLevel.even,
+        (TiYongRelation.tiGeneratesYong, SeasonalStrength.prosperous): TrendLevel.even,
+        (TiYongRelation.tiGeneratesYong, SeasonalStrength.resting): TrendLevel.minorBlock,
+        (TiYongRelation.tiGeneratesYong, SeasonalStrength.dead): TrendLevel.block,
+        (TiYongRelation.yongOvercomesTi, SeasonalStrength.prosperous): TrendLevel.minorBlock,
+        (TiYongRelation.yongOvercomesTi, SeasonalStrength.resting): TrendLevel.block,
+        (TiYongRelation.yongOvercomesTi, SeasonalStrength.dead): TrendLevel.block,
+      };
+      cases.forEach((k, v) => expect(MeihuaForecast.level(k.$1, k.$2), v, reason: '$k'));
+      // 25 種組合涵蓋全部五級
+      final seen = {for (final x in r) for (final y in SeasonalStrength.values) MeihuaForecast.level(x, y)};
+      expect(seen, TrendLevel.values.toSet());
+      expect(MeihuaForecast.needsRemedy(TrendLevel.minorBlock), isTrue);
+      expect(MeihuaForecast.needsRemedy(TrendLevel.block), isTrue);
+      expect(MeihuaForecast.needsRemedy(TrendLevel.even), isFalse);
+    });
+
+    test('應期：旺快、衰慢，卦數合大於 8 再慢一級', () {
+      // 乾1＋兌2＝3；坤8＋坤8＝16；坎6＋震4＝10
+      expect(MeihuaForecast.timing(Trigram.qian, Trigram.dui, SeasonalStrength.prosperous), TimingWindow.soon);
+      expect(MeihuaForecast.timing(Trigram.kan, Trigram.zhen, SeasonalStrength.prosperous), TimingWindow.days);
+      expect(MeihuaForecast.timing(Trigram.qian, Trigram.dui, SeasonalStrength.strong), TimingWindow.days);
+      expect(MeihuaForecast.timing(Trigram.kun, Trigram.kun, SeasonalStrength.resting), TimingWindow.weeks);
+      expect(MeihuaForecast.timing(Trigram.qian, Trigram.dui, SeasonalStrength.dead), TimingWindow.weeks);
+      expect(MeihuaForecast.timing(Trigram.kun, Trigram.kun, SeasonalStrength.dead), TimingWindow.season);
+      expect(MeihuaForecast.timing(Trigram.kan, Trigram.zhen, SeasonalStrength.confined), TimingWindow.season);
+      expect(MeihuaForecast.numberSum(Trigram.kun, Trigram.gen), 15);
+    });
+
+    test('化解五行：生體，用克體時也是通關', () {
+      for (final ti in WuXing.values) {
+        final rem = MeihuaForecast.remedyElement(ti);
+        expect(rem.generates, ti);
+        final yong = WuXing.values.firstWhere((y) => y.overcomes == ti);
+        expect(yong.generates, rem);
+      }
+    });
+  });
+
   group('解卦內容', () {
     test('模板代入與 select', () {
       final c = MeihuaContent.fromJson(
@@ -178,6 +239,36 @@ void main() {
           expect(File('assets/content/$lang/meihua-lesson-${n.toString().padLeft(2, '0')}.json').existsSync(), isTrue,
               reason: '$lang $n');
         }
+      }
+    });
+
+    test('匯入的解卦模板：五級、應期、化解、免責齊全且不用「凶」字', () {
+      for (final lang in ['zh-Hant', 'en']) {
+        final f = File('assets/content/$lang/meihua-roles.json');
+        if (!f.existsSync()) return;
+        final raw = f.readAsStringSync();
+        final r = jsonDecode(raw) as Map<String, dynamic>;
+        for (final l in TrendLevel.values) {
+          for (final k in ['level', 'levelDesc', 'advice']) {
+            expect((r[k] as Map)[l.name], isA<String>(), reason: '$lang $k.${l.name}');
+          }
+        }
+        for (final w in TimingWindow.values) {
+          expect((r['timing'] as Map)[w.name], isA<String>(), reason: '$lang timing.${w.name}');
+        }
+        for (final s in SeasonalStrength.values) {
+          expect((r['pace'] as Map)[s.name], isA<String>(), reason: '$lang pace.${s.name}');
+        }
+        for (final e in WuXing.values) {
+          expect((r['remedyBy'] as Map)[e.name], isA<String>(), reason: '$lang remedyBy.${e.name}');
+        }
+        for (final k in ['remedy', 'timingWhy', 'disclaimer']) {
+          expect(r[k], isA<String>(), reason: '$lang $k');
+        }
+        for (final k in ['forecast', 'doing', 'trendLabel', 'timingLabel']) {
+          expect((r['headings'] as Map)[k], isA<String>(), reason: '$lang headings.$k');
+        }
+        if (lang == 'zh-Hant') expect(raw.contains('凶'), isFalse);
       }
     });
   });

@@ -50,6 +50,26 @@ void main() {
     expect(l.keyPoints, ['k']);
   });
 
+  test('梅花課程：練習題與模擬器欄位；舊課程沒有也能解析', () {
+    final j = jsonDecode(_lesson(1, 'x')) as Map<String, dynamic>;
+    expect(Lesson.fromJson(j).exercises, isEmpty);
+    expect(Lesson.fromJson(j).simulator, isNull);
+    j['exercises'] = [
+      {'q': 'q1', 'a': 'a1'}
+    ];
+    j['simulator'] = 'number';
+    final l = Lesson.fromJson(j);
+    expect(l.exercises.single.question, 'q1');
+    expect(l.exercises.single.answer, 'a1');
+    expect(l.simulator, 'number');
+  });
+
+  test('梅花課程檔名前綴', () async {
+    final src = LessonSource(bundle: _MapBundle({'assets/content/en/meihua-lesson-03.json': _lesson(3, 'Ways to Cast')}));
+    expect((await src.load('ja', 3, prefix: 'meihua-lesson'))?.$1.title, 'Ways to Cast');
+    expect(await src.load('ja', 3), isNull);
+  });
+
   test('前 2 課免費', () {
     expect([for (var i = 1; i <= lessonCount; i++) lessonIsFree(i)],
         [true, true, false, false, false, false, false, false]);

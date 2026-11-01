@@ -7,26 +7,31 @@ import '../../l10n/l10n.dart';
 import '../../shared/premium/paywall_page.dart';
 import '../../shared/widgets/adaptive_layout.dart';
 import '../../shared/widgets/hexagram_glyph.dart';
+import 'lesson_course.dart';
 
-/// 一課的內容：段落（可附卦畫示意、條列）、重點整理、練習；底部「下一課」。
+/// 一課的內容：段落（可附卦畫示意、條列）、重點整理、練習（可附練習題與解答、起卦模擬器）；底部「下一課」。
 class LessonPage extends StatelessWidget {
-  const LessonPage({super.key, required this.id});
+  const LessonPage({super.key, required this.id, this.course});
 
   final int id;
+
+  /// 不傳＝易經學習課程。
+  final LessonCourse? course;
 
   @override
   Widget build(BuildContext context) {
     final l = context.l10n;
     final folder = L10n.language.contentFolder;
+    final c = course ?? ichingCourse;
     return FutureBuilder<(Lesson, String)?>(
-      future: lessonSource.load(folder, id),
+      future: lessonSource.load(folder, id, prefix: c.prefix),
       builder: (context, snap) {
         final r = snap.data;
         return Scaffold(
           appBar: AppBar(title: Text(l.learnLessonNumber(id))),
           body: r == null
               ? Center(child: snap.connectionState == ConnectionState.done ? Text(l.learnMissing) : const CircularProgressIndicator())
-              : _Body(lesson: r.$1, fallback: r.$2 != folder),
+              : _Body(course: c, lesson: r.$1, fallback: r.$2 != folder),
         );
       },
     );
@@ -34,8 +39,9 @@ class LessonPage extends StatelessWidget {
 }
 
 class _Body extends StatelessWidget {
-  const _Body({required this.lesson, required this.fallback});
+  const _Body({required this.course, required this.lesson, required this.fallback});
 
+  final LessonCourse course;
   final Lesson lesson;
   final bool fallback;
 
@@ -44,7 +50,8 @@ class _Body extends StatelessWidget {
     final t = Theme.of(context).textTheme;
     final l = context.l10n;
     final s = AppServices.of(context);
-    final next = lesson.id < lessonCount ? lesson.id + 1 : null;
+    final next = lesson.id < course.count ? lesson.id + 1 : null;
+    final simulator = course.openSimulator;
     return ListView(
       padding: readablePadding(context, top: 16, bottom: 40),
       children: [
@@ -72,16 +79,29 @@ class _Body extends StatelessWidget {
           ]),
         if (lesson.practice.isNotEmpty)
           _Box(title: l.learnPractice, children: [Text(lesson.practice, style: t.bodyMedium)]),
+        if (lesson.exercises.isNotEmpty)
+          _Box(title: l.meihuaExercises, children: [
+            for (var i = 0; i < lesson.exercises.length; i++) _ExerciseView(n: i + 1, exercise: lesson.exercises[i]),
+          ]),
+        if (simulator != null && lesson.simulator != null) ...[
+          const SizedBox(height: 20),
+          OutlinedButton.icon(
+            onPressed: () => simulator(context, lesson.simulator!),
+            icon: const Icon(Icons.local_florist_outlined),
+            label: Text(l.meihuaOpenSimulator),
+          ),
+        ],
         if (next != null) ...[
           const SizedBox(height: 24),
           FilledButton(
             onPressed: () async {
-              if (!s.isPremium && !lessonIsFree(next) &&
-                  !await openPaywall(context, source: 'lesson', note: l.learnPaywallNote)) {
+              if (!s.isPremium && !course.isFree(context, next) &&
+                  !await openPaywall(context, source: course.paywallSource, note: course.paywallNote(context))) {
                 return;
               }
               if (!context.mounted) return;
-              Navigator.of(context).pushReplacement(MaterialPageRoute<void>(builder: (_) => LessonPage(id: next)));
+              Navigator.of(context)
+                  .pushReplacement(MaterialPageRoute<void>(builder: (_) => LessonPage(id: next, course: course)));
             },
             child: Text(l.learnNext),
           ),
@@ -168,6 +188,42 @@ class _Box extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [Text(title, style: Theme.of(context).textTheme.titleSmall?.copyWith(color: QianColors.rice)), ...children],
+      ),
+    );
+  }
+}
+
+/// 一題練習：題目，點「看解答」才顯示答案。
+class _ExerciseView extends StatefulWidget {
+  const _ExerciseView({required this.n, required this.exercise});
+
+  final int n;
+  final LessonExercise exercise;
+
+  @override
+  State<_ExerciseView> createState() => _ExerciseViewState();
+}
+
+class _ExerciseViewState extends State<_ExerciseView> {
+  bool _open = false;
+
+  @override
+  Widget build(BuildContext context) {
+    final t = Theme.of(context).textTheme;
+    return Padding(
+      padding: const EdgeInsets.only(top: 12),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text('${widget.n}. ${widget.exercise.question}', style: t.bodyMedium),
+          if (_open)
+            Padding(
+              padding: const EdgeInsets.only(top: 6),
+              child: Text(widget.exercise.answer, style: t.bodyMedium?.copyWith(color: QianColors.earth)),
+            )
+          else
+            TextButton(onPressed: () => setState(() => _open = true), child: Text(context.l10n.meihuaShowAnswer)),
+        ],
       ),
     );
   }

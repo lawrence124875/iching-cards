@@ -747,5 +747,75 @@
   "updateAvailable": "有新版本可以更新",
   "updateAction": "更新",
   "updateReady": "新版本已下載完成",
-  "updateRestart": "重新啟動"
+  "updateRestart": "重新啟動",
+  "featureMeihua": "梅花易數",
+  "meihuaIntro": "用此刻的時間、兩個數字或一句話起卦，從上下卦的畫面、體與用、互卦與變卦讀出眼前的處境，再回到自己。",
+  "meihuaCourseTitle": "梅花易數課程",
+  "meihuaCourseSubtitle": "12 課：類象、起卦、體用、五行與實例",
+  "meihuaCastTitle": "梅花起卦",
+  "meihuaCastSubtitle": "時間、數字或字數起卦，以象讀卦",
+  "methodMeihuaTime": "時間起卦",
+  "methodMeihuaNumber": "數字起卦",
+  "methodMeihuaWords": "字數起卦",
+  "meihuaTimeHint": "以此刻的農曆年、月、日、時起卦。",
+  "meihuaLunarNumbers": "年數 {year}・{month} 月・{day} 日・時數 {hour}",
+  "@meihuaLunarNumbers": {
+    "placeholders": {
+      "year": {
+        "type": "int"
+      },
+      "month": {
+        "type": "int"
+      },
+      "day": {
+        "type": "int"
+      },
+      "hour": {
+        "type": "int"
+      }
+    }
+  },
+  "meihuaQuestionHint": "想問的事（選填）",
+  "meihuaNumberHint": "心裡想著想問的事，隨口說出兩個數字。",
+  "meihuaFirstNumber": "第一個數",
+  "meihuaSecondNumber": "第二個數",
+  "meihuaWordsHint": "把想問的事寫成一句話，依字數起卦。",
+  "meihuaWordCount": "共 {n} 字",
+  "@meihuaWordCount": {
+    "placeholders": {
+      "n": {
+        "type": "int"
+      }
+    }
+  },
+  "meihuaCastButton": "起卦",
+  "meihuaPrimary": "本卦",
+  "meihuaMutual": "互卦",
+  "meihuaChanged": "變卦",
+  "meihuaTiYong": "體（自己）：{ti}　用（這件事）：{yong}",
+  "@meihuaTiYong": {
+    "placeholders": {
+      "ti": {
+        "type": "String"
+      },
+      "yong": {
+        "type": "String"
+      }
+    }
+  },
+  "meihuaFullReading": "{name}卦完整解讀",
+  "@meihuaFullReading": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "meihuaExercises": "練習題",
+  "meihuaShowAnswer": "看解答",
+  "meihuaOpenSimulator": "開啟起卦模擬器",
+  "meihuaPaywallLessonNote": "第一課免費試讀。成為會員即可解鎖全部 12 課：起卦、體用、五行旺衰與三個實例演練。",
+  "meihuaPaywallMethodNote": "數字起卦與字數起卦屬於會員功能；時間起卦免費每天一次。",
+  "meihuaPaywallJournalNote": "梅花起卦紀錄併入卦記是會員功能，成為會員即可保存與回顧。",
+  "meihuaPaywallLimitNote": "今天的梅花起卦已用完。一日一卦，靜心思考；成為會員即可不限次數，並使用全部起卦法。"
 }

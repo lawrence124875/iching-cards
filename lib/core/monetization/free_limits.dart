@@ -6,6 +6,9 @@ class FreeLimits {
     this.rewardedPerDay = 1,
     this.journalMax = 10,
     this.freeBreathMinutes = const {1, 2},
+    this.meihuaCastsPerDay = 1,
+    this.meihuaRewardedPerDay = 1,
+    this.meihuaFreeLessons = 1,
   });
 
   /// 每天免費起卦次數（抽一卦、三枚銅錢合計）。
@@ -20,11 +23,22 @@ class FreeLimits {
   /// 免費版可選的呼吸時長；其餘時長與雙耳節拍屬訂閱。
   final Set<int> freeBreathMinutes;
 
+  /// 梅花易數（與起卦額度分開算，2026-10-30 定案）：每天免費時間起卦次數、獎勵廣告上限、免費課數。
+  final int meihuaCastsPerDay;
+  final int meihuaRewardedPerDay;
+  final int meihuaFreeLessons;
+
+  /// 梅花易數的每日額度（給另一個 [CastQuota] 用）。
+  FreeLimits get meihua => FreeLimits(castsPerDay: meihuaCastsPerDay, rewardedPerDay: meihuaRewardedPerDay);
+
   /// Remote Config 參數名稱與預設值（firebase_telemetry 設定預設值用）。
   static const remoteDefaults = <String, int>{
     'qg_free_casts_per_day': 1,
     'qg_free_rewarded_per_day': 1,
     'qg_free_journal_max': 10,
+    'qg_meihua_free_casts_per_day': 1,
+    'qg_meihua_free_rewarded_per_day': 1,
+    'qg_meihua_free_lessons': 1,
   };
 
   /// 由遠端數值建立；讀不到或數值不合理就用預設。
@@ -39,6 +53,9 @@ class FreeLimits {
       castsPerDay: v('qg_free_casts_per_day', min: 1),
       rewardedPerDay: v('qg_free_rewarded_per_day'),
       journalMax: v('qg_free_journal_max', min: 1),
+      meihuaCastsPerDay: v('qg_meihua_free_casts_per_day', min: 1),
+      meihuaRewardedPerDay: v('qg_meihua_free_rewarded_per_day'),
+      meihuaFreeLessons: v('qg_meihua_free_lessons', max: 12),
     );
   }
 }

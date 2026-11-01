@@ -128,9 +128,13 @@ class MemoryQuotaStorage implements QuotaStorage {
   Future<void> write(Map<String, Object?> d) async => data = {...d};
 }
 
-/// 存在 App 文件資料夾的 `quota.json`（與卦記同一個資料夾，不需權限）。
+/// 存在 App 文件資料夾的 `quota.json`（與卦記同一個資料夾，不需權限）；梅花易數另存 `meihua_quota.json`。
 class FileQuotaStorage implements QuotaStorage {
-  Future<File> _file() async => File('${(await getApplicationDocumentsDirectory()).path}/quota.json');
+  FileQuotaStorage({this.fileName = 'quota.json'});
+
+  final String fileName;
+
+  Future<File> _file() async => File('${(await getApplicationDocumentsDirectory()).path}/$fileName');
 
   @override
   Future<Map<String, Object?>> read() async {

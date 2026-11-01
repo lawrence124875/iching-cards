@@ -49,10 +49,13 @@ class Services {
     AdService? ads,
     FreeLimits? limits,
     CastQuota? quota,
+    CastQuota? meihuaQuota,
   })  : premium = premium ?? FreePremium(),
         ads = ads ?? NoAds(),
         limits = limits ?? const FreeLimits(),
-        quota = quota ?? CastQuota(limits: limits ?? const FreeLimits(), storage: MemoryQuotaStorage());
+        quota = quota ?? CastQuota(limits: limits ?? const FreeLimits(), storage: MemoryQuotaStorage()),
+        meihuaQuota =
+            meihuaQuota ?? CastQuota(limits: (limits ?? const FreeLimits()).meihua, storage: MemoryQuotaStorage());
 
   /// [analytics]、[flags]：main.dart 以 Firebase 初始化後傳入（§18）；不傳＝不統計、功能全開。
   factory Services.standard({
@@ -93,6 +96,7 @@ class Services {
       ads: ads,
       limits: limits,
       quota: CastQuota(limits: limits),
+      meihuaQuota: CastQuota(limits: limits.meihua, storage: FileQuotaStorage(fileName: 'meihua_quota.json')),
     );
   }
 
@@ -145,6 +149,9 @@ class Services {
 
   /// 每日起卦次數。
   final CastQuota quota;
+
+  /// 梅花易數的每日額度（與 [quota] 分開算）。
+  final CastQuota meihuaQuota;
 
   bool get isPremium => premium.isPremium.value;
 }

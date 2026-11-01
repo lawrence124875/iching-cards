@@ -1,6 +1,7 @@
 import '../iching/cast_result.dart';
 import '../iching/hexagram_table.dart';
 import '../iching/trigram.dart';
+import 'meihua_forecast.dart';
 import 'wuxing.dart';
 
 /// 梅花易數的起卦法。
@@ -84,6 +85,15 @@ class MeihuaCast {
 
   /// 體卦在當月的旺衰。
   SeasonalStrength get tiStrength => SeasonalStrength.of(tiElement, monthElement);
+
+  /// 五級趨勢（體用生剋＋月令旺衰）。
+  TrendLevel get trend => MeihuaForecast.level(relation, tiStrength);
+
+  /// 應期區間（體用卦數＋旺衰）。
+  TimingWindow get timing => MeihuaForecast.timing(ti, yong, tiStrength);
+
+  /// 小阻／阻時的化解五行（生體之氣）。
+  WuXing get remedyElement => MeihuaForecast.remedyElement(tiElement);
 
   /// 由卦記存的一般起卦結果還原（一個動爻）；不是梅花起卦或動爻數不對時回傳 null。
   static MeihuaCast? fromCastResult(CastResult r, {required int monthBranch}) {

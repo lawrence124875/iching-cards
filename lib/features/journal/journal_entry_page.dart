@@ -6,6 +6,8 @@ import '../../core/content/hexagram_content.dart';
 import '../../core/iching/hexagram_table.dart';
 import '../../core/journal/journal_entry.dart';
 import '../../core/journal/journal_reminders.dart';
+import '../../core/meihua/lunar_moment.dart';
+import '../../core/meihua/meihua_cast.dart';
 import '../../l10n/l10n.dart';
 import '../../reading/reading_page.dart';
 import '../../reading/section.dart';
@@ -15,6 +17,7 @@ import '../../shared/widgets/hexagram_glyph.dart';
 import '../../shared/widgets/question_dialog.dart';
 import '../../shared/widgets/reminder_picker.dart';
 import '../../shared/widgets/adaptive_layout.dart';
+import '../meihua/meihua_reading_page.dart';
 
 /// 一筆卦記：當時的卦與問題 → 當時的解讀 → 回顧（後來發生了什麼、象怎麼對上）→ 提醒。
 class JournalEntryPage extends StatefulWidget {
@@ -221,7 +224,14 @@ class _JournalEntryPageState extends State<JournalEntryPage> {
         const SizedBox(height: 20),
         OutlinedButton(
           onPressed: () => Navigator.of(context).push(MaterialPageRoute<void>(
-            builder: (_) => ReadingPage(cast: cast, question: e.question, readingIndex: e.readingIndex, review: true),
+            builder: (_) {
+              // 梅花起卦的紀錄用梅花解卦回看（月令依當時日期）
+              final meihua =
+                  MeihuaCast.fromCastResult(cast, monthBranch: LunarMoment.fromDateTime(e.createdAt).monthBranch);
+              return meihua != null
+                  ? MeihuaReadingPage(cast: meihua, question: e.question, review: true)
+                  : ReadingPage(cast: cast, question: e.question, readingIndex: e.readingIndex, review: true);
+            },
           )),
           child: Text(l.journalViewReading),
         ),

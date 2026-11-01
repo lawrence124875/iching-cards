@@ -11,6 +11,8 @@ class Lesson {
     required this.sections,
     required this.keyPoints,
     required this.practice,
+    this.exercises = const [],
+    this.simulator,
   });
 
   factory Lesson.fromJson(Map<String, dynamic> j) => Lesson(
@@ -20,6 +22,8 @@ class Lesson {
         sections: [for (final s in j['sections'] as List) LessonSection.fromJson(s as Map<String, dynamic>)],
         keyPoints: [for (final k in j['keyPoints'] as List? ?? const []) k as String],
         practice: j['practice'] as String? ?? '',
+        exercises: [for (final e in j['exercises'] as List? ?? const []) LessonExercise.fromJson(e as Map<String, dynamic>)],
+        simulator: j['simulator'] as String?,
       );
 
   final int id;
@@ -28,6 +32,22 @@ class Lesson {
   final List<LessonSection> sections;
   final List<String> keyPoints;
   final String practice;
+
+  /// 練習題（梅花易數課程：每課 3 題，附解答）。
+  final List<LessonExercise> exercises;
+
+  /// 梅花易數課程：連到起卦模擬器的起卦法（time、number、words）。
+  final String? simulator;
+}
+
+class LessonExercise {
+  const LessonExercise({required this.question, required this.answer});
+
+  factory LessonExercise.fromJson(Map<String, dynamic> j) =>
+      LessonExercise(question: j['q'] as String, answer: j['a'] as String? ?? '');
+
+  final String question;
+  final String answer;
 }
 
 class LessonSection {
@@ -102,16 +122,17 @@ class LessonSource {
       };
 
   /// 回傳課程與實際讀到的資料夾（與 [folder] 不同時，畫面顯示「暫以其他語言顯示」）。
-  Future<(Lesson, String)?> load(String folder, int id) async {
+  /// [prefix]：易經課程 `lesson`，梅花易數 `meihua-lesson`。
+  Future<(Lesson, String)?> load(String folder, int id, {String prefix = 'lesson'}) async {
     for (final f in foldersFor(folder)) {
-      final lesson = await _load(f, id);
+      final lesson = await _load(f, id, prefix);
       if (lesson != null) return (lesson, f);
     }
     return null;
   }
 
-  Future<Lesson?> _load(String folder, int id) async {
-    final path = 'assets/content/$folder/lesson-${id.toString().padLeft(2, '0')}.json';
+  Future<Lesson?> _load(String folder, int id, String prefix) async {
+    final path = 'assets/content/$folder/$prefix-${id.toString().padLeft(2, '0')}.json';
     if (_cache.containsKey(path)) return _cache[path];
     Lesson? result;
     try {

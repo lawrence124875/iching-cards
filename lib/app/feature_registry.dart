@@ -3,6 +3,7 @@ import '../features/coin_cast/coin_cast_feature.dart';
 import '../features/draw/draw_feature.dart';
 import '../features/journal/journal_feature.dart';
 import '../features/learn/learn_feature.dart';
+import '../features/meihua/meihua_feature.dart';
 import '../features/yarrow/yarrow_feature.dart';
 import '../core/telemetry/remote_flags.dart';
 import 'app_feature.dart';
@@ -17,6 +18,7 @@ final List<AppFeature> registeredFeatures = [
   journalFeature,
   breathFeature,
   learnFeature,
+  meihuaFeature,
 ];
 
 /// 目前開放的功能：註冊表中、且遠端開關（`qg_feature_<id>`，§18）沒有關掉的。

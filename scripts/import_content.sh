@@ -9,6 +9,7 @@ LANGS="zh-Hant en zh-Hans ja ko vi es pt-BR id th ar"
 mkdir -p assets/cards
 summary=""
 n_lesson=0
+n_meihua=0
 for lang in $LANGS; do
   mkdir -p "assets/content/$lang"
   n=0
@@ -22,6 +23,17 @@ for lang in $LANGS; do
     [ -e "$f" ] || continue
     cp "$f" "assets/content/$lang/lesson-$(basename "$f")"
     n_lesson=$((n_lesson + 1))
+  done
+  # 梅花易數（<語言>/meihua/*.json → meihua-*.json；lessons/NN.json → meihua-lesson-NN.json）
+  for f in "$src/$lang"/meihua/*.json; do
+    [ -e "$f" ] || continue
+    cp "$f" "assets/content/$lang/meihua-$(basename "$f")"
+    n_meihua=$((n_meihua + 1))
+  done
+  for f in "$src/$lang"/meihua/lessons/[0-9][0-9].json; do
+    [ -e "$f" ] || continue
+    cp "$f" "assets/content/$lang/meihua-lesson-$(basename "$f")"
+    n_meihua=$((n_meihua + 1))
   done
   summary="$summary $lang=$n"
 done
@@ -40,4 +52,4 @@ for pass in normal redo; do
   done
 done
 
-echo "已匯入解讀（${summary# }）、課程 ${n_lesson} 檔、牌面圖 ${n_img} 張"
+echo "已匯入解讀（${summary# }）、課程 ${n_lesson} 檔、梅花易數 ${n_meihua} 檔、牌面圖 ${n_img} 張"

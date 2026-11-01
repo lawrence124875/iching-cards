@@ -75,6 +75,21 @@ void main() {
     expect(l.journalMax, 20);
   });
 
+  test('梅花易數：預設每天 1 次＋獎勵 1 次、第 1 課免費，與一般起卦分開計數', () async {
+    const l = FreeLimits();
+    expect(l.meihua.castsPerDay, 1);
+    expect(l.meihua.rewardedPerDay, 1);
+    expect(l.meihuaFreeLessons, 1);
+    expect(FreeLimits.remoteDefaults['qg_meihua_free_casts_per_day'], 1);
+    final main = CastQuota(limits: l, storage: MemoryQuotaStorage());
+    final meihua = CastQuota(limits: l.meihua, storage: MemoryQuotaStorage());
+    await main.recordCast();
+    expect(await main.check(), CastAllowance.needsReward);
+    expect(await meihua.check(), CastAllowance.free);
+    final r = FreeLimits.from((k, d) => k == 'qg_meihua_free_lessons' ? 99 : d);
+    expect(r.meihuaFreeLessons, 1); // 超過課數不合理
+  });
+
   test('沒有廣告時：插頁不可用、獎勵算失敗（照樣給這一次）', () async {
     final ads = NoAds();
     expect(await ads.loadInterstitial(), AdLoad.unavailable);

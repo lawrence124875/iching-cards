@@ -20,21 +20,23 @@ class CastPass {
 
 /// 起卦前呼叫（抽一卦翻牌、三枚銅錢第一擲）。可以起卦就回傳 [CastPass]，並已記一次；不行回傳 null。
 /// 免費版規則（HANDOFF §2.1）：每天 1 次，看獎勵廣告再 1 次（廣告失敗也給）；都用完直接開訂閱頁。
-Future<CastPass?> ensureCanCast(BuildContext context) async {
+/// 梅花易數傳自己的 [quota]（與一般起卦分開算）與 [type]（統計用，`meihua`）。
+Future<CastPass?> ensureCanCast(BuildContext context, {CastQuota? quota, String type = 'cast'}) async {
   final s = AppServices.of(context);
+  final q = quota ?? s.quota;
   if (s.isPremium) {
-    await _record(s, counted: false);
+    await _record(s, q, counted: false);
     return const CastPass(interstitial: false);
   }
-  final allowance = await s.quota.check();
+  final allowance = await q.check();
   if (allowance == CastAllowance.free) {
-    final dailyFree = await _record(s);
+    final dailyFree = await _record(s, q);
     if (dailyFree) s.ads.preloadInterstitial(); // 翻牌、擲錢的時間拿來載入
     return CastPass(interstitial: dailyFree);
   }
-  s.events.emit(const HitFreeLimit(type: 'cast'));
+  s.events.emit(HitFreeLimit(type: type));
   if (!context.mounted) return null;
-  if (allowance == CastAllowance.exhausted) return _paywall(context);
+  if (allowance == CastAllowance.exhausted) return _paywall(context, type);
   final choice = await showModalBottomSheet<_Choice>(
     context: context,
     showDragHandle: true,
@@ -47,33 +49,36 @@ Future<CastPass?> ensureCanCast(BuildContext context) async {
       final outcome = await s.ads.showRewarded();
       switch (outcome) {
         case RewardedOutcome.earned:
-          s.events.emit(const RewardedAdShown(source: 'cast', rewarded: true));
+          s.events.emit(RewardedAdShown(source: type, rewarded: true));
         case RewardedOutcome.dismissed:
-          s.events.emit(const RewardedAdShown(source: 'cast', rewarded: false));
+          s.events.emit(RewardedAdShown(source: type, rewarded: false));
           return null; // 中途關掉不給
         case RewardedOutcome.failed:
-          s.events.emit(const RewardedAdFailed(source: 'cast')); // 載入失敗、無填充：照樣給這一次
+          s.events.emit(RewardedAdFailed(source: type)); // 載入失敗、無填充：照樣給這一次
       }
-      await s.quota.grantReward();
-      if (await s.quota.check() != CastAllowance.free) return null;
-      await _record(s);
+      await q.grantReward();
+      if (await q.check() != CastAllowance.free) return null;
+      await _record(s, q);
       return const CastPass(interstitial: false); // 獎勵換來的那一次不再播插頁
     case _Choice.subscribe:
-      return _paywall(context);
+      return _paywall(context, type);
     case null:
       return null;
   }
 }
 
 /// 記一次起卦；回傳是否用的是今天的免費次數。
-Future<bool> _record(Services s, {bool counted = true}) async {
-  final r = await s.quota.recordCast(counted: counted);
+Future<bool> _record(Services s, CastQuota q, {bool counted = true}) async {
+  final r = await q.recordCast(counted: counted);
   if (r.firstEver) s.events.emit(const FirstCast());
   return r.dailyFree;
 }
 
-Future<CastPass?> _paywall(BuildContext context) async {
-  final ok = await openPaywall(context, source: 'cast_limit', note: context.l10n.paywallCastLimitNote);
+Future<CastPass?> _paywall(BuildContext context, String type) async {
+  final l = context.l10n;
+  final ok = type == 'meihua'
+      ? await openPaywall(context, source: 'meihua_limit', note: l.meihuaPaywallLimitNote)
+      : await openPaywall(context, source: 'cast_limit', note: l.paywallCastLimitNote);
   return ok ? const CastPass(interstitial: false) : null;
 }
 

@@ -85,6 +85,21 @@ class MeihuaCast {
   /// 體卦在當月的旺衰。
   SeasonalStrength get tiStrength => SeasonalStrength.of(tiElement, monthElement);
 
+  /// 由卦記存的一般起卦結果還原（一個動爻）；不是梅花起卦或動爻數不對時回傳 null。
+  static MeihuaCast? fromCastResult(CastResult r, {required int monthBranch}) {
+    final method = MeihuaMethod.fromId(r.methodId);
+    final moving = r.changingPositions;
+    if (method == null || moving.length != 1) return null;
+    final yang = [for (final l in r.lines) l.isYang];
+    return MeihuaCast(
+      method: method,
+      upper: Trigram.fromLines(yang.sublist(3, 6)),
+      lower: Trigram.fromLines(yang.sublist(0, 3)),
+      movingLine: moving.single,
+      monthBranch: monthBranch,
+    );
+  }
+
   /// 轉成一般起卦結果，好重用解讀頁與卦記（動爻＝老陰／老陽）。
   CastResult toCastResult() => CastResult(methodId: method.id, lines: [
         for (var i = 0; i < 6; i++)

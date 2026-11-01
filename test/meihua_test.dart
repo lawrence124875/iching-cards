@@ -1,4 +1,8 @@
+import 'dart:convert';
+import 'dart:io';
+
 import 'package:flutter_test/flutter_test.dart';
+import 'package:iching_cards/core/content/meihua_content.dart';
 import 'package:iching_cards/core/iching/trigram.dart';
 import 'package:iching_cards/core/meihua/lunar_moment.dart';
 import 'package:iching_cards/core/meihua/meihua_cast.dart';
@@ -88,6 +92,15 @@ void main() {
       }
     });
 
+    test('從卦記還原梅花起卦', () {
+      final c = MeihuaEngine.byTime(at(5, 12, 17, 9, monthBranch: 1));
+      final back = MeihuaCast.fromCastResult(c.toCastResult(), monthBranch: 1)!;
+      expect(back.primary, c.primary);
+      expect(back.movingLine, c.movingLine);
+      expect(back.method, MeihuaMethod.time);
+      expect(back.relation, c.relation);
+    });
+
     test('先天數往返', () {
       for (var n = 1; n <= 8; n++) {
         expect(MeihuaEngine.numberOf(MeihuaEngine.trigramOf(n)), n);
@@ -134,6 +147,38 @@ void main() {
       expect(m.yearNumber, 4);
       expect(m.month, 2);
       expect(m.day, 11);
+    });
+  });
+
+  group('解卦內容', () {
+    test('模板代入與 select', () {
+      final c = MeihuaContent.fromJson(
+        {'dui': {'name': '兌', 'image': '澤', 'self': 's'}},
+        {'49': '湖裡燃起了火'},
+        {
+          'ti': '體卦是{name}（{image}）：',
+          'relation': {'yongOvercomesTi': '用（{yong}）克體（{ti}）'},
+          'elements': {'metal': '金'},
+        },
+      );
+      expect(c.fill('ti', {'name': c.trigram('dui').name, 'image': c.trigram('dui').image}), '體卦是兌（澤）：');
+      expect(c.fill('relation', {'ti': c.element('metal'), 'yong': '火'}, sub: 'yongOvercomesTi'), '用（火）克體（金）');
+      expect(c.scene(49), '湖裡燃起了火');
+      expect(c.trigram('kun').name, '');
+    });
+
+    // CI 會先匯入私人內容（scripts/import_content.sh）；本機沒有內容時略過。
+    test('匯入的內容：繁中、英文 64 卦畫面與 12 課齊全', () {
+      for (final lang in ['zh-Hant', 'en']) {
+        final f = File('assets/content/$lang/meihua-scenes.json');
+        if (!f.existsSync()) return;
+        final scenes = jsonDecode(f.readAsStringSync()) as Map<String, dynamic>;
+        expect(scenes.length, 64, reason: lang);
+        for (var n = 1; n <= 12; n++) {
+          expect(File('assets/content/$lang/meihua-lesson-${n.toString().padLeft(2, '0')}.json').existsSync(), isTrue,
+              reason: '$lang $n');
+        }
+      }
     });
   });
 }

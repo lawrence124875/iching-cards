@@ -80,6 +80,9 @@ extension IchingTerms on AppLocalizations {
   String methodName(String methodId) => switch (methodId) {
         'coins' => methodCoins,
         'yarrow' => methodYarrow,
+        'meihua_time' => methodMeihuaTime,
+        'meihua_number' => methodMeihuaNumber,
+        'meihua_words' => methodMeihuaWords,
         _ => methodDraw,
       };
 

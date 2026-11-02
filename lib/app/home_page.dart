@@ -106,7 +106,7 @@ class HomePage extends StatelessWidget {
   }
 }
 
-enum _MenuItem { premium, dailyReminder, intro, shareApp, feedback, usage, adPrivacy, privacyPolicy }
+enum _MenuItem { premium, dailyReminder, intro, shareApp, feedback, usage, adPrivacy, privacyPolicy, terms }
 
 /// 首頁右上角選單：謙卦會員、每日一卦提醒、功能介紹、推薦給朋友、意見回饋、分享使用統計（勾選開關）、廣告隱私設定（需要同意的地區才出現）、隱私權政策。
 class _HomeMenu extends StatelessWidget {
@@ -137,6 +137,8 @@ class _HomeMenu extends StatelessWidget {
             s.ads.showPrivacyOptions();
           case _MenuItem.privacyPolicy:
             launchUrl(Uri.parse(privacyPolicyUrl), mode: LaunchMode.externalApplication);
+          case _MenuItem.terms:
+            launchUrl(Uri.parse(termsOfServiceUrl), mode: LaunchMode.externalApplication);
         }
       },
       itemBuilder: (_) => [
@@ -154,6 +156,7 @@ class _HomeMenu extends StatelessWidget {
         if (s.ads.privacyOptionsRequired && !s.isPremium)
           PopupMenuItem(value: _MenuItem.adPrivacy, child: Text(l.menuAdPrivacy)),
         PopupMenuItem(value: _MenuItem.privacyPolicy, child: Text(l.menuPrivacyPolicy)),
+        PopupMenuItem(value: _MenuItem.terms, child: Text(l.termsOfUse)),
       ],
     );
   }
@@ -161,3 +164,6 @@ class _HomeMenu extends StatelessWidget {
 
 /// 隱私權政策（本 repo GitHub Pages，§20）。
 const privacyPolicyUrl = 'https://lawrence124875.github.io/iching-cards/privacy.html';
+
+/// 服務條款（本 repo docs/terms.html，2026-11-02；訂閱、試用、退款、免責）。
+const termsOfServiceUrl = 'https://lawrence124875.github.io/iching-cards/terms.html';

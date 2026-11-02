@@ -1,5 +1,7 @@
 import 'package:lunar/lunar.dart';
 
+import 'solar_time.dart';
+
 /// 起卦用的農曆時刻：年支數、農曆月日、時支數都是 1 起算（子＝1 … 亥＝12）。
 /// monthBranch 是月令（依節氣，0＝子 … 11＝亥），只用在旺衰。
 class LunarMoment {
@@ -20,8 +22,9 @@ class LunarMoment {
   /// 由手機當地時間換算（`lunar` 套件）。
   /// 23 點起的子時算次日（梅花易數慣例），月令依節氣交接的確切時刻。
   /// 夏令時期間先扣回時差，改用當地標準時間（時辰以標準時間計）。
-  factory LunarMoment.fromDateTime(DateTime time) {
-    final t = standardTime(time);
+  /// 給 [longitude]（使用者選的城市）時改用真太陽時（`SolarTime`），夏令時自然不影響。
+  factory LunarMoment.fromDateTime(DateTime time, {double? longitude}) {
+    final t = longitude == null ? standardTime(time) : SolarTime.at(time, longitude);
     final dateLunar = Lunar.fromDate(t.hour == 23 ? t.add(const Duration(hours: 1)) : t);
     final exact = Lunar.fromDate(t);
     return LunarMoment(

@@ -22,10 +22,13 @@ import '../../shared/widgets/hexagram_glyph.dart';
 /// → 反思提問 → 頁底「僅供參考與自我覺察」。規則見 HANDOFF §2.2、lib/core/meihua/meihua_forecast.dart。
 /// [review] 為 true 時是從卦記回看：不發事件、不顯示儲存。
 class MeihuaReadingPage extends StatefulWidget {
-  const MeihuaReadingPage({super.key, required this.cast, this.question = '', this.review = false});
+  const MeihuaReadingPage({super.key, required this.cast, this.question = '', this.review = false, this.solarCity});
 
   final MeihuaCast cast;
   final String question;
+
+  /// 有選城市校正時辰時顯示「已依○○真太陽時校正」。
+  final String? solarCity;
   final bool review;
 
   @override
@@ -99,6 +102,14 @@ class _MeihuaReadingPageState extends State<MeihuaReadingPage> {
                 child: Text(l.meihuaFullReading(l.hexName(primary))),
               ),
               const SizedBox(height: 28),
+              if (widget.solarCity != null) ...[
+                Text(
+                  l.meihuaSolarOn(widget.solarCity!),
+                  textAlign: TextAlign.center,
+                  style: Theme.of(context).textTheme.bodySmall?.copyWith(color: QianColors.textSub),
+                ),
+                const SizedBox(height: 8),
+              ],
               Text(
                 mc.fill('disclaimer', const {}),
                 textAlign: TextAlign.center,

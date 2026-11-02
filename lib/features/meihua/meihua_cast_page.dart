@@ -6,11 +6,13 @@ import '../../app/theme.dart';
 import '../../core/meihua/lunar_moment.dart';
 import '../../core/meihua/meihua_cast.dart';
 import '../../core/meihua/meihua_engine.dart';
+import '../../core/meihua/solar_time.dart';
 import '../../l10n/l10n.dart';
 import '../../shared/premium/ad_banner.dart';
 import '../../shared/premium/cast_gate.dart';
 import '../../shared/premium/paywall_page.dart';
 import '../../shared/widgets/adaptive_layout.dart';
+import 'meihua_city_store.dart';
 import 'meihua_reading_page.dart';
 
 /// 梅花起卦：時間（免費每天 1 次＋獎勵 1 次）、數字、字數（會員）。
@@ -30,6 +32,50 @@ class _MeihuaCastPageState extends State<MeihuaCastPage> {
   final _second = TextEditingController();
   final _words = TextEditingController();
   bool _busy = false;
+  MeihuaCity? _city;
+
+  @override
+  void initState() {
+    super.initState();
+    MeihuaCityStore.load().then((c) {
+      if (mounted && c != null) setState(() => _city = c);
+    });
+  }
+
+  LunarMoment _moment() => LunarMoment.fromDateTime(DateTime.now(), longitude: _city?.longitude);
+
+  Future<void> _pickCity() async {
+    final l = context.l10n;
+    final picked = await showModalBottomSheet<Object>(
+      context: context,
+      isScrollControlled: true,
+      builder: (ctx) => SafeArea(
+        child: SizedBox(
+          height: MediaQuery.of(ctx).size.height * 0.75,
+          child: ListView(
+            children: [
+              Padding(padding: const EdgeInsets.fromLTRB(16, 16, 16, 8), child: Text(l.meihuaSolarHint)),
+              ListTile(
+                title: Text(l.meihuaSolarOff),
+                trailing: _city == null ? const Icon(Icons.check) : null,
+                onTap: () => Navigator.pop(ctx, 'off'),
+              ),
+              for (final c in MeihuaCities.all)
+                ListTile(
+                  title: Text(c.name),
+                  trailing: _city?.id == c.id ? const Icon(Icons.check) : null,
+                  onTap: () => Navigator.pop(ctx, c),
+                ),
+            ],
+          ),
+        ),
+      ),
+    );
+    if (picked == null || !mounted) return;
+    final city = picked is MeihuaCity ? picked : null;
+    setState(() => _city = city);
+    await MeihuaCityStore.save(city);
+  }
 
   @override
   void dispose() {
@@ -71,7 +117,7 @@ class _MeihuaCastPageState extends State<MeihuaCastPage> {
     final pass = await ensureCanCast(context, quota: s.meihuaQuota, type: 'meihua');
     _busy = false;
     if (pass == null || !mounted) return;
-    final moment = LunarMoment.fromDateTime(DateTime.now());
+    final moment = _moment();
     final cast = switch (_method) {
       MeihuaMethod.time => MeihuaEngine.byTime(moment),
       MeihuaMethod.number => MeihuaEngine.byNumbers(_num(_first)!, _num(_second)!, moment),
@@ -83,7 +129,8 @@ class _MeihuaCastPageState extends State<MeihuaCastPage> {
       if (!mounted) return;
     }
     await Navigator.of(context).push(
-      MaterialPageRoute<void>(builder: (_) => MeihuaReadingPage(cast: cast, question: question)),
+      MaterialPageRoute<void>(
+          builder: (_) => MeihuaReadingPage(cast: cast, question: question, solarCity: _city?.name)),
     );
   }
 
@@ -92,7 +139,7 @@ class _MeihuaCastPageState extends State<MeihuaCastPage> {
     final l = context.l10n;
     final t = Theme.of(context).textTheme;
     final premium = AppServices.of(context).isPremium;
-    final m = LunarMoment.fromDateTime(DateTime.now());
+    final m = _moment();
     return Scaffold(
       appBar: AppBar(title: Text(l.meihuaCastTitle)),
       bottomNavigationBar: const AdBanner(),
@@ -119,6 +166,13 @@ class _MeihuaCastPageState extends State<MeihuaCastPage> {
                 const SizedBox(height: 8),
                 Text(l.meihuaLunarNumbers(m.yearNumber, m.month, m.day, m.hourNumber),
                     style: t.bodySmall?.copyWith(color: QianColors.textSub)),
+                const SizedBox(height: 4),
+                TextButton.icon(
+                  style: TextButton.styleFrom(padding: EdgeInsets.zero, alignment: AlignmentDirectional.centerStart),
+                  onPressed: _pickCity,
+                  icon: const Icon(Icons.wb_sunny_outlined, size: 18),
+                  label: Text('${l.meihuaSolarLabel} · ${_city == null ? l.meihuaSolarOff : l.meihuaSolarOn(_city!.name)}'),
+                ),
                 const SizedBox(height: 16),
                 _field(_question, l.meihuaQuestionHint),
               ],

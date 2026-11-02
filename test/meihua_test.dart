@@ -151,6 +151,18 @@ void main() {
     });
   });
 
+  group('夏令時換回標準時間', () {
+    final t = DateTime(2024, 7, 1, 13, 10);
+    test('夏令時（+1 小時）扣回 1 小時，時辰跟著變', () {
+      final std = LunarMoment.standardTime(t, offset: const Duration(hours: 2), standard: const Duration(hours: 1));
+      expect(std.hour, 12);
+    });
+    test('非夏令時不變', () {
+      final std = LunarMoment.standardTime(t, offset: const Duration(hours: 8), standard: const Duration(hours: 8));
+      expect(std, t);
+    });
+  });
+
   group('趨勢與應期', () {
     test('書中例：觀梅占小阻、數日內；牡丹占阻、數週內', () {
       final a = MeihuaEngine.byTime(at(5, 12, 17, 9, monthBranch: 1));

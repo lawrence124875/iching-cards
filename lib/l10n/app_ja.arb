@@ -268,7 +268,7 @@
   "methodMeihuaTime": "時刻で立てる",
   "methodMeihuaNumber": "数字で立てる",
   "methodMeihuaWords": "字数で立てる",
-  "meihuaTimeHint": "今の旧暦の年・月・日・時から卦を立てます。",
+  "meihuaTimeHint": "今の旧暦の年・月・日・時から卦を立てます（中国の旧暦で計算し、夏時間中は自動的に1時間戻します）。",
   "meihuaLunarNumbers": "年数 {year}・{month}月・{day}日・時数 {hour}",
   "meihuaQuestionHint": "問いたいこと（任意）",
   "meihuaNumberHint": "問いたいことを思い浮かべ、二つの数字を挙げてください。",

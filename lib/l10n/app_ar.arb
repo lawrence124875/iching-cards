@@ -268,7 +268,7 @@
   "methodMeihuaTime": "من الوقت",
   "methodMeihuaNumber": "من الأرقام",
   "methodMeihuaWords": "من الكلمات",
-  "meihuaTimeHint": "يُكوَّن من السنة والشهر واليوم والساعة القمريّة لهذه اللحظة.",
+  "meihuaTimeHint": "يُكوَّن من السنة والشهر واليوم والساعة القمريّة لهذه اللحظة (وفق التقويم القمري الصيني؛ وفي التوقيت الصيفي تُطرح ساعة تلقائيًا).",
   "meihuaLunarNumbers": "السنة {year} · الشهر {month} · اليوم {day} · الساعة {hour}",
   "meihuaQuestionHint": "سؤالك (اختياريّ)",
   "meihuaNumberHint": "فكّر في سؤالك وقل رقمين.",

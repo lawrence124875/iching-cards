@@ -757,7 +757,7 @@
   "methodMeihuaTime": "時間起卦",
   "methodMeihuaNumber": "數字起卦",
   "methodMeihuaWords": "字數起卦",
-  "meihuaTimeHint": "以此刻的農曆年、月、日、時起卦。",
+  "meihuaTimeHint": "以此刻的農曆年、月、日、時起卦（以中國農曆計；夏令時期間自動扣回 1 小時）。",
   "meihuaLunarNumbers": "年數 {year}・{month} 月・{day} 日・時數 {hour}",
   "@meihuaLunarNumbers": {
     "placeholders": {

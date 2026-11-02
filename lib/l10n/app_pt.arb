@@ -268,7 +268,7 @@
   "methodMeihuaTime": "Por hora",
   "methodMeihuaNumber": "Por números",
   "methodMeihuaWords": "Por palavras",
-  "meihuaTimeHint": "Usa o ano, mês, dia e hora lunares deste momento.",
+  "meihuaTimeHint": "Usa o ano, mês, dia e hora lunares deste momento (calendário lunar chinês; no horário de verão, uma hora é descontada automaticamente).",
   "meihuaLunarNumbers": "Ano {year} · mês {month} · dia {day} · hora {hour}",
   "meihuaQuestionHint": "Sua pergunta (opcional)",
   "meihuaNumberHint": "Pense na sua pergunta e diga dois números.",

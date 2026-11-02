@@ -1,8 +1,7 @@
 import 'dart:async';
-import 'dart:io' show File, Platform;
+import 'dart:io' show Platform;
 
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
-import 'package:path_provider/path_provider.dart';
 import 'package:timezone/data/latest.dart' as tz_data;
 import 'package:timezone/timezone.dart' as tz;
 
@@ -94,30 +93,6 @@ class LocalNotificationReminders implements ReminderService {
     }
   }
 
-  /// 能準時就準時；第一次設定提醒時請使用者允許「鬧鐘與提醒」。
-  Future<AndroidScheduleMode> _scheduleMode() async {
-    if (!Platform.isAndroid) return AndroidScheduleMode.inexactAllowWhileIdle; // iOS 不使用此設定
-    try {
-      final android = _plugin.resolvePlatformSpecificImplementation<AndroidFlutterLocalNotificationsPlugin>();
-      if (android == null) return AndroidScheduleMode.inexactAllowWhileIdle;
-      var can = await android.canScheduleExactNotifications() ?? false;
-      if (!can) {
-        final flag = File('${(await getApplicationSupportDirectory()).path}/exact_alarm_asked');
-        if (!await flag.exists()) {
-          await flag.writeAsString(DateTime.now().toIso8601String());
-          await android.requestExactAlarmsPermission(); // 開系統設定頁，使用者返回後才繼續
-          can = await android.canScheduleExactNotifications() ?? false;
-        }
-      }
-      return can ? AndroidScheduleMode.exactAllowWhileIdle : AndroidScheduleMode.inexactAllowWhileIdle;
-    } catch (_) {
-      return AndroidScheduleMode.inexactAllowWhileIdle;
-    }
-  }
-
-  /// 上一次排程是否為準時模式。
-  bool lastExact = false;
-
   @override
   Future<bool> schedule({
     required int id,
@@ -135,9 +110,8 @@ class LocalNotificationReminders implements ReminderService {
       return false;
     }
     final daily = kind == ReminderKind.daily;
-    // 每日一卦晚幾分鐘無妨：不要求「鬧鐘與提醒」權限，也不開系統設定頁
-    final mode = daily ? AndroidScheduleMode.inexactAllowWhileIdle : await _scheduleMode();
-    if (!daily) lastExact = mode == AndroidScheduleMode.exactAllowWhileIdle;
+    // 一律不精確排程（Play 精確鬧鐘政策只允許鬧鐘／行事曆類 App；提醒晚幾分鐘無妨，2026-11-02）
+    const mode = AndroidScheduleMode.inexactAllowWhileIdle;
     try {
       await _plugin.zonedSchedule(
         id,

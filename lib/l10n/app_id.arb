@@ -623,7 +623,7 @@
   "methodMeihuaTime": "Dari waktu",
   "methodMeihuaNumber": "Dari angka",
   "methodMeihuaWords": "Dari kata",
-  "meihuaTimeHint": "Disusun dari tahun, bulan, hari, dan jam kalender lunar saat ini.",
+  "meihuaTimeHint": "Disusun dari tahun, bulan, hari, dan jam kalender lunar saat ini (kalender lunar Tiongkok; saat waktu musim panas, otomatis dikurangi satu jam).",
   "meihuaLunarNumbers": "Tahun {year} · bulan {month} · hari {day} · jam {hour}",
   "meihuaQuestionHint": "Pertanyaanmu (opsional)",
   "meihuaNumberHint": "Pikirkan pertanyaanmu dan sebutkan dua angka.",

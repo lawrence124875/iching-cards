@@ -268,7 +268,7 @@
   "methodMeihuaTime": "จากเวลา",
   "methodMeihuaNumber": "จากตัวเลข",
   "methodMeihuaWords": "จากคำ",
-  "meihuaTimeHint": "ตั้งจากปี เดือน วัน และยามตามปฏิทินจันทรคติของตอนนี้",
+  "meihuaTimeHint": "ตั้งจากปี เดือน วัน และยามตามปฏิทินจันทรคติของตอนนี้ (ใช้ปฏิทินจันทรคติจีน ช่วงเวลาออมแสงจะหักออกหนึ่งชั่วโมงโดยอัตโนมัติ)",
   "meihuaLunarNumbers": "ปี {year} · เดือน {month} · วัน {day} · ยาม {hour}",
   "meihuaQuestionHint": "สิ่งที่อยากถาม (ไม่บังคับ)",
   "meihuaNumberHint": "นึกถึงสิ่งที่อยากถาม แล้วพูดตัวเลขสองตัว",

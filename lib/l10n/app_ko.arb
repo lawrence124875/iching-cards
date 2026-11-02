@@ -268,7 +268,7 @@
   "methodMeihuaTime": "시간으로",
   "methodMeihuaNumber": "숫자로",
   "methodMeihuaWords": "글자 수로",
-  "meihuaTimeHint": "지금의 음력 연·월·일·시로 괘를 세웁니다.",
+  "meihuaTimeHint": "지금의 음력 연·월·일·시로 괘를 세웁니다 (중국 음력 기준, 서머타임 중에는 자동으로 1시간을 뺍니다).",
   "meihuaLunarNumbers": "연수 {year} · {month}월 · {day}일 · 시수 {hour}",
   "meihuaQuestionHint": "묻고 싶은 것 (선택)",
   "meihuaNumberHint": "묻고 싶은 것을 떠올리며 두 숫자를 말해 보세요.",

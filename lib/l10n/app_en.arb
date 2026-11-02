@@ -623,7 +623,7 @@
   "methodMeihuaTime": "By time",
   "methodMeihuaNumber": "By numbers",
   "methodMeihuaWords": "By words",
-  "meihuaTimeHint": "Cast from the lunar year, month, day and hour of this moment.",
+  "meihuaTimeHint": "Cast from the lunar year, month, day and hour of this moment (Chinese lunar calendar; one hour is taken off automatically during daylight saving time).",
   "meihuaLunarNumbers": "Year {year} · month {month} · day {day} · hour {hour}",
   "meihuaQuestionHint": "Your question (optional)",
   "meihuaNumberHint": "Hold your question in mind and say two numbers.",

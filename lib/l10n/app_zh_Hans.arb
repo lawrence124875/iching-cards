@@ -268,7 +268,7 @@
   "methodMeihuaTime": "时间起卦",
   "methodMeihuaNumber": "数字起卦",
   "methodMeihuaWords": "字数起卦",
-  "meihuaTimeHint": "以此刻的农历年、月、日、时起卦。",
+  "meihuaTimeHint": "以此刻的农历年、月、日、时起卦（以中国农历计；夏令时期间自动扣回 1 小时）。",
   "meihuaLunarNumbers": "年数 {year}・{month} 月・{day} 日・时数 {hour}",
   "meihuaQuestionHint": "想问的事（选填）",
   "meihuaNumberHint": "心里想着想问的事，随口说出两个数字。",

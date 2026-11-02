@@ -268,7 +268,7 @@
   "methodMeihuaTime": "Theo giờ",
   "methodMeihuaNumber": "Theo số",
   "methodMeihuaWords": "Theo số chữ",
-  "meihuaTimeHint": "Lập quẻ theo năm, tháng, ngày, giờ âm lịch của lúc này.",
+  "meihuaTimeHint": "Lập quẻ theo năm, tháng, ngày, giờ âm lịch của lúc này (theo âm lịch Trung Quốc; trong giờ mùa hè sẽ tự động trừ một giờ).",
   "meihuaLunarNumbers": "Năm {year} · tháng {month} · ngày {day} · giờ {hour}",
   "meihuaQuestionHint": "Điều bạn muốn hỏi (tùy chọn)",
   "meihuaNumberHint": "Nghĩ về điều muốn hỏi và nói ra hai con số.",

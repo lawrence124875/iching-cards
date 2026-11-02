@@ -224,14 +224,15 @@ jobs:
           blame=$(ls build/app/outputs/logs/manifest-merger-release-report.txt 2>/dev/null | head -1)
           aab=build/app/outputs/bundle/release/app-release.aab
           out="manifest=${m:-未找到}"
-          out+=$'\n'"compileSdk=$(grep -o 'compileSdkVersion="[0-9]*"' "$m" | head -1 | grep -o '[0-9]*')"
+          aapt2=$(ls -d "$ANDROID_HOME"/build-tools/*/aapt2 2>/dev/null | sort -V | tail -1)
+          out+=$'\n'"compileSdk=$("$aapt2" dump badging build/app/outputs/flutter-apk/app-release.apk 2>/dev/null | grep -o "compileSdkVersion='[0-9]*'" | grep -o '[0-9]*')"
           out+=" targetSdk=$(grep -o 'targetSdkVersion="[0-9]*"' "$m" | head -1 | grep -o '[0-9]*')"
           out+=" minSdk=$(grep -o 'minSdkVersion="[0-9]*"' "$m" | head -1 | grep -o '[0-9]*')"
           out+=" AAB=$(stat -c %s "$aab" 2>/dev/null) bytes"
           out+=$'\n'"--- uses-permission（來源）"
           for perm in $(grep -oE '<uses-permission(-sdk-23)? [^>]*android:name="[^"]+"' "$m" | grep -oE 'android:name="[^"]+"' | cut -d'"' -f2 | sort -u); do
-            src=$(grep -A3 -F "uses-permission#${perm}" "$blame" 2>/dev/null | grep -oE '\[[^]]+\]|from .*AndroidManifest.xml' | head -3 | tr '\n' ' ')
-            out+=$'\n'"${perm} <= ${src:-?}"
+            src=$(grep -A3 -F "uses-permission#${perm}" "$blame" 2>/dev/null | grep -oE '\[[^]]+\]|android/app/src/main' | sed 's#android/app/src/main#app#' | sort -u | tr '\n' ' ')
+            out+=$'\n'"${perm#android.permission.} <= ${src:-?}"
           done
           out+=$'\n'"--- 無障礙／其他敏感宣告"
           out+=" $(grep -c 'BIND_ACCESSIBILITY_SERVICE' "$m")"

@@ -627,7 +627,6 @@
   "meihuaSolarLabel": "Hour correction",
   "meihuaSolarOff": "Off (clock time)",
   "meihuaSolarOn": "Corrected to true solar time in {city}",
-  "@meihuaSolarOn": {"placeholders": {"city": {"type": "String"}}},
   "meihuaSolarHint": "Optional: pick the city you are in (or the nearest one) to set the hour by the sun's actual position. No location access is used.",
   "meihuaLunarNumbers": "Year {year} · month {month} · day {day} · hour {hour}",
   "meihuaQuestionHint": "Your question (optional)",

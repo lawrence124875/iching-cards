@@ -8,6 +8,7 @@ import 'package:iching_cards/core/meihua/lunar_moment.dart';
 import 'package:iching_cards/core/meihua/meihua_cast.dart';
 import 'package:iching_cards/core/meihua/meihua_engine.dart';
 import 'package:iching_cards/core/meihua/meihua_forecast.dart';
+import 'package:iching_cards/core/meihua/solar_time.dart';
 import 'package:iching_cards/core/meihua/wuxing.dart';
 
 LunarMoment at(int year, int month, int day, int hour, {int monthBranch = 2}) =>
@@ -148,6 +149,24 @@ void main() {
       expect(m.yearNumber, 4);
       expect(m.month, 2);
       expect(m.day, 11);
+    });
+  });
+
+  group('真太陽時（依城市經度）', () {
+    test('台北 2024-07-01 04:00 UTC ≈ 12:02 太陽時（午時）', () {
+      final s = SolarTime.at(DateTime.utc(2024, 7, 1, 4), 121.56);
+      expect(s.hour, 12);
+      expect(s.minute, inInclusiveRange(0, 5));
+      expect(LunarMoment.fromDateTime(DateTime.utc(2024, 7, 1, 4), longitude: 121.56).hourNumber, 7);
+    });
+    test('烏魯木齊同一刻 ≈ 09:46（巳時，比北京時間晚兩個多小時）', () {
+      final s = SolarTime.at(DateTime.utc(2024, 7, 1, 4), 87.62);
+      expect(s.hour, 9);
+      expect(s.minute, inInclusiveRange(42, 50));
+    });
+    test('均時差：11 月初約 +16 分、2 月中約 −14 分', () {
+      expect(SolarTime.equationOfTimeMinutes(DateTime.utc(2024, 11, 3, 12)), closeTo(16.4, 1));
+      expect(SolarTime.equationOfTimeMinutes(DateTime.utc(2024, 2, 11, 12)), closeTo(-14.2, 1));
     });
   });
 

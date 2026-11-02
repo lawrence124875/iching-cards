@@ -758,6 +758,10 @@
   "methodMeihuaNumber": "數字起卦",
   "methodMeihuaWords": "字數起卦",
   "meihuaTimeHint": "以此刻的農曆年、月、日、時起卦（以中國農曆計；夏令時期間自動扣回 1 小時）。",
+  "meihuaSolarLabel": "時辰校正",
+  "meihuaSolarOff": "關閉（用鐘點時間）",
+  "meihuaSolarOn": "已依{city}真太陽時校正",
+  "meihuaSolarHint": "選用：選擇你所在（或最近）的城市，依太陽實際位置校正時辰，不會取用位置權限。",
   "meihuaLunarNumbers": "年數 {year}・{month} 月・{day} 日・時數 {hour}",
   "@meihuaLunarNumbers": {
     "placeholders": {

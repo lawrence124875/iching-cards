@@ -28,7 +28,7 @@ abstract class ReminderService {
   String? takeLaunchPayload();
 }
 
-/// 通知類別：卦記回顧（準時）、每日一卦（可延後，不要求「鬧鐘與提醒」權限）。
+/// 通知類別：卦記回顧、每日一卦（皆為不精確排程，可能延後幾分鐘）。
 enum ReminderKind { review, daily }
 
 enum ReminderFailureKind { permissionDenied, initFailed, scheduleFailed, unsupported }

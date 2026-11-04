@@ -21,6 +21,7 @@ import '../../shared/premium/paywall_page.dart';
 import '../../shared/widgets/adaptive_layout.dart';
 import '../../shared/widgets/hexagram_glyph.dart';
 import '../meihua/meihua_reading_page.dart';
+import 'cross_guide.dart';
 
 /// 交叉頁：兩卦對照（共識／部分呼應／分歧）→ 趨勢與應期 → 主題 → 易經怎麼看 → 梅花怎麼看
 /// → 今日小行動 → 反思提問 → 頁底聲明。分歧時兩邊各自說明，不合成結論。
@@ -123,7 +124,13 @@ class _CrossReadingPageState extends State<CrossReadingPage> {
   Widget build(BuildContext context) {
     final l = context.l10n;
     return Scaffold(
-      appBar: AppBar(title: Text(l.featureCross)),
+      appBar: AppBar(title: Text(l.featureCross), actions: [
+        IconButton(
+          onPressed: () => showCrossGuide(context),
+          icon: const Icon(Icons.info_outline),
+          tooltip: l.featureCross,
+        ),
+      ]),
       body: FutureBuilder<_Data?>(
         future: _data,
         builder: (context, snap) {

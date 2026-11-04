@@ -60,7 +60,7 @@ class FreeLimits {
       journalMax: v('qg_free_journal_max', min: 1),
       meihuaCastsPerDay: v('qg_meihua_free_casts_per_day', min: 1),
       meihuaRewardedPerDay: v('qg_meihua_free_rewarded_per_day'),
-      meihuaFreeLessons: v('qg_meihua_free_lessons', max: 12),
+      meihuaFreeLessons: v('qg_meihua_free_lessons', max: 13),
       crossFreePreview: v('qg_cross_free_preview', max: 1) == 1,
     );
   }

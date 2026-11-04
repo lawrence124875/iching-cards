@@ -88,7 +88,7 @@ class _Body extends StatelessWidget {
           OutlinedButton.icon(
             onPressed: () => simulator(context, lesson.simulator!),
             icon: const Icon(Icons.local_florist_outlined),
-            label: Text(l.meihuaOpenSimulator),
+            label: Text(lesson.simulator == 'cross' ? l.featureCross : l.meihuaOpenSimulator),
           ),
         ],
         if (next != null) ...[

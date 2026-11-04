@@ -36,7 +36,7 @@ for lang in $LANGS; do
     cp "$f" "assets/content/$lang/meihua-lesson-$(basename "$f")"
     n_meihua=$((n_meihua + 1))
   done
-  # 雙卦交叉模板（<語言>/cross/templates.json → cross-templates.json；目前只有繁中、英文）
+  # 雙卦交叉模板（<語言>/cross/templates.json → cross-templates.json；11 語）
   if [ -e "$src/$lang/cross/templates.json" ]; then
     cp "$src/$lang/cross/templates.json" "assets/content/$lang/cross-templates.json"
     n_cross=$((n_cross + 1))

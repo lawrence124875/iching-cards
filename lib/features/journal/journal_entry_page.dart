@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import '../../app/services.dart';
 import '../../app/theme.dart';
 import '../../core/content/hexagram_content.dart';
+import '../../core/iching/cast_result.dart';
 import '../../core/iching/hexagram_table.dart';
 import '../../core/journal/journal_entry.dart';
 import '../../core/journal/journal_reminders.dart';
@@ -17,6 +18,8 @@ import '../../shared/widgets/hexagram_glyph.dart';
 import '../../shared/widgets/question_dialog.dart';
 import '../../shared/widgets/reminder_picker.dart';
 import '../../shared/widgets/adaptive_layout.dart';
+import '../cross/cross_feedback.dart';
+import '../cross/cross_reading_page.dart';
 import '../meihua/meihua_reading_page.dart';
 
 /// 一筆卦記：當時的卦與問題 → 當時的解讀 → 回顧（後來發生了什麼、象怎麼對上）→ 提醒。
@@ -225,6 +228,20 @@ class _JournalEntryPageState extends State<JournalEntryPage> {
         OutlinedButton(
           onPressed: () => Navigator.of(context).push(MaterialPageRoute<void>(
             builder: (_) {
+              // 雙卦交叉的紀錄用交叉頁回看
+              final cross = e.cross;
+              final crossMeihua = cross == null
+                  ? null
+                  : MeihuaCast.fromCastResult(
+                      CastResult(
+                        methodId: MeihuaMethod.time.id,
+                        lines: [for (final v in cross.meihuaLines) LineValue.fromValue(v)],
+                      ),
+                      monthBranch: cross.monthBranch,
+                    );
+              if (crossMeihua != null) {
+                return CrossReadingPage(iching: cast, meihua: crossMeihua, question: e.question, review: true);
+              }
               // 梅花起卦的紀錄用梅花解卦回看（月令依當時日期）
               final meihua =
                   MeihuaCast.fromCastResult(cast, monthBranch: LunarMoment.fromDateTime(e.createdAt).monthBranch);
@@ -235,6 +252,11 @@ class _JournalEntryPageState extends State<JournalEntryPage> {
           )),
           child: Text(l.journalViewReading),
         ),
+        if (e.cross != null)
+          CrossFeedbackSection(
+            verified: e.cross!.verified,
+            onChanged: (v) => _update(e.copyWith(cross: e.cross!.withVerified(v))),
+          ),
         Section(
           title: l.journalReviews,
           child: Column(

@@ -1,7 +1,7 @@
 name: iching_cards
 description: "謙卦｜易經六十四卦卡（LC Lab）"
 publish_to: 'none'
-version: 0.5.6+61
+version: 0.6.0+62
 
 environment:
   sdk: '>=3.4.0 <4.0.0'
@@ -47,6 +47,7 @@ flutter:
   # 這兩個資料夾在公開 repo 只有 .gitkeep；內容由 CI 從私人 repo iching-content 匯入
   #（scripts/import_content.sh），絕不 commit 到本 repo。
   assets:
+    - assets/content/
     - assets/content/zh-Hant/
     - assets/content/en/
     - assets/content/zh-Hans/

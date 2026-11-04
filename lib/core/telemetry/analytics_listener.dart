@@ -36,6 +36,7 @@ class AnalyticsListener {
         TrialStarted t => ('qg_trial_start', {'period': t.period}),
         Subscribed s => ('qg_purchase', {'period': s.period}),
         Restored _ => ('qg_restore', const <String, Object>{}),
+        CrossFeedback c => ('qg_cross_feedback', {'verified': c.verified}),
         _ => null,
       };
 

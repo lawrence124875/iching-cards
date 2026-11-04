@@ -40,7 +40,14 @@ void main() {
     const TrialStarted(period: 'yearly'),
     const Subscribed(period: 'yearly'),
     const Restored(),
+    const CrossFeedback(verified: 'yes'),
   ];
+
+  test('雙卦交叉回饋只送選項值', () {
+    final d = AnalyticsListener.describe(const CrossFeedback(verified: 'partly'))!;
+    expect(d.$1, 'qg_cross_feedback');
+    expect(d.$2, {'verified': 'partly'});
+  });
 
   test('統計事件一律 qg_ 開頭、名稱合規、參數只有字串或數字', () {
     final valid = RegExp(r'^[a-zA-Z][a-zA-Z0-9_]{0,39}$');

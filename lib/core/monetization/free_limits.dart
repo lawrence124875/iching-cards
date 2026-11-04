@@ -9,6 +9,7 @@ class FreeLimits {
     this.meihuaCastsPerDay = 1,
     this.meihuaRewardedPerDay = 1,
     this.meihuaFreeLessons = 1,
+    this.crossFreePreview = true,
   });
 
   /// 每天免費起卦次數（抽一卦、三枚銅錢合計）。
@@ -28,6 +29,9 @@ class FreeLimits {
   final int meihuaRewardedPerDay;
   final int meihuaFreeLessons;
 
+  /// 雙卦交叉：免費版可否看預覽（共識／分歧標題）；false 時免費版一進入就顯示付費牆（`qg_cross_free_preview`，1／0）。
+  final bool crossFreePreview;
+
   /// 梅花易數的每日額度（給另一個 [CastQuota] 用）。
   FreeLimits get meihua => FreeLimits(castsPerDay: meihuaCastsPerDay, rewardedPerDay: meihuaRewardedPerDay);
 
@@ -39,6 +43,7 @@ class FreeLimits {
     'qg_meihua_free_casts_per_day': 1,
     'qg_meihua_free_rewarded_per_day': 1,
     'qg_meihua_free_lessons': 1,
+    'qg_cross_free_preview': 1,
   };
 
   /// 由遠端數值建立；讀不到或數值不合理就用預設。
@@ -56,6 +61,7 @@ class FreeLimits {
       meihuaCastsPerDay: v('qg_meihua_free_casts_per_day', min: 1),
       meihuaRewardedPerDay: v('qg_meihua_free_rewarded_per_day'),
       meihuaFreeLessons: v('qg_meihua_free_lessons', max: 12),
+      crossFreePreview: v('qg_cross_free_preview', max: 1) == 1,
     );
   }
 }

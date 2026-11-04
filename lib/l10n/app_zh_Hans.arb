@@ -260,6 +260,8 @@
   "updateReady": "新版本已下载完成",
   "updateRestart": "重新启动",
   "featureMeihua": "梅花易数",
+  "featureCross": "双卦交叉",
+  "methodCross": "双卦交叉",
   "meihuaIntro": "用此刻的时间、两个数字或一句话起卦，从上下卦的画面、体与用、互卦与变卦读出眼前的处境，再回到自己。",
   "meihuaCourseTitle": "梅花易数课程",
   "meihuaCourseSubtitle": "12 课：类象、起卦、体用、五行与实例",

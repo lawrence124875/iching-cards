@@ -260,6 +260,8 @@
   "updateReady": "新しいバージョンの準備ができました",
   "updateRestart": "再起動",
   "featureMeihua": "梅花易数",
+  "featureCross": "二卦の対照",
+  "methodCross": "二卦の対照",
   "meihuaIntro": "今の時刻、二つの数字、または一文から卦を立て、上下の卦の情景、体と用、互卦と変卦から今の状況を読み、自分に立ち返ります。",
   "meihuaCourseTitle": "梅花易数講座",
   "meihuaCourseSubtitle": "全12課：象・立卦・体用・五行・実例",

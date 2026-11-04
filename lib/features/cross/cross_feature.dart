@@ -10,6 +10,7 @@ import '../../shared/cast/stepwise_cast_page.dart';
 import '../../shared/premium/paywall_page.dart';
 import '../../shared/widgets/question_dialog.dart';
 import '../meihua/meihua_city_store.dart';
+import 'cross_guide.dart';
 import 'cross_reading_page.dart';
 
 /// 雙卦交叉（易經 × 梅花，HANDOFF §2.4）：寫下問題 → 三錢起卦（扣一般起卦額度）→ 以擲完那一刻的時間起梅花卦 → 交叉頁。
@@ -34,9 +35,14 @@ class _CrossCastPageState extends State<CrossCastPage> {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) async {
       final s = AppServices.of(context);
-      if (s.isPremium || s.limits.crossFreePreview) return;
-      final ok = await openPaywall(context, source: 'cross');
-      if (!ok && mounted) Navigator.of(context).pop();
+      if (!s.isPremium && !s.limits.crossFreePreview) {
+        final ok = await openPaywall(context, source: 'cross');
+        if (!ok) {
+          if (mounted) Navigator.of(context).pop();
+          return;
+        }
+      }
+      if (mounted) await showCrossGuideOnce(context);
     });
   }
 

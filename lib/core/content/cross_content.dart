@@ -34,6 +34,12 @@ class CrossContent {
   List<String> _list(String key, String combo) =>
       [for (final x in ((_j[key] as Map?)?[combo] as List? ?? const [])) if (x is String) x];
 
+  /// 首次進入的 3 頁引導（title、body）。
+  List<({String title, String body})> get guide => [
+        for (final x in (_j['guide'] as List? ?? const []))
+          if (x is Map) (title: x['title'] as String? ?? '', body: x['body'] as String? ?? ''),
+      ];
+
   List<String> actions(String combo) => _list('actions', combo);
   List<String> questions(String combo) => _list('questions', combo);
 }

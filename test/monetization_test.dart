@@ -90,6 +90,13 @@ void main() {
     expect(r.meihuaFreeLessons, 1); // 超過課數不合理
   });
 
+  test('雙卦交叉免費預覽：預設開，Remote Config 0 關閉，其他值不合理用預設', () {
+    expect(FreeLimits.remoteDefaults['qg_cross_free_preview'], 1);
+    expect(FreeLimits.from((k, d) => d).crossFreePreview, isTrue);
+    expect(FreeLimits.from((k, d) => k == 'qg_cross_free_preview' ? 0 : d).crossFreePreview, isFalse);
+    expect(FreeLimits.from((k, d) => k == 'qg_cross_free_preview' ? 7 : d).crossFreePreview, isTrue);
+  });
+
   test('沒有廣告時：插頁不可用、獎勵算失敗（照樣給這一次）', () async {
     final ads = NoAds();
     expect(await ads.loadInterstitial(), AdLoad.unavailable);

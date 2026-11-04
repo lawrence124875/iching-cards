@@ -102,4 +102,39 @@ void main() {
       expect(await store.addMissing([a, b]), isEmpty);
     });
   });
+
+  group('雙卦交叉紀錄', () {
+    test('cross 與 verified 來回轉換；回饋可改可清除', () {
+      final e = JournalEntry.fromCast(
+        cast: CastResult(methodId: 'cross', lines: cast.lines),
+        now: DateTime(2026, 11, 4, 9),
+        question: '要不要接這個案子？',
+        cross: CrossRecord(meihuaLines: [7, 7, 8, 9, 8, 7], monthBranch: 10),
+      );
+      final back = JournalEntry.tryFromJson(jsonDecode(jsonEncode(e.toJson())) as Map<String, dynamic>)!;
+      expect(back.methodId, 'cross');
+      expect(back.cross!.meihuaLines, [7, 7, 8, 9, 8, 7]);
+      expect(back.cross!.monthBranch, 10);
+      expect(back.cross!.verified, isNull);
+
+      final yes = back.copyWith(cross: back.cross!.withVerified('yes'));
+      final again = JournalEntry.tryFromJson(jsonDecode(jsonEncode(yes.toJson())) as Map<String, dynamic>)!;
+      expect(again.cross!.verified, 'yes');
+      expect(again.cross!.withVerified(null).verified, isNull);
+    });
+
+    test('舊紀錄沒有 cross；不合法的 cross 或 verified 被略過', () {
+      final old = JournalEntry.fromCast(cast: cast, now: DateTime(2026, 10, 1));
+      final j = old.toJson();
+      expect(j.containsKey('cross'), isFalse);
+      expect(JournalEntry.tryFromJson(j)!.cross, isNull);
+      expect(JournalEntry.tryFromJson({...j, 'cross': {'meihua': [7, 7], 'monthBranch': 1}})!.cross, isNull);
+      final bad = JournalEntry.tryFromJson({
+        ...j,
+        'cross': {'meihua': [7, 7, 8, 9, 8, 7], 'monthBranch': 3, 'verified': 'maybe'},
+      })!;
+      expect(bad.cross!.verified, isNull);
+      expect(bad.cross!.monthBranch, 3);
+    });
+  });
 }

@@ -21,6 +21,7 @@ class StepwiseCastPage extends StatefulWidget {
     required this.instructions,
     required this.stepLabel,
     required this.allLabel,
+    this.onDone,
   });
 
   final StepwiseMethod method;
@@ -29,6 +30,9 @@ class StepwiseCastPage extends StatefulWidget {
   /// 求第 n 爻的按鈕文字。
   final String Function(AppLocalizations l, int n) stepLabel;
   final String Function(AppLocalizations l) allLabel;
+
+  /// 擲完後按「看解讀」：預設開一般解讀頁；雙卦交叉改走自己的頁面（插頁廣告仍在這裡先播）。
+  final Future<void> Function(BuildContext context, CastResult cast, String question)? onDone;
 
   @override
   State<StepwiseCastPage> createState() => _StepwiseCastPageState();
@@ -69,8 +73,11 @@ class _StepwiseCastPageState extends State<StepwiseCastPage> {
       await pauseBeforeReading(context);
       if (!mounted) return;
     }
+    final cast = CastResult(methodId: _method.id, lines: lines);
+    final done = widget.onDone;
+    if (done != null) return done(context, cast, _question);
     await Navigator.of(context).push(MaterialPageRoute<void>(
-      builder: (_) => ReadingPage(cast: CastResult(methodId: _method.id, lines: lines), question: _question),
+      builder: (_) => ReadingPage(cast: cast, question: _question),
     ));
   }
 

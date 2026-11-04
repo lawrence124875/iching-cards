@@ -53,6 +53,7 @@ jobs:
             ar
             images/webp
             glossary
+            cross
             store/release-notes
 
       - uses: subosito/flutter-action@v2
@@ -62,6 +63,23 @@ jobs:
 
       - name: 匯入內容
         run: bash scripts/import_content.sh _content
+
+      # 牌面圖必須是 WebP（檔頭 RIFF....WEBP）；副檔名對但內容是 PNG／JPEG 會讓 App 變大，直接停止。只印數量與卦序。
+      - name: 檢查牌面圖為 WebP
+        run: |
+          bad=""; n=0
+          for f in assets/cards/*.webp; do
+            [ -e "$f" ] || continue
+            n=$((n + 1))
+            if [ "$(head -c 4 "$f")" != RIFF ] || [ "$(tail -c +9 "$f" | head -c 4)" != WEBP ]; then
+              bad="$bad $(basename "$f" .webp)"
+            fi
+          done
+          if [ -n "$bad" ]; then
+            echo "::error title=牌面圖不是 WebP::卦序${bad}（共 $n 張）"
+            exit 1
+          fi
+          echo "::notice title=牌面圖檢查::$n 張皆為 WebP"
 
       # 11 語術語表（REFERENCE §17）→ lib/l10n/glossary_data.g.dart（不進 repo）。在字型子集之前，
       # 讓術語表用到的字也進子集。
@@ -240,6 +258,24 @@ jobs:
           { echo '```'; echo "$out"; echo '```'; } >> "$GITHUB_STEP_SUMMARY"
           enc=$(printf '%s' "$out" | sed ':a;N;$!ba;s/%/%25/g;s/\r/%0D/g;s/\n/%0A/g')
           echo "::notice title=權限與SDK報告::${enc}"
+          exit 0
+
+      # 大小摘要：AAB／APK 與各資產目錄（content 依語言、cards、fonts、audio…），寫成一個 notice。
+      - name: 大小摘要
+        if: ${{ always() }}
+        run: |
+          set +e
+          kb() { du -sk "$1" 2>/dev/null | cut -f1; }
+          out="AAB=$(( $(stat -c %s build/app/outputs/bundle/release/app-release.aab 2>/dev/null || echo 0) / 1024 )) KB"
+          out+=" APK=$(( $(stat -c %s build/app/outputs/flutter-apk/app-release.apk 2>/dev/null || echo 0) / 1024 )) KB"
+          out+=$'\n'"--- assets（KB）"
+          for d in assets/*/; do out+=$'\n'"$(basename "$d")=$(kb "$d")"; done
+          out+=$'\n'"--- assets/content 各語言（KB）"
+          for d in assets/content/*/; do out+=" $(basename "$d")=$(kb "$d")"; done
+          echo "$out"
+          { echo '```'; echo "$out"; echo '```'; } >> "$GITHUB_STEP_SUMMARY"
+          enc=$(printf '%s' "$out" | sed ':a;N;$!ba;s/%/%25/g;s/\r/%0D/g;s/\n/%0A/g')
+          echo "::notice title=大小摘要::${enc}"
           exit 0
 
       # ⚠️ 永久原則（REFERENCE §10.4）：APK／AAB 不可用 upload-artifact 放在公開 repo，

@@ -83,6 +83,7 @@ extension IchingTerms on AppLocalizations {
         'meihua_time' => methodMeihuaTime,
         'meihua_number' => methodMeihuaNumber,
         'meihua_words' => methodMeihuaWords,
+        'cross' => methodCross,
         _ => methodDraw,
       };
 

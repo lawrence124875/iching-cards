@@ -104,6 +104,14 @@ class Restored extends AppEvent {
   const Restored();
 }
 
+/// 雙卦交叉的「事後應驗了嗎？」回饋（只送選項值，不含問題與卦象；HANDOFF §2.4）。
+class CrossFeedback extends AppEvent {
+  const CrossFeedback({required this.verified});
+
+  /// yes／partly／no；清除回答時為 none。
+  final String verified;
+}
+
 class EventBus {
   final _controller = StreamController<AppEvent>.broadcast();
 

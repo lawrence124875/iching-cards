@@ -15,20 +15,22 @@ Future<JournalEntry?> showSaveReadingSheet(
   required CastResult cast,
   required String question,
   required int? readingIndex,
+  CrossRecord? cross,
 }) =>
     showModalBottomSheet<JournalEntry>(
       context: context,
       isScrollControlled: true,
       backgroundColor: QianColors.inkCard,
-      builder: (_) => _SaveSheet(cast: cast, question: question, readingIndex: readingIndex),
+      builder: (_) => _SaveSheet(cast: cast, question: question, readingIndex: readingIndex, cross: cross),
     );
 
 class _SaveSheet extends StatefulWidget {
-  const _SaveSheet({required this.cast, required this.question, required this.readingIndex});
+  const _SaveSheet({required this.cast, required this.question, required this.readingIndex, this.cross});
 
   final CastResult cast;
   final String question;
   final int? readingIndex;
+  final CrossRecord? cross;
 
   @override
   State<_SaveSheet> createState() => _SaveSheetState();
@@ -58,6 +60,7 @@ class _SaveSheetState extends State<_SaveSheet> {
       question: _controller.text.trim(),
       readingIndex: widget.readingIndex,
       reminderAt: _days == null ? null : JournalReminders.reviewTime(now, _days!),
+      cross: widget.cross,
     );
     await store.save(entry);
     var reminderOk = true;

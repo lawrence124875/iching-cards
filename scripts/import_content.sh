@@ -10,6 +10,7 @@ mkdir -p assets/cards
 summary=""
 n_lesson=0
 n_meihua=0
+n_cross=0
 for lang in $LANGS; do
   mkdir -p "assets/content/$lang"
   n=0
@@ -35,8 +36,19 @@ for lang in $LANGS; do
     cp "$f" "assets/content/$lang/meihua-lesson-$(basename "$f")"
     n_meihua=$((n_meihua + 1))
   done
+  # 雙卦交叉模板（<語言>/cross/templates.json → cross-templates.json；目前只有繁中、英文）
+  if [ -e "$src/$lang/cross/templates.json" ]; then
+    cp "$src/$lang/cross/templates.json" "assets/content/$lang/cross-templates.json"
+    n_cross=$((n_cross + 1))
+  fi
   summary="$summary $lang=$n"
 done
+
+# 易經吉凶分數表（語言無關，tools/build_cross.py 產生）
+if [ -e "$src/cross/iching_trend.json" ]; then
+  cp "$src/cross/iching_trend.json" assets/content/cross-trend.json
+  n_cross=$((n_cross + 1))
+fi
 
 # 牌面圖：先複製一般檔，再讓重產版（-v2、-v3…）覆蓋。
 n_img=0
@@ -52,4 +64,4 @@ for pass in normal redo; do
   done
 done
 
-echo "已匯入解讀（${summary# }）、課程 ${n_lesson} 檔、梅花易數 ${n_meihua} 檔、牌面圖 ${n_img} 張"
+echo "已匯入解讀（${summary# }）、課程 ${n_lesson} 檔、梅花易數 ${n_meihua} 檔、雙卦交叉 ${n_cross} 檔、牌面圖 ${n_img} 張"

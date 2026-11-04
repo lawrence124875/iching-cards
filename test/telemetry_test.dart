@@ -84,6 +84,7 @@ void main() {
       'qg_trial_start',
       'qg_purchase',
       'qg_restore',
+      'qg_cross_feedback',
     ]);
     expect(rec.logged.first.$2, {'method': 'coins', 'hexagram': 15, 'has_changed': 1});
     final byName = {for (final e in rec.logged) e.$1: e.$2};

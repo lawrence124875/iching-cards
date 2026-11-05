@@ -46,7 +46,20 @@ class HomePage extends StatelessWidget {
           padding: const EdgeInsets.only(bottom: 8),
           child: FilledButton(onPressed: () => open(f), child: Text(f.label(l))),
         ),
-      for (final f in secondary) TextButton(onPressed: () => open(f), child: Text(f.label(l))),
+      // 0.6.5+67：次要選項用細框＋淡色底，看得出是按鈕，但比主按鈕輕
+      for (final f in secondary)
+        Padding(
+          padding: const EdgeInsets.only(bottom: 8),
+          child: OutlinedButton(
+            style: OutlinedButton.styleFrom(
+              backgroundColor: QianColors.inkCard,
+              foregroundColor: QianColors.text,
+              minimumSize: const Size(200, 46),
+            ),
+            onPressed: () => open(f),
+            child: Text(f.label(l)),
+          ),
+        ),
     ];
 
     // 0.1.0+16：整頁一定一屏顯示完（不捲動）。主內容放在 FittedBox 裡，螢幕矮或系統字體放大時

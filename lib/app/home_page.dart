@@ -40,16 +40,12 @@ class HomePage extends StatelessWidget {
     ];
     final motto = Text(l.homeMotto,
         textAlign: TextAlign.center, style: t.bodyLarge?.copyWith(color: QianColors.textSub, fontSize: 15));
-    // 0.6.6+68：主按鈕全寬一排；次要選項兩個一列（Wrap 置中，單數時最後一個置中）
-    Widget label(AppFeature f) => FittedBox(fit: BoxFit.scaleDown, child: Text(f.label(l), maxLines: 1));
+    // 0.6.6+68：主按鈕全寬一排、金色漸層；次要選項兩個一列、深色底金細框（Wrap 置中，單數時最後一個置中）
     final actions = [
       for (final f in primary)
         Padding(
-          padding: const EdgeInsets.only(bottom: 10),
-          child: SizedBox(
-            width: 290,
-            child: FilledButton(onPressed: () => open(f), child: label(f)),
-          ),
+          padding: const EdgeInsets.only(bottom: 12),
+          child: _HomeButton(width: 290, height: 52, primary: true, label: f.label(l), onTap: () => open(f)),
         ),
       if (secondary.isNotEmpty)
         Wrap(
@@ -58,19 +54,7 @@ class HomePage extends StatelessWidget {
           runSpacing: 10,
           children: [
             for (final f in secondary)
-              SizedBox(
-                width: 140,
-                child: OutlinedButton(
-                  style: OutlinedButton.styleFrom(
-                    backgroundColor: QianColors.inkCard,
-                    foregroundColor: QianColors.text,
-                    minimumSize: const Size(140, 46),
-                    padding: const EdgeInsets.symmetric(horizontal: 10),
-                  ),
-                  onPressed: () => open(f),
-                  child: label(f),
-                ),
-              ),
+              _HomeButton(width: 140, height: 46, primary: false, label: f.label(l), onTap: () => open(f)),
           ],
         ),
     ];
@@ -193,3 +177,67 @@ const privacyPolicyUrl = 'https://lawrence124875.github.io/iching-cards/privacy.
 
 /// 服務條款（本 repo docs/terms.html，2026-11-02；訂閱、試用、退款、免責）。
 const termsOfServiceUrl = 'https://lawrence124875.github.io/iching-cards/terms.html';
+
+
+/// 首頁按鈕：主按鈕金色漸層＋柔光；次要按鈕深色漸層底＋半透明金框。圓角膠囊形。
+class _HomeButton extends StatelessWidget {
+  const _HomeButton({required this.width, required this.height, required this.primary, required this.label, required this.onTap});
+
+  final double width;
+  final double height;
+  final bool primary;
+  final String label;
+  final VoidCallback onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    final radius = BorderRadius.circular(height / 2);
+    final style = Theme.of(context).textTheme.labelLarge?.copyWith(
+          color: primary ? QianColors.ink : QianColors.rice,
+          fontWeight: primary ? FontWeight.w600 : FontWeight.w500,
+        );
+    final decoration = primary
+        ? BoxDecoration(
+            borderRadius: radius,
+            gradient: const LinearGradient(
+              begin: Alignment.topLeft,
+              end: Alignment.bottomRight,
+              colors: [Color(0xFFEACB86), QianColors.earth, Color(0xFFAE8641)],
+            ),
+            boxShadow: [BoxShadow(color: QianColors.earth.withValues(alpha: 0.28), blurRadius: 14, offset: const Offset(0, 4))],
+          )
+        : BoxDecoration(
+            borderRadius: radius,
+            gradient: const LinearGradient(
+              begin: Alignment.topCenter,
+              end: Alignment.bottomCenter,
+              colors: [Color(0xFF2E2B36), QianColors.inkCard],
+            ),
+            border: Border.all(color: QianColors.earth.withValues(alpha: 0.55)),
+          );
+    return Semantics(
+      button: true,
+      child: SizedBox(
+        width: width,
+        height: height,
+        child: DecoratedBox(
+          decoration: decoration,
+          child: Material(
+            type: MaterialType.transparency,
+            child: InkWell(
+              borderRadius: radius,
+              onTap: onTap,
+              splashColor: (primary ? QianColors.ink : QianColors.earth).withValues(alpha: 0.12),
+              child: Center(
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 12),
+                  child: FittedBox(fit: BoxFit.scaleDown, child: Text(label, maxLines: 1, style: style)),
+                ),
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}

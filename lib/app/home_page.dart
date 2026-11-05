@@ -40,25 +40,38 @@ class HomePage extends StatelessWidget {
     ];
     final motto = Text(l.homeMotto,
         textAlign: TextAlign.center, style: t.bodyLarge?.copyWith(color: QianColors.textSub, fontSize: 15));
+    // 0.6.6+68：主按鈕全寬一排；次要選項兩個一列（Wrap 置中，單數時最後一個置中）
+    Widget label(AppFeature f) => FittedBox(fit: BoxFit.scaleDown, child: Text(f.label(l), maxLines: 1));
     final actions = [
       for (final f in primary)
         Padding(
-          padding: const EdgeInsets.only(bottom: 8),
-          child: FilledButton(onPressed: () => open(f), child: Text(f.label(l))),
-        ),
-      // 0.6.5+67：次要選項用細框＋淡色底，看得出是按鈕，但比主按鈕輕
-      for (final f in secondary)
-        Padding(
-          padding: const EdgeInsets.only(bottom: 8),
-          child: OutlinedButton(
-            style: OutlinedButton.styleFrom(
-              backgroundColor: QianColors.inkCard,
-              foregroundColor: QianColors.text,
-              minimumSize: const Size(200, 46),
-            ),
-            onPressed: () => open(f),
-            child: Text(f.label(l)),
+          padding: const EdgeInsets.only(bottom: 10),
+          child: SizedBox(
+            width: 290,
+            child: FilledButton(onPressed: () => open(f), child: label(f)),
           ),
+        ),
+      if (secondary.isNotEmpty)
+        Wrap(
+          alignment: WrapAlignment.center,
+          spacing: 10,
+          runSpacing: 10,
+          children: [
+            for (final f in secondary)
+              SizedBox(
+                width: 140,
+                child: OutlinedButton(
+                  style: OutlinedButton.styleFrom(
+                    backgroundColor: QianColors.inkCard,
+                    foregroundColor: QianColors.text,
+                    minimumSize: const Size(140, 46),
+                    padding: const EdgeInsets.symmetric(horizontal: 10),
+                  ),
+                  onPressed: () => open(f),
+                  child: label(f),
+                ),
+              ),
+          ],
         ),
     ];
 

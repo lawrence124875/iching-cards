@@ -123,20 +123,41 @@ ThemeData buildTheme([AppFonts fonts = AppFonts.chinese]) {
       bodySmall: const TextStyle(fontSize: 13, height: 1.6, color: QianColors.textSub),
       labelLarge: TextStyle(fontSize: 16, letterSpacing: ls(2)),
     ),
+    // 0.6.7+69：全 app 按鈕統一成首頁樣式（膠囊形；主按鈕金色漸層、次按鈕深色漸層底＋半透明金框）。
     filledButtonTheme: FilledButtonThemeData(
       style: FilledButton.styleFrom(
-        backgroundColor: QianColors.earth,
+        backgroundColor: Colors.transparent,
+        disabledBackgroundColor: Colors.transparent,
         foregroundColor: QianColors.ink,
+        disabledForegroundColor: QianColors.ink.withValues(alpha: 0.6),
+        shadowColor: Colors.transparent,
+        elevation: 0,
         minimumSize: const Size(200, 52),
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(2)),
+        shape: const StadiumBorder(),
+        textStyle: TextStyle(fontSize: 16, letterSpacing: ls(2), fontWeight: FontWeight.w600),
+      ).copyWith(
+        backgroundBuilder: (context, states, child) => DecoratedBox(
+          decoration: qianPrimaryButtonDecoration(enabled: !states.contains(WidgetState.disabled)),
+          child: child,
+        ),
       ),
     ),
     outlinedButtonTheme: OutlinedButtonThemeData(
       style: OutlinedButton.styleFrom(
+        backgroundColor: Colors.transparent,
         foregroundColor: QianColors.rice,
-        side: const BorderSide(color: QianColors.mountain),
+        disabledForegroundColor: QianColors.textSub.withValues(alpha: 0.6),
+        side: BorderSide(color: QianColors.earth.withValues(alpha: 0.55)),
         minimumSize: const Size(160, 48),
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(2)),
+        shape: const StadiumBorder(),
+        textStyle: TextStyle(fontSize: 16, letterSpacing: ls(2), fontWeight: FontWeight.w500),
+      ).copyWith(
+        side: WidgetStateProperty.resolveWith((states) => BorderSide(
+            color: QianColors.earth.withValues(alpha: states.contains(WidgetState.disabled) ? 0.25 : 0.55))),
+        backgroundBuilder: (context, states, child) => DecoratedBox(
+          decoration: qianSecondaryButtonDecoration(),
+          child: child,
+        ),
       ),
     ),
     textButtonTheme: TextButtonThemeData(
@@ -144,3 +165,31 @@ ThemeData buildTheme([AppFonts fonts = AppFonts.chinese]) {
     ),
   );
 }
+
+
+/// 主按鈕底：金色漸層＋柔光（首頁 0.6.6+68 定案；filledButtonTheme 與首頁共用）。
+BoxDecoration qianPrimaryButtonDecoration({bool enabled = true, BorderRadius? radius}) => BoxDecoration(
+      borderRadius: radius ?? BorderRadius.circular(999),
+      gradient: LinearGradient(
+        begin: Alignment.topLeft,
+        end: Alignment.bottomRight,
+        colors: [
+          for (final c in const [Color(0xFFEACB86), QianColors.earth, Color(0xFFAE8641)])
+            enabled ? c : c.withValues(alpha: 0.35),
+        ],
+      ),
+      boxShadow: enabled
+          ? [BoxShadow(color: QianColors.earth.withValues(alpha: 0.28), blurRadius: 14, offset: const Offset(0, 4))]
+          : null,
+    );
+
+/// 次要按鈕底：深色漸層（框線另由 outlinedButtonTheme 的 side 或 [border] 畫）。
+BoxDecoration qianSecondaryButtonDecoration({BorderRadius? radius, BoxBorder? border}) => BoxDecoration(
+      borderRadius: radius ?? BorderRadius.circular(999),
+      gradient: const LinearGradient(
+        begin: Alignment.topCenter,
+        end: Alignment.bottomCenter,
+        colors: [Color(0xFF2E2B36), QianColors.inkCard],
+      ),
+      border: border,
+    );

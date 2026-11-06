@@ -197,24 +197,9 @@ class _HomeButton extends StatelessWidget {
           fontWeight: primary ? FontWeight.w600 : FontWeight.w500,
         );
     final decoration = primary
-        ? BoxDecoration(
-            borderRadius: radius,
-            gradient: const LinearGradient(
-              begin: Alignment.topLeft,
-              end: Alignment.bottomRight,
-              colors: [Color(0xFFEACB86), QianColors.earth, Color(0xFFAE8641)],
-            ),
-            boxShadow: [BoxShadow(color: QianColors.earth.withValues(alpha: 0.28), blurRadius: 14, offset: const Offset(0, 4))],
-          )
-        : BoxDecoration(
-            borderRadius: radius,
-            gradient: const LinearGradient(
-              begin: Alignment.topCenter,
-              end: Alignment.bottomCenter,
-              colors: [Color(0xFF2E2B36), QianColors.inkCard],
-            ),
-            border: Border.all(color: QianColors.earth.withValues(alpha: 0.55)),
-          );
+        ? qianPrimaryButtonDecoration(radius: radius)
+        : qianSecondaryButtonDecoration(
+            radius: radius, border: Border.all(color: QianColors.earth.withValues(alpha: 0.55)));
     return Semantics(
       button: true,
       child: SizedBox(

@@ -27,6 +27,26 @@ class _FakeReminders extends NoopReminderService {
   Future<void> cancel(int id) async => scheduled.remove(id);
 }
 
+/// 使用者拒絕通知權限。
+class _DeniedReminders extends _FakeReminders {
+  @override
+  ReminderFailure? get lastFailure => const ReminderFailure(ReminderFailureKind.permissionDenied);
+
+  @override
+  Future<bool> schedule({
+    required int id,
+    required DateTime at,
+    required String title,
+    required String body,
+    required String payload,
+    ReminderKind kind = ReminderKind.review,
+    bool askPermission = true,
+  }) async {
+    asks.add(askPermission);
+    return false;
+  }
+}
+
 void main() {
   const s = DailyReminderSettings();
   const msg = (title: 't', body: 'b');
@@ -68,5 +88,15 @@ void main() {
     final m = DailyReminderSettings.fromJson(s.copyWith(hour: 21, minute: 30, enabled: false).toJson());
     expect((m.enabled, m.hour, m.minute), (false, 21, 30));
     expect(DailyReminderSettings.fromJson({}).enabled, isTrue);
+  });
+
+  test('拒絕通知權限就存成關閉，之後不再請求', () async {
+    final r = _DeniedReminders();
+    final d = DailyReminder(reminders: r, store: MemoryDailyReminderStore());
+    await d.refresh(castToday: false, message: msg);
+    final saved = await d.store.read();
+    expect((saved.enabled, saved.asked), (false, true));
+    await d.refresh(castToday: false, message: msg);
+    expect(r.asks, [true]);
   });
 }

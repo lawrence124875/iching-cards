@@ -111,6 +111,7 @@
   "reminderDays": "{days, plural, =1{يوم واحد} =2{يومان} few{{days} أيّام} other{{days} يومًا}}",
   "reminderCustom": "مخصّص",
   "reminderPermissionDenied": "الإشعارات متوقّفة لتطبيق Qiangua. يمكنك تشغيلها من الإعدادات ← التطبيقات ← Qiangua ← الإشعارات.",
+  "reminderOpenSettings": "فتح إعدادات الإشعارات",
   "reminderInitFailed": "تعذّر تشغيل الإشعارات: {detail}",
   "reminderScheduleFailed": "تعذّرت الجدولة: {detail}",
   "reminderUnsupported": "التذكيرات غير مدعومة على هذا النظام بعد",

@@ -122,10 +122,15 @@ class DailyReminder {
   }
 
   /// 啟動或起卦後呼叫：第一次（還沒問過權限）會請求一次權限。
+  /// 沒有通知權限（拒絕或之後在系統關掉）就把開關存成關閉，設定裡顯示的才是真的狀態。
   Future<void> refresh({required bool castToday, required ({String title, String body}) message}) async {
-    var s = await store.read();
+    final s = await store.read();
     final ask = s.enabled && !s.asked;
-    await apply(s, castToday: castToday, message: message, askPermission: ask);
-    if (ask) await store.write(s.copyWith(asked: true));
+    final ok = await apply(s, castToday: castToday, message: message, askPermission: ask);
+    var next = ask ? s.copyWith(asked: true) : s;
+    if (s.enabled && !ok && reminders.lastFailure?.kind == ReminderFailureKind.permissionDenied) {
+      next = next.copyWith(enabled: false);
+    }
+    if (ask || next.enabled != s.enabled) await store.write(next);
   }
 }

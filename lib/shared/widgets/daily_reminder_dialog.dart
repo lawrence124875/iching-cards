@@ -3,9 +3,12 @@ import 'package:flutter/material.dart';
 import '../../app/services.dart';
 import '../../app/theme.dart';
 import '../../core/reminders/daily_reminder.dart';
+import '../../core/reminders/reminder_service.dart';
 import '../../l10n/l10n.dart';
 
 /// 每日一卦提醒的設定（首頁選單）：開關＋時間。改了就馬上重排。
+/// 沒有通知權限就顯示關閉；打開開關時再請求一次權限，系統不再跳對話框就直接帶到通知設定，
+/// 從設定回來已允許就自動開啟（另留「前往通知設定」按鈕）。
 Future<void> showDailyReminderDialog(BuildContext context) async {
   final services = AppServices.of(context);
   final daily = services.dailyReminder;
@@ -26,15 +29,48 @@ class _DailyReminderDialog extends StatefulWidget {
   State<_DailyReminderDialog> createState() => _DailyReminderDialogState();
 }
 
-class _DailyReminderDialogState extends State<_DailyReminderDialog> {
+class _DailyReminderDialogState extends State<_DailyReminderDialog> with WidgetsBindingObserver {
   late DailyReminderSettings _s = widget.initial;
   String? _error;
+
+  /// 打開開關時權限被拒：顯示「前往通知設定」，回到 App 時再檢查一次。
+  bool _needSettings = false;
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addObserver(this);
+    if (_s.enabled) _syncPermission();
+  }
+
+  @override
+  void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
+    super.dispose();
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (state == AppLifecycleState.resumed && _needSettings) _retryAfterSettings();
+  }
+
+  /// 開著但其實沒有權限（之後在系統關掉）：改成關閉。
+  Future<void> _syncPermission() async {
+    if (await widget.services.reminders.hasPermission() || !mounted) return;
+    await _update(_s.copyWith(enabled: false));
+  }
+
+  Future<void> _retryAfterSettings() async {
+    if (!await widget.services.reminders.hasPermission() || !mounted) return;
+    await _update(_s.copyWith(enabled: true));
+  }
 
   Future<void> _update(DailyReminderSettings next, {bool ask = false}) async {
     final l = context.l10n;
     setState(() {
       _s = next.copyWith(asked: true);
       _error = null;
+      _needSettings = false;
     });
     await widget.daily.store.write(_s);
     final ok = await widget.daily.apply(
@@ -43,7 +79,21 @@ class _DailyReminderDialogState extends State<_DailyReminderDialog> {
       message: L10n.current.dailyMessage,
       askPermission: ask,
     );
-    if (!ok && mounted) setState(() => _error = l.reminderFailed(l.reminderFailureText(widget.services.reminders.lastFailure)));
+    if (ok || !mounted) return;
+    final failure = widget.services.reminders.lastFailure;
+    if (_s.enabled && failure?.kind == ReminderFailureKind.permissionDenied) {
+      // 沒有權限就不算開著：存回關閉，並讓使用者到系統設定開
+      _s = _s.copyWith(enabled: false);
+      await widget.daily.store.write(_s);
+      if (!mounted) return;
+      setState(() {
+        _needSettings = true;
+        _error = l.reminderPermissionDenied;
+      });
+      if (ask && failure!.promptSkipped) await widget.services.reminders.openSettings();
+      return;
+    }
+    setState(() => _error = l.reminderFailed(l.reminderFailureText(failure)));
   }
 
   Future<void> _pickTime() async {
@@ -76,6 +126,14 @@ class _DailyReminderDialogState extends State<_DailyReminderDialog> {
           const SizedBox(height: 8),
           Text(_error!, style: TextStyle(color: Theme.of(context).colorScheme.error)),
         ],
+        if (_needSettings)
+          Align(
+            alignment: AlignmentDirectional.centerStart,
+            child: TextButton(
+              onPressed: widget.services.reminders.openSettings,
+              child: Text(l.reminderOpenSettings),
+            ),
+          ),
       ]),
       actions: [TextButton(onPressed: () => Navigator.pop(context), child: Text(l.ok))],
     );

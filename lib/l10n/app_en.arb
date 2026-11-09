@@ -334,6 +334,7 @@
   },
   "reminderCustom": "Custom",
   "reminderPermissionDenied": "Notifications are off for Qiangua. You can turn them on in Settings → Apps → Qiangua → Notifications.",
+  "reminderOpenSettings": "Open notification settings",
   "reminderInitFailed": "Notifications could not start: {detail}",
   "@reminderInitFailed": {
     "placeholders": {

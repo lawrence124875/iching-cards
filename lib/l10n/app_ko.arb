@@ -111,6 +111,7 @@
   "reminderDays": "{days, plural, other{{days}일}}",
   "reminderCustom": "직접 정하기",
   "reminderPermissionDenied": "‘겸괘’의 알림이 허용되지 않았습니다. 기기 설정 → 앱 → 겸괘 → 알림에서 켤 수 있습니다",
+  "reminderOpenSettings": "알림 설정 열기",
   "reminderInitFailed": "알림을 시작하지 못했습니다: {detail}",
   "reminderScheduleFailed": "예약하지 못했습니다: {detail}",
   "reminderUnsupported": "이 기기에서는 아직 알림을 지원하지 않습니다",

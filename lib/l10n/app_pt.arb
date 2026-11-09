@@ -111,6 +111,7 @@
   "reminderDays": "{days, plural, =1{1 dia} other{{days} dias}}",
   "reminderCustom": "Personalizar",
   "reminderPermissionDenied": "As notificações do Qiangua estão desativadas. Você pode ativá-las em Configurações → Apps → Qiangua → Notificações.",
+  "reminderOpenSettings": "Abrir configurações de notificação",
   "reminderInitFailed": "Não foi possível iniciar as notificações: {detail}",
   "reminderScheduleFailed": "Não foi possível agendar: {detail}",
   "reminderUnsupported": "Os lembretes ainda não estão disponíveis nesta plataforma",

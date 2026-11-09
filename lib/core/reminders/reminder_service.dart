@@ -18,6 +18,12 @@ abstract class ReminderService {
 
   Future<void> cancel(int id);
 
+  /// 目前是否已允許通知（只檢查，不跳權限對話框）。
+  Future<bool> hasPermission();
+
+  /// 開系統的「通知」設定頁（權限被拒、系統不再跳對話框時讓使用者自己開）。
+  Future<void> openSettings();
+
   /// 上一次 schedule 失敗的原因；成功時為 null。介面文字由 l10n 的 reminderFailureText 產生。
   ReminderFailure? get lastFailure;
 
@@ -35,10 +41,13 @@ enum ReminderFailureKind { permissionDenied, initFailed, scheduleFailed, unsuppo
 
 /// 提醒失敗的原因；[detail] 為例外訊息（方便使用者回報）。
 class ReminderFailure {
-  const ReminderFailure(this.kind, [this.detail = '']);
+  const ReminderFailure(this.kind, [this.detail = '', this.promptSkipped = false]);
 
   final ReminderFailureKind kind;
   final String detail;
+
+  /// 請求了權限但系統沒跳對話框（已拒絕過、系統不再問），只能請使用者到通知設定開。
+  final bool promptSkipped;
 }
 
 /// 不做任何事（測試或尚未支援的平台）。
@@ -60,6 +69,12 @@ class NoopReminderService implements ReminderService {
 
   @override
   Future<void> cancel(int id) async {}
+
+  @override
+  Future<bool> hasPermission() async => false;
+
+  @override
+  Future<void> openSettings() async {}
 
   @override
   ReminderFailure? get lastFailure => const ReminderFailure(ReminderFailureKind.unsupported);

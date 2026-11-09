@@ -334,6 +334,7 @@
   },
   "reminderCustom": "Atur sendiri",
   "reminderPermissionDenied": "Notifikasi untuk Qiangua sedang mati. Kamu dapat menyalakannya di Setelan → Aplikasi → Qiangua → Notifikasi.",
+  "reminderOpenSettings": "Buka pengaturan notifikasi",
   "reminderInitFailed": "Notifikasi tidak dapat dimulai: {detail}",
   "@reminderInitFailed": {
     "placeholders": {

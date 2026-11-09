@@ -368,6 +368,7 @@
   },
   "reminderCustom": "自訂",
   "reminderPermissionDenied": "尚未允許「謙卦」發送通知，可到手機設定 → 應用程式 → 謙卦 → 通知 開啟",
+  "reminderOpenSettings": "前往通知設定",
   "reminderInitFailed": "通知初始化失敗：{detail}",
   "@reminderInitFailed": {
     "placeholders": {

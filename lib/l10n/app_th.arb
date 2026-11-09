@@ -111,6 +111,7 @@
   "reminderDays": "{days, plural, other{{days} วัน}}",
   "reminderCustom": "กำหนดเอง",
   "reminderPermissionDenied": "การแจ้งเตือนของ Qiangua ปิดอยู่ เปิดได้ที่ การตั้งค่า → แอป → Qiangua → การแจ้งเตือน",
+  "reminderOpenSettings": "เปิดการตั้งค่าการแจ้งเตือน",
   "reminderInitFailed": "เริ่มการแจ้งเตือนไม่สำเร็จ: {detail}",
   "reminderScheduleFailed": "ตั้งเวลาไม่สำเร็จ: {detail}",
   "reminderUnsupported": "แพลตฟอร์มนี้ยังไม่รองรับการเตือน",

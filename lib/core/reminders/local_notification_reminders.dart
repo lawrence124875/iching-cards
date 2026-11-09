@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:io' show Platform;
 
+import 'package:app_settings/app_settings.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:timezone/data/latest.dart' as tz_data;
 import 'package:timezone/timezone.dart' as tz;
@@ -70,6 +71,20 @@ class LocalNotificationReminders implements ReminderService {
       _ready = false;
       _lastFailure = ReminderFailure(ReminderFailureKind.initFailed, '$e');
     }
+  }
+
+  @override
+  Future<bool> hasPermission() async {
+    if (!_ready) await init();
+    if (!_ready) return false;
+    return _requestPermission(ask: false);
+  }
+
+  @override
+  Future<void> openSettings() async {
+    try {
+      await AppSettings.openAppSettings(type: AppSettingsType.notification);
+    } catch (_) {}
   }
 
   Future<bool> _requestPermission({required bool ask}) async {

@@ -111,6 +111,7 @@
   "reminderDays": "{days, plural, other{{days} 日}}",
   "reminderCustom": "日数を指定",
   "reminderPermissionDenied": "「謙卦」の通知が許可されていません。端末の設定 → アプリ → 謙卦 → 通知 でオンにできます",
+  "reminderOpenSettings": "通知設定を開く",
   "reminderInitFailed": "通知を開始できませんでした：{detail}",
   "reminderScheduleFailed": "予約に失敗しました：{detail}",
   "reminderUnsupported": "この端末ではまだお知らせに対応していません",

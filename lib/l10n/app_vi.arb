@@ -111,6 +111,7 @@
   "reminderDays": "{days, plural, other{{days} ngày}}",
   "reminderCustom": "Tự chọn",
   "reminderPermissionDenied": "Thông báo của Quẻ Khiêm đang tắt. Bạn có thể bật trong Cài đặt → Ứng dụng → Quẻ Khiêm → Thông báo.",
+  "reminderOpenSettings": "Mở cài đặt thông báo",
   "reminderInitFailed": "Không khởi động được thông báo: {detail}",
   "reminderScheduleFailed": "Đặt lịch thất bại: {detail}",
   "reminderUnsupported": "Nền tảng này chưa hỗ trợ lời nhắc",

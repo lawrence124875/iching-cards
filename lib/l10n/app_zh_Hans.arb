@@ -111,6 +111,7 @@
   "reminderDays": "{days, plural, other{{days} 天}}",
   "reminderCustom": "自订",
   "reminderPermissionDenied": "尚未允许“谦卦”发送通知，可到手机设置 → 应用程序 → 谦卦 → 通知 打开",
+  "reminderOpenSettings": "前往通知设置",
   "reminderInitFailed": "通知初始化失败：{detail}",
   "reminderScheduleFailed": "调度失败：{detail}",
   "reminderUnsupported": "这个平台尚未支持提醒",

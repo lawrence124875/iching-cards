@@ -23,8 +23,9 @@ import '../../shared/widgets/hexagram_glyph.dart';
 import '../meihua/meihua_reading_page.dart';
 import 'cross_guide.dart';
 
-/// 交叉頁：兩卦對照（共識／部分呼應／分歧）→ 趨勢與應期 → 主題 → 易經怎麼看 → 梅花怎麼看
-/// → 今日小行動 → 反思提問 → 頁底聲明。分歧時兩邊各自說明，不合成結論。
+/// 交叉頁（2026-11-09 改四段）：雙卦交會（共識／部分呼應／分歧、趨勢與應期、主題）
+/// → 梅花：當下局勢（體用＋互卦／變卦轉折）→ 易經：長遠走向（本卦→之卦過程＋重點文字）
+/// → 行動方向（今日小行動＋反思提問）→ 頁底聲明。分歧時兩邊各自說明，不合成結論。
 /// 免費版只顯示對照標題，其餘為會員內容。[review] 為 true 時是從卦記回看：不發事件、不顯示儲存。
 class CrossReadingPage extends StatefulWidget {
   const CrossReadingPage({
@@ -223,9 +224,37 @@ class _CrossReadingPageState extends State<CrossReadingPage> {
         ]),
       ),
       Section(
+        title: cc.s('headings', 'meihua'),
+        child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+          Text(cc.angle('meihua', r.meihua.direction)),
+          const SizedBox(height: 8),
+          Text(l.meihuaTiYong(l.trigramLabel(widget.meihua.ti), l.trigramLabel(widget.meihua.yong)),
+              style: t.bodySmall?.copyWith(color: QianColors.textSub)),
+          const SizedBox(height: 8),
+          Text(cc.s('turning', null, {
+            'mutual': l.hexName(HexagramTable.byNumber(widget.meihua.mutual)),
+            'changed': l.hexName(HexagramTable.byNumber(widget.meihua.changed)),
+          })),
+          const SizedBox(height: 8),
+          TextButton(
+            onPressed: () => Navigator.of(context).push(MaterialPageRoute<void>(
+              builder: (_) => MeihuaReadingPage(cast: widget.meihua, question: widget.question, review: true),
+            )),
+            child: Text(l.meihuaFullReading(l.hexName(meihuaPrimary))),
+          ),
+        ]),
+      ),
+      Section(
         title: cc.s('headings', 'iching'),
         child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
           Text(cc.angle('iching', r.iching.direction)),
+          const SizedBox(height: 8),
+          Text(widget.iching.changed == null
+              ? cc.s('processStatic', null, {'primary': l.hexName(primary)})
+              : cc.s('process', null, {
+                  'primary': l.hexName(primary),
+                  'changed': l.hexName(HexagramTable.byNumber(widget.iching.changed!)),
+                })),
           for (final x in d.texts) ...[
             const SizedBox(height: 8),
             Text(x, style: t.bodyMedium?.copyWith(color: QianColors.rice)),
@@ -239,25 +268,23 @@ class _CrossReadingPageState extends State<CrossReadingPage> {
           ),
         ]),
       ),
-      Section(
-        title: cc.s('headings', 'meihua'),
-        child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-          Text(cc.angle('meihua', r.meihua.direction)),
-          const SizedBox(height: 8),
-          Text(l.meihuaTiYong(l.trigramLabel(widget.meihua.ti), l.trigramLabel(widget.meihua.yong)),
-              style: t.bodySmall?.copyWith(color: QianColors.textSub)),
-          const SizedBox(height: 8),
-          TextButton(
-            onPressed: () => Navigator.of(context).push(MaterialPageRoute<void>(
-              builder: (_) => MeihuaReadingPage(cast: widget.meihua, question: widget.question, review: true),
-            )),
-            child: Text(l.meihuaFullReading(l.hexName(meihuaPrimary))),
-          ),
-        ]),
-      ),
-      if (actions.isNotEmpty) Section(title: cc.s('headings', 'action'), child: Text(CrossResult.pick(actions, seed))),
-      if (questions.isNotEmpty)
-        Section(title: cc.s('headings', 'question'), child: Text(CrossResult.pick(questions, seed))),
+      if (actions.isNotEmpty || questions.isNotEmpty)
+        Section(
+          title: cc.s('headings', 'plan'),
+          child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+            if (actions.isNotEmpty) ...[
+              Text(cc.s('headings', 'action'), style: t.bodySmall?.copyWith(color: QianColors.textSub)),
+              const SizedBox(height: 4),
+              Text(CrossResult.pick(actions, seed)),
+            ],
+            if (questions.isNotEmpty) ...[
+              if (actions.isNotEmpty) const SizedBox(height: 12),
+              Text(cc.s('headings', 'question'), style: t.bodySmall?.copyWith(color: QianColors.textSub)),
+              const SizedBox(height: 4),
+              Text(CrossResult.pick(questions, seed)),
+            ],
+          ]),
+        ),
       if (!widget.review && _services.journal != null && _services.flags.featureEnabled('journal')) ...[
         const SizedBox(height: 32),
         Center(

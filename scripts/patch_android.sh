@@ -152,11 +152,33 @@ activity, gradle = sys.argv[1], sys.argv[2]
 k = open(activity, encoding="utf-8").read()
 if "setDecorFitsSystemWindows" not in k:
     k = k.replace("import com.ryanheise.audioservice.AudioServiceActivity",
-                  "import android.os.Bundle\nimport androidx.core.view.WindowCompat\nimport com.ryanheise.audioservice.AudioServiceActivity", 1)
+                  "import android.content.Intent\nimport android.net.Uri\nimport android.os.Build\nimport android.os.Bundle\nimport android.provider.Settings\nimport androidx.core.view.WindowCompat\nimport com.ryanheise.audioservice.AudioServiceActivity\nimport io.flutter.embedding.engine.FlutterEngine\nimport io.flutter.plugin.common.MethodChannel", 1)
     body = """class MainActivity : AudioServiceActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         WindowCompat.setDecorFitsSystemWindows(window, false)
         super.onCreate(savedInstanceState)
+    }
+
+    // 每日提醒：通知權限被拒、系統不再跳對話框時開本 App 的通知設定頁（lib/core/reminders/local_notification_reminders.dart）
+    override fun configureFlutterEngine(flutterEngine: FlutterEngine) {
+        super.configureFlutterEngine(flutterEngine)
+        MethodChannel(flutterEngine.dartExecutor.binaryMessenger, "qiangua/settings").setMethodCallHandler { call, result ->
+            if (call.method != "openNotificationSettings") {
+                result.notImplemented()
+                return@setMethodCallHandler
+            }
+            val intent = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                Intent(Settings.ACTION_APP_NOTIFICATION_SETTINGS).putExtra(Settings.EXTRA_APP_PACKAGE, packageName)
+            } else {
+                Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS, Uri.parse("package:$packageName"))
+            }
+            try {
+                startActivity(intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK))
+                result.success(true)
+            } catch (e: Exception) {
+                result.success(false)
+            }
+        }
     }
 }
 """

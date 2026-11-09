@@ -67,11 +67,14 @@ void main() {
     expect(DailyReminder.plan(DateTime(2026, 10, 29), s.copyWith(enabled: false), castToday: false), isEmpty);
   });
 
-  test('refresh 只在第一次請求權限，重排會取代舊的', () async {
+  test('啟動不請求權限，第一次看到解讀才請求一次，重排會取代舊的', () async {
     final r = _FakeReminders();
     final d = DailyReminder(reminders: r, store: MemoryDailyReminderStore());
     await d.refresh(castToday: false, message: msg);
-    await d.refresh(castToday: true, message: msg);
+    expect(r.asks.where((a) => a), isEmpty);
+    expect((await d.store.read()).asked, isFalse);
+    await d.refresh(castToday: true, message: msg, allowAsk: true);
+    await d.refresh(castToday: true, message: msg, allowAsk: true);
     expect(r.scheduled.length, DailyReminder.days);
     expect(r.asks.where((a) => a).length, 1);
     expect((await d.store.read()).asked, isTrue);
@@ -90,13 +93,15 @@ void main() {
     expect(DailyReminderSettings.fromJson({}).enabled, isTrue);
   });
 
-  test('拒絕通知權限就存成關閉，之後不再請求', () async {
+  test('啟動時沒權限不改開關；起卦時拒絕就存成關閉，之後不再請求', () async {
     final r = _DeniedReminders();
     final d = DailyReminder(reminders: r, store: MemoryDailyReminderStore());
     await d.refresh(castToday: false, message: msg);
+    expect((await d.store.read()).enabled, isTrue);
+    await d.refresh(castToday: true, message: msg, allowAsk: true);
     final saved = await d.store.read();
     expect((saved.enabled, saved.asked), (false, true));
-    await d.refresh(castToday: false, message: msg);
-    expect(r.asks, [true]);
+    await d.refresh(castToday: true, message: msg, allowAsk: true);
+    expect(r.asks, [false, true]);
   });
 }

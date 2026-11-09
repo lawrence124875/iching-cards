@@ -40,7 +40,7 @@ class _DailyReminderDialogState extends State<_DailyReminderDialog> with Widgets
   void initState() {
     super.initState();
     WidgetsBinding.instance.addObserver(this);
-    if (_s.enabled) _syncPermission();
+    if (_s.enabled && _s.asked) _syncPermission(); // 還沒問過權限（尚未起卦）就維持開啟
   }
 
   @override

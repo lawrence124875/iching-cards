@@ -1,10 +1,11 @@
 import 'dart:async';
 import 'dart:io' show Platform;
 
-import 'package:app_settings/app_settings.dart';
+import 'package:flutter/services.dart' show MethodChannel;
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:timezone/data/latest.dart' as tz_data;
 import 'package:timezone/timezone.dart' as tz;
+import 'package:url_launcher/url_launcher.dart';
 
 import 'reminder_service.dart';
 
@@ -83,7 +84,12 @@ class LocalNotificationReminders implements ReminderService {
   @override
   Future<void> openSettings() async {
     try {
-      await AppSettings.openAppSettings(type: AppSettingsType.notification);
+      if (Platform.isIOS) {
+        await launchUrl(Uri.parse('app-settings:'));
+      } else {
+        // MainActivity 的 MethodChannel（scripts/patch_android.sh 加入）
+        await const MethodChannel('qiangua/settings').invokeMethod<bool>('openNotificationSettings');
+      }
     } catch (_) {}
   }
 

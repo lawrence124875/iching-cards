@@ -120,8 +120,11 @@ class LocalNotificationReminders implements ReminderService {
   }) async {
     if (!_ready) await init(); // 啟動時失敗就再試一次
     if (!_ready) return false;
+    final watch = Stopwatch()..start();
     if (!await _requestPermission(ask: askPermission)) {
-      _lastFailure = const ReminderFailure(ReminderFailureKind.permissionDenied);
+      // 系統對話框要使用者按，至少要好幾百毫秒；很快就回來表示系統沒跳（已拒絕過、不再問）
+      final skipped = askPermission && watch.elapsedMilliseconds < 500;
+      _lastFailure = ReminderFailure(ReminderFailureKind.permissionDenied, '', skipped);
       return false;
     }
     final daily = kind == ReminderKind.daily;

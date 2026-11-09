@@ -41,10 +41,13 @@ enum ReminderFailureKind { permissionDenied, initFailed, scheduleFailed, unsuppo
 
 /// 提醒失敗的原因；[detail] 為例外訊息（方便使用者回報）。
 class ReminderFailure {
-  const ReminderFailure(this.kind, [this.detail = '']);
+  const ReminderFailure(this.kind, [this.detail = '', this.promptSkipped = false]);
 
   final ReminderFailureKind kind;
   final String detail;
+
+  /// 請求了權限但系統沒跳對話框（已拒絕過、系統不再問），只能請使用者到通知設定開。
+  final bool promptSkipped;
 }
 
 /// 不做任何事（測試或尚未支援的平台）。

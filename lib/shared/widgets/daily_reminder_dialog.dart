@@ -7,8 +7,8 @@ import '../../core/reminders/reminder_service.dart';
 import '../../l10n/l10n.dart';
 
 /// 每日一卦提醒的設定（首頁選單）：開關＋時間。改了就馬上重排。
-/// 沒有通知權限就顯示關閉；打開時再請求一次權限，被拒（系統不再跳對話框）就提供「前往通知設定」，
-/// 從設定回來已允許就自動開啟。
+/// 沒有通知權限就顯示關閉；打開開關時再請求一次權限，系統不再跳對話框就直接帶到通知設定，
+/// 從設定回來已允許就自動開啟（另留「前往通知設定」按鈕）。
 Future<void> showDailyReminderDialog(BuildContext context) async {
   final services = AppServices.of(context);
   final daily = services.dailyReminder;
@@ -90,6 +90,7 @@ class _DailyReminderDialogState extends State<_DailyReminderDialog> with Widgets
         _needSettings = true;
         _error = l.reminderPermissionDenied;
       });
+      if (ask && failure!.promptSkipped) await widget.services.reminders.openSettings();
       return;
     }
     setState(() => _error = l.reminderFailed(l.reminderFailureText(failure)));

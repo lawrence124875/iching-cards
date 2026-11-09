@@ -14,16 +14,6 @@ class ReadingShown extends AppEvent {
   final int? changed;
 }
 
-/// 看完一次解讀、離開解讀頁（從卦記回看的不算；評分邀請用）。
-class ReadingFinished extends AppEvent {
-  const ReadingFinished();
-}
-
-/// 回看一筆較早（12 小時以上）的卦記、離開該頁（評分邀請用）。
-class JournalRevisited extends AppEvent {
-  const JournalRevisited();
-}
-
 /// 存了一筆卦記（不帶任何文字內容）。
 class JournalSaved extends AppEvent {
   const JournalSaved({required this.hasReminder});

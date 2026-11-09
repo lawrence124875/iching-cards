@@ -94,7 +94,6 @@ class _CrossReadingPageState extends State<CrossReadingPage> {
   void initState() {
     super.initState();
     if (widget.review) return;
-    _events = _services.events; // 先取好，dispose 時不能再查 context
     WidgetsBinding.instance.addPostFrameCallback((_) {
       _services.events.emit(ReadingShown(
         methodId: 'cross',
@@ -120,14 +119,6 @@ class _CrossReadingPageState extends State<CrossReadingPage> {
     if (entry == null) return;
     _services.events.emit(JournalSaved(hasReminder: entry.reminderAt != null));
     if (mounted) setState(() => _saved = true);
-  }
-
-  EventBus? _events; // 只有不是回看時才有：離開時通知評分邀請
-
-  @override
-  void dispose() {
-    _events?.emit(const ReadingFinished());
-    super.dispose();
   }
 
   @override

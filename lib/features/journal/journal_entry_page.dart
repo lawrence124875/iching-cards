@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import '../../app/services.dart';
 import '../../app/theme.dart';
 import '../../core/content/hexagram_content.dart';
-import '../../core/events/event_bus.dart';
 import '../../core/iching/cast_result.dart';
 import '../../core/iching/hexagram_table.dart';
 import '../../core/journal/journal_entry.dart';
@@ -127,20 +126,7 @@ class _JournalEntryPageState extends State<JournalEntryPage> {
     if (yes != true) return;
     await _services.reminders.cancel(_entry!.notificationId);
     await _services.journal?.delete(_entry!.id);
-    _deleted = true;
     if (mounted) Navigator.pop(context);
-  }
-
-  bool _deleted = false;
-
-  @override
-  void dispose() {
-    // 回看較早的卦記（不是剛存好的那筆）→ 通知評分邀請（ASO §4.1）
-    final e = _entry;
-    if (e != null && !_deleted && DateTime.now().difference(e.createdAt) >= const Duration(hours: 12)) {
-      _services.events.emit(const JournalRevisited());
-    }
-    super.dispose();
   }
 
   @override

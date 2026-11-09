@@ -39,6 +39,7 @@
   "drawFlip": "Descubrir",
   "drawAgain": "Sacar otra vez",
   "coinsInstructions": "Cara vale 3 y cruz vale 2; las tres monedas suman una línea. Lanza seis veces, de abajo arriba. El 6 y el 9 son líneas mutantes.",
+  "crossCastNote": "El I Ching muestra la esencia del asunto y su principio; la Flor de Ciruelo, el momento y la tendencia actuales. Al abrir la lectura tras lanzar, el hexagrama de la Flor de Ciruelo se forma automáticamente con la hora de ese instante.",
   "coinsToss": "Lanzamiento {n} de 6",
   "coinsTossAll": "Lanzar todo de una vez",
   "coinsRestart": "Empezar de nuevo",

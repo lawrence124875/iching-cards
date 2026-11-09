@@ -39,6 +39,7 @@
   "drawFlip": "Lật thẻ",
   "drawAgain": "Rút lại",
   "coinsInstructions": "Mặt ngửa tính 3, mặt sấp tính 2; tổng ba đồng xu cho ra một hào. Gieo sáu lần, từ dưới lên trên. 6 và 9 là hào động.",
+  "crossCastNote": "Kinh Dịch xem \"bản chất và đạo lý của sự việc\", Mai Hoa xem \"thời cơ và xu hướng lúc này\". Khi gieo xong và mở phần giải, quẻ Mai Hoa được tự động lập theo thời gian lúc đó.",
   "coinsToss": "Lần gieo thứ {n}",
   "coinsTossAll": "Gieo một lần cả sáu",
   "coinsRestart": "Bắt đầu lại",

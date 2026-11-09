@@ -39,6 +39,7 @@
   "drawFlip": "Revelar",
   "drawAgain": "Tirar outra vez",
   "coinsInstructions": "Cara vale 3 e coroa vale 2; as três moedas somadas formam uma linha. Lance seis vezes, de baixo para cima. O 6 e o 9 são linhas mutáveis.",
+  "crossCastNote": "O I Ching mostra a essência da questão e seu princípio; a Flor de Ameixeira, o momento e a tendência atuais. Ao abrir a leitura depois de lançar, o hexagrama da Flor de Ameixeira é formado automaticamente com a hora daquele instante.",
   "coinsToss": "Lançamento {n} de 6",
   "coinsTossAll": "Lançar tudo de uma vez",
   "coinsRestart": "Recomeçar",

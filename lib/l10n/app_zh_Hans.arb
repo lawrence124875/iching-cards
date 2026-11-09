@@ -39,6 +39,7 @@
   "drawFlip": "翻牌",
   "drawAgain": "重新抽",
   "coinsInstructions": "阳面 3、阴面 2，三枚相加得一爻；由下往上掷六次，6 与 9 为变爻。",
+  "crossCastNote": "易经看「事情的本质与道理」，梅花看「当下时机与趋势」。掷完卦看解读时，会自动以当下时间起梅花卦，不必另外操作。",
   "coinsToss": "掷第 {n} 次",
   "coinsTossAll": "一次掷完",
   "coinsRestart": "重新起卦",

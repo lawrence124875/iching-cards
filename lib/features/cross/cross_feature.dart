@@ -63,6 +63,7 @@ class _CrossCastPageState extends State<CrossCastPage> {
         instructions: (l) => l.coinsInstructions,
         stepLabel: (l, n) => l.coinsToss(n),
         allLabel: (l) => l.coinsTossAll,
+        note: (l) => l.crossCastNote,
         onDone: _done,
       );
 }

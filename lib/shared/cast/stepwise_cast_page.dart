@@ -22,6 +22,7 @@ class StepwiseCastPage extends StatefulWidget {
     required this.stepLabel,
     required this.allLabel,
     this.onDone,
+    this.note,
   });
 
   final StepwiseMethod method;
@@ -30,6 +31,9 @@ class StepwiseCastPage extends StatefulWidget {
   /// 求第 n 爻的按鈕文字。
   final String Function(AppLocalizations l, int n) stepLabel;
   final String Function(AppLocalizations l) allLabel;
+
+  /// 說明下方的提示框（雙卦交叉用來說明兩卦各看什麼）；null 不顯示。
+  final String Function(AppLocalizations l)? note;
 
   /// 擲完後按「看解讀」：預設開一般解讀頁；雙卦交叉改走自己的頁面（插頁廣告仍在這裡先播）。
   final Future<void> Function(BuildContext context, CastResult cast, String question)? onDone;
@@ -108,6 +112,17 @@ class _StepwiseCastPageState extends State<StepwiseCastPage> {
         textAlign: TextAlign.center,
         style: t.bodySmall,
       ),
+      if (widget.note != null)
+        Container(
+          margin: const EdgeInsets.only(top: 8),
+          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+          decoration: BoxDecoration(
+            color: QianColors.earth.withValues(alpha: 0.08),
+            border: Border.all(color: QianColors.earth.withValues(alpha: 0.45)),
+            borderRadius: BorderRadius.circular(10),
+          ),
+          child: Text(widget.note!(l), textAlign: TextAlign.center, style: t.bodySmall),
+        ),
       // 擲完六次就不再寫想問的事（存進卦記時仍可修改）
       QuestionPrompt(
         question: _question,

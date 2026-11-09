@@ -46,6 +46,7 @@
   "drawFlip": "Reveal",
   "drawAgain": "Draw Again",
   "coinsInstructions": "Heads count 3 and tails 2; three coins add up to one line. Toss six times from the bottom up. 6 and 9 are changing lines.",
+  "crossCastNote": "The I Ching shows the nature of the matter and its underlying principle; Plum Blossom shows the timing and trend of this moment. When you open the reading after tossing, the Plum Blossom hexagram is cast automatically from the current time.",
   "coinsToss": "Toss {n} of 6",
   "@coinsToss": {
     "placeholders": {

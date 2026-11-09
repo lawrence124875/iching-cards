@@ -46,6 +46,7 @@
   "drawFlip": "Buka",
   "drawAgain": "Ambil Lagi",
   "coinsInstructions": "Sisi gambar bernilai 3 dan sisi angka bernilai 2; jumlah tiga koin menjadi satu garis. Lempar enam kali dari bawah ke atas. 6 dan 9 adalah garis berubah.",
+  "crossCastNote": "I Ching melihat inti persoalan dan prinsipnya; Bunga Plum melihat keadaan saat ini dan arahnya. Saat membuka bacaan setelah selesai melempar, heksagram Bunga Plum disusun otomatis dari waktu saat itu.",
   "coinsToss": "Lemparan {n} dari 6",
   "@coinsToss": {
     "placeholders": {

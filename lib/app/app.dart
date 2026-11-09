@@ -32,7 +32,8 @@ class _IchingAppState extends State<IchingApp> {
     final reminders = services.reminders;
     _taps = reminders.taps.listen(_open);
     // 看到解讀＝今天起過卦：每日一卦提醒改從明天開始
-    _readings = services.events.on<ReadingShown>().listen((_) => _refreshDaily(services));
+    // 第一次看到解讀時才請求通知權限（啟動時不請求，避免英文 App v9～10 的啟動當機）
+    _readings = services.events.on<ReadingShown>().listen((_) => _refreshDaily(services, allowAsk: true));
     WidgetsBinding.instance.addPostFrameCallback((_) async {
       final p = reminders.takeLaunchPayload();
       if (p != null) {
@@ -43,15 +44,15 @@ class _IchingAppState extends State<IchingApp> {
         final nav = _navigatorKey.currentState;
         if (intro != null && nav != null && !await intro.seen()) await showIntro(nav);
       }
-      // 介紹看完才排每日一卦提醒：第一次會請求通知權限（預設開啟）
+      // 介紹看完才排每日一卦提醒（預設開啟）；啟動時不請求權限，已允許就照常排
       await _refreshDaily(services);
     });
   }
 
-  Future<void> _refreshDaily(Services services) async {
+  Future<void> _refreshDaily(Services services, {bool allowAsk = false}) async {
     final daily = services.dailyReminder;
     if (daily == null) return;
-    await daily.refresh(castToday: await services.quota.castToday(), message: L10n.current.dailyMessage);
+    await daily.refresh(castToday: await services.quota.castToday(), message: L10n.current.dailyMessage, allowAsk: allowAsk);
   }
 
   /// 通知帶來的 payload 交給認得它的功能（例如卦記開啟該筆紀錄）。

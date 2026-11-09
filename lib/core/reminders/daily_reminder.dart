@@ -121,16 +121,20 @@ class DailyReminder {
     return ok;
   }
 
-  /// 啟動或起卦後呼叫：第一次（還沒問過權限）會請求一次權限。
-  /// 沒有通知權限（拒絕或之後在系統關掉）就把開關存成關閉，設定裡顯示的才是真的狀態。
-  Future<void> refresh({required bool castToday, required ({String title, String body}) message}) async {
+  /// 啟動或起卦後呼叫。[allowAsk]（起卦後看到解讀時為 true）：第一次（還沒問過權限）會請求一次權限；
+  /// 啟動時不請求（英文 App v9～10 啟動時請求權限會當機），只默默排好。
+  /// 問過之後沒有通知權限（拒絕或之後在系統關掉）就把開關存成關閉，設定裡顯示的才是真的狀態。
+  Future<void> refresh({
+    required bool castToday,
+    required ({String title, String body}) message,
+    bool allowAsk = false,
+  }) async {
     final s = await store.read();
-    final ask = s.enabled && !s.asked;
+    final ask = allowAsk && s.enabled && !s.asked;
     final ok = await apply(s, castToday: castToday, message: message, askPermission: ask);
     var next = ask ? s.copyWith(asked: true) : s;
-    if (s.enabled && !ok && reminders.lastFailure?.kind == ReminderFailureKind.permissionDenied) {
-      next = next.copyWith(enabled: false);
-    }
+    final denied = !ok && reminders.lastFailure?.kind == ReminderFailureKind.permissionDenied;
+    if (s.enabled && denied && next.asked) next = next.copyWith(enabled: false);
     if (ask || next.enabled != s.enabled) await store.write(next);
   }
 }

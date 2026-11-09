@@ -12,7 +12,10 @@ import 'core/audio/just_audio_playback.dart';
 import 'core/admob/admob_ads.dart';
 import 'core/firebase/firebase_feedback.dart';
 import 'core/firebase/firebase_telemetry.dart';
+import 'core/monetization/cast_quota.dart';
 import 'core/monetization/free_limits.dart';
+import 'core/review/review_prompter.dart';
+import 'core/review/store_app_review.dart';
 import 'core/revenuecat/revenuecat_premium.dart';
 import 'core/telemetry/analytics_listener.dart';
 import 'core/telemetry/usage_sharing.dart';
@@ -58,6 +61,8 @@ Future<void> main() async {
     feedback: telemetry.available ? const FirestoreFeedbackSender() : null,
   );
   AnalyticsListener(services.events, services.analytics); // 全 App 存活期間都在，不需 dispose
+  // 評分邀請（ASO §4.1）：第 3 次看完解讀或回看卦記時，每 90 天最多一次
+  ReviewPrompter(services.events, const StoreAppReview(), FileQuotaStorage(fileName: 'review.json'));
   await services.reminders.init(); // 不拋例外；失敗時提醒功能停用
   runApp(AppServices(services: services, child: const IchingApp()));
   appStarted = true;

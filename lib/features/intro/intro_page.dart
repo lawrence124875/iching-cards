@@ -40,6 +40,7 @@ class _IntroPageState extends State<IntroPage> {
     final l = context.l10n;
     final pages = [
       (l.intro1Title, l.intro1Body),
+      (l.intro6Title, l.intro6Body),
       (l.intro2Title, l.intro2Body),
       (l.intro3Title, l.intro3Body),
       (l.intro4Title, l.intro4Body),

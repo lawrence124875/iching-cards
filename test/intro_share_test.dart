@@ -95,10 +95,10 @@ void main() {
         tester.view.devicePixelRatio = 3;
         addTearDown(tester.view.reset);
         await tester.pumpWidget(app(const IntroPage()));
-        for (var i = 0; i < 5; i++) {
+        for (var i = 0; i < 6; i++) {
           await tester.pumpAndSettle();
           expect(tester.takeException(), isNull);
-          if (i < 4) await tester.tap(find.byType(FilledButton));
+          if (i < 5) await tester.tap(find.byType(FilledButton));
         }
       });
     }
@@ -146,7 +146,7 @@ void main() {
         await tester.pumpAndSettle();
         await tester.tap(find.text('intro'));
         await tester.pumpAndSettle();
-        for (var i = 0; i < 5; i++) {
+        for (var i = 0; i < 6; i++) {
           expect(tester.takeException(), isNull);
           await tester.tap(find.byType(FilledButton));
           await tester.pumpAndSettle();

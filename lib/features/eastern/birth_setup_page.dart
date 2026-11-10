@@ -32,6 +32,15 @@ class _BirthSetupPageState extends State<BirthSetupPage> {
 
   String _two(int n) => n.toString().padLeft(2, '0');
 
+  /// 日期輸入框的提示：依目前語言實際能解析的格式（例如繁中 yyyy/mm/dd），
+  /// 而不是 Flutter 內建翻譯（部分語言寫成 mm/dd/yyyy，與實際格式不符）。
+  String? _dateHint() {
+    final sample = MaterialLocalizations.of(context).formatCompactDate(DateTime(2001, 11, 22));
+    final letters = ec.s('setup.dateLetters').split('|');
+    if (letters.length != 3 || !sample.contains('2001') || !sample.contains('11') || !sample.contains('22')) return null;
+    return sample.replaceFirst('2001', letters[0]).replaceFirst('11', letters[1]).replaceFirst('22', letters[2]);
+  }
+
   Future<void> _pickDate() async {
     final d = await showDatePicker(
       context: context,
@@ -39,6 +48,7 @@ class _BirthSetupPageState extends State<BirthSetupPage> {
       firstDate: DateTime(1900),
       lastDate: DateTime.now(),
       initialEntryMode: DatePickerEntryMode.input,
+      fieldHintText: _dateHint(),
     );
     if (d != null) setState(() => _date = d);
   }
@@ -59,6 +69,12 @@ class _BirthSetupPageState extends State<BirthSetupPage> {
             trailing: _cityId == null ? const Icon(Icons.check) : null,
             onTap: () => Navigator.pop(ctx, 'off'),
           ),
+          ListTile(
+            title: Text(ec.s('setup.cityCustom')),
+            subtitle: MeihuaCities.custom(_cityId ?? '') == null ? null : Text(MeihuaCities.custom(_cityId!)!.name),
+            trailing: MeihuaCities.custom(_cityId ?? '') != null ? const Icon(Icons.check) : const Icon(Icons.edit_outlined),
+            onTap: () => Navigator.pop(ctx, 'custom'),
+          ),
           for (final c in MeihuaCities.all)
             ListTile(
               title: Text(c.name),
@@ -69,7 +85,46 @@ class _BirthSetupPageState extends State<BirthSetupPage> {
       ),
     );
     if (picked == null || !mounted) return;
+    if (picked == 'custom') {
+      final id = await _askLongitude();
+      if (id != null && mounted) setState(() => _cityId = id);
+      return;
+    }
     setState(() => _cityId = picked is MeihuaCity ? picked.id : null);
+  }
+
+  /// 自行輸入經度（東經為正、西經為負）；回傳自訂 id 或 null（取消）。
+  Future<String?> _askLongitude() async {
+    final current = MeihuaCities.custom(_cityId ?? '');
+    final ctrl = TextEditingController(text: current?.longitude.toStringAsFixed(2) ?? '');
+    double? parse(String v) {
+      final x = double.tryParse(v.trim().replaceAll(',', '.'));
+      return x != null && x >= -180 && x <= 180 ? x : null;
+    }
+
+    final lon = await showDialog<double>(
+      context: context,
+      builder: (ctx) => StatefulBuilder(
+        builder: (ctx, setD) => AlertDialog(
+          title: Text(ec.s('setup.cityCustom')),
+          content: TextField(
+            controller: ctrl,
+            autofocus: true,
+            keyboardType: const TextInputType.numberWithOptions(signed: true, decimal: true),
+            decoration: InputDecoration(helperText: ec.s('setup.cityCustomHint'), helperMaxLines: 3),
+            onChanged: (_) => setD(() {}),
+          ),
+          actions: [
+            TextButton(onPressed: () => Navigator.pop(ctx), child: Text(ec.s('setup.cancel'))),
+            TextButton(
+              onPressed: parse(ctrl.text) == null ? null : () => Navigator.pop(ctx, parse(ctrl.text)),
+              child: Text(ec.s('setup.save')),
+            ),
+          ],
+        ),
+      ),
+    );
+    return lon == null ? null : MeihuaCities.customId(lon);
   }
 
   Future<void> _save() async {

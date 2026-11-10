@@ -165,7 +165,9 @@ class _CrossReadingPageState extends State<CrossReadingPage> {
           if (snap.connectionState != ConnectionState.done) return const Center(child: CircularProgressIndicator());
           final d = snap.data;
           if (d == null) return Center(child: Text(l.learnMissing));
-          _easternRecord = d.zyear == null ? null : EasternRecord(birth: d.profile!.toJson(), systems: const ['ziwei']);
+          _easternRecord = d.profile == null
+              ? null
+              : EasternRecord(birth: d.profile!.toJson(), systems: [if (d.zyear != null) 'ziwei', 'bazi']);
           return ValueListenableBuilder<bool>(
             valueListenable: _services.premium.isPremium,
             builder: (context, premium, _) => ListView(
@@ -179,10 +181,10 @@ class _CrossReadingPageState extends State<CrossReadingPage> {
                   ),
                 _Glyphs(iching: widget.iching, meihua: widget.meihua, cc: d.cc),
                 const SizedBox(height: 20),
-                if (d.zyear != null)
+                if (d.profile != null)
                   Padding(
                     padding: const EdgeInsets.only(bottom: 8),
-                    child: Text(l.methodCross3,
+                    child: Text(d.zyear != null ? l.methodCross4 : l.methodCross3,
                         textAlign: TextAlign.center,
                         style: Theme.of(context).textTheme.bodySmall?.copyWith(color: QianColors.textSub)),
                   ),
@@ -338,27 +340,45 @@ class _CrossReadingPageState extends State<CrossReadingPage> {
 }
 
 extension on _CrossReadingPageState {
-  /// 第二段「年度大勢（紫微）」：流年命宮、三系統合看評語（27 段矩陣）、三方主題。
-  /// 沒有出生資料時給填寫入口；沒有時辰時說明無法加入。
+  /// 第二段「年度大勢（紫微）」：流年命宮、三系統合看評語（27 段矩陣）、三方主題，
+  /// 再加八字本月能量的語氣修飾（八字不當第四軸）。沒有出生資料時給填寫入口；沒有時辰時只有八字。
   List<Widget> _ziweiSection(BuildContext context, _Data d) {
     final ec = d.ec;
     if (ec == null) return const [];
     final l = context.l10n;
     final t = Theme.of(context).textTheme;
-    final z = d.zyear;
-    if (z == null) {
+    final p = d.profile;
+    if (p == null) {
       if (widget.review) return const [];
       return [
         Section(
           title: ec.s('cross.heading'),
           child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-            Text(d.profile == null ? ec.s('cross.addBirth') : ec.s('cross.noHour'), style: t.bodySmall),
-            if (d.profile == null)
-              TextButton(
-                onPressed: () => Navigator.of(context)
-                    .push(MaterialPageRoute<void>(builder: (_) => BirthSetupPage(ec: ec))),
-                child: Text(ec.s('cross.addBirthButton')),
-              ),
+            Text(ec.s('cross.addBirth'), style: t.bodySmall),
+            TextButton(
+              onPressed: () => Navigator.of(context).push(MaterialPageRoute<void>(builder: (_) => BirthSetupPage(ec: ec))),
+              child: Text(ec.s('cross.addBirthButton')),
+            ),
+          ]),
+        ),
+      ];
+    }
+    final now = widget.at ?? DateTime.now();
+    final bazi = p.monthAt(now);
+    final baziLine = ec.s('cross.baziLine', {
+      'ganzhi': '${stemChars[bazi.monthStem]}${branchChars[bazi.monthBranch]}',
+      'energy': ec.s('bazi.energy.${bazi.energy.name}'),
+      'modifier': ec.s('bazi.modifier.${bazi.energy.name}'),
+    });
+    final z = d.zyear;
+    if (z == null) {
+      return [
+        Section(
+          title: ec.s('cross.heading'),
+          child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+            Text(ec.s('cross.noHour'), style: t.bodySmall),
+            const SizedBox(height: 8),
+            Text(baziLine),
           ]),
         ),
       ];
@@ -369,7 +389,7 @@ extension on _CrossReadingPageState {
     final it = themeOfHexagram(widget.iching.primary);
     final mt = themeOfHexagram(widget.meihua.primary);
     final stars = z.majors.stars.map((x) => ec.s('ziwei.stars.${x.name}')).join(l.separator);
-    final y = ziweiYearAt(widget.at ?? DateTime.now());
+    final y = ziweiYearAt(now);
     final key = '${z.trend.name}_${r.iching.direction.name}_${r.meihua.direction.name}';
     return [
       Section(
@@ -384,9 +404,12 @@ extension on _CrossReadingPageState {
           const SizedBox(height: 8),
           Text(ec.s('cross.matrix.$key'), style: t.bodyMedium?.copyWith(color: QianColors.rice)),
           const SizedBox(height: 8),
-          Text(zt == it && it == mt
-              ? ec.s('cross.themesShared', {'themes': theme(zt)})
-              : ec.s('cross.themesApart', {'ziwei': theme(zt), 'iching': theme(it), 'meihua': theme(mt)}),
+          Text(baziLine),
+          const SizedBox(height: 8),
+          Text(
+              zt == it && it == mt
+                  ? ec.s('cross.themesShared', {'themes': theme(zt)})
+                  : ec.s('cross.themesApart', {'ziwei': theme(zt), 'iching': theme(it), 'meihua': theme(mt)}),
               style: t.bodySmall),
         ]),
       ),

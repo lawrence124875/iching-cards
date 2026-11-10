@@ -4,6 +4,7 @@ import 'package:lunar/lunar.dart';
 
 import '../meihua/lunar_moment.dart';
 import '../meihua/solar_time.dart';
+import 'bazi.dart';
 import 'ziwei.dart';
 
 /// 生辰（國曆，手機當地時區）。只存在手機上（`birth_profile.json`），不上傳、不進卦記備份。
@@ -60,6 +61,31 @@ class BirthProfile {
       hour: Lunar.fromDate(effectiveTime).getTimeZhiIndex(),
     );
   }
+}
+
+extension BirthBazi on BirthProfile {
+  /// 日主（日干）；23 點起的子時算次日。不知道時辰時以出生日期為準（三柱）。
+  int get dayStem => Lunar.fromDate(_dayTimeOf(this)).getDayGanIndex();
+
+  /// 此刻（節氣換年、換月）的本月能量。
+  BaziMonth monthAt(DateTime now) {
+    final l = Lunar.fromDate(now);
+    return BaziMonth(
+      dayStem: dayStem,
+      yearStem: l.getYearGanIndexExact(),
+      yearBranch: l.getYearZhiIndexExact(),
+      monthStem: l.getMonthGanIndexExact(),
+      monthBranch: l.getMonthZhiIndexExact(),
+    );
+  }
+}
+
+DateTime _dayTimeOf(BirthProfile p) => p._dayTime;
+
+/// 此刻這個節氣月從哪一天開始（顯示用）。
+DateTime baziMonthStart(DateTime now) {
+  final s = Lunar.fromDate(now).getPrevJie().getSolar();
+  return DateTime(s.getYear(), s.getMonth(), s.getDay());
 }
 
 /// 此刻的紫微流年（農曆正月初一換年）：年份、天干、地支。

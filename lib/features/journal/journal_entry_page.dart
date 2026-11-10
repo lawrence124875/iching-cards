@@ -21,6 +21,7 @@ import '../../shared/widgets/reminder_picker.dart';
 import '../../shared/widgets/adaptive_layout.dart';
 import '../cross/cross_feedback.dart';
 import '../cross/cross_reading_page.dart';
+import '../eastern/bazi_month_page.dart';
 import '../eastern/ziwei_year_page.dart';
 import '../meihua/meihua_reading_page.dart';
 
@@ -161,7 +162,7 @@ class _JournalEntryPageState extends State<JournalEntryPage> {
         Text('${formatDateTime(e.createdAt)}${l.separator}${l.journalMethodLabel(e.labelKey)}',
             textAlign: TextAlign.center, style: t.bodySmall),
         const SizedBox(height: 16),
-        const Icon(Icons.wb_twilight_outlined, size: 48, color: QianColors.earth),
+        Icon(e.methodId == 'bazi' ? Icons.bolt_outlined : Icons.wb_twilight_outlined, size: 48, color: QianColors.earth),
         const SizedBox(height: 8),
         Text(l.journalMethodLabel(e.labelKey), textAlign: TextAlign.center, style: t.headlineSmall),
         Section(
@@ -181,7 +182,9 @@ class _JournalEntryPageState extends State<JournalEntryPage> {
         if (birth != null)
           OutlinedButton(
             onPressed: () => Navigator.of(context).push(MaterialPageRoute<void>(
-              builder: (_) => ZiweiYearPage(profile: birth, at: e.createdAt, review: true),
+              builder: (_) => e.methodId == 'bazi'
+                  ? BaziMonthPage(profile: birth, at: e.createdAt, review: true)
+                  : ZiweiYearPage(profile: birth, at: e.createdAt, review: true),
             )),
             child: Text(l.journalViewReading),
           ),

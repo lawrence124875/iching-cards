@@ -6,6 +6,7 @@ import '../../core/eastern/birth_profile.dart';
 import '../../l10n/l10n.dart';
 import '../../shared/premium/ad_banner.dart';
 import '../../shared/widgets/adaptive_layout.dart';
+import 'bazi_month_page.dart';
 import 'birth_setup_page.dart';
 import 'birth_store.dart';
 import 'ziwei_year_page.dart';
@@ -62,6 +63,14 @@ class _EasternHomePageState extends State<EasternHomePage> {
                     subtitle: ec.s('ziwei.entrySub'),
                     onTap: () => Navigator.of(context)
                         .push(MaterialPageRoute<void>(builder: (_) => ZiweiYearPage(profile: p))),
+                  ),
+                  const SizedBox(height: 12),
+                  EasternEntry(
+                    icon: Icons.bolt_outlined,
+                    title: ec.s('bazi.entry'),
+                    subtitle: ec.s('bazi.entrySub'),
+                    onTap: () => Navigator.of(context)
+                        .push(MaterialPageRoute<void>(builder: (_) => BaziMonthPage(profile: p))),
                   ),
                   const SizedBox(height: 24),
                   Text(birthSummary(ec, p), textAlign: TextAlign.center, style: t.bodySmall),

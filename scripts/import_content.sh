@@ -11,6 +11,7 @@ summary=""
 n_lesson=0
 n_meihua=0
 n_cross=0
+n_eastern=0
 for lang in $LANGS; do
   mkdir -p "assets/content/$lang"
   n=0
@@ -41,6 +42,19 @@ for lang in $LANGS; do
     cp "$src/$lang/cross/templates.json" "assets/content/$lang/cross-templates.json"
     n_cross=$((n_cross + 1))
   fi
+  # 東方命理（紫微／八字）模板與課程（<語言>/eastern/templates.json → eastern-templates.json；
+  # lessons/ziwei-NN.json、bazi-NN.json → ziwei-lesson-NN.json、bazi-lesson-NN.json）
+  if [ -e "$src/$lang/eastern/templates.json" ]; then
+    cp "$src/$lang/eastern/templates.json" "assets/content/$lang/eastern-templates.json"
+    n_eastern=$((n_eastern + 1))
+  fi
+  for kind in ziwei bazi; do
+    for f in "$src/$lang"/eastern/lessons/$kind-[0-9][0-9].json; do
+      [ -e "$f" ] || continue
+      cp "$f" "assets/content/$lang/$kind-lesson-$(basename "$f" | sed "s/^$kind-//")"
+      n_eastern=$((n_eastern + 1))
+    done
+  done
   summary="$summary $lang=$n"
 done
 
@@ -64,4 +78,4 @@ for pass in normal redo; do
   done
 done
 
-echo "已匯入解讀（${summary# }）、課程 ${n_lesson} 檔、梅花易數 ${n_meihua} 檔、雙卦交叉 ${n_cross} 檔、牌面圖 ${n_img} 張"
+echo "已匯入解讀（${summary# }）、課程 ${n_lesson} 檔、梅花易數 ${n_meihua} 檔、雙卦交叉 ${n_cross} 檔、東方命理 ${n_eastern} 檔、牌面圖 ${n_img} 張"

@@ -54,6 +54,7 @@ jobs:
             images/webp
             glossary
             cross
+            eastern
             store/release-notes
 
       - uses: subosito/flutter-action@v2

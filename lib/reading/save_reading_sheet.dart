@@ -16,21 +16,42 @@ Future<JournalEntry?> showSaveReadingSheet(
   required String question,
   required int? readingIndex,
   CrossRecord? cross,
+  EasternRecord? eastern,
 }) =>
     showModalBottomSheet<JournalEntry>(
       context: context,
       isScrollControlled: true,
       backgroundColor: QianColors.inkCard,
-      builder: (_) => _SaveSheet(cast: cast, question: question, readingIndex: readingIndex, cross: cross),
+      builder: (_) => _SaveSheet(cast: cast, question: question, readingIndex: readingIndex, cross: cross, eastern: eastern),
+    );
+
+/// 存命理卡片（紫微年度卡、八字本月卡）：沒有六爻、不設回顧提醒。
+Future<JournalEntry?> showSaveCardSheet(
+  BuildContext context, {
+  required String methodId,
+  required EasternRecord eastern,
+}) =>
+    showModalBottomSheet<JournalEntry>(
+      context: context,
+      isScrollControlled: true,
+      backgroundColor: QianColors.inkCard,
+      builder: (_) => _SaveSheet(cast: null, question: '', readingIndex: null, eastern: eastern, cardMethod: methodId),
     );
 
 class _SaveSheet extends StatefulWidget {
-  const _SaveSheet({required this.cast, required this.question, required this.readingIndex, this.cross});
+  const _SaveSheet({required this.cast, required this.question, required this.readingIndex, this.cross, this.eastern, this.cardMethod});
 
-  final CastResult cast;
+  final CastResult? cast;
+
+  /// 命理卡片的 methodId（`ziwei`、`bazi`）；此時 [cast] 為 null。
+  final String? cardMethod;
   final String question;
   final int? readingIndex;
   final CrossRecord? cross;
+  final EasternRecord? eastern;
+
+  /// 命理卡片（紫微、八字）不設回顧提醒（通知內文以卦名為主）。
+  bool get isCard => cardMethod != null;
 
   @override
   State<_SaveSheet> createState() => _SaveSheetState();
@@ -38,7 +59,7 @@ class _SaveSheet extends StatefulWidget {
 
 class _SaveSheetState extends State<_SaveSheet> {
   late final _controller = TextEditingController(text: widget.question);
-  int? _days = 7;
+  late int? _days = widget.isCard ? null : 7;
   bool _saving = false;
 
   @override
@@ -54,13 +75,24 @@ class _SaveSheetState extends State<_SaveSheet> {
     if (store == null || _saving) return;
     setState(() => _saving = true);
     final now = DateTime.now();
-    var entry = JournalEntry.fromCast(
-      cast: widget.cast,
+    final card = widget.cardMethod;
+    var entry = card != null
+        ? JournalEntry(
+            id: now.microsecondsSinceEpoch.toRadixString(36),
+            createdAt: now,
+            methodId: card,
+            lineValues: const [],
+            question: _controller.text.trim(),
+            eastern: widget.eastern,
+          )
+        : JournalEntry.fromCast(
+      cast: widget.cast!,
       now: now,
       question: _controller.text.trim(),
       readingIndex: widget.readingIndex,
       reminderAt: _days == null ? null : JournalReminders.reviewTime(now, _days!),
       cross: widget.cross,
+      eastern: widget.eastern,
     );
     await store.save(entry);
     var reminderOk = true;
@@ -114,10 +146,12 @@ class _SaveSheetState extends State<_SaveSheet> {
               onSubmitted: (_) => FocusManager.instance.primaryFocus?.unfocus(),
               decoration: InputDecoration(hintText: l.optionalHint),
             ),
-            const SizedBox(height: 8),
-            Text(l.saveSheetRemind, style: t.titleMedium),
-            const SizedBox(height: 8),
-            ReminderPicker(days: _days, onChanged: (d) => setState(() => _days = d)),
+            if (!widget.isCard) ...[
+              const SizedBox(height: 8),
+              Text(l.saveSheetRemind, style: t.titleMedium),
+              const SizedBox(height: 8),
+              ReminderPicker(days: _days, onChanged: (d) => setState(() => _days = d)),
+            ],
             if (_days != null) ...[
               const SizedBox(height: 6),
               Text(l.saveSheetRemindIn(_days!, hour12(JournalReminders.reviewHour)), style: t.bodySmall),

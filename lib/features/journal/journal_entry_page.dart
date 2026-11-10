@@ -282,7 +282,8 @@ class _JournalEntryPageState extends State<JournalEntryPage> {
                       monthBranch: cross.monthBranch,
                     );
               if (crossMeihua != null) {
-                return CrossReadingPage(iching: cast, meihua: crossMeihua, question: e.question, review: true);
+                return CrossReadingPage(
+                    iching: cast, meihua: crossMeihua, question: e.question, review: true, eastern: e.eastern, at: e.createdAt);
               }
               // 梅花起卦的紀錄用梅花解卦回看（月令依當時日期）
               final meihua =

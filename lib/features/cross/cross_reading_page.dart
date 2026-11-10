@@ -3,9 +3,13 @@ import 'package:flutter/material.dart';
 import '../../app/services.dart';
 import '../../app/theme.dart';
 import '../../core/content/cross_content.dart';
+import '../../core/content/eastern_content.dart';
 import '../../core/content/hexagram_content.dart';
 import '../../core/content/meihua_content.dart';
 import '../../core/cross/cross_reading.dart';
+import '../../core/eastern/birth_profile.dart';
+import '../../core/eastern/themes.dart';
+import '../../core/eastern/ziwei.dart';
 import '../../core/events/event_bus.dart';
 import '../../core/iching/cast_result.dart';
 import '../../core/iching/focus_rule.dart';
@@ -20,6 +24,8 @@ import '../../reading/section.dart';
 import '../../shared/premium/paywall_page.dart';
 import '../../shared/widgets/adaptive_layout.dart';
 import '../../shared/widgets/hexagram_glyph.dart';
+import '../eastern/birth_setup_page.dart';
+import '../eastern/birth_store.dart';
 import '../meihua/meihua_reading_page.dart';
 import 'cross_guide.dart';
 
@@ -35,6 +41,8 @@ class CrossReadingPage extends StatefulWidget {
     this.question = '',
     this.review = false,
     this.solarCity,
+    this.eastern,
+    this.at,
   });
 
   final CastResult iching;
@@ -43,12 +51,21 @@ class CrossReadingPage extends StatefulWidget {
   final bool review;
   final String? solarCity;
 
+  /// 卦記回看：當時存的出生資料（沒有＝雙卦交叉）；[at] 為存檔時間（流年依當時）。
+  final EasternRecord? eastern;
+  final DateTime? at;
+
   @override
   State<CrossReadingPage> createState() => _CrossReadingPageState();
 }
 
 class _Data {
-  _Data(this.cc, this.mc, this.result, this.focus, this.texts);
+  _Data(this.cc, this.mc, this.result, this.focus, this.texts, {this.ec, this.profile, this.zyear});
+
+  /// 東方命理：文案、出生資料、紫微流年（沒填時辰為 null）。
+  final EasternContent? ec;
+  final BirthProfile? profile;
+  final ZiweiYear? zyear;
 
   final CrossContent cc;
   final MeihuaContent? mc;
@@ -87,7 +104,14 @@ class _CrossReadingPageState extends State<CrossReadingPage> {
           : h.lines.where((x) => x.position == item.position).map((x) => x.text).firstOrNull ?? '';
       if (t.isNotEmpty) texts.add(t);
     }
-    return _Data(cc, mc, result, focus, texts);
+    final ec = await easternSource.load(folder);
+    final BirthProfile? profile = widget.review
+        ? (widget.eastern == null ? null : BirthProfile.fromJson(widget.eastern!.birth))
+        : await BirthStore.load();
+    final chart = profile?.ziwei();
+    final y = ziweiYearAt(widget.at ?? DateTime.now());
+    return _Data(cc, mc, result, focus, texts,
+        ec: ec, profile: profile, zyear: chart?.year(stem: y.stem, branch: y.branch));
   }
 
   @override
@@ -108,6 +132,8 @@ class _CrossReadingPageState extends State<CrossReadingPage> {
         monthBranch: widget.meihua.monthBranch,
       );
 
+  EasternRecord? _easternRecord;
+
   Future<void> _save() async {
     final entry = await showSaveReadingSheet(
       context,
@@ -115,6 +141,7 @@ class _CrossReadingPageState extends State<CrossReadingPage> {
       question: widget.question,
       readingIndex: null,
       cross: _record,
+      eastern: _easternRecord,
     );
     if (entry == null) return;
     _services.events.emit(JournalSaved(hasReminder: entry.reminderAt != null));
@@ -138,6 +165,7 @@ class _CrossReadingPageState extends State<CrossReadingPage> {
           if (snap.connectionState != ConnectionState.done) return const Center(child: CircularProgressIndicator());
           final d = snap.data;
           if (d == null) return Center(child: Text(l.learnMissing));
+          _easternRecord = d.zyear == null ? null : EasternRecord(birth: d.profile!.toJson(), systems: const ['ziwei']);
           return ValueListenableBuilder<bool>(
             valueListenable: _services.premium.isPremium,
             builder: (context, premium, _) => ListView(
@@ -151,6 +179,13 @@ class _CrossReadingPageState extends State<CrossReadingPage> {
                   ),
                 _Glyphs(iching: widget.iching, meihua: widget.meihua, cc: d.cc),
                 const SizedBox(height: 20),
+                if (d.zyear != null)
+                  Padding(
+                    padding: const EdgeInsets.only(bottom: 8),
+                    child: Text(l.methodCross3,
+                        textAlign: TextAlign.center,
+                        style: Theme.of(context).textTheme.bodySmall?.copyWith(color: QianColors.textSub)),
+                  ),
                 _VerdictTitle(cc: d.cc, verdict: d.result.verdict),
                 if (premium) ..._full(context, d) else ..._locked(context, d.cc),
                 const SizedBox(height: 28),
@@ -223,6 +258,7 @@ class _CrossReadingPageState extends State<CrossReadingPage> {
           ],
         ]),
       ),
+      ..._ziweiSection(context, d),
       Section(
         title: cc.s('headings', 'meihua'),
         child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
@@ -297,6 +333,63 @@ class _CrossReadingPageState extends State<CrossReadingPage> {
                 ),
         ),
       ],
+    ];
+  }
+}
+
+extension on _CrossReadingPageState {
+  /// 第二段「年度大勢（紫微）」：流年命宮、三系統合看評語（27 段矩陣）、三方主題。
+  /// 沒有出生資料時給填寫入口；沒有時辰時說明無法加入。
+  List<Widget> _ziweiSection(BuildContext context, _Data d) {
+    final ec = d.ec;
+    if (ec == null) return const [];
+    final l = context.l10n;
+    final t = Theme.of(context).textTheme;
+    final z = d.zyear;
+    if (z == null) {
+      if (widget.review) return const [];
+      return [
+        Section(
+          title: ec.s('cross.heading'),
+          child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+            Text(d.profile == null ? ec.s('cross.addBirth') : ec.s('cross.noHour'), style: t.bodySmall),
+            if (d.profile == null)
+              TextButton(
+                onPressed: () => Navigator.of(context)
+                    .push(MaterialPageRoute<void>(builder: (_) => BirthSetupPage(ec: ec))),
+                child: Text(ec.s('cross.addBirthButton')),
+              ),
+          ]),
+        ),
+      ];
+    }
+    final r = d.result;
+    String theme(LifeTheme x) => ec.s('ziwei.themes.${x.name}');
+    final zt = z.theme;
+    final it = themeOfHexagram(widget.iching.primary);
+    final mt = themeOfHexagram(widget.meihua.primary);
+    final stars = z.majors.stars.map((x) => ec.s('ziwei.stars.${x.name}')).join(l.separator);
+    final y = ziweiYearAt(widget.at ?? DateTime.now());
+    final key = '${z.trend.name}_${r.iching.direction.name}_${r.meihua.direction.name}';
+    return [
+      Section(
+        title: ec.s('cross.heading'),
+        child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+          Text(ec.s('cross.yearLine', {
+            'year': '${y.year}',
+            'stars': stars,
+            'trend': ec.s('ziwei.trend.${z.trend.name}'),
+            'theme': theme(zt),
+          })),
+          const SizedBox(height: 8),
+          Text(ec.s('cross.matrix.$key'), style: t.bodyMedium?.copyWith(color: QianColors.rice)),
+          const SizedBox(height: 8),
+          Text(zt == it && it == mt
+              ? ec.s('cross.themesShared', {'themes': theme(zt)})
+              : ec.s('cross.themesApart', {'ziwei': theme(zt), 'iching': theme(it), 'meihua': theme(mt)}),
+              style: t.bodySmall),
+        ]),
+      ),
     ];
   }
 }

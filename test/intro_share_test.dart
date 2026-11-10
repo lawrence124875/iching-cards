@@ -26,7 +26,7 @@ Services _services({IntroStore? intro}) => Services(
 
 void main() {
   group('功能介紹', () {
-    testWidgets('首次開啟顯示五頁，看完記為已看過', (tester) async {
+    testWidgets('首次開啟顯示六頁，看完記為已看過', (tester) async {
       final store = MemoryIntroStore();
       await tester.pumpWidget(AppServices(services: _services(intro: store), child: const IchingApp()));
       await tester.pumpAndSettle();

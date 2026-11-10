@@ -26,7 +26,7 @@ class JournalReminders {
   static Future<bool> apply(ReminderService reminders, JournalEntry e, ReviewMessage message) async {
     await reminders.cancel(e.notificationId);
     final at = e.reminderAt;
-    if (at == null || !at.isAfter(DateTime.now())) return true;
+    if (at == null || !at.isAfter(DateTime.now()) || e.isCard) return true;
     final days = DateTime(at.year, at.month, at.day)
         .difference(DateTime(e.createdAt.year, e.createdAt.month, e.createdAt.day))
         .inDays;

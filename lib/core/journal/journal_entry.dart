@@ -56,6 +56,30 @@ class CrossRecord {
   }
 }
 
+/// 東方命理紀錄（HANDOFF §4-3 C3）：存當時用的出生資料（只在手機與卦記備份檔），以及用到哪些系統。
+/// 紫微年度卡（methodId `ziwei`）、八字本月卡（`bazi`）沒有六爻；交叉解讀（`cross`）帶這筆就是三／四系統交叉。
+class EasternRecord {
+  EasternRecord({required Map<String, dynamic> birth, required List<String> systems})
+      : birth = Map.unmodifiable(birth),
+        systems = List.unmodifiable(systems);
+
+  /// BirthProfile.toJson()。
+  final Map<String, dynamic> birth;
+
+  /// 用到的命理系統：`ziwei`、`bazi`。
+  final List<String> systems;
+
+  Map<String, dynamic> toJson() => {'birth': birth, 'systems': systems};
+
+  static EasternRecord? tryFromJson(Object? j) {
+    if (j is! Map || j['birth'] is! Map) return null;
+    return EasternRecord(
+      birth: Map<String, dynamic>.from(j['birth'] as Map),
+      systems: [for (final x in (j['systems'] as List? ?? const [])) if (x is String) x],
+    );
+  }
+}
+
 class JournalEntry {
   JournalEntry({
     required this.id,
@@ -67,6 +91,7 @@ class JournalEntry {
     this.reminderAt,
     List<FollowUp> followUps = const [],
     this.cross,
+    this.eastern,
   })  : lineValues = List.unmodifiable(lineValues),
         followUps = List.unmodifiable(followUps);
 
@@ -77,6 +102,7 @@ class JournalEntry {
     int? readingIndex,
     DateTime? reminderAt,
     CrossRecord? cross,
+    EasternRecord? eastern,
   }) =>
       JournalEntry(
         id: now.microsecondsSinceEpoch.toRadixString(36),
@@ -87,7 +113,11 @@ class JournalEntry {
         readingIndex: readingIndex,
         reminderAt: reminderAt,
         cross: cross,
+        eastern: eastern,
       );
+
+  /// 命理卡片（紫微年度卡、八字本月卡）：沒有六爻。
+  static const cardMethods = {'ziwei', 'bazi'};
 
   final String id;
   final DateTime createdAt;
@@ -104,6 +134,20 @@ class JournalEntry {
 
   /// 雙卦交叉紀錄；一般起卦為 null。
   final CrossRecord? cross;
+
+  /// 東方命理紀錄；沒用到紫微／八字為 null。
+  final EasternRecord? eastern;
+
+  /// 命理卡片（沒有六爻，[cast] 不可用）。
+  bool get isCard => cardMethods.contains(methodId);
+
+  /// 卦記標示用的種類鍵：`ziwei`、`bazi`、`cross3`、`cross4`，其他照 methodId。
+  String get labelKey {
+    if (methodId == 'cross' && eastern != null && eastern!.systems.isNotEmpty) {
+      return eastern!.systems.length >= 2 ? 'cross4' : 'cross3';
+    }
+    return methodId;
+  }
 
   CastResult get cast =>
       CastResult(methodId: methodId, lines: [for (final v in lineValues) LineValue.fromValue(v)]);
@@ -128,6 +172,7 @@ class JournalEntry {
         reminderAt: clearReminder ? null : (reminderAt ?? this.reminderAt),
         followUps: followUps ?? this.followUps,
         cross: cross ?? this.cross,
+        eastern: eastern,
       );
 
   Map<String, dynamic> toJson() => {
@@ -140,12 +185,16 @@ class JournalEntry {
         if (reminderAt != null) 'reminderAt': reminderAt!.toIso8601String(),
         'followUps': [for (final f in followUps) f.toJson()],
         if (cross != null) 'cross': cross!.toJson(),
+        if (eastern != null) 'eastern': eastern!.toJson(),
       };
 
   /// 寬鬆解析：欄位缺漏給預設值，六爻不合法時回傳 null（略過該筆）。
+  /// 命理卡片沒有六爻（lines 為空），舊版 App 讀到會略過，不會誤顯示成某一卦。
   static JournalEntry? tryFromJson(Map<String, dynamic> j) {
     final lines = (j['lines'] as List?)?.whereType<int>().toList() ?? const [];
-    if (lines.length != 6 || lines.any((v) => v < 6 || v > 9)) return null;
+    final eastern = EasternRecord.tryFromJson(j['eastern']);
+    final card = cardMethods.contains(j['methodId']) && eastern != null && lines.isEmpty;
+    if (!card && (lines.length != 6 || lines.any((v) => v < 6 || v > 9))) return null;
     final created = DateTime.tryParse(j['createdAt'] as String? ?? '');
     if (created == null) return null;
     return JournalEntry(
@@ -161,6 +210,7 @@ class JournalEntry {
           if (f is Map<String, dynamic>) FollowUp.fromJson(f),
       ],
       cross: CrossRecord.tryFromJson(j['cross']),
+      eastern: eastern,
     );
   }
 }

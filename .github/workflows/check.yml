@@ -1,0 +1,125 @@
+name: Check (branches)
+
+# 分支上的快速檢查（不建置、不發 Release）：靜態檢查＋單元測試。
+# 內容取 iching-content 同名分支（沒有就用 main），讓 App 與內容可以在同名分支一起改、一起測。
+on:
+  push:
+    branches-ignore: [main]
+    paths-ignore:
+      - '**.md'
+      - 'docs/**'
+  workflow_dispatch:
+
+concurrency:
+  group: check-${{ github.ref_name }}
+  cancel-in-progress: true
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+
+      - name: 決定內容分支
+        id: ref
+        env:
+          TOKEN: ${{ secrets.BUILDS_REPO_TOKEN }}
+          BR: ${{ github.ref_name }}
+        run: |
+          if git ls-remote --exit-code --heads "https://x-access-token:${TOKEN}@github.com/lawrence124875/iching-content.git" "$BR" > /dev/null 2>&1; then
+            echo "ref=$BR" >> "$GITHUB_OUTPUT"; echo "::notice::內容分支 $BR"
+          else
+            echo "ref=main" >> "$GITHUB_OUTPUT"; echo "::notice::內容分支 main"
+          fi
+
+      - name: 取得私人內容（iching-content）
+        uses: actions/checkout@v5
+        with:
+          repository: lawrence124875/iching-content
+          token: ${{ secrets.BUILDS_REPO_TOKEN }}
+          ref: ${{ steps.ref.outputs.ref }}
+          path: _content
+          sparse-checkout: |
+            zh-Hant
+            en
+            zh-Hans
+            ja
+            ko
+            vi
+            es
+            pt-BR
+            id
+            th
+            ar
+            glossary
+            cross
+            eastern
+
+      - uses: subosito/flutter-action@v2
+        with:
+          channel: 'stable'
+          cache: true
+
+      - name: 匯入內容
+        run: bash scripts/import_content.sh _content
+
+      # 11 語術語表（REFERENCE §17）→ lib/l10n/glossary_data.g.dart（不進 repo）。在字型子集之前，
+      # 讓術語表用到的字也進子集。
+      - name: 產生術語表
+        run: python3 scripts/gen_glossary.py _content/glossary/glossary.json lib/l10n/glossary_data.g.dart
+
+      # 思源黑體／宋體（Google Fonts，OFL）固定在某個 commit，避免上游更新改變字形。
+      # 換版本：改 NOTO_COMMIT（並同步改 cache key）。
+      - name: 快取字型原檔
+        uses: actions/cache@v4
+        with:
+          path: _fonts_src
+          key: noto-tc-sc-jp-kr-th-ar-9710da1e
+
+      - name: 產生字型子集
+        env:
+          NOTO_COMMIT: 9710da1eacb3be272583c3224dcb70f9da6eadbb
+        run: |
+          set -euo pipefail
+          mkdir -p _fonts_src
+          base="https://raw.githubusercontent.com/google/fonts/${NOTO_COMMIT}/ofl"
+          [ -s "_fonts_src/NotoSansTC[wght].ttf" ] || curl -fsSL -o "_fonts_src/NotoSansTC[wght].ttf" "${base}/notosanstc/NotoSansTC%5Bwght%5D.ttf"
+          [ -s "_fonts_src/NotoSerifTC[wght].ttf" ] || curl -fsSL -o "_fonts_src/NotoSerifTC[wght].ttf" "${base}/notoseriftc/NotoSerifTC%5Bwght%5D.ttf"
+          [ -s "_fonts_src/NotoSansSC[wght].ttf" ] || curl -fsSL -o "_fonts_src/NotoSansSC[wght].ttf" "${base}/notosanssc/NotoSansSC%5Bwght%5D.ttf"
+          [ -s "_fonts_src/NotoSerifSC[wght].ttf" ] || curl -fsSL -o "_fonts_src/NotoSerifSC[wght].ttf" "${base}/notoserifsc/NotoSerifSC%5Bwght%5D.ttf"
+          [ -s "_fonts_src/NotoSansJP[wght].ttf" ] || curl -fsSL -o "_fonts_src/NotoSansJP[wght].ttf" "${base}/notosansjp/NotoSansJP%5Bwght%5D.ttf"
+          [ -s "_fonts_src/NotoSerifJP[wght].ttf" ] || curl -fsSL -o "_fonts_src/NotoSerifJP[wght].ttf" "${base}/notoserifjp/NotoSerifJP%5Bwght%5D.ttf"
+          [ -s "_fonts_src/NotoSansKR[wght].ttf" ] || curl -fsSL -o "_fonts_src/NotoSansKR[wght].ttf" "${base}/notosanskr/NotoSansKR%5Bwght%5D.ttf"
+          [ -s "_fonts_src/NotoSerifKR[wght].ttf" ] || curl -fsSL -o "_fonts_src/NotoSerifKR[wght].ttf" "${base}/notoserifkr/NotoSerifKR%5Bwght%5D.ttf"
+          [ -s "_fonts_src/NotoSansThai[wdth,wght].ttf" ] || curl -fsSL -o "_fonts_src/NotoSansThai[wdth,wght].ttf" "${base}/notosansthai/NotoSansThai%5Bwdth%2Cwght%5D.ttf"
+          [ -s "_fonts_src/NotoSerifThai[wdth,wght].ttf" ] || curl -fsSL -o "_fonts_src/NotoSerifThai[wdth,wght].ttf" "${base}/notoserifthai/NotoSerifThai%5Bwdth%2Cwght%5D.ttf"
+          [ -s "_fonts_src/NotoSansArabic[wdth,wght].ttf" ] || curl -fsSL -o "_fonts_src/NotoSansArabic[wdth,wght].ttf" "${base}/notosansarabic/NotoSansArabic%5Bwdth%2Cwght%5D.ttf"
+          [ -s "_fonts_src/NotoNaskhArabic[wght].ttf" ] || curl -fsSL -o "_fonts_src/NotoNaskhArabic[wght].ttf" "${base}/notonaskharabic/NotoNaskhArabic%5Bwght%5D.ttf"
+          pip install --quiet fonttools==4.62.1
+          python3 scripts/build_fonts.py _fonts_src assets/fonts
+
+      - name: 安裝套件
+        run: flutter pub get
+
+      # 錯誤轉成 annotation，Claude 可用 check-runs API 讀取（容器連不到日誌下載網址）。
+      - name: 靜態檢查
+        run: |
+          set +e
+          flutter analyze --no-fatal-infos --no-fatal-warnings > /tmp/analyze.log 2>&1
+          status=$?
+          cat /tmp/analyze.log
+          if [ $status -ne 0 ]; then
+            grep -E "error •|error -" /tmp/analyze.log | head -30 | while IFS= read -r line; do echo "::error::$line"; done
+          fi
+          exit $status
+
+      - name: 單元測試
+        run: |
+          set +e
+          flutter test > /tmp/test.log 2>&1
+          status=$?
+          cat /tmp/test.log
+          if [ $status -ne 0 ]; then
+            grep -E "\[E\]|Expected|Actual|Error" /tmp/test.log | head -30 | while IFS= read -r line; do echo "::error::$line"; done
+          fi
+          exit $status

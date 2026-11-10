@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import '../../app/services.dart';
 import '../../app/theme.dart';
 import '../../core/content/hexagram_content.dart';
+import '../../core/eastern/birth_profile.dart';
 import '../../core/iching/cast_result.dart';
 import '../../core/iching/hexagram_table.dart';
 import '../../core/journal/journal_entry.dart';
@@ -20,6 +21,8 @@ import '../../shared/widgets/reminder_picker.dart';
 import '../../shared/widgets/adaptive_layout.dart';
 import '../cross/cross_feedback.dart';
 import '../cross/cross_reading_page.dart';
+import '../eastern/bazi_month_page.dart';
+import '../eastern/ziwei_year_page.dart';
 import '../meihua/meihua_reading_page.dart';
 
 /// 一筆卦記：當時的卦與問題 → 當時的解讀 → 回顧（後來發生了什麼、象怎麼對上）→ 提醒。
@@ -48,7 +51,7 @@ class _JournalEntryPageState extends State<JournalEntryPage> {
   Future<void> _load() async {
     _loaded = true;
     final e = await _services.journal?.byId(widget.entryId);
-    final c = e == null ? null : await _services.content.hexagram(e.cast.primary);
+    final c = e == null || e.isCard ? null : await _services.content.hexagram(e.cast.primary);
     if (!mounted) return;
     setState(() {
       _entry = e;
@@ -148,7 +151,49 @@ class _JournalEntryPageState extends State<JournalEntryPage> {
     );
   }
 
+  /// 命理卡片（紫微年度卡、八字本月卡）：沒有六爻，顯示種類、問題與回看按鈕。
+  Widget _cardBody(BuildContext context, JournalEntry e) {
+    final t = Theme.of(context).textTheme;
+    final l = context.l10n;
+    final birth = e.eastern == null ? null : BirthProfile.fromJson(e.eastern!.birth);
+    return ListView(
+      padding: readablePadding(context, top: 8, bottom: 40),
+      children: [
+        Text('${formatDateTime(e.createdAt)}${l.separator}${l.journalMethodLabel(e.labelKey)}',
+            textAlign: TextAlign.center, style: t.bodySmall),
+        const SizedBox(height: 16),
+        Icon(e.methodId == 'bazi' ? Icons.bolt_outlined : Icons.wb_twilight_outlined, size: 48, color: QianColors.earth),
+        const SizedBox(height: 8),
+        Text(l.journalMethodLabel(e.labelKey), textAlign: TextAlign.center, style: t.headlineSmall),
+        Section(
+          title: l.questionTitle,
+          child: InkWell(
+            onTap: _editQuestion,
+            child: Row(children: [
+              Expanded(
+                child: Text(e.question.isEmpty ? l.journalQuestionEmpty : e.question,
+                    style: e.question.isEmpty ? t.bodyMedium?.copyWith(color: QianColors.textSub) : null),
+              ),
+              const Icon(Icons.edit_outlined, size: 18, color: QianColors.textSub),
+            ]),
+          ),
+        ),
+        const SizedBox(height: 20),
+        if (birth != null)
+          OutlinedButton(
+            onPressed: () => Navigator.of(context).push(MaterialPageRoute<void>(
+              builder: (_) => e.methodId == 'bazi'
+                  ? BaziMonthPage(profile: birth, at: e.createdAt, review: true)
+                  : ZiweiYearPage(profile: birth, at: e.createdAt, review: true),
+            )),
+            child: Text(l.journalViewReading),
+          ),
+      ],
+    );
+  }
+
   Widget _body(BuildContext context, JournalEntry e) {
+    if (e.isCard) return _cardBody(context, e);
     final t = Theme.of(context).textTheme;
     final l = context.l10n;
     final cast = e.cast;
@@ -167,7 +212,7 @@ class _JournalEntryPageState extends State<JournalEntryPage> {
     return ListView(
       padding: readablePadding(context, top: 8, bottom: 40),
       children: [
-        Text('${formatDateTime(e.createdAt)}${l.separator}${l.journalMethodLabel(e.methodId)}',
+        Text('${formatDateTime(e.createdAt)}${l.separator}${l.journalMethodLabel(e.labelKey)}',
             textAlign: TextAlign.center, style: t.bodySmall),
         const SizedBox(height: 16),
         Row(
@@ -240,7 +285,8 @@ class _JournalEntryPageState extends State<JournalEntryPage> {
                       monthBranch: cross.monthBranch,
                     );
               if (crossMeihua != null) {
-                return CrossReadingPage(iching: cast, meihua: crossMeihua, question: e.question, review: true);
+                return CrossReadingPage(
+                    iching: cast, meihua: crossMeihua, question: e.question, review: true, eastern: e.eastern, at: e.createdAt);
               }
               // 梅花起卦的紀錄用梅花解卦回看（月令依當時日期）
               final meihua =

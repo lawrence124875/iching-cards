@@ -68,15 +68,23 @@ class _Tile extends StatelessWidget {
   Widget build(BuildContext context) {
     final t = Theme.of(context).textTheme;
     final l = context.l10n;
-    final cast = entry.cast;
-    final p = HexagramTable.byNumber(cast.primary);
-    final c = cast.changed == null ? null : HexagramTable.byNumber(cast.changed!);
+    final card = entry.isCard;
+    final cast = card ? null : entry.cast;
+    final p = cast == null ? null : HexagramTable.byNumber(cast.primary);
+    final c = cast?.changed == null ? null : HexagramTable.byNumber(cast!.changed!);
     final reviews = entry.followUps.length;
     final pending = entry.reminderAt != null && entry.reminderAt!.isAfter(DateTime.now());
     return ListTile(
       contentPadding: const EdgeInsets.symmetric(vertical: 8, horizontal: 4),
-      leading: HexagramGlyph(lines: p.lines, changing: cast.changingPositions.toSet(), width: 32),
-      title: Text(c == null ? l.journalTitleSingle(l.hexName(p)) : l.journalTitleChange(l.hexName(p), l.hexName(c)),
+      leading: p == null
+          ? const SizedBox(width: 32, child: Icon(Icons.wb_twilight_outlined, color: QianColors.earth))
+          : HexagramGlyph(lines: p.lines, changing: cast!.changingPositions.toSet(), width: 32),
+      title: Text(
+          p == null
+              ? l.journalMethodLabel(entry.labelKey)
+              : c == null
+                  ? l.journalTitleSingle(l.hexName(p))
+                  : l.journalTitleChange(l.hexName(p), l.hexName(c)),
           style: t.titleMedium),
       subtitle: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -91,7 +99,7 @@ class _Tile extends StatelessWidget {
           Text(
             [
               formatDate(entry.createdAt),
-              l.journalMethodLabel(entry.methodId),
+              l.journalMethodLabel(entry.labelKey),
               if (reviews > 0) l.journalReviewCount(reviews),
               if (pending) l.journalReminderOn(formatDate(entry.reminderAt!)),
             ].join(l.separator),

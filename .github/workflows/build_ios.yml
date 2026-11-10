@@ -43,6 +43,8 @@ jobs:
             ar
             images/webp
             glossary
+            cross
+            eastern
             store/release-notes
 
       # macOS 系統 Python 不允許直接 pip 安裝（字型子集要 fontTools）

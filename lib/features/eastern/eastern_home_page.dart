@@ -6,9 +6,11 @@ import '../../core/eastern/birth_profile.dart';
 import '../../l10n/l10n.dart';
 import '../../shared/premium/ad_banner.dart';
 import '../../shared/widgets/adaptive_layout.dart';
+import '../learn/lesson_list_page.dart';
 import 'bazi_month_page.dart';
 import 'birth_setup_page.dart';
 import 'birth_store.dart';
+import 'eastern_feature.dart';
 import 'ziwei_year_page.dart';
 
 /// 東方命理入口：簡介、出生資料、年度基調（紫微）。
@@ -46,6 +48,22 @@ class _EasternHomePageState extends State<EasternHomePage> {
                 const Icon(Icons.auto_awesome_outlined, size: 48, color: QianColors.earth),
                 const SizedBox(height: 12),
                 Text(ec.s('intro'), style: t.bodyMedium, textAlign: TextAlign.center),
+                const SizedBox(height: 24),
+                EasternEntry(
+                  icon: Icons.menu_book_outlined,
+                  title: l.ziweiCourseTitle,
+                  subtitle: ec.s('courses.ziwei'),
+                  onTap: () => Navigator.of(context)
+                      .push(MaterialPageRoute<void>(builder: (_) => LessonListPage(course: ziweiCourse))),
+                ),
+                const SizedBox(height: 12),
+                EasternEntry(
+                  icon: Icons.menu_book_outlined,
+                  title: l.baziCourseTitle,
+                  subtitle: ec.s('courses.bazi'),
+                  onTap: () => Navigator.of(context)
+                      .push(MaterialPageRoute<void>(builder: (_) => LessonListPage(course: baziCourse))),
+                ),
                 const SizedBox(height: 24),
                 if (p == null) ...[
                   Text(ec.s('setup.needSetup'), textAlign: TextAlign.center, style: t.bodySmall),

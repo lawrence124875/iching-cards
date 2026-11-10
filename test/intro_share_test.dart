@@ -31,7 +31,7 @@ void main() {
       await tester.pumpWidget(AppServices(services: _services(intro: store), child: const IchingApp()));
       await tester.pumpAndSettle();
       expect(find.byType(IntroPage), findsOneWidget);
-      for (var i = 0; i < 4; i++) {
+      for (var i = 0; i < 5; i++) {
         await tester.tap(find.byType(FilledButton));
         await tester.pumpAndSettle();
       }

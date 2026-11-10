@@ -23,7 +23,7 @@ class _IntroPageState extends State<IntroPage> {
   final _pages = PageController();
   int _index = 0;
 
-  static const _icons = [Icons.style_outlined, Icons.bookmark_outline, Icons.air, Icons.ios_share, Icons.mail_outline];
+  static const _icons = [Icons.style_outlined, Icons.auto_awesome_outlined, Icons.bookmark_outline, Icons.air, Icons.ios_share, Icons.mail_outline];
 
   @override
   void dispose() {

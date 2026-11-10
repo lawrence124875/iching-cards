@@ -164,6 +164,18 @@ void main() {
       expect(s.hour, 9);
       expect(s.minute, inInclusiveRange(42, 50));
     });
+    test('台灣縣市與自訂經度：新竹比台北晚約 2.4 分', () {
+      final t = DateTime.utc(2024, 7, 1, 4);
+      final hc = MeihuaCities.byId('hsinchu')!;
+      final tp = MeihuaCities.byId('taipei')!;
+      expect(SolarTime.at(t, tp.longitude).difference(SolarTime.at(t, hc.longitude)).inSeconds, closeTo(142, 2));
+      final c = MeihuaCities.byId(MeihuaCities.customId(120.97))!;
+      expect(c.longitude, 120.97);
+      expect(c.name, '120.97°E');
+      expect(MeihuaCities.byId('lon:-74.01')!.name, '74.01°W');
+      expect(MeihuaCities.byId('lon:200'), isNull);
+      expect(MeihuaCities.all.map((e) => e.id).toSet().length, MeihuaCities.all.length);
+    });
     test('均時差：11 月初約 +16 分、2 月中約 −14 分', () {
       expect(SolarTime.equationOfTimeMinutes(DateTime.utc(2024, 11, 3, 12)), closeTo(16.4, 1));
       expect(SolarTime.equationOfTimeMinutes(DateTime.utc(2024, 2, 11, 12)), closeTo(-14.2, 1));

@@ -43,6 +43,23 @@ class MeihuaCities {
   static const all = <MeihuaCity>[
     MeihuaCity('taipei', 'Taipei 台北', 121.56),
     MeihuaCity('kaohsiung', 'Kaohsiung 高雄', 120.30),
+    MeihuaCity('keelung', 'Keelung 基隆', 121.74),
+    MeihuaCity('taoyuan', 'Taoyuan 桃園', 121.30),
+    MeihuaCity('hsinchu', 'Hsinchu 新竹', 120.97),
+    MeihuaCity('miaoli', 'Miaoli 苗栗', 120.82),
+    MeihuaCity('taichung', 'Taichung 台中', 120.68),
+    MeihuaCity('changhua', 'Changhua 彰化', 120.54),
+    MeihuaCity('nantou', 'Nantou 南投', 120.69),
+    MeihuaCity('yunlin', 'Yunlin 雲林', 120.54),
+    MeihuaCity('chiayi', 'Chiayi 嘉義', 120.45),
+    MeihuaCity('tainan', 'Tainan 台南', 120.21),
+    MeihuaCity('pingtung', 'Pingtung 屏東', 120.49),
+    MeihuaCity('yilan', 'Yilan 宜蘭', 121.75),
+    MeihuaCity('hualien', 'Hualien 花蓮', 121.60),
+    MeihuaCity('taitung', 'Taitung 台東', 121.15),
+    MeihuaCity('penghu', 'Penghu 澎湖', 119.57),
+    MeihuaCity('kinmen', 'Kinmen 金門', 118.32),
+    MeihuaCity('matsu', 'Matsu 馬祖', 119.95),
     MeihuaCity('hongkong', 'Hong Kong 香港', 114.17),
     MeihuaCity('macau', 'Macau 澳門', 113.54),
     MeihuaCity('beijing', 'Beijing 北京', 116.40),
@@ -123,7 +140,23 @@ class MeihuaCities {
     MeihuaCity('fortaleza', 'Fortaleza', -38.54),
   ];
 
+  /// 自訂經度的 id 前綴（出生資料可自行輸入經度），例如 `lon:120.97`。
+  static const customPrefix = 'lon:';
+
+  static String customId(double longitude) => '$customPrefix${longitude.toStringAsFixed(2)}';
+
+  /// 自訂經度：顯示成 `120.97°E`／`74.01°W`。
+  static MeihuaCity? custom(String id) {
+    if (!id.startsWith(customPrefix)) return null;
+    final lon = double.tryParse(id.substring(customPrefix.length));
+    if (lon == null || lon < -180 || lon > 180) return null;
+    return MeihuaCity(id, '${lon.abs().toStringAsFixed(2)}°${lon < 0 ? 'W' : 'E'}', lon);
+  }
+
   static MeihuaCity? byId(String? id) {
+    if (id == null) return null;
+    final c = custom(id);
+    if (c != null) return c;
     for (final c in all) {
       if (c.id == id) return c;
     }

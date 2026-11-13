@@ -26,16 +26,16 @@ Services _services({IntroStore? intro}) => Services(
 
 void main() {
   group('功能介紹', () {
-    testWidgets('首次開啟顯示九頁，看完記為已看過', (tester) async {
+    testWidgets('首次開啟顯示三頁核心，看完記為已看過', (tester) async {
       final store = MemoryIntroStore();
       await tester.pumpWidget(AppServices(services: _services(intro: store), child: const IchingApp()));
       await tester.pumpAndSettle();
       expect(find.byType(IntroPage), findsOneWidget);
-      for (var i = 0; i < 8; i++) {
+      for (var i = 0; i < 2; i++) {
         await tester.tap(find.byType(FilledButton));
         await tester.pumpAndSettle();
       }
-      await tester.tap(find.byType(FilledButton)); // 最後一頁：開始使用
+      await tester.tap(find.byType(FilledButton)); // 第三頁：開始使用
       await tester.pumpAndSettle();
       expect(find.byType(IntroPage), findsNothing);
       expect(store.value, isTrue);
@@ -94,7 +94,7 @@ void main() {
         tester.view.physicalSize = const Size(360 * 3, 640 * 3);
         tester.view.devicePixelRatio = 3;
         addTearDown(tester.view.reset);
-        await tester.pumpWidget(app(const IntroPage()));
+        await tester.pumpWidget(app(const IntroPage(full: true)));
         for (var i = 0; i < 9; i++) {
           await tester.pumpAndSettle();
           expect(tester.takeException(), isNull);
@@ -132,7 +132,7 @@ void main() {
                         info: HexagramTable.byNumber(15), title: 'W' * 30, image: 'W ' * 200),
                     child: const Text('share'),
                   ),
-                  TextButton(onPressed: () => showIntro(Navigator.of(context)), child: const Text('intro')),
+                  TextButton(onPressed: () => showIntro(Navigator.of(context), full: true), child: const Text('intro')),
                 ]),
               ),
             ),

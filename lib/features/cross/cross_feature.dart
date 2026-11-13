@@ -20,7 +20,28 @@ final crossFeature = AppFeature(
   label: (l) => l.featureCross,
   placement: FeaturePlacement.secondary,
   builder: (_) => const CrossCastPage(),
+  memberContent: true,
 );
+
+/// 從解讀頁「換個角度再看」直接用這一卦做雙卦交叉（0.8.0）：不再起卦、不扣額度，梅花以此刻時間起卦。
+/// 免費版規則同 [CrossCastPage]：遠端關掉預覽時先開訂閱頁。
+Future<void> openCrossWithCast(BuildContext context, CastResult cast, String question) async {
+  final s = AppServices.of(context);
+  if (!s.isPremium && !s.limits.crossFreePreview) {
+    if (!await openPaywall(context, source: 'cross')) return;
+    if (!context.mounted) return;
+  }
+  await showCrossGuideOnce(context);
+  if (!context.mounted) return;
+  var q = question;
+  if (q.isEmpty) q = await askQuestion(context) ?? '';
+  final city = await MeihuaCityStore.load();
+  final meihua = MeihuaEngine.byTime(LunarMoment.fromDateTime(DateTime.now(), longitude: city?.longitude));
+  if (!context.mounted) return;
+  await Navigator.of(context).push(MaterialPageRoute<void>(
+    builder: (_) => CrossReadingPage(iching: cast, meihua: meihua, question: q, solarCity: city?.name),
+  ));
+}
 
 class CrossCastPage extends StatefulWidget {
   const CrossCastPage({super.key});

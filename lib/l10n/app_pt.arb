@@ -213,7 +213,7 @@
   "introNext": "Próximo",
   "introStart": "Começar",
   "intro1Title": "Tire um hexagrama e leia o momento",
-  "intro1Body": "Mantenha uma questão em mente e toque em Tirar uma carta na tela inicial, ou escolha Lançar três moedas ou Varetas de milefólio. Cada hexagrama traz seu julgamento e suas linhas, três leituras, uma pequena ação e uma pergunta para ajudar você a pensar com clareza.",
+  "intro1Body": "Mantenha uma questão em mente e toque em Tirar uma carta na tela inicial; nessa página você também pode escolher Lançar três moedas ou Varetas de milefólio. Cada hexagrama traz seu julgamento e suas linhas, três leituras, uma pequena ação e uma pergunta para ajudar você a pensar com clareza.",
   "intro2Title": "Diário: anote e reveja",
   "intro2Body": "Salve sua pergunta e o hexagrama no diário; resultados de Flor de Ameixeira, Leitura dupla, Zi Wei e Bazi também podem ser salvos. Defina um lembrete para rever depois o que você pensava e como tudo seguiu. O diário pode ser copiado para um arquivo e restaurado num celular novo.",
   "intro3Title": "Respire com o hexagrama",
@@ -221,7 +221,7 @@
   "intro4Title": "Compartilhar e assinatura",
   "intro4Body": "Transforme um hexagrama de que goste num cartão para compartilhar. Os textos e leituras são sempre grátis; a versão gratuita permite uma consulta por dia e mais uma após um anúncio curto. Membros não veem anúncios, têm consultas e diário ilimitados, a Leitura dupla completa, todos os cursos, sessões de respiração mais longas e batidas binaurais.",
   "intro5Title": "Conte o que você acha",
-  "intro5Body": "O menu no canto superior direito da tela inicial permite definir um lembrete diário, rever este tour, enviar sua opinião e escolher se compartilha estatísticas de uso anônimas. Suas sugestões ajudam a melhorar o app.",
+  "intro5Body": "O menu no canto superior direito da tela inicial permite rever este tour e enviar sua opinião. Em Configurações, nesse mesmo menu, você pode definir um lembrete diário e escolher se compartilha estatísticas de uso anônimas. Suas sugestões ajudam a melhorar o app.",
   "introMeihuaTitle": "Flor de Ameixeira",
   "introMeihuaBody": "Faça a consulta com este momento, dois números ou uma frase e leia a situação pelas imagens dos trigramas, o eu e o outro, e os hexagramas nuclear e mutado, com uma tendência em cinco níveis, uma janela de tempo aproximada e o que você pode fazer. Uma consulta por horário por dia é grátis.",
   "introCrossTitle": "Leitura dupla",
@@ -312,5 +312,10 @@
   "meihuaPaywallLessonNote": "A lição 1 é grátis. Assine o Premium para abrir as 12 lições: consulta, Ti e Yong, as cinco fases e três exemplos.",
   "meihuaPaywallMethodNote": "Consultar por números ou palavras é Premium; por hora é grátis uma vez ao dia.",
   "meihuaPaywallJournalNote": "Salvar consultas Flor de Ameixeira no diário é Premium.",
-  "meihuaPaywallLimitNote": "Você já usou a consulta Flor de Ameixeira de hoje. Uma por dia, com calma; com Premium não há limite e você tem todos os métodos."
+  "meihuaPaywallLimitNote": "Você já usou a consulta Flor de Ameixeira de hoje. Uma por dia, com calma; com Premium não há limite e você tem todos os métodos.",
+  "drawOtherMethods": "Outras formas de consultar",
+  "homeFreeLeft": "{count, plural, =1{Hoje resta 1 consulta gratuita} other{Hoje restam {count} consultas gratuitas}}",
+  "homeLastEntry": "Última entrada: {title}",
+  "readingMoreTitle": "Ver por outro ângulo",
+  "menuSettings": "Configurações"
 }

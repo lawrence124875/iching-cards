@@ -8,6 +8,8 @@ import '../core/events/event_bus.dart';
 import '../core/iching/cast_result.dart';
 import '../core/iching/focus_rule.dart';
 import '../core/iching/hexagram_table.dart';
+import '../features/cross/cross_feature.dart';
+import '../features/meihua/meihua_feature.dart';
 import '../features/share/share.dart';
 import '../l10n/l10n.dart';
 import '../shared/widgets/card_face.dart';
@@ -80,6 +82,8 @@ class _ReadingPageState extends State<ReadingPage> {
           ),
         ],
       ),
+      // 0.8.0：「記下這一卦」固定在底部，不必捲到最後才看到
+      bottomNavigationBar: _canSave ? _saveBar(context) : null,
       body: FutureBuilder<List<HexagramContent?>>(
         future: _content,
         builder: (context, snap) {
@@ -133,44 +137,90 @@ class _ReadingPageState extends State<ReadingPage> {
                 Section(title: l.sectionAction, child: Text(reading.action)),
                 Section(title: l.sectionQuestion, child: Text(reading.question)),
               ],
-              for (final action in activeFeatures(_services.flags).map((f) => f.readingAction).whereType<ReadingAction>())
-                Padding(
-                  padding: const EdgeInsets.only(top: 32),
-                  child: Center(
-                    child: OutlinedButton.icon(
+              // 0.8.0：詳解與呼吸收成一列（置中換行），樣式一致
+              const SizedBox(height: 32),
+              Wrap(
+                alignment: WrapAlignment.center,
+                spacing: 8,
+                runSpacing: 8,
+                children: [
+                  OutlinedButton.icon(
+                    onPressed: () =>
+                        _openDetail(context, cast.primary, cast.primary == _focusHexagram ? _focusLines : const {}),
+                    icon: const Icon(Icons.menu_book_outlined, size: 18),
+                    label: Text(l.detailButton(l.hexName(primary))),
+                  ),
+                  if (changed != null)
+                    OutlinedButton.icon(
+                      onPressed: () => _openDetail(
+                          context, changed.number, changed.number == _focusHexagram ? _focusLines : const {}),
+                      icon: const Icon(Icons.menu_book_outlined, size: 18),
+                      label: Text(l.detailButtonChanged(l.hexName(changed))),
+                    ),
+                  for (final action
+                      in activeFeatures(_services.flags).map((f) => f.readingAction).whereType<ReadingAction>())
+                    OutlinedButton.icon(
                       onPressed: () => action.open(context, cast.primary),
-                      icon: Icon(action.icon),
+                      icon: Icon(action.icon, size: 18),
                       label: Text(action.label(l)),
                     ),
-                  ),
-                ),
-              if (!widget.review && _services.journal != null && _services.flags.featureEnabled('journal')) ...[
-                const SizedBox(height: 32),
-                Center(
-                  child: _saved
-                      ? Text(l.savedToJournalHint, style: Theme.of(context).textTheme.bodySmall)
-                      : FilledButton.icon(
-                          onPressed: () => _save(pc),
-                          icon: const Icon(Icons.bookmark_add_outlined),
-                          label: Text(l.saveThisReading),
-                        ),
-                ),
-              ],
-              const SizedBox(height: 32),
-              OutlinedButton(
-                onPressed: () => _openDetail(context, cast.primary, cast.primary == _focusHexagram ? _focusLines : const {}),
-                child: Text(l.detailButton(l.hexName(primary))),
+                ],
               ),
-              if (changed != null) ...[
-                const SizedBox(height: 8),
-                OutlinedButton(
-                  onPressed: () => _openDetail(context, changed.number, changed.number == _focusHexagram ? _focusLines : const {}),
-                  child: Text(l.detailButtonChanged(l.hexName(changed))),
+              // 0.8.0：換個角度再看（梅花易數、用這一卦做雙卦交叉）；卦記回看時不顯示
+              if (!widget.review && (_meihuaOn || _crossOn)) ...[
+                const SizedBox(height: 32),
+                Text(l.readingMoreTitle, textAlign: TextAlign.center, style: Theme.of(context).textTheme.titleMedium),
+                const SizedBox(height: 12),
+                Wrap(
+                  alignment: WrapAlignment.center,
+                  spacing: 8,
+                  runSpacing: 8,
+                  children: [
+                    if (_meihuaOn)
+                      OutlinedButton.icon(
+                        onPressed: () => Navigator.of(context).push(MaterialPageRoute<void>(builder: meihuaFeature.builder!)),
+                        icon: const Icon(Icons.local_florist_outlined, size: 18),
+                        label: Text(l.featureMeihua),
+                      ),
+                    if (_crossOn)
+                      OutlinedButton.icon(
+                        onPressed: () => openCrossWithCast(context, cast, widget.question),
+                        icon: Icon(_services.isPremium ? Icons.compare_arrows : Icons.lock_outline, size: 18),
+                        label: Text(l.featureCross),
+                      ),
+                  ],
                 ),
               ],
             ],
           );
         },
+      ),
+    );
+  }
+
+  bool get _canSave => !widget.review && _services.journal != null && _services.flags.featureEnabled('journal');
+  bool get _meihuaOn => _services.flags.featureEnabled('meihua');
+  bool get _crossOn => _services.flags.featureEnabled('cross');
+
+  Widget _saveBar(BuildContext context) {
+    final l = context.l10n;
+    return SafeArea(
+      child: Padding(
+        padding: const EdgeInsets.fromLTRB(24, 8, 24, 12),
+        child: Center(
+          heightFactor: 1,
+          child: _saved
+              ? Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 12),
+                  child: Text(l.savedToJournalHint,
+                      textAlign: TextAlign.center, style: Theme.of(context).textTheme.bodySmall),
+                )
+              : FilledButton.icon(
+                  onPressed: () async => _save((await _content)[0]),
+                  icon: const Icon(Icons.bookmark_add_outlined),
+                  label: Text(l.saveThisReading),
+                ),
+        ),
       ),
     );
   }

@@ -8,8 +8,9 @@ typedef LocalizedText = String Function(AppLocalizations l);
 /// 處理通知等外部開啟（payload）；認得就導覽並回傳 true。
 typedef PayloadHandler = bool Function(NavigatorState navigator, String payload);
 
-/// primary／secondary：首頁主按鈕／次要連結；none：不在首頁，只從其他地方進入（例如解讀頁）。
-enum FeaturePlacement { primary, secondary, none }
+/// primary／secondary：首頁主按鈕／次要連結；altCast：不在首頁，放在「抽一卦」頁的「其他起卦方式」（0.8.0）；
+/// none：不在首頁，只從其他地方進入（例如解讀頁）。
+enum FeaturePlacement { primary, secondary, altCast, none }
 
 /// 解讀頁底部的功能入口（例如「以此卦靜心呼吸」），帶入本卦卦序。
 class ReadingAction {
@@ -29,6 +30,7 @@ class AppFeature {
     this.builder,
     this.openPayload,
     this.readingAction,
+    this.memberContent = false,
   });
 
   final String id;
@@ -38,4 +40,7 @@ class AppFeature {
   final WidgetBuilder? builder;
   final PayloadHandler? openPayload;
   final ReadingAction? readingAction;
+
+  /// 完整內容屬會員：免費版在首頁按鈕前加鎖頭小圖示（0.8.0），點進去仍可看免費預覽。
+  final bool memberContent;
 }

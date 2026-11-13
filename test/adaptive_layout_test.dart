@@ -94,6 +94,10 @@ void main() {
         // 三枚銅錢：一次擲完
         nav().popUntil((r) => r.isFirst);
         await _settle(tester);
+        await tester.tap(find.text(l.featureDraw)); // 0.8.0：銅錢與蓍草在抽一卦頁「其他起卦方式」
+        await _settle(tester);
+        await tester.ensureVisible(find.text(l.featureCoins));
+        await _settle(tester);
         await tester.tap(find.text(l.featureCoins));
         await _settle(tester);
         await tester.tap(find.widgetWithText(TextButton, l.coinsTossAll));
@@ -101,6 +105,10 @@ void main() {
 
         // 蓍草：說明較長，先看未起卦的版面，再一次演完
         nav().popUntil((r) => r.isFirst);
+        await _settle(tester);
+        await tester.tap(find.text(l.featureDraw)); // 0.8.0：銅錢與蓍草在抽一卦頁「其他起卦方式」
+        await _settle(tester);
+        await tester.ensureVisible(find.text(l.featureYarrow));
         await _settle(tester);
         await tester.tap(find.text(l.featureYarrow));
         await _settle(tester);

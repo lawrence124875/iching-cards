@@ -213,7 +213,7 @@
   "introNext": "Tiếp",
   "introStart": "Bắt đầu",
   "intro1Title": "Rút một quẻ, đọc tượng lúc này",
-  "intro1Body": "Giữ một việc trong lòng rồi chọn Rút một quẻ trên màn hình chính, hoặc Gieo ba đồng xu, Lập quẻ bằng cỏ thi. Mỗi quẻ có lời quẻ, lời hào, ba phần luận giải, một hành động nhỏ và một câu hỏi giúp bạn nghĩ cho rõ.",
+  "intro1Body": "Giữ một việc trong lòng rồi chọn Rút một quẻ trên màn hình chính; ở trang đó bạn cũng có thể chọn Gieo ba đồng xu hoặc Lập quẻ bằng cỏ thi. Mỗi quẻ có lời quẻ, lời hào, ba phần luận giải, một hành động nhỏ và một câu hỏi giúp bạn nghĩ cho rõ.",
   "intro2Title": "Nhật ký quẻ: ghi lại, nhìn lại",
   "intro2Body": "Lưu câu hỏi và quẻ vào nhật ký; kết quả Mai Hoa, Đối chiếu hai quẻ, Tử Vi và Bát Tự cũng lưu được. Đặt lời nhắc để sau này xem lại suy nghĩ lúc đó và diễn biến về sau; nhật ký có thể sao lưu thành tệp và khôi phục trên điện thoại mới.",
   "intro3Title": "Thở cùng quẻ",
@@ -221,7 +221,7 @@
   "intro4Title": "Chia sẻ và hội viên",
   "intro4Body": "Quẻ bạn thích có thể làm thành thẻ để chia sẻ với bạn bè. Lời quẻ, lời hào và phần luận luôn miễn phí; bản miễn phí được gieo một quẻ mỗi ngày, xem một quảng cáo ngắn để gieo thêm một quẻ. Thành viên Quẻ Khiêm không có quảng cáo, gieo quẻ và nhật ký không giới hạn, cùng bản luận đầy đủ của Đối chiếu hai quẻ, tất cả khóa học, bài thở dài hơn và nhịp hai tai.",
   "intro5Title": "Cho chúng tôi biết ý kiến của bạn",
-  "intro5Body": "Menu ở góc trên bên phải màn hình chính cho phép đặt lời nhắc mỗi ngày một quẻ, xem lại phần giới thiệu này, gửi góp ý và chọn có chia sẻ thống kê sử dụng ẩn danh hay không. Góp ý của bạn giúp ứng dụng tốt hơn.",
+  "intro5Body": "Menu ở góc trên bên phải màn hình chính cho phép xem lại phần giới thiệu này và gửi góp ý. Trong mục Cài đặt của menu, bạn có thể đặt lời nhắc mỗi ngày một quẻ và chọn có chia sẻ thống kê sử dụng ẩn danh hay không. Góp ý của bạn giúp ứng dụng tốt hơn.",
   "introMeihuaTitle": "Mai Hoa",
   "introMeihuaBody": "Lập quẻ từ thời điểm này, hai con số hoặc một câu, rồi đọc tình thế qua hình ảnh quẻ trên dưới, thể và dụng, quẻ hỗ và quẻ biến, kèm xu thế năm mức, khoảng thời gian ước chừng và những việc có thể làm. Mỗi ngày được lập quẻ theo thời gian miễn phí một lần.",
   "introCrossTitle": "Đối chiếu hai quẻ",
@@ -312,5 +312,10 @@
   "meihuaPaywallLessonNote": "Bài 1 miễn phí. Trở thành thành viên để mở cả 12 bài: lập quẻ, thể dụng, ngũ hành và ba ví dụ thực hành.",
   "meihuaPaywallMethodNote": "Lập quẻ theo số và số chữ dành cho thành viên; lập quẻ theo giờ miễn phí mỗi ngày một lần.",
   "meihuaPaywallJournalNote": "Lưu quẻ Mai Hoa vào nhật ký dành cho thành viên.",
-  "meihuaPaywallLimitNote": "Bạn đã dùng hết lượt Mai Hoa hôm nay. Mỗi ngày một quẻ, suy ngẫm thong thả; thành viên được dùng không giới hạn và mọi cách lập quẻ."
+  "meihuaPaywallLimitNote": "Bạn đã dùng hết lượt Mai Hoa hôm nay. Mỗi ngày một quẻ, suy ngẫm thong thả; thành viên được dùng không giới hạn và mọi cách lập quẻ.",
+  "drawOtherMethods": "Cách lập quẻ khác",
+  "homeFreeLeft": "{count, plural, other{Hôm nay còn {count} lượt miễn phí}}",
+  "homeLastEntry": "Ghi chép gần nhất: {title}",
+  "readingMoreTitle": "Xem từ một góc khác",
+  "menuSettings": "Cài đặt"
 }

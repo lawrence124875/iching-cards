@@ -6,7 +6,7 @@ import '../../shared/cast/stepwise_cast_page.dart';
 final yarrowFeature = AppFeature(
   id: 'yarrow',
   label: (l) => l.featureYarrow,
-  placement: FeaturePlacement.secondary,
+  placement: FeaturePlacement.altCast,
   builder: (_) => StepwiseCastPage(
     method: const YarrowStalks(),
     instructions: (l) => l.yarrowInstructions,

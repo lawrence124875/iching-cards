@@ -335,13 +335,14 @@
   "descCross": "سداسيّ من الإي تشينغ وآخر من زهرة البرقوق، جنبًا إلى جنب",
   "descEastern": "زي وي لهذا العام، وباتسي لهذا الشهر",
   "learnLessonCount": "{count, plural, one{درس واحد} two{درسان} few{{count} دروس} many{{count} درسًا} other{{count} درس}}",
-  "onboardTitle": "من أين تودّ أن تبدأ؟",
-  "onboardSubtitle": "اختر واحدًا وسنأخذك مباشرةً إلى سداسيّك الأوّل. يمكنك التبديل في أي وقت من الشريط السفلي.",
-  "onboardDaily": "سداسيّ اليوم",
-  "onboardDailyDesc": "سداسيّ واحد كل يوم لترى نفسك اليوم بوضوح",
-  "onboardLearn": "تعلّم الإي تشينغ",
-  "onboardLearnDesc": "ابدأ من الين واليانغ والثلاثيّات الثمانية، وتعلّم قراءة السداسيّات بنفسك",
-  "onboardAsk": "اطرح سؤالًا",
-  "onboardAskDesc": "اكتب ما يشغل بالك واسحب سداسيًّا",
-  "onboardLater": "أتجوّل أولًا"
+  "libraryTitle": "السداسيّات الأربعة والستّون",
+  "libraryDesc": "تصفّح كل سداسيّ: الصورة والنصّ والخطوط والقراءات",
+  "quizTitle": "تمرين السداسيّات",
+  "quizDesc": "انظر إلى الخطوط واختر الاسم؛ ما تخطئ فيه يظهر أكثر",
+  "quizPrompt": "ما هذا السداسيّ؟",
+  "quizNext": "التالي",
+  "quizAgain": "تمرّن مرّة أخرى",
+  "quizProgress": "السؤال {current} من {total}",
+  "quizDone": "{correct} من {total} صحيحة",
+  "quizMastered": "{count, plural, other{أتقنت {count} من 64 سداسيًّا}}"
 }

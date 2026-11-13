@@ -1,8 +1,5 @@
 import 'package:flutter/material.dart';
 
-import '../features/daily/daily_page.dart';
-import '../features/draw/draw_feature.dart';
-import '../features/intro/onboarding_page.dart';
 import '../features/journal/journal_feature.dart';
 import '../features/learn/learn_feature.dart';
 import '../l10n/l10n.dart';
@@ -14,9 +11,6 @@ import 'services.dart';
 /// 首頁外框（0.9.0，參考塔羅 App 0.4.0）：底部導覽「今日／起卦／學習／卦記」；手機橫放（矮而寬）改側邊導覽。
 /// 學習、卦記被遠端開關關掉時，對應的分頁一起拿掉。
 /// 只建目前分頁（不用 IndexedStack）：每個分頁自帶橫幅廣告，看不見的分頁不載入廣告。
-///
-/// 新手引導選完的起點，交給首頁帶過去（學易經→學習分頁；每日一卦→今日一卦頁；問一件事→抽一卦）。
-final homeStartRequest = ValueNotifier<StartChoice?>(null);
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -40,38 +34,6 @@ class _HomePageState extends State<HomePage> {
 
   /// 從今日一卦等頁面回來時加一，讓目前分頁重建、重新讀取今日一卦與剩餘次數。
   int _generation = 0;
-
-  @override
-  void initState() {
-    super.initState();
-    homeStartRequest.addListener(_onStart);
-    WidgetsBinding.instance.addPostFrameCallback((_) => _onStart());
-  }
-
-  @override
-  void dispose() {
-    homeStartRequest.removeListener(_onStart);
-    super.dispose();
-  }
-
-  Future<void> _onStart() async {
-    final choice = homeStartRequest.value;
-    if (choice == null || !mounted) return;
-    homeStartRequest.value = null;
-    final nav = Navigator.of(context);
-    switch (choice) {
-      case StartChoice.learn:
-        final i = _tabs(context).indexWhere((t) => t.id == learnFeature.id);
-        if (i >= 0) setState(() => _index = i);
-      case StartChoice.daily:
-        setState(() => _index = 0);
-        await nav.push(MaterialPageRoute<void>(builder: (_) => const DailyPage()));
-        if (mounted) setState(() => _generation++);
-      case StartChoice.ask:
-        await nav.push(MaterialPageRoute<void>(builder: drawFeature.builder!));
-        if (mounted) setState(() => _generation++);
-    }
-  }
 
   void _refresh() {
     if (mounted) setState(() => _generation++);

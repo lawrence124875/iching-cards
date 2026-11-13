@@ -335,13 +335,14 @@
   "descCross": "易经与梅花各起一卦，对照着看",
   "descEastern": "紫微看今年，八字看本月",
   "learnLessonCount": "{count, plural, other{共 {count} 课}}",
-  "onboardTitle": "你想从哪里开始？",
-  "onboardSubtitle": "选一个，马上带你起第一卦。之后随时可以从底部切换。",
-  "onboardDaily": "每日一卦",
-  "onboardDailyDesc": "每天一卦，看见今天的自己",
-  "onboardLearn": "学易经",
-  "onboardLearnDesc": "从阴阳、八卦开始，一步步学会自己读卦",
-  "onboardAsk": "问一件事",
-  "onboardAskDesc": "写下心里的问题，抽一卦看看",
-  "onboardLater": "先自己逛逛"
+  "libraryTitle": "六十四卦",
+  "libraryDesc": "逐卦看卦象、卦辞、爻辞与解读",
+  "quizTitle": "认卦练习",
+  "quizDesc": "看卦象选卦名，答错的卦会多出现几次",
+  "quizPrompt": "这是哪一卦？",
+  "quizNext": "下一题",
+  "quizAgain": "再练一轮",
+  "quizProgress": "第 {current}/{total} 题",
+  "quizDone": "答对 {correct}/{total} 题",
+  "quizMastered": "{count, plural, other{已熟悉 {count}/64 卦}}"
 }

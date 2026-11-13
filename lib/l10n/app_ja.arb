@@ -335,13 +335,14 @@
   "descCross": "易経と梅花で一卦ずつ立て、見比べる",
   "descEastern": "紫微で今年を、八字で今月を見る",
   "learnLessonCount": "{count, plural, other{全{count}課}}",
-  "onboardTitle": "どこから始めますか？",
-  "onboardSubtitle": "ひとつ選ぶと、すぐに最初の一卦へご案内します。あとで下のメニューからいつでも切り替えられます。",
-  "onboardDaily": "今日の一卦",
-  "onboardDailyDesc": "1日1卦、今日の自分を見つめる",
-  "onboardLearn": "易経を学ぶ",
-  "onboardLearnDesc": "陰陽と八卦から始めて、自分で卦を読めるように",
-  "onboardAsk": "ひとつ問う",
-  "onboardAskDesc": "心にある問いを書いて、一卦引いてみる",
-  "onboardLater": "まずは自由に見てみる"
+  "libraryTitle": "六十四卦",
+  "libraryDesc": "卦ごとに卦象・卦辞・爻辞・解読を見る",
+  "quizTitle": "卦の練習",
+  "quizDesc": "卦象を見て卦名を選ぶ。間違えた卦はよく出題されます",
+  "quizPrompt": "これはどの卦？",
+  "quizNext": "次へ",
+  "quizAgain": "もう一度練習する",
+  "quizProgress": "{current}／{total}問目",
+  "quizDone": "{total}問中{correct}問正解",
+  "quizMastered": "{count, plural, other{64卦中{count}卦を習得}}"
 }

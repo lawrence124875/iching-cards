@@ -335,13 +335,14 @@
   "descCross": "ตั้งฉั่วจากอี้จิงและเหมยฮวาอย่างละหนึ่ง แล้ววางเทียบกัน",
   "descEastern": "จื่อเวยดูปีนี้ ปาจื้อดูเดือนนี้",
   "learnLessonCount": "{count, plural, other{{count} บท}}",
-  "onboardTitle": "อยากเริ่มจากตรงไหน?",
-  "onboardSubtitle": "เลือกหนึ่งอย่าง แล้วเราจะพาไปตั้งฉั่วแรกทันที เปลี่ยนได้ตลอดจากแถบด้านล่าง",
-  "onboardDaily": "ฉั่วประจำวัน",
-  "onboardDailyDesc": "วันละหนึ่งฉั่ว เพื่อมองเห็นตัวเองในวันนี้",
-  "onboardLearn": "เรียนอี้จิง",
-  "onboardLearnDesc": "เริ่มจากหยินหยางและแปดตรีแกรม จนอ่านฉั่วได้เอง",
-  "onboardAsk": "ถามหนึ่งเรื่อง",
-  "onboardAskDesc": "เขียนคำถามในใจ แล้วจับไพ่ดูหนึ่งใบ",
-  "onboardLater": "ขอดูรอบ ๆ ก่อน"
+  "libraryTitle": "64 ฉั่ว",
+  "libraryDesc": "ดูทีละฉั่ว: ภาพ คำทำนายฉั่ว คำของเส้น และคำอธิบาย",
+  "quizTitle": "ฝึกจำฉั่ว",
+  "quizDesc": "ดูเส้นฉั่วแล้วเลือกชื่อ ฉั่วที่ตอบผิดจะออกบ่อยขึ้น",
+  "quizPrompt": "นี่คือฉั่วอะไร?",
+  "quizNext": "ถัดไป",
+  "quizAgain": "ฝึกอีกรอบ",
+  "quizProgress": "ข้อ {current}/{total}",
+  "quizDone": "ถูก {correct} จาก {total} ข้อ",
+  "quizMastered": "{count, plural, other{จำได้แล้ว {count}/64 ฉั่ว}}"
 }

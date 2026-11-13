@@ -17,6 +17,7 @@ import '../core/monetization/free_limits.dart';
 import '../core/monetization/premium_service.dart';
 import '../core/daily/daily_hexagram.dart';
 import '../core/journal/journal_store.dart';
+import '../core/learn/quiz_progress.dart';
 import '../core/iching/focus_rule.dart';
 import '../core/reminders/daily_reminder.dart';
 import '../core/reminders/local_notification_reminders.dart';
@@ -52,7 +53,9 @@ class Services {
     CastQuota? quota,
     CastQuota? meihuaQuota,
     DailyHexagramStore? dailyHexagram,
+    QuizProgress? quiz,
   })  : dailyHexagram = dailyHexagram ?? DailyHexagramStore(),
+        quiz = quiz ?? QuizProgress(),
         premium = premium ?? FreePremium(),
         ads = ads ?? NoAds(),
         limits = limits ?? const FreeLimits(),
@@ -101,6 +104,7 @@ class Services {
       quota: CastQuota(limits: limits),
       meihuaQuota: CastQuota(limits: limits.meihua, storage: FileQuotaStorage(fileName: 'meihua_quota.json')),
       dailyHexagram: DailyHexagramStore(storage: FileQuotaStorage(fileName: 'daily_hexagram.json')),
+      quiz: QuizProgress(storage: FileQuotaStorage(fileName: 'hexagram_quiz.json')),
     );
   }
 
@@ -159,6 +163,9 @@ class Services {
 
   /// 今日一卦（不計入每日起卦次數，0.9.0）。
   final DailyHexagramStore dailyHexagram;
+
+  /// 認卦練習進度（0.9.0）。
+  final QuizProgress quiz;
 
   bool get isPremium => premium.isPremium.value;
 }

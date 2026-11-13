@@ -335,13 +335,14 @@
   "descCross": "Mỗi bên Kinh Dịch và Mai Hoa một quẻ, đặt cạnh nhau mà xem",
   "descEastern": "Tử Vi xem năm nay, Bát Tự xem tháng này",
   "learnLessonCount": "{count, plural, other{{count} bài}}",
-  "onboardTitle": "Bạn muốn bắt đầu từ đâu?",
-  "onboardSubtitle": "Chọn một mục, chúng tôi sẽ đưa bạn đến quẻ đầu tiên ngay. Bạn có thể đổi bất cứ lúc nào ở thanh bên dưới.",
-  "onboardDaily": "Quẻ hôm nay",
-  "onboardDailyDesc": "Mỗi ngày một quẻ để nhìn rõ chính mình hôm nay",
-  "onboardLearn": "Học Kinh Dịch",
-  "onboardLearnDesc": "Bắt đầu từ âm dương, bát quái, rồi tự đọc được quẻ",
-  "onboardAsk": "Hỏi một điều",
-  "onboardAskDesc": "Viết ra câu hỏi trong lòng rồi rút một quẻ",
-  "onboardLater": "Tự khám phá trước"
+  "libraryTitle": "64 quẻ",
+  "libraryDesc": "Xem từng quẻ: tượng, lời quẻ, lời hào và luận giải",
+  "quizTitle": "Luyện nhận quẻ",
+  "quizDesc": "Nhìn tượng quẻ rồi chọn tên quẻ; quẻ trả lời sai sẽ xuất hiện nhiều hơn",
+  "quizPrompt": "Đây là quẻ nào?",
+  "quizNext": "Tiếp",
+  "quizAgain": "Luyện thêm một lượt",
+  "quizProgress": "Câu {current}/{total}",
+  "quizDone": "Đúng {correct}/{total} câu",
+  "quizMastered": "{count, plural, other{Đã thuộc {count}/64 quẻ}}"
 }

@@ -335,13 +335,14 @@
   "descCross": "Un hexagrama del I Ching y otro de Flor de Ciruelo, lado a lado",
   "descEastern": "Zi Wei para este año, Bazi para este mes",
   "learnLessonCount": "{count, plural, one{{count} lección} other{{count} lecciones}}",
-  "onboardTitle": "¿Por dónde quieres empezar?",
-  "onboardSubtitle": "Elige una opción y te llevamos directo a tu primer hexagrama. Puedes cambiar cuando quieras desde la barra inferior.",
-  "onboardDaily": "Hexagrama del día",
-  "onboardDailyDesc": "Un hexagrama al día para verte con más claridad",
-  "onboardLearn": "Aprender el I Ching",
-  "onboardLearnDesc": "Empieza por el yin, el yang y los ocho trigramas, y aprende a leer hexagramas",
-  "onboardAsk": "Hacer una pregunta",
-  "onboardAskDesc": "Escribe lo que tienes en mente y saca un hexagrama",
-  "onboardLater": "Explorar por mi cuenta"
+  "libraryTitle": "Los 64 hexagramas",
+  "libraryDesc": "Recorre cada hexagrama: imagen, dictamen, líneas y lecturas",
+  "quizTitle": "Práctica de hexagramas",
+  "quizDesc": "Mira las líneas y elige el nombre; los que fallas aparecen más a menudo",
+  "quizPrompt": "¿Qué hexagrama es este?",
+  "quizNext": "Siguiente",
+  "quizAgain": "Practicar otra vez",
+  "quizProgress": "Pregunta {current} de {total}",
+  "quizDone": "{correct} de {total} correctas",
+  "quizMastered": "{count, plural, other{{count} de 64 hexagramas aprendidos}}"
 }

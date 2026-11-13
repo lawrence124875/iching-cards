@@ -335,13 +335,14 @@
   "descCross": "주역과 매화역수로 한 괘씩 세워 나란히 보기",
   "descEastern": "자미로 올해를, 사주로 이번 달을",
   "learnLessonCount": "{count, plural, other{총 {count}과}}",
-  "onboardTitle": "어디서부터 시작할까요?",
-  "onboardSubtitle": "하나를 고르면 바로 첫 괘로 안내해 드려요. 나중에 아래 메뉴에서 언제든 바꿀 수 있어요.",
-  "onboardDaily": "오늘의 괘",
-  "onboardDailyDesc": "하루 한 괘, 오늘의 나를 들여다보기",
-  "onboardLearn": "주역 배우기",
-  "onboardLearnDesc": "음양과 팔괘부터 시작해 스스로 괘를 읽는 법 배우기",
-  "onboardAsk": "질문하기",
-  "onboardAskDesc": "마음속 질문을 적고 한 괘 뽑아 보기",
-  "onboardLater": "먼저 둘러보기"
+  "libraryTitle": "육십사괘",
+  "libraryDesc": "괘마다 괘상·괘사·효사·풀이 보기",
+  "quizTitle": "괘 익히기",
+  "quizDesc": "괘상을 보고 괘 이름 고르기, 틀린 괘는 더 자주 나와요",
+  "quizPrompt": "이 괘는 무엇일까요?",
+  "quizNext": "다음",
+  "quizAgain": "한 번 더 연습하기",
+  "quizProgress": "{total}문제 중 {current}번째",
+  "quizDone": "{total}문제 중 {correct}개 정답",
+  "quizMastered": "{count, plural, other{64괘 중 {count}괘 익힘}}"
 }

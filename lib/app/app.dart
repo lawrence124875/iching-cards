@@ -5,7 +5,7 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 
 import '../core/events/event_bus.dart';
 import '../l10n/l10n.dart';
-import '../features/intro/onboarding_page.dart';
+import '../features/intro/intro_page.dart';
 import 'feature_registry.dart';
 import '../shared/widgets/update_prompt.dart';
 import 'home_page.dart';
@@ -39,13 +39,10 @@ class _IchingAppState extends State<IchingApp> {
       if (p != null) {
         _open(p);
       } else {
-        // 首次開啟顯示新手引導「你想從哪裡開始？」（0.9.0；從通知打開時不打斷），選完交給首頁帶過去
+        // 首次開啟顯示三頁核心介紹（從通知打開時不打斷）
         final intro = services.intro;
         final nav = _navigatorKey.currentState;
-        if (intro != null && nav != null && !await intro.seen()) {
-          final choice = await showOnboarding(nav);
-          if (choice != null) homeStartRequest.value = choice;
-        }
+        if (intro != null && nav != null && !await intro.seen()) await showIntro(nav);
       }
       // 介紹看完才排每日一卦提醒（預設開啟）；啟動時不請求權限，已允許就照常排
       await _refreshDaily(services);

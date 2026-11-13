@@ -690,13 +690,14 @@
   "descCross": "One I Ching and one Plum Blossom hexagram, read side by side",
   "descEastern": "Zi Wei for this year, Bazi for this month",
   "learnLessonCount": "{count, plural, one{{count} lesson} other{{count} lessons}}",
-  "onboardTitle": "Where would you like to start?",
-  "onboardSubtitle": "Pick one and we’ll take you straight to your first hexagram. You can switch anytime from the bar below.",
-  "onboardDaily": "Hexagram of the Day",
-  "onboardDailyDesc": "One hexagram a day to see yourself more clearly",
-  "onboardLearn": "Learn the I Ching",
-  "onboardLearnDesc": "Start with yin, yang and the eight trigrams, and learn to read hexagrams yourself",
-  "onboardAsk": "Ask a question",
-  "onboardAskDesc": "Write down what’s on your mind and draw a hexagram",
-  "onboardLater": "Just look around"
+  "libraryTitle": "The 64 Hexagrams",
+  "libraryDesc": "Browse each hexagram: image, judgment, lines and readings",
+  "quizTitle": "Hexagram Practice",
+  "quizDesc": "See the lines, pick the name; ones you miss come back more often",
+  "quizPrompt": "Which hexagram is this?",
+  "quizNext": "Next",
+  "quizAgain": "Practice again",
+  "quizProgress": "Question {current} of {total}",
+  "quizDone": "{correct} of {total} correct",
+  "quizMastered": "{count, plural, other{{count} of 64 hexagrams learned}}"
 }

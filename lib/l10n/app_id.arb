@@ -690,13 +690,14 @@
   "descCross": "Satu heksagram I Ching dan satu Bunga Plum, dibaca berdampingan",
   "descEastern": "Zi Wei untuk tahun ini, Bazi untuk bulan ini",
   "learnLessonCount": "{count, plural, other{{count} pelajaran}}",
-  "onboardTitle": "Mau mulai dari mana?",
-  "onboardSubtitle": "Pilih satu dan kami langsung mengantarmu ke heksagram pertama. Kamu bisa beralih kapan saja dari bilah di bawah.",
-  "onboardDaily": "Heksagram Hari Ini",
-  "onboardDailyDesc": "Satu heksagram sehari untuk melihat dirimu hari ini",
-  "onboardLearn": "Belajar I Ching",
-  "onboardLearnDesc": "Mulai dari yin, yang, dan delapan trigram, lalu belajar membaca heksagram sendiri",
-  "onboardAsk": "Ajukan pertanyaan",
-  "onboardAskDesc": "Tulis pertanyaan di hatimu lalu ambil satu heksagram",
-  "onboardLater": "Lihat-lihat dulu"
+  "libraryTitle": "64 Heksagram",
+  "libraryDesc": "Lihat tiap heksagram: gambaran, teks putusan, garis, dan bacaan",
+  "quizTitle": "Latihan Heksagram",
+  "quizDesc": "Lihat garisnya lalu pilih namanya; yang salah akan lebih sering muncul",
+  "quizPrompt": "Heksagram apa ini?",
+  "quizNext": "Berikutnya",
+  "quizAgain": "Latihan lagi",
+  "quizProgress": "Soal {current} dari {total}",
+  "quizDone": "Benar {correct} dari {total}",
+  "quizMastered": "{count, plural, other{Sudah hafal {count} dari 64 heksagram}}"
 }

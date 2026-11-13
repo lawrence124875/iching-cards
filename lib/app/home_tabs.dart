@@ -7,6 +7,8 @@ import '../features/daily/daily_feature.dart';
 import '../features/daily/daily_page.dart';
 import '../features/draw/draw_feature.dart';
 import '../features/eastern/eastern_feature.dart';
+import '../features/learn/hexagram_library_page.dart';
+import '../features/learn/hexagram_quiz_page.dart';
 import '../features/learn/lesson_course.dart';
 import '../features/learn/lesson_list_page.dart';
 import '../features/meihua/meihua_feature.dart';
@@ -188,7 +190,7 @@ class CastTab extends StatelessWidget {
   }
 }
 
-/// 「學習」分頁：易經、梅花易數、紫微、八字四套課程（各自的開頭可免費試讀）。
+/// 「學習」分頁：六十四卦卦庫、認卦練習（0.9.0，不上鎖），再來是易經、梅花易數、紫微、八字四套課程（各自的開頭可免費試讀）。
 class LearnTab extends StatelessWidget {
   const LearnTab({super.key});
 
@@ -210,6 +212,22 @@ class LearnTab extends StatelessWidget {
       body: ListView(
         padding: readablePadding(context, top: 8, bottom: 40),
         children: [
+          for (final (icon, title, desc, page) in <(IconData, String, String, Widget)>[
+            (Icons.grid_view_outlined, l.libraryTitle, l.libraryDesc, const HexagramLibraryPage()),
+            (Icons.quiz_outlined, l.quizTitle, l.quizDesc, const HexagramQuizPage()),
+          ])
+            Card(
+              margin: const EdgeInsets.only(bottom: 10),
+              child: ListTile(
+                contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
+                leading: Icon(icon, color: QianColors.earth),
+                title: Text(title),
+                subtitle: Text(desc),
+                trailing: const Icon(Icons.chevron_right, color: QianColors.textSub),
+                onTap: () => Navigator.of(context).push(MaterialPageRoute<void>(builder: (_) => page)),
+              ),
+            ),
+          const SizedBox(height: 8),
           for (final (c, icon) in courses)
             Card(
               margin: const EdgeInsets.only(bottom: 10),

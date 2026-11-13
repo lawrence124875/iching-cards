@@ -896,5 +896,7 @@
   "guyingOriginal": "原書文字",
   "guyingAbout": "關於古圖",
   "guyingViewSource": "查看原書掃描（Wikimedia Commons）",
-  "@guyingSymbolLine": {"placeholders": {"see": {"type": "String"}, "means": {"type": "String"}}}
+  "@guyingSymbolLine": {"placeholders": {"see": {"type": "String"}, "means": {"type": "String"}}},
+  "guyingShowHere": "看這一卦的古圖（斷易天機）",
+  "guyingHide": "收起古圖"
 }

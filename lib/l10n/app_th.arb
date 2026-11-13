@@ -353,5 +353,7 @@
   "guyingSymbolLine": "{see}: {means}",
   "guyingOriginal": "ข้อความต้นฉบับ",
   "guyingAbout": "เกี่ยวกับภาพโบราณ",
-  "guyingViewSource": "ดูภาพสแกนต้นฉบับ (Wikimedia Commons)"
+  "guyingViewSource": "ดูภาพสแกนต้นฉบับ (Wikimedia Commons)",
+  "guyingShowHere": "ดูภาพโบราณของฉั่วนี้ (Duanyi Tianji)",
+  "guyingHide": "ซ่อนภาพโบราณ"
 }

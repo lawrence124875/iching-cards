@@ -353,5 +353,7 @@
   "guyingSymbolLine": "{see}：{means}",
   "guyingOriginal": "原书文字",
   "guyingAbout": "关于古图",
-  "guyingViewSource": "查看原书扫描（Wikimedia Commons）"
+  "guyingViewSource": "查看原书扫描（Wikimedia Commons）",
+  "guyingShowHere": "看这一卦的古图（断易天机）",
+  "guyingHide": "收起古图"
 }

@@ -353,5 +353,7 @@
   "guyingSymbolLine": "{see}: {means}",
   "guyingOriginal": "Texto original",
   "guyingAbout": "Sobre los grabados",
-  "guyingViewSource": "Ver los escaneos originales (Wikimedia Commons)"
+  "guyingViewSource": "Ver los escaneos originales (Wikimedia Commons)",
+  "guyingShowHere": "Ver el grabado de este hexagrama (Duanyi Tianji)",
+  "guyingHide": "Ocultar grabados"
 }

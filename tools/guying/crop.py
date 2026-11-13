@@ -22,34 +22,49 @@ def close1d(b, k):  # fill gaps up to k along last axis
         c[..., :-s] |= b[..., s:]
     return c
 
+def hruns(b):
+    return runs(close1d(b, 6))
+
 rows, crops, dbg = [], [], []
-for page, half, y0, y1, name in SPEC["items"]:
+CX = 0.35
+for page, half, cy, name in SPEC["items"]:
     im = Image.open(os.path.join(pages, page + ".jpg")).convert("RGB")
     W, H = im.size
     hx0, hx1 = (0, W // 2) if half == "L" else (W // 2, W)
     g = np.asarray(ImageOps.grayscale(im.crop((hx0, 0, hx1, H))), float)
     hw = g.shape[1]
-    thr = np.percentile(g, 50) * 0.72
-    dark = g < thr
+    dark = g < np.percentile(g, 50) * 0.72
+    status = "ok"
     k = over.get(name)
-    if k:  # manual box in half fractions x0,y0,x1,y1
-        bx0, by0, bx1, by1 = int(k[0]*hw), int(k[1]*H), int(k[2]*hw), int(k[3]*H)
+    if k:
+        bx0, by0, bx1, by1 = int(k[0]*hw), int(k[1]*H), int(k[2]*hw), int(k[3]*H); status = "manual"
     else:
-        def hline(lo, hi, xa, xb):
-            lo, hi = max(0, int(lo*H)), min(H, int(hi*H))
-            sc = runs(close1d(dark[lo:hi, xa:xb], 4))
-            return lo + int(np.argmax(sc)), sc.max() / max(1, xb - xa)
-        def vline(lo, hi, ya, yb):
-            lo, hi = max(0, int(lo*hw)), min(hw, int(hi*hw))
-            sc = runs(close1d(dark[ya:yb, lo:hi].T, 4))
-            return lo + int(np.argmax(sc)), sc.max() / max(1, yb - ya)
-        xa, xb = int(0.15*hw), int(0.55*hw)
-        by0, s0 = hline(y0 - 0.09, y0 + 0.09, xa, xb)
-        by1, s1 = hline(y1 - 0.09, y1 + 0.09, xa, xb)
-        bx0, s2 = vline(0.0, 0.3, by0 + 5, by1 - 5)
-        bx1, s3 = vline(0.5, 0.92, by0 + 5, by1 - 5)
-        by0, s0 = hline(by0/H - 0.02, by0/H + 0.02, bx0 + 10, bx1 - 10)
-        by1, s1 = hline(by1/H - 0.02, by1/H + 0.02, bx0 + 10, bx1 - 10)
+        xa, xb = int((CX - 0.22) * hw), int((CX + 0.18) * hw)
+        hs = hruns(dark[:, xa:xb]) >= 0.85 * (xb - xa)
+        lines, r = [], 0
+        while r < H:
+            if hs[r]:
+                e = r
+                while e + 1 < H and hs[e + 1]: e += 1
+                lines.append((r + e) // 2); r = e + 1
+            else: r += 1
+        c = int(cy * H)
+        ups = sorted([l for l in lines if c - 0.32*H < l < c], reverse=True)
+        dns = sorted([l for l in lines if c < l < c + 0.32*H])
+        found = None
+        for t in ups:
+            for b in dns:
+                if not (0.12*H <= b - t <= 0.45*H): continue
+                band = dark[t + 4:b - 4, :]
+                vs = hruns(band.T) >= 0.9 * band.shape[0]
+                xs = np.nonzero(vs)[0]
+                L = [x for x in xs if x < (CX - 0.12) * hw]; R = [x for x in xs if x > (CX + 0.12) * hw]
+                if L and R and min(R) - max(L) >= 0.4 * hw:
+                    found = (max(L), t, min(R), b); break
+            if found: break
+        if found: bx0, by0, bx1, by1 = found
+        else:
+            status = "FAIL"; bx0, by0, bx1, by1 = int(0.03*hw), int((cy-0.13)*H), int(0.7*hw), int((cy+0.13)*H)
     box = (hx0 + bx0, by0, hx0 + bx1, by1)
     c = im.crop(box)
     num = NAMES.index(name) + 1
@@ -57,8 +72,8 @@ for page, half, y0, y1, name in SPEC["items"]:
     if cw.width > 900: cw = cw.resize((900, round(cw.height * 900 / cw.width)), Image.LANCZOS)
     cw.save(os.path.join(out, "images", f"{num:02d}.webp"), quality=80, method=6)
     sz = os.path.getsize(os.path.join(out, "images", f"{num:02d}.webp"))
-    rows.append(f"{num:02d},{name},{page},{half},{box[0]},{box[1]},{box[2]},{box[3]},{c.width}x{c.height},{sz}")
-    crops.append((f"{len(crops)+1}:{num:02d}", c))
+    rows.append(f"{num:02d},{name},{page},{half},{bx0/hw:.3f},{by0/H:.3f},{bx1/hw:.3f},{by1/H:.3f},{c.width}x{c.height},{status},{sz}")
+    crops.append((f"{len(crops)+1}:{num:02d}{'' if status=='ok' else ' '+status}", c))
     d = im.crop((hx0, 0, hx1, H)).copy(); dr = ImageDraw.Draw(d)
     dr.rectangle((bx0, by0, bx1, by1), outline=(255, 0, 0), width=8)
     dbg.append((f"{len(dbg)+1}:{num:02d} {page}{half}", d))
@@ -75,5 +90,5 @@ def sheet(items, tw, path, cols=8):
     s.save(path, quality=72)
 sheet(crops, 220, os.path.join(out, "work", "crops_sheet.jpg"))
 sheet(dbg, 160, os.path.join(out, "work", "debug_sheet.jpg"), cols=11)
-open(os.path.join(out, "work", "map.csv"), "w", encoding="utf-8").write("num,name,page,half,x0,y0,x1,y1,size,bytes\n" + "\n".join(rows) + "\n")
-print("cropped", len(rows), "total KB", sum(int(r.split(",")[-1]) for r in rows) // 1024)
+open(os.path.join(out, "work", "map.csv"), "w", encoding="utf-8").write("num,name,page,half,fx0,fy0,fx1,fy1,size,status,bytes\n" + "\n".join(rows) + "\n")
+print("cropped", len(rows), "fail", sum("FAIL" in r for r in rows), "total KB", sum(int(r.split(",")[-1]) for r in rows) // 1024)

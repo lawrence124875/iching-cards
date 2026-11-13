@@ -12,6 +12,7 @@ import 'package:iching_cards/core/iching/hexagram_table.dart';
 import 'package:iching_cards/core/onboarding/intro_store.dart';
 import 'package:iching_cards/core/reminders/reminder_service.dart';
 import 'package:iching_cards/features/intro/intro_page.dart';
+import 'package:iching_cards/features/intro/onboarding_page.dart';
 import 'package:iching_cards/features/share/share.dart';
 import 'package:iching_cards/l10n/l10n.dart';
 
@@ -26,18 +27,14 @@ Services _services({IntroStore? intro}) => Services(
 
 void main() {
   group('功能介紹', () {
-    testWidgets('首次開啟顯示三頁核心，看完記為已看過', (tester) async {
+    testWidgets('首次開啟顯示新手引導，選了起點記為已看過', (tester) async {
       final store = MemoryIntroStore();
       await tester.pumpWidget(AppServices(services: _services(intro: store), child: const IchingApp()));
       await tester.pumpAndSettle();
-      expect(find.byType(IntroPage), findsOneWidget);
-      for (var i = 0; i < 2; i++) {
-        await tester.tap(find.byType(FilledButton));
-        await tester.pumpAndSettle();
-      }
-      await tester.tap(find.byType(FilledButton)); // 第三頁：開始使用
+      expect(find.byType(OnboardingPage), findsOneWidget);
+      await tester.tap(find.byKey(const ValueKey('onboard_learn')));
       await tester.pumpAndSettle();
-      expect(find.byType(IntroPage), findsNothing);
+      expect(find.byType(OnboardingPage), findsNothing);
       expect(store.value, isTrue);
     });
 
@@ -45,7 +42,7 @@ void main() {
       await tester
           .pumpWidget(AppServices(services: _services(intro: MemoryIntroStore(value: true)), child: const IchingApp()));
       await tester.pumpAndSettle();
-      expect(find.byType(IntroPage), findsNothing);
+      expect(find.byType(OnboardingPage), findsNothing);
     });
 
     testWidgets('略過也記為已看過', (tester) async {
@@ -54,7 +51,7 @@ void main() {
       await tester.pumpAndSettle();
       await tester.tap(find.byType(TextButton).first);
       await tester.pumpAndSettle();
-      expect(find.byType(IntroPage), findsNothing);
+      expect(find.byType(OnboardingPage), findsNothing);
       expect(store.value, isTrue);
     });
   });

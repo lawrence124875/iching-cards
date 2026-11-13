@@ -15,6 +15,7 @@ import '../core/monetization/ad_service.dart';
 import '../core/monetization/cast_quota.dart';
 import '../core/monetization/free_limits.dart';
 import '../core/monetization/premium_service.dart';
+import '../core/daily/daily_hexagram.dart';
 import '../core/journal/journal_store.dart';
 import '../core/iching/focus_rule.dart';
 import '../core/reminders/daily_reminder.dart';
@@ -50,7 +51,9 @@ class Services {
     FreeLimits? limits,
     CastQuota? quota,
     CastQuota? meihuaQuota,
-  })  : premium = premium ?? FreePremium(),
+    DailyHexagramStore? dailyHexagram,
+  })  : dailyHexagram = dailyHexagram ?? DailyHexagramStore(),
+        premium = premium ?? FreePremium(),
         ads = ads ?? NoAds(),
         limits = limits ?? const FreeLimits(),
         quota = quota ?? CastQuota(limits: limits ?? const FreeLimits(), storage: MemoryQuotaStorage()),
@@ -97,6 +100,7 @@ class Services {
       limits: limits,
       quota: CastQuota(limits: limits),
       meihuaQuota: CastQuota(limits: limits.meihua, storage: FileQuotaStorage(fileName: 'meihua_quota.json')),
+      dailyHexagram: DailyHexagramStore(storage: FileQuotaStorage(fileName: 'daily_hexagram.json')),
     );
   }
 
@@ -152,6 +156,9 @@ class Services {
 
   /// 梅花易數的每日額度（與 [quota] 分開算）。
   final CastQuota meihuaQuota;
+
+  /// 今日一卦（不計入每日起卦次數，0.9.0）。
+  final DailyHexagramStore dailyHexagram;
 
   bool get isPremium => premium.isPremium.value;
 }

@@ -121,7 +121,7 @@ class _DailyReminderDialogState extends State<_DailyReminderDialog> with Widgets
           trailing: Text(time),
           onTap: _pickTime,
         ),
-        Text(l.dailyReminderHint, style: const TextStyle(color: QianColors.textSub)),
+        Text(l.dailyReminderHint, style: TextStyle(color: QianColors.textSub)),
         if (_error != null) ...[
           const SizedBox(height: 8),
           Text(_error!, style: TextStyle(color: Theme.of(context).colorScheme.error)),

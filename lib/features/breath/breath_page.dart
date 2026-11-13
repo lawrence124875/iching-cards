@@ -414,7 +414,7 @@ class _MiniBreath extends StatelessWidget {
           child: Text(
             context.l10n.phase(state.phase),
             style: Theme.of(context).textTheme.titleMedium?.copyWith(
-              color: QianColors.text,
+              color: QianColors.onImage,
               shadows: const [Shadow(blurRadius: 6, color: Colors.black)],
             ),
           ),

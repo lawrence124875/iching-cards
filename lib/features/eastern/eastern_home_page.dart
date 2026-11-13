@@ -45,7 +45,7 @@ class _EasternHomePageState extends State<EasternHomePage> {
             builder: (context, p, _) => ListView(
               padding: readablePadding(context, top: 16, bottom: 32),
               children: [
-                const Icon(Icons.auto_awesome_outlined, size: 48, color: QianColors.earth),
+                Icon(Icons.auto_awesome_outlined, size: 48, color: QianColors.earth),
                 const SizedBox(height: 12),
                 Text(ec.s('intro'), style: t.bodyMedium, textAlign: TextAlign.center),
                 const SizedBox(height: 24),
@@ -140,7 +140,7 @@ class EasternEntry extends StatelessWidget {
         leading: Icon(icon, color: QianColors.earth),
         title: Text(title, style: t.titleMedium),
         subtitle: Text(subtitle, style: t.bodySmall?.copyWith(color: QianColors.textSub)),
-        trailing: const Icon(Icons.chevron_right, color: QianColors.textSub),
+        trailing: Icon(Icons.chevron_right, color: QianColors.textSub),
         onTap: onTap,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
       ),

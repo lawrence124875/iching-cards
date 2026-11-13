@@ -174,7 +174,7 @@ class _JournalEntryPageState extends State<JournalEntryPage> {
                 child: Text(e.question.isEmpty ? l.journalQuestionEmpty : e.question,
                     style: e.question.isEmpty ? t.bodyMedium?.copyWith(color: QianColors.textSub) : null),
               ),
-              const Icon(Icons.edit_outlined, size: 18, color: QianColors.textSub),
+              Icon(Icons.edit_outlined, size: 18, color: QianColors.textSub),
             ]),
           ),
         ),
@@ -236,7 +236,7 @@ class _JournalEntryPageState extends State<JournalEntryPage> {
                     const SizedBox(height: 8),
                     Row(children: [
                       HexagramGlyph(lines: p.lines, changing: cast.changingPositions.toSet(), width: 28),
-                      const Padding(
+                      Padding(
                         padding: EdgeInsets.symmetric(horizontal: 10),
                         child: Icon(Icons.east, size: 18, color: QianColors.mountain),
                       ),
@@ -265,7 +265,7 @@ class _JournalEntryPageState extends State<JournalEntryPage> {
                 child: Text(e.question.isEmpty ? l.journalQuestionEmpty : e.question,
                     style: e.question.isEmpty ? t.bodyMedium?.copyWith(color: QianColors.textSub) : null),
               ),
-              const Icon(Icons.edit_outlined, size: 18, color: QianColors.textSub),
+              Icon(Icons.edit_outlined, size: 18, color: QianColors.textSub),
             ]),
           ),
         ),
@@ -316,7 +316,7 @@ class _JournalEntryPageState extends State<JournalEntryPage> {
                     width: double.infinity,
                     margin: const EdgeInsets.only(top: 12),
                     padding: const EdgeInsetsDirectional.only(start: 12),
-                    decoration: const BoxDecoration(
+                    decoration: BoxDecoration(
                       border: BorderDirectional(start: BorderSide(color: QianColors.rice, width: 2)),
                     ),
                     child: Column(

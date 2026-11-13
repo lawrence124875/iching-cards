@@ -314,7 +314,7 @@ class _ChangeRow extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         side(l.primaryHexagram, p, cast.changingPositions.toSet()),
-        const Padding(
+        Padding(
           padding: EdgeInsets.symmetric(horizontal: 28),
           child: Icon(Icons.east, color: QianColors.mountain),
         ),

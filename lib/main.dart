@@ -59,6 +59,7 @@ Future<void> main() async {
   );
   AnalyticsListener(services.events, services.analytics); // 全 App 存活期間都在，不需 dispose
   await services.reminders.init(); // 不拋例外；失敗時提醒功能停用
+  await services.theme.ready; // 外觀設定先讀好，開機不閃另一種配色
   runApp(AppServices(services: services, child: const IchingApp()));
   appStarted = true;
   syncAds();

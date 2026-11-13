@@ -50,7 +50,7 @@ class _List extends StatelessWidget {
           return ListView.separated(
             padding: readablePadding(context, horizontal: 16, top: 8, bottom: 32),
             itemCount: entries.length,
-            separatorBuilder: (_, __) => const Divider(height: 1, color: QianColors.inkCard),
+            separatorBuilder: (_, __) => Divider(height: 1, color: QianColors.inkCard),
             itemBuilder: (context, i) => _Tile(entry: entries[i]),
           );
         },
@@ -77,7 +77,7 @@ class _Tile extends StatelessWidget {
     return ListTile(
       contentPadding: const EdgeInsets.symmetric(vertical: 8, horizontal: 4),
       leading: p == null
-          ? const SizedBox(width: 32, child: Icon(Icons.wb_twilight_outlined, color: QianColors.earth))
+          ? SizedBox(width: 32, child: Icon(Icons.wb_twilight_outlined, color: QianColors.earth))
           : HexagramGlyph(lines: p.lines, changing: cast!.changingPositions.toSet(), width: 32),
       title: Text(
           p == null

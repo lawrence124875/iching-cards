@@ -72,7 +72,7 @@ class _Body extends StatelessWidget {
               Padding(
                 padding: const EdgeInsets.only(top: 6),
                 child: Row(crossAxisAlignment: CrossAxisAlignment.start, children: [
-                  const Text('・', style: TextStyle(color: QianColors.rice)),
+                  Text('・', style: TextStyle(color: QianColors.rice)),
                   Expanded(child: Text(k, style: t.bodyMedium)),
                 ]),
               ),

@@ -85,7 +85,7 @@ class _CardArtViewerState extends State<CardArtViewer> {
                     return snap.connectionState == ConnectionState.done
                         ? Center(
                             child: Text(widget.info.symbol,
-                                style: const TextStyle(fontSize: 160, color: QianColors.mountain)))
+                                style: TextStyle(fontSize: 160, color: QianColors.mountain)))
                         : const SizedBox.shrink();
                   }
                   return InteractiveViewer(
@@ -117,7 +117,7 @@ class _CardArtViewerState extends State<CardArtViewer> {
                     child: Text(context.l10n.tapToReturn,
                         textAlign: TextAlign.center,
                         style: t.bodySmall?.copyWith(
-                          color: QianColors.text,
+                          color: QianColors.onImage,
                           shadows: const [Shadow(blurRadius: 6, color: Colors.black)],
                         )),
                   ),

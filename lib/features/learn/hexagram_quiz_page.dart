@@ -95,7 +95,7 @@ class _HexagramQuizPageState extends State<HexagramQuizPage> {
       body = ListView(
         padding: readablePadding(context, top: 48, bottom: 32),
         children: [
-          const Icon(Icons.emoji_events_outlined, size: 56, color: QianColors.earth),
+          Icon(Icons.emoji_events_outlined, size: 56, color: QianColors.earth),
           const SizedBox(height: 16),
           Text(l.quizDone(_correct, _questions.length), textAlign: TextAlign.center, style: t.headlineSmall),
           const SizedBox(height: 8),
@@ -184,7 +184,7 @@ class _Choice extends StatelessWidget {
         disabledForegroundColor: QianColors.text,
       ),
       icon: switch (state) {
-        _ChoiceState.right => const Icon(Icons.check_circle_outline, color: QianColors.earth),
+        _ChoiceState.right => Icon(Icons.check_circle_outline, color: QianColors.earth),
         _ChoiceState.wrong => const Icon(Icons.cancel_outlined, color: Colors.redAccent),
         _ => const SizedBox.shrink(),
       },

@@ -92,3 +92,9 @@ sheet(crops, 220, os.path.join(out, "work", "crops_sheet.jpg"))
 sheet(dbg, 160, os.path.join(out, "work", "debug_sheet.jpg"), cols=11)
 open(os.path.join(out, "work", "map.csv"), "w", encoding="utf-8").write("num,name,page,half,fx0,fy0,fx1,fy1,size,status,bytes\n" + "\n".join(rows) + "\n")
 print("cropped", len(rows), "fail", sum("FAIL" in r for r in rows), "total KB", sum(int(r.split(",")[-1]) for r in rows) // 1024)
+# export half pages for local tuning (work branch only)
+hp = os.path.join(out, "work", "halves"); os.makedirs(hp, exist_ok=True)
+for page, half, cy, name in SPEC["items"]:
+    im = Image.open(os.path.join(pages, page + ".jpg")).convert("RGB"); W, H = im.size
+    h = im.crop((0, 0, W // 2, H) if half == "L" else (W // 2, 0, W, H))
+    h.save(os.path.join(hp, f"{NAMES.index(name)+1:02d}.jpg"), quality=85)

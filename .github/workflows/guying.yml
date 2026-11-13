@@ -1,0 +1,44 @@
+name: 古圖裁切（斷易天機）
+on:
+  push:
+    branches: ['claude/**']
+    paths: ['tools/guying/**', '.github/workflows/guying.yml']
+  workflow_dispatch:
+jobs:
+  guying:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/checkout@v5
+        with:
+          repository: lawrence124875/iching-content
+          ref: claude/project-thread-xfzooj
+          token: ${{ secrets.BUILDS_REPO_TOKEN }}
+          path: content
+      - uses: actions/cache@v4
+        with:
+          path: work/src
+          key: guying-src-harvard-53238003
+      - name: 下載哈佛本 PDF（Commons）
+        run: |
+          mkdir -p work/src && cd work/src
+          UA="QianguaArtBuild/1.0 (GitHub Actions; public-domain image extraction)"
+          for v in 1 2; do
+            [ -s v$v.pdf ] && continue
+            T="File:Harvard drs 53238003 新鍥纂集諸家全書大成斷易天機 v.$v.pdf"
+            URL=$(curl -sG -A "$UA" https://commons.wikimedia.org/w/api.php --data-urlencode "titles=$T" -d action=query -d format=json -d prop=imageinfo -d iiprop=url | python3 -c 'import sys,json;p=json.load(sys.stdin)["query"]["pages"];print(list(p.values())[0]["imageinfo"][0]["url"])')
+            echo "$URL"
+            for n in 1 2 3 4 5; do curl -fL -A "$UA" -o v$v.pdf "$URL" && break; sleep $((n*20)); done
+            ls -l v$v.pdf
+          done
+      - run: pip install -q pymupdf pillow numpy
+      - name: 擷取頁面與總覽
+        run: python3 tools/guying/extract.py work/src work/pages content/guying/work/sheets
+      - name: 執行裁切（若有）
+        run: |
+          if [ -f tools/guying/crop.py ]; then python3 tools/guying/crop.py work/pages content/guying; fi
+      - name: 推回 iching-content
+        run: |
+          cd content
+          git config user.name "github-actions[bot]"; git config user.email "41898699+github-actions[bot]@users.noreply.github.com"
+          git add guying && git commit -qm "古圖裁切產出（Actions ${{ github.run_number }}） [skip ci]" && git push -q || echo "no changes"

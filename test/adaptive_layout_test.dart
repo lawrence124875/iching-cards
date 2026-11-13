@@ -83,6 +83,9 @@ void main() {
         await tester.dragUntilVisible(find.text(l.homeDisclaimer), find.byType(Scrollable).first, const Offset(0, -200));
         await _settle(tester);
         expect(tester.getBottomLeft(find.text(l.homeDisclaimer)).dy, lessThanOrEqualTo(size.height - padding.bottom));
+        // 捲回上方（橫放時抽一卦按鈕已捲出畫面、被清單回收）
+        await tester.dragUntilVisible(find.text(l.featureDraw), find.byType(Scrollable).first, const Offset(0, 200));
+        await _settle(tester);
 
         // 首頁 → 抽一卦 → 翻牌 → 解讀（捲到底）
         await tester.ensureVisible(find.text(l.featureDraw));

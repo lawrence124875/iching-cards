@@ -36,9 +36,9 @@ jobs:
         run: python3 tools/guying/extract.py work/src work/pages content/guying/work/sheets
       - name: 執行裁切（若有）
         run: |
-          if [ -f tools/guying/crop.py ]; then python3 tools/guying/crop.py work/pages content/guying; fi
+          if [ -f tools/guying/crop.py ]; then rm -rf content/guying/images content/guying/work/halves content/guying/work/debug_sheet.jpg; python3 tools/guying/crop.py work/pages content/guying; fi
       - name: 推回 iching-content
         run: |
           cd content
           git config user.name "github-actions[bot]"; git config user.email "41898699+github-actions[bot]@users.noreply.github.com"
-          git add guying && git commit -qm "古圖裁切產出（Actions ${{ github.run_number }}） [skip ci]" && git push -q || echo "no changes"
+          git add -A guying && git commit -qm "古圖裁切產出（Actions ${{ github.run_number }}） [skip ci]" && git push -q || echo "no changes"

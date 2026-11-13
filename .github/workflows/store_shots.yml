@@ -107,7 +107,7 @@ jobs:
         run: |
           set -euo pipefail
           for l in zh-Hant zh-Hans en ja ko vi es pt-BR id th ar; do
-            SCREENSHOT_OUT=/tmp/shots/$l SCREENSHOT_LANG=$l flutter test --no-pub screenshots/store_screenshots_test.dart > /tmp/shot-$l.log 2>&1 \
+            SCREENSHOT_ONLY=guying SCREENSHOT_OUT=/tmp/shots/$l SCREENSHOT_LANG=$l flutter test --no-pub screenshots/store_screenshots_test.dart > /tmp/shot-$l.log 2>&1 \
               || { tail -40 /tmp/shot-$l.log; grep -E "Error|Exception|Expected" /tmp/shot-$l.log | head -10 | while IFS= read -r line; do echo "::error::$l $line"; done; exit 1; }
             if [ ! -s /tmp/shots/$l/raw-09.png ]; then
               grep -vE "^\s*$" /tmp/shot-$l.log | tail -15 | while IFS= read -r line; do echo "::error::$l $line"; done

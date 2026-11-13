@@ -83,7 +83,7 @@ class _ZoomableArt extends StatelessWidget {
           fit: StackFit.expand,
           children: [
             _Art(info: info),
-            const PositionedDirectional(
+            PositionedDirectional(
               end: 6,
               bottom: 6,
               child: DecoratedBox(
@@ -143,7 +143,7 @@ class _Placeholder extends StatelessWidget {
       child: loading
           ? null
           : Text(info.symbol,
-              style: const TextStyle(fontSize: 96, color: QianColors.mountain, height: 1)),
+              style: TextStyle(fontSize: 96, color: QianColors.mountain, height: 1)),
     );
   }
 }

@@ -17,6 +17,7 @@ import '../core/monetization/free_limits.dart';
 import '../core/monetization/premium_service.dart';
 import '../core/daily/daily_hexagram.dart';
 import '../core/journal/journal_store.dart';
+import '../core/appearance/theme_pref.dart';
 import '../core/guying/guying.dart';
 import '../core/learn/quiz_progress.dart';
 import '../core/iching/focus_rule.dart';
@@ -56,7 +57,9 @@ class Services {
     DailyHexagramStore? dailyHexagram,
     QuizProgress? quiz,
     GuyingPref? guying,
+    ThemePref? theme,
   })  : guying = guying ?? GuyingPref(),
+        theme = theme ?? ThemePref(),
         dailyHexagram = dailyHexagram ?? DailyHexagramStore(),
         quiz = quiz ?? QuizProgress(),
         premium = premium ?? FreePremium(),
@@ -109,11 +112,15 @@ class Services {
       dailyHexagram: DailyHexagramStore(storage: FileQuotaStorage(fileName: 'daily_hexagram.json')),
       quiz: QuizProgress(storage: FileQuotaStorage(fileName: 'hexagram_quiz.json')),
       guying: GuyingPref(storage: FileQuotaStorage(fileName: 'guying.json')),
+      theme: ThemePref(storage: FileQuotaStorage(fileName: 'theme.json')),
     );
   }
 
   /// 「顯示古圖（斷易天機）」開關，預設關閉。
   final GuyingPref guying;
+
+  /// 外觀：跟隨系統／淺色／深色（0.11.0）。
+  final ThemePref theme;
 
   final ContentSource content;
   final EventBus events;

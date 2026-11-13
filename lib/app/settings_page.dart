@@ -37,37 +37,46 @@ class SettingsPage extends StatelessWidget {
         children: [
           if (!s.isPremium)
             ListTile(
-              leading: const Icon(Icons.workspace_premium_outlined, color: QianColors.earth),
+              leading: Icon(Icons.workspace_premium_outlined, color: QianColors.earth),
               title: Text(l.menuPremium),
               onTap: () => openPaywall(context, source: 'menu'),
             ),
           ListTile(
-            leading: const Icon(Icons.info_outline, color: QianColors.earth),
+            leading: Icon(Icons.info_outline, color: QianColors.earth),
             title: Text(l.menuIntro),
             onTap: () => showIntro(Navigator.of(context), full: true),
           ),
           ListTile(
-            leading: const Icon(Icons.ios_share, color: QianColors.earth),
+            leading: Icon(Icons.ios_share, color: QianColors.earth),
             title: Text(l.menuShareApp),
             onTap: () => shareApp(context),
           ),
           if (s.feedback != null)
             ListTile(
-              leading: const Icon(Icons.mail_outline, color: QianColors.earth),
+              leading: Icon(Icons.mail_outline, color: QianColors.earth),
               title: Text(l.menuFeedback),
               onTap: () => openFeedback(context),
             ),
           const Divider(),
           if (s.dailyStore != null)
             ListTile(
-              leading: const Icon(Icons.notifications_none, color: QianColors.earth),
+              leading: Icon(Icons.notifications_none, color: QianColors.earth),
               title: Text(l.menuDailyReminder),
               onTap: () => showDailyReminderDialog(context),
             ),
+          ValueListenableBuilder<ThemeMode>(
+            valueListenable: s.theme.mode,
+            builder: (context, mode, _) => ListTile(
+              leading: Icon(Icons.contrast, color: QianColors.earth),
+              title: Text(l.appearance),
+              subtitle: Text(_modeLabel(l, mode)),
+              onTap: () => _pickAppearance(context, s, mode),
+            ),
+          ),
           ValueListenableBuilder<bool>(
             valueListenable: s.guying.enabled,
             builder: (context, on, _) => SwitchListTile(
-              secondary: const Icon(Icons.image_outlined, color: QianColors.earth),
+              secondary: Icon(Icons.image_outlined, color: QianColors.earth),
               title: Text(l.guyingToggle),
               subtitle: Text(l.guyingToggleHint),
               value: on,
@@ -75,7 +84,7 @@ class SettingsPage extends StatelessWidget {
             ),
           ),
           ListTile(
-            leading: const Icon(Icons.menu_book_outlined, color: QianColors.earth),
+            leading: Icon(Icons.menu_book_outlined, color: QianColors.earth),
             title: Text(l.guyingAbout),
             onTap: () => Navigator.of(context)
                 .push(MaterialPageRoute<void>(builder: (_) => const GuyingAboutPage())),
@@ -84,7 +93,7 @@ class SettingsPage extends StatelessWidget {
             ValueListenableBuilder<bool>(
               valueListenable: usage.enabled,
               builder: (context, on, _) => SwitchListTile(
-                secondary: const Icon(Icons.insights_outlined, color: QianColors.earth),
+                secondary: Icon(Icons.insights_outlined, color: QianColors.earth),
                 title: Text(l.menuShareUsage),
                 value: on,
                 onChanged: (v) => usage.set(v),
@@ -92,18 +101,18 @@ class SettingsPage extends StatelessWidget {
             ),
           if (s.ads.privacyOptionsRequired && !s.isPremium)
             ListTile(
-              leading: const Icon(Icons.privacy_tip_outlined, color: QianColors.earth),
+              leading: Icon(Icons.privacy_tip_outlined, color: QianColors.earth),
               title: Text(l.menuAdPrivacy),
               onTap: () => s.ads.showPrivacyOptions(),
             ),
           ListTile(
-            leading: const Icon(Icons.policy_outlined, color: QianColors.earth),
+            leading: Icon(Icons.policy_outlined, color: QianColors.earth),
             title: Text(l.menuPrivacyPolicy),
             trailing: const Icon(Icons.open_in_new, size: 18),
             onTap: () => launchUrl(Uri.parse(privacyPolicyUrl), mode: LaunchMode.externalApplication),
           ),
           ListTile(
-            leading: const Icon(Icons.description_outlined, color: QianColors.earth),
+            leading: Icon(Icons.description_outlined, color: QianColors.earth),
             title: Text(l.termsOfUse),
             trailing: const Icon(Icons.open_in_new, size: 18),
             onTap: () => launchUrl(Uri.parse(termsOfServiceUrl), mode: LaunchMode.externalApplication),
@@ -111,5 +120,35 @@ class SettingsPage extends StatelessWidget {
         ],
       ),
     );
+  }
+
+  static String _modeLabel(AppLocalizations l, ThemeMode mode) => switch (mode) {
+        ThemeMode.light => l.appearanceLight,
+        ThemeMode.dark => l.appearanceDark,
+        ThemeMode.system => l.appearanceSystem,
+      };
+
+  /// 外觀三選一（跟隨系統／淺色／深色），選了立即套用。
+  static Future<void> _pickAppearance(BuildContext context, Services s, ThemeMode current) async {
+    final l = context.l10n;
+    final picked = await showDialog<ThemeMode>(
+      context: context,
+      builder: (context) => SimpleDialog(
+        title: Text(l.appearance),
+        children: [
+          for (final m in const [ThemeMode.system, ThemeMode.light, ThemeMode.dark])
+            SimpleDialogOption(
+              onPressed: () => Navigator.of(context).pop(m),
+              child: Row(children: [
+                Icon(m == current ? Icons.radio_button_checked : Icons.radio_button_off,
+                    size: 20, color: QianColors.earth),
+                const SizedBox(width: 16),
+                Expanded(child: Text(_modeLabel(l, m))),
+              ]),
+            ),
+        ],
+      ),
+    );
+    if (picked != null && picked != current) await s.theme.set(picked);
   }
 }

@@ -10,14 +10,16 @@ class HexagramGlyph extends StatelessWidget {
     required this.lines,
     this.changing = const {},
     this.width = 48,
-    this.color = QianColors.earth,
+    this.color,
     this.visibleCount = 6,
   });
 
   final List<bool> lines;
   final Set<int> changing;
   final double width;
-  final Color color;
+
+  /// 不指定時用主題地黃（深淺模式各自的色值）。
+  final Color? color;
 
   /// 擲錢時逐爻顯示：只畫最下面的幾爻。
   final int visibleCount;
@@ -30,7 +32,7 @@ class HexagramGlyph extends StatelessWidget {
       label: changing.isEmpty ? l.glyphLabel : l.glyphLabelChanging(sorted.join(l.listSeparator)),
       child: CustomPaint(
         size: Size(width * 1.25, width * 0.9 * lines.length / 6),
-        painter: _GlyphPainter(lines, changing, color, visibleCount),
+        painter: _GlyphPainter(lines, changing, color ?? QianColors.earth, visibleCount),
       ),
     );
   }

@@ -37,7 +37,7 @@ class LessonListPage extends StatelessWidget {
             return ListView.separated(
               padding: readablePadding(context, horizontal: 16, top: 8, bottom: 32),
               itemCount: lessons.length,
-              separatorBuilder: (_, __) => const Divider(height: 1, color: QianColors.inkCard),
+              separatorBuilder: (_, __) => Divider(height: 1, color: QianColors.inkCard),
               itemBuilder: (context, i) =>
                   _Tile(course: c, lesson: lessons[i], locked: !premium && !c.isFree(context, lessons[i].id)),
             );

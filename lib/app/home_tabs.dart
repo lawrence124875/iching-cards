@@ -87,7 +87,7 @@ class TodayTab extends StatelessWidget {
               ),
               IconButton(
                 tooltip: l.menuSettings,
-                icon: const Icon(Icons.settings_outlined, color: QianColors.textSub),
+                icon: Icon(Icons.settings_outlined, color: QianColors.textSub),
                 onPressed: () async {
                   await Navigator.of(context).push(MaterialPageRoute<void>(builder: (_) => const SettingsPage()));
                   onReturn();
@@ -164,11 +164,11 @@ class CastTab extends StatelessWidget {
                     Flexible(child: Text(x.feature.label(l))),
                     if (x.feature.memberContent && !premium) ...[
                       const SizedBox(width: 6),
-                      const Icon(Icons.lock_outline, size: 16, color: QianColors.earth),
+                      Icon(Icons.lock_outline, size: 16, color: QianColors.earth),
                     ],
                   ]),
                   subtitle: Text(x.desc(l)),
-                  trailing: const Icon(Icons.chevron_right, color: QianColors.textSub),
+                  trailing: Icon(Icons.chevron_right, color: QianColors.textSub),
                   onTap: () => _open(context, x.feature, onReturn),
                 ),
               ),
@@ -212,7 +212,7 @@ class LearnTab extends StatelessWidget {
                 leading: Icon(icon, color: QianColors.earth),
                 title: Text(title),
                 subtitle: Text(desc),
-                trailing: const Icon(Icons.chevron_right, color: QianColors.textSub),
+                trailing: Icon(Icons.chevron_right, color: QianColors.textSub),
                 onTap: () => Navigator.of(context).push(MaterialPageRoute<void>(builder: (_) => page)),
               ),
             ),
@@ -225,7 +225,7 @@ class LearnTab extends StatelessWidget {
                 leading: Icon(icon, color: QianColors.earth),
                 title: Text(c.title(context)),
                 subtitle: Text(l.learnLessonCount(c.count)),
-                trailing: const Icon(Icons.chevron_right, color: QianColors.textSub),
+                trailing: Icon(Icons.chevron_right, color: QianColors.textSub),
                 onTap: () => Navigator.of(context).push(MaterialPageRoute<void>(
                   builder: (_) => LessonListPage(course: c),
                 )),
@@ -315,7 +315,7 @@ class _TodayCardState extends State<_TodayCard> {
                 if (_streak > 0) ...[
                   const SizedBox(height: 6),
                   Row(children: [
-                    const Icon(Icons.local_fire_department_outlined, size: 16, color: QianColors.earth),
+                    Icon(Icons.local_fire_department_outlined, size: 16, color: QianColors.earth),
                     const SizedBox(width: 4),
                     Flexible(child: Text(l.homeStreak(_streak), style: t.bodySmall)),
                   ]),
@@ -326,7 +326,7 @@ class _TodayCardState extends State<_TodayCard> {
                 ],
               ]),
             ),
-            const Icon(Icons.chevron_right, color: QianColors.textSub),
+            Icon(Icons.chevron_right, color: QianColors.textSub),
           ]),
         ),
       ),
@@ -447,7 +447,7 @@ class _DrawCard extends StatelessWidget {
                 const _FreeLeft(),
               ]),
             ),
-            const Icon(Icons.chevron_right, color: QianColors.textSub),
+            Icon(Icons.chevron_right, color: QianColors.textSub),
           ]),
         ),
       ),

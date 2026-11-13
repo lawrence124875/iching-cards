@@ -51,7 +51,7 @@ class ReminderPicker extends StatelessWidget {
           selected: selected,
           onSelected: (_) => onTap(),
           selectedColor: QianColors.earth,
-          labelStyle: TextStyle(color: selected ? QianColors.ink : QianColors.text),
+          labelStyle: TextStyle(color: selected ? QianColors.onGold : QianColors.text),
           showCheckmark: false,
         );
     return Wrap(

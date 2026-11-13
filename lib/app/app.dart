@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 
 import '../core/events/event_bus.dart';
@@ -19,10 +20,38 @@ class IchingApp extends StatefulWidget {
   State<IchingApp> createState() => _IchingAppState();
 }
 
-class _IchingAppState extends State<IchingApp> {
+class _IchingAppState extends State<IchingApp> with WidgetsBindingObserver {
   final _navigatorKey = GlobalKey<NavigatorState>();
   StreamSubscription<String>? _taps;
   StreamSubscription<ReadingShown>? _readings;
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addObserver(this);
+  }
+
+  /// 跟隨系統時，系統切換深淺色要跟著換。
+  @override
+  void didChangePlatformBrightness() {
+    if (mounted) setState(() {});
+  }
+
+  /// 依外觀設定與系統亮度決定深淺色（QianColors.dark）；有變就換系統列圖示並整棵樹重建。
+  void _applyBrightness(ThemeMode mode) {
+    final dark = switch (mode) {
+      ThemeMode.dark => true,
+      ThemeMode.light => false,
+      ThemeMode.system =>
+        WidgetsBinding.instance.platformDispatcher.platformBrightness == Brightness.dark,
+    };
+    if (dark == QianColors.dark) return;
+    QianColors.dark = dark;
+    SystemChrome.setSystemUIOverlayStyle(qianSystemBars);
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (mounted) rebuildForTheme(context as Element);
+    });
+  }
 
   @override
   void didChangeDependencies() {
@@ -66,6 +95,7 @@ class _IchingAppState extends State<IchingApp> {
 
   @override
   void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
     _taps?.cancel();
     _readings?.cancel();
     super.dispose();
@@ -73,6 +103,16 @@ class _IchingAppState extends State<IchingApp> {
 
   @override
   Widget build(BuildContext context) {
+    return ValueListenableBuilder<ThemeMode>(
+      valueListenable: AppServices.of(context).theme.mode,
+      builder: (context, mode, _) {
+        _applyBrightness(mode);
+        return _app();
+      },
+    );
+  }
+
+  Widget _app() {
     return MaterialApp(
       navigatorKey: _navigatorKey,
       onGenerateTitle: (context) => context.l10n.appTitle,

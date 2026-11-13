@@ -708,5 +708,7 @@
   "guyingSymbolLine": "{see}: {means}",
   "guyingOriginal": "Teks asli",
   "guyingAbout": "Tentang gambar kuno",
-  "guyingViewSource": "Lihat pindaian asli (Wikimedia Commons)"
+  "guyingViewSource": "Lihat pindaian asli (Wikimedia Commons)",
+  "guyingShowHere": "Lihat gambar kuno heksagram ini (Duanyi Tianji)",
+  "guyingHide": "Sembunyikan gambar kuno"
 }

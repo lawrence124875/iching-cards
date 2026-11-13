@@ -353,5 +353,7 @@
   "guyingSymbolLine": "{see}: {means}",
   "guyingOriginal": "Nguyên văn",
   "guyingAbout": "Về tranh cổ",
-  "guyingViewSource": "Xem bản quét gốc (Wikimedia Commons)"
+  "guyingViewSource": "Xem bản quét gốc (Wikimedia Commons)",
+  "guyingShowHere": "Xem tranh cổ của quẻ này (Đoán Dịch Thiên Cơ)",
+  "guyingHide": "Ẩn tranh cổ"
 }

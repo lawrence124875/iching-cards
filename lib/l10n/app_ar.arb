@@ -353,5 +353,7 @@
   "guyingSymbolLine": "{see}: {means}",
   "guyingOriginal": "النص الأصلي",
   "guyingAbout": "عن النقوش القديمة",
-  "guyingViewSource": "عرض المسح الأصلي (Wikimedia Commons)"
+  "guyingViewSource": "عرض المسح الأصلي (Wikimedia Commons)",
+  "guyingShowHere": "اعرض الرسم القديم لهذا السداسيّ (Duanyi Tianji)",
+  "guyingHide": "إخفاء الرسوم القديمة"
 }

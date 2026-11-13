@@ -708,5 +708,7 @@
   "guyingSymbolLine": "{see}: {means}",
   "guyingOriginal": "Original text",
   "guyingAbout": "About the woodcuts",
-  "guyingViewSource": "View the original scans (Wikimedia Commons)"
+  "guyingViewSource": "View the original scans (Wikimedia Commons)",
+  "guyingShowHere": "See this hexagram's woodcut (Duanyi Tianji)",
+  "guyingHide": "Hide woodcuts"
 }

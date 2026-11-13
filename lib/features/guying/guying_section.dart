@@ -7,7 +7,8 @@ import '../../l10n/l10n.dart';
 import '../../reading/section.dart';
 import 'guying_about_page.dart';
 
-/// 解讀頁與卦庫詳解的「古圖」區塊：設定裡打開「顯示古圖」才出現（預設關閉）。
+/// 解讀頁與卦庫詳解的「古圖」區塊（預設關閉）。關閉時只顯示一行入口，點了就打開（同設定開關）；
+/// 打開時區塊底部可收起。
 class GuyingSection extends StatelessWidget {
   const GuyingSection({super.key, required this.number});
 
@@ -18,7 +19,19 @@ class GuyingSection extends StatelessWidget {
     final pref = AppServices.of(context).guying;
     return ValueListenableBuilder<bool>(
       valueListenable: pref.enabled,
-      builder: (context, on, _) => on ? _GuyingBody(number: number) : const SizedBox.shrink(),
+      builder: (context, on, _) => on
+          ? _GuyingBody(number: number)
+          : Padding(
+              padding: const EdgeInsets.only(top: 16),
+              child: Align(
+                alignment: AlignmentDirectional.centerStart,
+                child: TextButton.icon(
+                  icon: const Icon(Icons.image_outlined, size: 18),
+                  label: Text(context.l10n.guyingShowHere),
+                  onPressed: () => pref.set(true),
+                ),
+              ),
+            ),
     );
   }
 }
@@ -97,14 +110,21 @@ class _GuyingBodyState extends State<_GuyingBody> {
                     ],
                   ),
                 ),
-              Align(
-                alignment: AlignmentDirectional.centerStart,
-                child: TextButton.icon(
-                  icon: const Icon(Icons.menu_book_outlined, size: 18),
-                  label: Text(l.guyingAbout),
-                  onPressed: () => Navigator.of(context)
-                      .push(MaterialPageRoute<void>(builder: (_) => const GuyingAboutPage())),
-                ),
+              Wrap(
+                spacing: 8,
+                children: [
+                  TextButton.icon(
+                    icon: const Icon(Icons.menu_book_outlined, size: 18),
+                    label: Text(l.guyingAbout),
+                    onPressed: () => Navigator.of(context)
+                        .push(MaterialPageRoute<void>(builder: (_) => const GuyingAboutPage())),
+                  ),
+                  TextButton.icon(
+                    icon: const Icon(Icons.visibility_off_outlined, size: 18),
+                    label: Text(l.guyingHide),
+                    onPressed: () => AppServices.of(context).guying.set(false),
+                  ),
+                ],
               ),
             ],
           ),

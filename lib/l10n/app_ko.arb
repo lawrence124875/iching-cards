@@ -353,5 +353,7 @@
   "guyingSymbolLine": "{see}: {means}",
   "guyingOriginal": "원문",
   "guyingAbout": "옛 그림에 대하여",
-  "guyingViewSource": "원본 스캔 보기 (Wikimedia Commons)"
+  "guyingViewSource": "원본 스캔 보기 (Wikimedia Commons)",
+  "guyingShowHere": "이 괘의 옛 그림 보기(단역천기)",
+  "guyingHide": "옛 그림 접기"
 }

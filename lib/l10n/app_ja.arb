@@ -353,5 +353,7 @@
   "guyingSymbolLine": "{see}：{means}",
   "guyingOriginal": "原書の文",
   "guyingAbout": "古図について",
-  "guyingViewSource": "原書のスキャンを見る（Wikimedia Commons）"
+  "guyingViewSource": "原書のスキャンを見る（Wikimedia Commons）",
+  "guyingShowHere": "この卦の古図を見る（断易天機）",
+  "guyingHide": "古図をしまう"
 }

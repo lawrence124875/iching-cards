@@ -29,6 +29,7 @@ import 'package:iching_cards/core/audio/audio_playback.dart';
 import 'package:iching_cards/core/audio/screen_awake.dart';
 import 'package:iching_cards/core/content/asset_content_source.dart';
 import 'package:iching_cards/core/events/event_bus.dart';
+import 'package:iching_cards/core/guying/guying.dart';
 import 'package:iching_cards/core/iching/focus_rule.dart';
 import 'package:iching_cards/core/iching/hexagram_table.dart';
 import 'package:iching_cards/core/journal/journal_entry.dart';
@@ -41,6 +42,7 @@ import 'package:iching_cards/core/soundscape/soundscape_files.dart';
 import 'package:iching_cards/features/breath/breath_page.dart';
 import 'package:iching_cards/features/journal/journal_entry_page.dart';
 import 'package:iching_cards/l10n/l10n.dart';
+import 'package:iching_cards/reading/detail_page.dart';
 
 /// Redmi 實機（2026-10-04 繁中截圖用的那支）：1080×2400、密度 2.625。
 /// 上 100 px 狀態列、下 190 px 三鍵導覽列，與 make.py 的裁切 (100, 2210) 對齊。
@@ -99,6 +101,7 @@ void main() {
       breath: BreathServices(files: _NoFiles(), playback: playback, screenAwake: NoopScreenAwake()),
       premium: FreePremium(premium: true),
       ads: NoAds(),
+      guying: GuyingPref()..enabled.value = true,
     );
 
     // 資產清單與內容先在真實非同步中讀好（快取在內容來源裡），畫面一建好就有圖與解讀
@@ -132,6 +135,25 @@ void main() {
 
     NavigatorState nav() => tester.state<NavigatorState>(find.byType(Navigator).first);
     final en = lookupAppLocalizations(lang.locale);
+
+    // SCREENSHOT_ONLY=guying：只出古圖那一張（raw-09.png）：卦頁（謙）捲到古圖區塊。
+    if (Platform.environment['SCREENSHOT_ONLY'] == 'guying') {
+      // 截圖只看畫面；ListTile 墨水提示是 debug 斷言，不影響輸出
+      final prevOnError = FlutterError.onError;
+      FlutterError.onError = (d) {
+        if (d.exceptionAsString().contains('ink splashes may be invisible')) return;
+        prevOnError?.call(d);
+      };
+      unawaited(nav().push(MaterialPageRoute<void>(builder: (_) => const DetailPage(number: 15))));
+      await _settle(tester, frames: 40);
+      await _scrollTo(tester, find.text(en.guyingSection), top: 8);
+      await shot(9);
+      nav().popUntil((r) => r.isFirst);
+      await _settle(tester, frames: 3);
+      debugDisableShadows = true;
+      FlutterError.onError = prevOnError;
+      return;
+    }
 
     // 8 首頁（最後輸出，但先截：之後都從首頁進入）
     await shot(8);

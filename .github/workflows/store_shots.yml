@@ -1,0 +1,160 @@
+name: Store screenshot (guying)
+
+# 商店截圖「古圖」那一張：11 語渲染卦頁古圖區塊（screenshots/store_screenshots_test.dart，SCREENSHOT_ONLY=guying），
+# 用 iching-content store/screenshots-<語言>/make.py 的排版，輸出 screenshot-guying.png 推到 iching-content 同名分支。
+on:
+  push:
+    branches: ['claude/**']
+    paths:
+      - 'screenshots/**'
+      - '.github/workflows/store_shots.yml'
+
+concurrency:
+  group: store-shots-${{ github.ref_name }}
+  cancel-in-progress: true
+
+jobs:
+  shots:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+
+      - name: 決定內容分支
+        id: ref
+        env:
+          TOKEN: ${{ secrets.BUILDS_REPO_TOKEN }}
+          BR: ${{ github.ref_name }}
+        run: |
+          if git ls-remote --exit-code --heads "https://x-access-token:${TOKEN}@github.com/lawrence124875/iching-content.git" "$BR" > /dev/null 2>&1; then
+            echo "ref=$BR" >> "$GITHUB_OUTPUT"; echo "::notice::內容分支 $BR"
+          else
+            echo "ref=main" >> "$GITHUB_OUTPUT"; echo "::notice::內容分支 main"
+          fi
+
+      - name: 取得私人內容（iching-content）
+        uses: actions/checkout@v5
+        with:
+          repository: lawrence124875/iching-content
+          token: ${{ secrets.BUILDS_REPO_TOKEN }}
+          ref: ${{ steps.ref.outputs.ref }}
+          path: _content
+          sparse-checkout: |
+            zh-Hant
+            en
+            zh-Hans
+            ja
+            ko
+            vi
+            es
+            pt-BR
+            id
+            th
+            ar
+            glossary
+            cross
+            eastern
+            guying
+
+      - uses: subosito/flutter-action@v2
+        with:
+          channel: 'stable'
+          # 2026-11-13：stable 升到 3.50.0 後 release lint 在 JDK 17 崩潰（List.removeLast），先固定在最後一個能建置的版本
+          flutter-version: '3.47.9'
+          cache: true
+
+      - name: 匯入內容
+        run: bash scripts/import_content.sh _content
+
+      # 11 語術語表（REFERENCE §17）→ lib/l10n/glossary_data.g.dart（不進 repo）。在字型子集之前，
+      # 讓術語表用到的字也進子集。
+      - name: 產生術語表
+        run: python3 scripts/gen_glossary.py _content/glossary/glossary.json lib/l10n/glossary_data.g.dart
+
+      # 思源黑體／宋體（Google Fonts，OFL）固定在某個 commit，避免上游更新改變字形。
+      # 換版本：改 NOTO_COMMIT（並同步改 cache key）。
+      - name: 快取字型原檔
+        uses: actions/cache@v4
+        with:
+          path: _fonts_src
+          key: noto-tc-sc-jp-kr-th-ar-9710da1e
+
+      - name: 產生字型子集
+        env:
+          NOTO_COMMIT: 9710da1eacb3be272583c3224dcb70f9da6eadbb
+        run: |
+          set -euo pipefail
+          mkdir -p _fonts_src
+          base="https://raw.githubusercontent.com/google/fonts/${NOTO_COMMIT}/ofl"
+          [ -s "_fonts_src/NotoSansTC[wght].ttf" ] || curl -fsSL -o "_fonts_src/NotoSansTC[wght].ttf" "${base}/notosanstc/NotoSansTC%5Bwght%5D.ttf"
+          [ -s "_fonts_src/NotoSerifTC[wght].ttf" ] || curl -fsSL -o "_fonts_src/NotoSerifTC[wght].ttf" "${base}/notoseriftc/NotoSerifTC%5Bwght%5D.ttf"
+          [ -s "_fonts_src/NotoSansSC[wght].ttf" ] || curl -fsSL -o "_fonts_src/NotoSansSC[wght].ttf" "${base}/notosanssc/NotoSansSC%5Bwght%5D.ttf"
+          [ -s "_fonts_src/NotoSerifSC[wght].ttf" ] || curl -fsSL -o "_fonts_src/NotoSerifSC[wght].ttf" "${base}/notoserifsc/NotoSerifSC%5Bwght%5D.ttf"
+          [ -s "_fonts_src/NotoSansJP[wght].ttf" ] || curl -fsSL -o "_fonts_src/NotoSansJP[wght].ttf" "${base}/notosansjp/NotoSansJP%5Bwght%5D.ttf"
+          [ -s "_fonts_src/NotoSerifJP[wght].ttf" ] || curl -fsSL -o "_fonts_src/NotoSerifJP[wght].ttf" "${base}/notoserifjp/NotoSerifJP%5Bwght%5D.ttf"
+          [ -s "_fonts_src/NotoSansKR[wght].ttf" ] || curl -fsSL -o "_fonts_src/NotoSansKR[wght].ttf" "${base}/notosanskr/NotoSansKR%5Bwght%5D.ttf"
+          [ -s "_fonts_src/NotoSerifKR[wght].ttf" ] || curl -fsSL -o "_fonts_src/NotoSerifKR[wght].ttf" "${base}/notoserifkr/NotoSerifKR%5Bwght%5D.ttf"
+          [ -s "_fonts_src/NotoSansThai[wdth,wght].ttf" ] || curl -fsSL -o "_fonts_src/NotoSansThai[wdth,wght].ttf" "${base}/notosansthai/NotoSansThai%5Bwdth%2Cwght%5D.ttf"
+          [ -s "_fonts_src/NotoSerifThai[wdth,wght].ttf" ] || curl -fsSL -o "_fonts_src/NotoSerifThai[wdth,wght].ttf" "${base}/notoserifthai/NotoSerifThai%5Bwdth%2Cwght%5D.ttf"
+          [ -s "_fonts_src/NotoSansArabic[wdth,wght].ttf" ] || curl -fsSL -o "_fonts_src/NotoSansArabic[wdth,wght].ttf" "${base}/notosansarabic/NotoSansArabic%5Bwdth%2Cwght%5D.ttf"
+          [ -s "_fonts_src/NotoNaskhArabic[wght].ttf" ] || curl -fsSL -o "_fonts_src/NotoNaskhArabic[wght].ttf" "${base}/notonaskharabic/NotoNaskhArabic%5Bwght%5D.ttf"
+          pip install --quiet fonttools==4.62.1
+          python3 scripts/build_fonts.py _fonts_src assets/fonts
+
+      - name: 安裝套件
+        run: flutter pub get
+
+      - name: 渲染 11 語
+        run: |
+          set -euo pipefail
+          for l in zh-Hant zh-Hans en ja ko vi es pt-BR id th ar; do
+            SCREENSHOT_ONLY=guying SCREENSHOT_OUT=/tmp/shots/$l SCREENSHOT_LANG=$l flutter test --no-pub screenshots/store_screenshots_test.dart > /tmp/shot-$l.log 2>&1 \
+              || { tail -40 /tmp/shot-$l.log; grep -E "Error|Exception|Expected" /tmp/shot-$l.log | head -10 | while IFS= read -r line; do echo "::error::$l $line"; done; exit 1; }
+            if [ ! -s /tmp/shots/$l/raw-09.png ]; then
+              grep -vE "^\s*$" /tmp/shot-$l.log | tail -15 | while IFS= read -r line; do echo "::error::$l $line"; done
+              ls -la /tmp/shots/$l || true
+              exit 1
+            fi
+          done
+
+      - name: 取得內容分支（可寫）
+        uses: actions/checkout@v5
+        with:
+          repository: lawrence124875/iching-content
+          token: ${{ secrets.BUILDS_REPO_TOKEN }}
+          ref: ${{ steps.ref.outputs.ref }}
+          path: _cw
+
+      - name: 排版並推回內容分支
+        run: |
+          set -euo pipefail
+          sudo apt-get install -y -qq libraqm0 libfribidi0 > /dev/null
+          pip install --quiet pillow
+          python3 - <<'PY'
+          import importlib.util, os, shutil, tempfile
+          T={'zh-Hant':('搭配明代古圖學看象','《斷易天機》1597 木刻原圖'),
+             'zh-Hans':('搭配明代古图学看象','《断易天机》1597 木刻原图'),
+             'en':('Learn from Ming Woodcuts','Original 1597 prints from the Duanyi Tianji'),
+             'ja':('明代の古図で象を学ぶ','『断易天機』1597年の木版画'),
+             'ko':('명나라 옛 그림으로 상 읽기','『단역천기』 1597년 목판화 원본'),
+             'vi':('Học xem tượng qua tranh cổ','Tranh khắc gỗ Đoán Dịch Thiên Cơ, 1597'),
+             'es':('Aprende con grabados Ming','Grabados originales del Duanyi Tianji, 1597'),
+             'pt-BR':('Aprenda com xilogravuras Ming','Gravuras originais do Duanyi Tianji, 1597'),
+             'id':('Belajar dari gambar kuno Ming','Cetakan kayu asli Duanyi Tianji, 1597'),
+             'th':('เรียนดูภาพจากภาพโบราณสมัยหมิง','ภาพแกะไม้ต้นฉบับ Duanyi Tianji ปี 1597'),
+             'ar':('تعلّم من رسوم عهد مينغ','رسوم خشبية أصلية من Duanyi Tianji، 1597')}
+          for l,(t1,t2) in T.items():
+              d=f'_cw/store/screenshots-{l}'
+              spec=importlib.util.spec_from_file_location(f'mk_{l.replace("-","_")}',f'{d}/make.py')
+              m=importlib.util.module_from_spec(spec); spec.loader.exec_module(m)
+              tmp=tempfile.mkdtemp(); m.HERE=tmp
+              m.ITEMS=[(t1,t2,'',100,2210)]
+              m.main([f'/tmp/shots/{l}/raw-09.png'])
+              shutil.copy(f'{tmp}/screenshot-01.png',f'{d}/screenshot-guying.png')
+              print('ok',l)
+          PY
+          cd _cw
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add store/screenshots-*/screenshot-guying.png
+          git commit -m "商店截圖：古圖（11 語） [skip ci]" || exit 0
+          git push

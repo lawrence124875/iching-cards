@@ -344,5 +344,14 @@
   "quizAgain": "Practicar otra vez",
   "quizProgress": "Pregunta {current} de {total}",
   "quizDone": "{correct} de {total} correctas",
-  "quizMastered": "{count, plural, other{{count} de 64 hexagramas aprendidos}}"
+  "quizMastered": "{count, plural, other{{count} de 64 hexagramas aprendidos}}",
+  "guyingSection": "Grabado antiguo",
+  "guyingToggle": "Mostrar grabados antiguos (Duanyi Tianji)",
+  "guyingToggleHint": "Añade un grabado en madera de la dinastía Ming a las lecturas y a la biblioteca de hexagramas para aprender a leer imágenes",
+  "guyingCredit": "Grabado del Duanyi Tianji (1597) · Biblioteca Harvard-Yenching · Dominio público",
+  "guyingSymbols": "Qué hay en la imagen",
+  "guyingSymbolLine": "{see}: {means}",
+  "guyingOriginal": "Texto original",
+  "guyingAbout": "Sobre los grabados",
+  "guyingViewSource": "Ver los escaneos originales (Wikimedia Commons)"
 }

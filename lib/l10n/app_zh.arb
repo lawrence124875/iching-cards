@@ -886,5 +886,15 @@
   "quizDone": "答對 {correct}／{total} 題",
   "@quizDone": {"placeholders": {"correct": {"type": "int"}, "total": {"type": "int"}}},
   "quizMastered": "{count, plural, other{已熟悉 {count}／64 卦}}",
-  "@quizMastered": {"placeholders": {"count": {"type": "int"}}}
+  "@quizMastered": {"placeholders": {"count": {"type": "int"}}},
+  "guyingSection": "古圖",
+  "guyingToggle": "顯示古圖（斷易天機）",
+  "guyingToggleHint": "在解讀與卦庫加上明代木刻卦影，學著看圖讀象",
+  "guyingCredit": "明《斷易天機》卦影（1597）・哈佛燕京圖書館藏・公有領域",
+  "guyingSymbols": "畫裡有什麼",
+  "guyingSymbolLine": "{see}：{means}",
+  "guyingOriginal": "原書文字",
+  "guyingAbout": "關於古圖",
+  "guyingViewSource": "查看原書掃描（Wikimedia Commons）",
+  "@guyingSymbolLine": {"placeholders": {"see": {"type": "String"}, "means": {"type": "String"}}}
 }

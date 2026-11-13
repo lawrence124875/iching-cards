@@ -78,4 +78,18 @@ for pass in normal redo; do
   done
 done
 
-echo "已匯入解讀（${summary# }）、課程 ${n_lesson} 檔、梅花易數 ${n_meihua} 檔、雙卦交叉 ${n_cross} 檔、東方命理 ${n_eastern} 檔、牌面圖 ${n_img} 張"
+# 古圖（明《斷易天機》卦影，公有領域）：guying/images/NN.webp → assets/guying/NN.webp；
+# <語言>/guying.json → assets/content/<語言>/guying.json；guying/original.json → assets/content/guying-original.json
+mkdir -p assets/guying
+n_guying=0
+for f in "$src"/guying/images/[0-9][0-9].webp; do
+  [ -e "$f" ] || continue
+  cp "$f" assets/guying/
+  n_guying=$((n_guying + 1))
+done
+if [ -e "$src/guying/original.json" ]; then cp "$src/guying/original.json" assets/content/guying-original.json; fi
+for lang in $LANGS; do
+  if [ -e "$src/$lang/guying.json" ]; then cp "$src/$lang/guying.json" "assets/content/$lang/guying.json"; fi
+done
+
+echo "已匯入解讀（${summary# }）、課程 ${n_lesson} 檔、梅花易數 ${n_meihua} 檔、雙卦交叉 ${n_cross} 檔、東方命理 ${n_eastern} 檔、牌面圖 ${n_img} 張、古圖 ${n_guying} 張"

@@ -344,5 +344,14 @@
   "quizAgain": "Praticar de novo",
   "quizProgress": "Pergunta {current} de {total}",
   "quizDone": "{correct} de {total} corretas",
-  "quizMastered": "{count, plural, other{{count} de 64 hexagramas aprendidos}}"
+  "quizMastered": "{count, plural, other{{count} de 64 hexagramas aprendidos}}",
+  "guyingSection": "Gravura antiga",
+  "guyingToggle": "Mostrar gravuras antigas (Duanyi Tianji)",
+  "guyingToggleHint": "Adiciona uma xilogravura da dinastia Ming às leituras e à biblioteca de hexagramas, para aprender a ler imagens",
+  "guyingCredit": "Gravura do Duanyi Tianji (1597) · Biblioteca Harvard-Yenching · Domínio público",
+  "guyingSymbols": "O que há na imagem",
+  "guyingSymbolLine": "{see}: {means}",
+  "guyingOriginal": "Texto original",
+  "guyingAbout": "Sobre as gravuras",
+  "guyingViewSource": "Ver as digitalizações originais (Wikimedia Commons)"
 }

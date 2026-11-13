@@ -344,5 +344,14 @@
   "quizAgain": "تمرّن مرّة أخرى",
   "quizProgress": "السؤال {current} من {total}",
   "quizDone": "{correct} من {total} صحيحة",
-  "quizMastered": "{count, plural, other{أتقنت {count} من 64 سداسيًّا}}"
+  "quizMastered": "{count, plural, other{أتقنت {count} من 64 سداسيًّا}}",
+  "guyingSection": "نقش قديم",
+  "guyingToggle": "عرض النقوش القديمة (دوانيي تيانجي)",
+  "guyingToggleHint": "يضيف نقشًا خشبيًا من عهد أسرة مينغ إلى القراءات ومكتبة السداسيات، لتتعلّم قراءة المعاني من الصور",
+  "guyingCredit": "نقش من كتاب Duanyi Tianji (1597) · مكتبة هارفارد-ينتشينغ · ملكية عامة",
+  "guyingSymbols": "ماذا في الصورة",
+  "guyingSymbolLine": "{see}: {means}",
+  "guyingOriginal": "النص الأصلي",
+  "guyingAbout": "عن النقوش القديمة",
+  "guyingViewSource": "عرض المسح الأصلي (Wikimedia Commons)"
 }

@@ -55,6 +55,7 @@ jobs:
             glossary
             cross
             eastern
+            guying
             store/release-notes
 
       - uses: subosito/flutter-action@v2

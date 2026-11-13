@@ -344,5 +344,14 @@
   "quizAgain": "もう一度練習する",
   "quizProgress": "{current}／{total}問目",
   "quizDone": "{total}問中{correct}問正解",
-  "quizMastered": "{count, plural, other{64卦中{count}卦を習得}}"
+  "quizMastered": "{count, plural, other{64卦中{count}卦を習得}}",
+  "guyingSection": "古図",
+  "guyingToggle": "古図を表示（断易天機）",
+  "guyingToggleHint": "解読と卦の一覧に明代の木版画「卦影」を加え、絵から象を読む練習ができます",
+  "guyingCredit": "『断易天機』卦影（1597年）・ハーバード燕京図書館蔵・パブリックドメイン",
+  "guyingSymbols": "絵に描かれているもの",
+  "guyingSymbolLine": "{see}：{means}",
+  "guyingOriginal": "原書の文",
+  "guyingAbout": "古図について",
+  "guyingViewSource": "原書のスキャンを見る（Wikimedia Commons）"
 }

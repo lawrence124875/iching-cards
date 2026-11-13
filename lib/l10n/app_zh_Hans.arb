@@ -344,5 +344,14 @@
   "quizAgain": "再练一轮",
   "quizProgress": "第 {current}/{total} 题",
   "quizDone": "答对 {correct}/{total} 题",
-  "quizMastered": "{count, plural, other{已熟悉 {count}/64 卦}}"
+  "quizMastered": "{count, plural, other{已熟悉 {count}/64 卦}}",
+  "guyingSection": "古图",
+  "guyingToggle": "显示古图（断易天机）",
+  "guyingToggleHint": "在解读与卦库加上明代木刻卦影，学着看图读象",
+  "guyingCredit": "明《断易天机》卦影（1597）・哈佛燕京图书馆藏・公有领域",
+  "guyingSymbols": "画里有什么",
+  "guyingSymbolLine": "{see}：{means}",
+  "guyingOriginal": "原书文字",
+  "guyingAbout": "关于古图",
+  "guyingViewSource": "查看原书扫描（Wikimedia Commons）"
 }

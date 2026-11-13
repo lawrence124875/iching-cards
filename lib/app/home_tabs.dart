@@ -303,7 +303,13 @@ class _TodayCardState extends State<_TodayCard> {
               width: 76,
               child: AspectRatio(
                 aspectRatio: 0.62,
-                child: info == null ? const CardBack() : CardFace(info: info),
+                child: FittedBox(
+                  child: SizedBox(
+                    width: 200,
+                    height: 200 / 0.62,
+                    child: info == null ? const CardBack() : CardFace(info: info),
+                  ),
+                ),
               ),
             ),
             const SizedBox(width: 16),

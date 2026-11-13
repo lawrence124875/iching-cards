@@ -15,7 +15,6 @@ import '../features/meihua/meihua_feature.dart';
 import '../features/yarrow/yarrow_feature.dart';
 import '../l10n/l10n.dart';
 import '../shared/premium/ad_banner.dart';
-import '../shared/premium/paywall_page.dart';
 import '../shared/widgets/adaptive_layout.dart';
 import '../shared/widgets/card_back.dart';
 import '../shared/widgets/card_face.dart';
@@ -50,8 +49,8 @@ Future<void> _open(BuildContext context, AppFeature f, VoidCallback onReturn) as
   onReturn();
 }
 
-/// 「今日」分頁：品牌＋設定齒輪、今日一卦大卡（連續天數）、會員入口與今日剩餘次數（免費版）、
-/// 抽一卦主按鈕、梅花／雙卦／紫微八字小卡、箴言與免責聲明。內容可捲動，不再整頁縮放。
+/// 「今日」分頁（0.9.1 精簡）：品牌＋設定齒輪、今日一卦大卡、抽一卦卡（含免費剩餘次數）、
+/// 其他起卦小卡（圓底圖示、會員內容角落鎖頭）、底部箴言＋免責。會員入口在設定頁與次數用完時。
 class TodayTab extends StatelessWidget {
   const TodayTab({super.key, required this.onReturn});
 
@@ -97,24 +96,13 @@ class TodayTab extends StatelessWidget {
             ]),
             const SizedBox(height: 16),
             if (daily) _TodayCard(onReturn: onReturn),
-            ValueListenableBuilder<bool>(
-              valueListenable: s.premium.isPremium,
-              builder: (context, premium, _) => premium ? const SizedBox.shrink() : const _PremiumCard(),
-            ),
-            const SizedBox(height: 20),
-            for (final x in draw)
-              Center(
-                child: HomeButton(
-                  width: 290,
-                  height: 52,
-                  primary: true,
-                  label: x.feature.label(l),
-                  onTap: () => _open(context, x.feature, onReturn),
-                ),
-              ),
-            const _FreeLeft(),
+            for (final x in draw) _DrawCard(system: x, onTap: () => _open(context, x.feature, onReturn)),
             if (tiles.isNotEmpty) ...[
-              const SizedBox(height: 16),
+              const SizedBox(height: 24),
+              Padding(
+                padding: const EdgeInsetsDirectional.only(start: 4, bottom: 8),
+                child: Text(l.drawOtherMethods, style: t.titleMedium),
+              ),
               ValueListenableBuilder<bool>(
                 valueListenable: s.premium.isPremium,
                 builder: (context, premium, _) => IntrinsicHeight(
@@ -131,14 +119,15 @@ class TodayTab extends StatelessWidget {
                 ),
               ),
             ],
-            const SizedBox(height: 28),
+            const SizedBox(height: 32),
             Text(l.homeMotto,
-                textAlign: TextAlign.center, style: t.bodyLarge?.copyWith(color: QianColors.textSub, fontSize: 15)),
-            const SizedBox(height: 16),
+                textAlign: TextAlign.center,
+                style: t.bodyMedium?.copyWith(color: QianColors.textSub.withValues(alpha: 0.85), height: 1.7)),
+            const SizedBox(height: 6),
             Text(
               l.homeDisclaimer,
               textAlign: TextAlign.center,
-              style: t.bodySmall?.copyWith(fontSize: 11, color: QianColors.textSub.withValues(alpha: 0.75)),
+              style: t.bodySmall?.copyWith(fontSize: 11, color: QianColors.textSub.withValues(alpha: 0.6)),
             ),
           ],
         ),
@@ -300,7 +289,7 @@ class _TodayCardState extends State<_TodayCard> {
           padding: const EdgeInsets.all(16),
           child: Row(children: [
             SizedBox(
-              width: 76,
+              width: 96,
               child: AspectRatio(
                 aspectRatio: 0.62,
                 child: FittedBox(
@@ -333,33 +322,13 @@ class _TodayCardState extends State<_TodayCard> {
                 ],
                 if (info == null) ...[
                   const SizedBox(height: 10),
-                  FilledButton(onPressed: _open, child: Text(l.dailyFlip)),
+                  Text(l.dailyFlip, style: t.labelLarge?.copyWith(color: QianColors.earth)),
                 ],
               ]),
             ),
+            const Icon(Icons.chevron_right, color: QianColors.textSub),
           ]),
         ),
-      ),
-    );
-  }
-}
-
-/// 會員入口（只在免費版顯示）。
-class _PremiumCard extends StatelessWidget {
-  const _PremiumCard();
-
-  @override
-  Widget build(BuildContext context) {
-    final l = context.l10n;
-    return Card(
-      margin: EdgeInsets.zero,
-      child: ListTile(
-        contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
-        leading: const Icon(Icons.workspace_premium_outlined, color: QianColors.earth),
-        title: Text(l.menuPremium),
-        subtitle: Text(l.homePremiumDesc, maxLines: 2, overflow: TextOverflow.ellipsis),
-        trailing: const Icon(Icons.chevron_right, color: QianColors.textSub),
-        onTap: () => openPaywall(context, source: 'home'),
       ),
     );
   }
@@ -389,11 +358,11 @@ class _FreeLeftState extends State<_FreeLeft> {
               future: _left,
               builder: (context, snap) {
                 final left = snap.data;
-                if (left == null) return const SizedBox(height: 28);
+                if (left == null) return const SizedBox.shrink();
                 return Padding(
-                  padding: const EdgeInsets.only(top: 8),
+                  padding: const EdgeInsets.only(top: 4),
                   child: Text(left > 0 ? l.homeFreeLeft(left) : l.castLimitTitle,
-                      textAlign: TextAlign.center, style: t.bodySmall?.copyWith(color: QianColors.earth)),
+                      style: t.bodySmall?.copyWith(color: QianColors.earth)),
                 );
               },
             ),
@@ -421,15 +390,21 @@ class _SystemTile extends StatelessWidget {
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 14),
           child: Column(mainAxisSize: MainAxisSize.min, children: [
-            Icon(system.icon, color: QianColors.earth),
-            const SizedBox(height: 8),
-            Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-              if (locked) ...[
-                const Icon(Icons.lock_outline, size: 13, color: QianColors.earth),
-                const SizedBox(width: 3),
-              ],
-              Flexible(child: Text(system.feature.label(l), textAlign: TextAlign.center, style: t.labelLarge)),
+            Stack(clipBehavior: Clip.none, children: [
+              _avatar(system.icon),
+              if (locked)
+                PositionedDirectional(
+                  end: -4,
+                  bottom: -2,
+                  child: CircleAvatar(
+                    radius: 9,
+                    backgroundColor: QianColors.inkCard,
+                    child: Icon(Icons.lock_outline, size: 12, color: QianColors.earth, semanticLabel: l.learnLocked),
+                  ),
+                ),
             ]),
+            const SizedBox(height: 8),
+            Text(system.feature.label(l), textAlign: TextAlign.center, style: t.labelLarge),
           ]),
         ),
       ),
@@ -437,67 +412,43 @@ class _SystemTile extends StatelessWidget {
   }
 }
 
-/// 首頁按鈕：主按鈕金色漸層＋柔光；次要按鈕深色漸層底＋半透明金框。圓角膠囊形。
-class HomeButton extends StatelessWidget {
-  const HomeButton({
-    required this.width,
-    required this.height,
-    required this.primary,
-    required this.label,
-    required this.onTap,
-    this.locked = false,
-  });
+Widget _avatar(IconData icon) => CircleAvatar(
+      backgroundColor: QianColors.earth.withValues(alpha: 0.15),
+      foregroundColor: QianColors.earth,
+      child: Icon(icon),
+    );
 
-  final double width;
-  final double height;
-  final bool primary;
-  final String label;
+/// 抽一卦（0.9.1）：和今日一卦同樣的卡片樣式，免費版剩餘次數放在卡內。
+class _DrawCard extends StatelessWidget {
+  const _DrawCard({required this.system, required this.onTap});
+
+  final _System system;
   final VoidCallback onTap;
-
-  /// 會員內容：文字前加鎖頭小圖示（0.8.0）。
-  final bool locked;
 
   @override
   Widget build(BuildContext context) {
-    final radius = BorderRadius.circular(height / 2);
-    final style = Theme.of(context).textTheme.labelLarge?.copyWith(
-          color: primary ? QianColors.ink : QianColors.rice,
-          fontWeight: primary ? FontWeight.w600 : FontWeight.w500,
-        );
-    final decoration = primary
-        ? qianPrimaryButtonDecoration(radius: radius)
-        : qianSecondaryButtonDecoration(
-            radius: radius, border: Border.all(color: QianColors.earth.withValues(alpha: 0.55)));
-    return Semantics(
-      button: true,
-      child: SizedBox(
-        width: width,
-        height: height,
-        child: DecoratedBox(
-          decoration: decoration,
-          child: Material(
-            type: MaterialType.transparency,
-            child: InkWell(
-              borderRadius: radius,
-              onTap: onTap,
-              splashColor: (primary ? QianColors.ink : QianColors.earth).withValues(alpha: 0.12),
-              child: Center(
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 12),
-                  child: FittedBox(
-                    fit: BoxFit.scaleDown,
-                    child: Row(mainAxisSize: MainAxisSize.min, children: [
-                      if (locked) ...[
-                        const Icon(Icons.lock_outline, size: 14, color: QianColors.earth),
-                        const SizedBox(width: 4),
-                      ],
-                      Text(label, maxLines: 1, style: style),
-                    ]),
-                  ),
-                ),
-              ),
+    final l = context.l10n;
+    final t = Theme.of(context).textTheme;
+    return Card(
+      margin: EdgeInsets.zero,
+      child: InkWell(
+        borderRadius: BorderRadius.circular(16),
+        onTap: onTap,
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+          child: Row(children: [
+            _avatar(system.icon),
+            const SizedBox(width: 16),
+            Expanded(
+              child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+                Text(system.feature.label(l), style: t.titleMedium?.copyWith(color: QianColors.earth)),
+                const SizedBox(height: 2),
+                Text(system.desc(l), style: t.bodySmall?.copyWith(color: QianColors.textSub)),
+                const _FreeLeft(),
+              ]),
             ),
-          ),
+            const Icon(Icons.chevron_right, color: QianColors.textSub),
+          ]),
         ),
       ),
     );

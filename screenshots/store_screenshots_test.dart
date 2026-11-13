@@ -138,6 +138,12 @@ void main() {
 
     // SCREENSHOT_ONLY=guying：只出古圖那一張（raw-09.png）：卦頁（謙）捲到古圖區塊。
     if (Platform.environment['SCREENSHOT_ONLY'] == 'guying') {
+      // 截圖只看畫面；ListTile 墨水提示是 debug 斷言，不影響輸出
+      final prevOnError = FlutterError.onError;
+      FlutterError.onError = (d) {
+        if (d.exceptionAsString().contains('ink splashes may be invisible')) return;
+        prevOnError?.call(d);
+      };
       unawaited(nav().push(MaterialPageRoute<void>(builder: (_) => const DetailPage(number: 15))));
       await _settle(tester, frames: 40);
       await _scrollTo(tester, find.text(en.guyingSection), top: 8);
@@ -145,7 +151,8 @@ void main() {
       nav().popUntil((r) => r.isFirst);
       await _settle(tester, frames: 3);
       debugDisableShadows = true;
-      return;
+      debugDisableShadows = true;
+      FlutterError.onError = prevOnError;
     }
 
     // 8 首頁（最後輸出，但先截：之後都從首頁進入）

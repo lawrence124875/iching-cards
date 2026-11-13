@@ -39,7 +39,7 @@ class _IchingAppState extends State<IchingApp> {
       if (p != null) {
         _open(p);
       } else {
-        // 首次開啟顯示功能介紹（從通知打開時不打斷）
+        // 首次開啟顯示三頁核心介紹（從通知打開時不打斷）
         final intro = services.intro;
         final nav = _navigatorKey.currentState;
         if (intro != null && nav != null && !await intro.seen()) await showIntro(nav);

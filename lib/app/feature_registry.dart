@@ -1,6 +1,7 @@
 import '../features/breath/breath_feature.dart';
 import '../features/coin_cast/coin_cast_feature.dart';
 import '../features/cross/cross_feature.dart';
+import '../features/daily/daily_feature.dart';
 import '../features/draw/draw_feature.dart';
 import '../features/eastern/eastern_feature.dart';
 import '../features/journal/journal_feature.dart';
@@ -14,8 +15,9 @@ export 'app_feature.dart';
 
 /// 功能註冊表：增減功能＝增減這裡的一行（日後可再以 Remote Config 遠端開關）。
 final List<AppFeature> registeredFeatures = [
-  // 順序＝首頁按鈕順序（0.8.0 首頁分組：抽一卦為主；梅花、雙卦、紫微八字、卦記、課程；銅錢與蓍草移到抽一卦頁）
+  // 0.9.0 起首頁改底部分頁（home_page.dart 自己列出各入口）；這裡的順序只影響解讀頁的功能入口與通知處理
   drawFeature,
+  dailyFeature,
   meihuaFeature,
   crossFeature,
   easternFeature,

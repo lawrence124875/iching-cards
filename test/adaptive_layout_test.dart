@@ -79,9 +79,19 @@ void main() {
         void aboveNavBar() =>
             expect(tester.getBottomLeft(find.byType(Navigator).first).dy, lessThanOrEqualTo(size.height - padding.bottom));
         aboveNavBar();
+        // 0.9.0：今日分頁可捲動，免責聲明在最下面：捲到看得見時不可被導覽列擋住
+        await tester.dragUntilVisible(find.text(l.homeDisclaimer), find.byType(Scrollable).first, const Offset(0, -200));
+        await _settle(tester);
         expect(tester.getBottomLeft(find.text(l.homeDisclaimer)).dy, lessThanOrEqualTo(size.height - padding.bottom));
+        // 捲回上方（橫放時抽一卦按鈕已捲出畫面、被清單回收）
+        await tester.dragUntilVisible(find.text(l.featureDraw), find.byType(Scrollable).first, const Offset(0, 200));
+        await _settle(tester);
 
         // 首頁 → 抽一卦 → 翻牌 → 解讀（捲到底）
+        await tester.fling(find.byType(Scrollable).first, const Offset(0, 3000), 3000); // 今日分頁捲回最上方
+        await _settle(tester);
+        await tester.dragUntilVisible(find.text(l.featureDraw), find.byType(Scrollable).first, const Offset(0, -100));
+        await _settle(tester);
         await tester.tap(find.text(l.featureDraw));
         await _settle(tester);
         await tester.tap(find.widgetWithText(FilledButton, l.drawFlip));
@@ -94,6 +104,10 @@ void main() {
         // 三枚銅錢：一次擲完
         nav().popUntil((r) => r.isFirst);
         await _settle(tester);
+        await tester.fling(find.byType(Scrollable).first, const Offset(0, 3000), 3000); // 今日分頁捲回最上方
+        await _settle(tester);
+        await tester.dragUntilVisible(find.text(l.featureDraw), find.byType(Scrollable).first, const Offset(0, -100));
+        await _settle(tester);
         await tester.tap(find.text(l.featureDraw)); // 0.8.0：銅錢與蓍草在抽一卦頁「其他起卦方式」
         await _settle(tester);
         await tester.ensureVisible(find.text(l.featureCoins));
@@ -105,6 +119,10 @@ void main() {
 
         // 蓍草：說明較長，先看未起卦的版面，再一次演完
         nav().popUntil((r) => r.isFirst);
+        await _settle(tester);
+        await tester.fling(find.byType(Scrollable).first, const Offset(0, 3000), 3000); // 今日分頁捲回最上方
+        await _settle(tester);
+        await tester.dragUntilVisible(find.text(l.featureDraw), find.byType(Scrollable).first, const Offset(0, -100));
         await _settle(tester);
         await tester.tap(find.text(l.featureDraw)); // 0.8.0：銅錢與蓍草在抽一卦頁「其他起卦方式」
         await _settle(tester);

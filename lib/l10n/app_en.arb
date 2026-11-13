@@ -699,5 +699,14 @@
   "quizAgain": "Practice again",
   "quizProgress": "Question {current} of {total}",
   "quizDone": "{correct} of {total} correct",
-  "quizMastered": "{count, plural, other{{count} of 64 hexagrams learned}}"
+  "quizMastered": "{count, plural, other{{count} of 64 hexagrams learned}}",
+  "guyingSection": "Antique woodcut",
+  "guyingToggle": "Show antique woodcuts (Duanyi Tianji)",
+  "guyingToggleHint": "Adds a Ming-dynasty woodblock picture to readings and the hexagram library, so you can learn to read images",
+  "guyingCredit": "Woodcut from Duanyi Tianji (1597) · Harvard-Yenching Library · Public domain",
+  "guyingSymbols": "What's in the picture",
+  "guyingSymbolLine": "{see}: {means}",
+  "guyingOriginal": "Original text",
+  "guyingAbout": "About the woodcuts",
+  "guyingViewSource": "View the original scans (Wikimedia Commons)"
 }

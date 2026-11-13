@@ -11,6 +11,7 @@ import '../core/iching/hexagram_table.dart';
 import '../features/cross/cross_feature.dart';
 import '../features/meihua/meihua_feature.dart';
 import '../features/share/share.dart';
+import '../features/guying/guying_section.dart';
 import '../l10n/l10n.dart';
 import '../shared/widgets/card_face.dart';
 import '../shared/widgets/hexagram_glyph.dart';
@@ -131,6 +132,7 @@ class _ReadingPageState extends State<ReadingPage> {
                       textAlign: TextAlign.center, style: Theme.of(context).textTheme.headlineSmall),
                 ),
                 Section(title: l.sectionImage, child: Text(reading.image, style: Theme.of(context).textTheme.bodyLarge)),
+                GuyingSection(number: primary.number),
                 Section(title: l.sectionSource, child: Text(reading.source)),
                 Section(title: l.sectionForYou, child: Text(reading.forYou)),
                 if (pc?.eastWest != null) _EastWest(ew: pc!.eastWest!),

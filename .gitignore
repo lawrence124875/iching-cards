@@ -35,6 +35,7 @@ doc/api/
 # 解讀內容與牌面圖只在私人 repo；本公開 repo 只留 .gitkeep
 /assets/content/**/*.json
 /assets/cards/*.webp
+/assets/guying/*.webp
 /_content/
 # 金鑰絕不 commit
 *.jks

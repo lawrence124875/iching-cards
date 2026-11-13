@@ -12,8 +12,8 @@ for page, half, name, (fx0, fy0, fx1, fy1) in SPEC["items"]:
     W, H = im.size; hw = W // 2; ox = 0 if half == "L" else hw
     c = im.crop((ox + int(fx0 * hw), int(fy0 * H), ox + int(fx1 * hw), int(fy1 * H)))
     num = NAMES.index(name) + 1
-    w = c if c.width <= 720 else c.resize((720, round(c.height * 720 / c.width)), Image.LANCZOS)
-    p = os.path.join(out, "images", f"{num:02d}.webp"); w.save(p, quality=72, method=6)
+    w = c if c.width <= 640 else c.resize((640, round(c.height * 640 / c.width)), Image.LANCZOS)
+    p = os.path.join(out, "images", f"{num:02d}.webp"); w.save(p, quality=64, method=6)
     rows.append(f"{num:02d},{name},{page},{half},{w.width}x{w.height},{os.path.getsize(p)}")
     crops.append((num, c))
 crops.sort()

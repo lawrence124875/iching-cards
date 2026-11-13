@@ -4,6 +4,7 @@ import '../app/services.dart';
 import '../app/theme.dart';
 import '../core/content/hexagram_content.dart';
 import '../core/iching/hexagram_table.dart';
+import '../features/guying/guying_section.dart';
 import '../l10n/l10n.dart';
 import '../shared/widgets/adaptive_layout.dart';
 import '../shared/widgets/hexagram_glyph.dart';
@@ -46,6 +47,7 @@ class _DetailPageState extends State<DetailPage> {
               const SizedBox(height: 12),
               Text('${info.symbol}  ${l.hexFullName(info)}',
                   textAlign: TextAlign.center, style: t.headlineSmall),
+              GuyingSection(number: info.number),
               if (c == null)
                 Section(title: l.sectionText, child: Text(l.hexagramContentInProgress))
               else ...[

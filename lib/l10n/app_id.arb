@@ -699,5 +699,14 @@
   "quizAgain": "Latihan lagi",
   "quizProgress": "Soal {current} dari {total}",
   "quizDone": "Benar {correct} dari {total}",
-  "quizMastered": "{count, plural, other{Sudah hafal {count} dari 64 heksagram}}"
+  "quizMastered": "{count, plural, other{Sudah hafal {count} dari 64 heksagram}}",
+  "guyingSection": "Gambar kuno",
+  "guyingToggle": "Tampilkan gambar kuno (Duanyi Tianji)",
+  "guyingToggleHint": "Menambahkan cukilan kayu dinasti Ming ke tafsiran dan pustaka heksagram, untuk belajar membaca makna dari gambar",
+  "guyingCredit": "Cukilan kayu dari Duanyi Tianji (1597) · Perpustakaan Harvard-Yenching · Domain publik",
+  "guyingSymbols": "Apa yang ada di gambar",
+  "guyingSymbolLine": "{see}: {means}",
+  "guyingOriginal": "Teks asli",
+  "guyingAbout": "Tentang gambar kuno",
+  "guyingViewSource": "Lihat pindaian asli (Wikimedia Commons)"
 }

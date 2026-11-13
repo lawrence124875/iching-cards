@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../features/feedback/feedback_page.dart';
+import '../features/guying/guying_about_page.dart';
 import '../features/intro/intro_page.dart';
 import '../features/share/share.dart';
 import '../l10n/l10n.dart';
@@ -63,6 +64,22 @@ class SettingsPage extends StatelessWidget {
               title: Text(l.menuDailyReminder),
               onTap: () => showDailyReminderDialog(context),
             ),
+          ValueListenableBuilder<bool>(
+            valueListenable: s.guying.enabled,
+            builder: (context, on, _) => SwitchListTile(
+              secondary: const Icon(Icons.image_outlined, color: QianColors.earth),
+              title: Text(l.guyingToggle),
+              subtitle: Text(l.guyingToggleHint),
+              value: on,
+              onChanged: s.guying.set,
+            ),
+          ),
+          ListTile(
+            leading: const Icon(Icons.menu_book_outlined, color: QianColors.earth),
+            title: Text(l.guyingAbout),
+            onTap: () => Navigator.of(context)
+                .push(MaterialPageRoute<void>(builder: (_) => const GuyingAboutPage())),
+          ),
           if (usage != null)
             ValueListenableBuilder<bool>(
               valueListenable: usage.enabled,

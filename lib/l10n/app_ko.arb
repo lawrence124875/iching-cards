@@ -344,5 +344,14 @@
   "quizAgain": "한 번 더 연습하기",
   "quizProgress": "{total}문제 중 {current}번째",
   "quizDone": "{total}문제 중 {correct}개 정답",
-  "quizMastered": "{count, plural, other{64괘 중 {count}괘 익힘}}"
+  "quizMastered": "{count, plural, other{64괘 중 {count}괘 익힘}}",
+  "guyingSection": "옛 그림",
+  "guyingToggle": "옛 그림 보기 (단역천기)",
+  "guyingToggleHint": "풀이와 괘 목록에 명나라 목판화 괘영을 더해 그림으로 상을 읽는 법을 익힙니다",
+  "guyingCredit": "『단역천기』 괘영(1597) · 하버드 옌칭 도서관 소장 · 퍼블릭 도메인",
+  "guyingSymbols": "그림 속에 있는 것",
+  "guyingSymbolLine": "{see}: {means}",
+  "guyingOriginal": "원문",
+  "guyingAbout": "옛 그림에 대하여",
+  "guyingViewSource": "원본 스캔 보기 (Wikimedia Commons)"
 }

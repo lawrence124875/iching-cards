@@ -14,15 +14,16 @@ export 'app_feature.dart';
 
 /// 功能註冊表：增減功能＝增減這裡的一行（日後可再以 Remote Config 遠端開關）。
 final List<AppFeature> registeredFeatures = [
+  // 順序＝首頁按鈕順序（0.8.0 首頁分組：抽一卦為主；梅花、雙卦、紫微八字、卦記、課程；銅錢與蓍草移到抽一卦頁）
   drawFeature,
-  coinCastFeature,
-  yarrowFeature,
-  journalFeature,
-  breathFeature,
-  learnFeature,
   meihuaFeature,
   crossFeature,
   easternFeature,
+  journalFeature,
+  learnFeature,
+  coinCastFeature,
+  yarrowFeature,
+  breathFeature,
 ];
 
 /// 目前開放的功能：註冊表中、且遠端開關（`qg_feature_<id>`，§18）沒有關掉的。

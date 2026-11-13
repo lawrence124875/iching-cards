@@ -161,6 +161,8 @@ void main() {
     // 5 三枚銅錢：回首頁 →「Cast with Three Coins」→ 擲六次
     nav().popUntil((r) => r.isFirst);
     await _settle(tester);
+    await tester.tap(find.text(en.featureDraw)); // 0.8.0：銅錢在抽一卦頁「其他起卦方式」
+    await _settle(tester);
     await tester.tap(find.text(en.featureCoins));
     await _settle(tester);
     for (var i = 1; i <= 6; i++) {

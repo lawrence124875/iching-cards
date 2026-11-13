@@ -213,7 +213,7 @@
   "introNext": "Siguiente",
   "introStart": "Empezar",
   "intro1Title": "Saca un hexagrama y lee el momento",
-  "intro1Body": "Ten presente un asunto y toca Sacar una carta en la pantalla de inicio, o elige Lanzar tres monedas o Tallos de milenrama. Cada hexagrama trae su dictamen y sus líneas, tres lecturas, una pequeña acción y una pregunta para ayudarte a pensar con claridad.",
+  "intro1Body": "Ten presente un asunto y toca Sacar una carta en la pantalla de inicio; en esa página también puedes elegir Lanzar tres monedas o Tallos de milenrama. Cada hexagrama trae su dictamen y sus líneas, tres lecturas, una pequeña acción y una pregunta para ayudarte a pensar con claridad.",
   "intro2Title": "Diario: anota y vuelve a mirar",
   "intro2Body": "Guarda tu pregunta y el hexagrama en el diario; también puedes guardar resultados de Flor de Ciruelo, Lectura doble, Zi Wei y Bazi. Pon un recordatorio para volver a ver lo que pensabas y cómo salió todo. El diario se puede respaldar en un archivo y restaurar en un teléfono nuevo.",
   "intro3Title": "Respira con el hexagrama",
@@ -221,7 +221,7 @@
   "intro4Title": "Compartir y membresía",
   "intro4Body": "Convierte un hexagrama que te guste en una tarjeta para compartir. Los textos y lecturas son siempre gratis; la versión gratuita permite una tirada al día y otra más tras un anuncio corto. Los miembros no ven anuncios, tienen tiradas y diario ilimitados, la Lectura doble completa, todos los cursos, sesiones de respiración más largas y pulsos binaurales.",
   "intro5Title": "Cuéntanos qué piensas",
-  "intro5Body": "El menú de la esquina superior derecha de la pantalla de inicio te permite poner un recordatorio diario, volver a ver esta guía, enviarnos tu opinión y decidir si compartes estadísticas de uso anónimas. Tus sugerencias nos ayudan a mejorar la app.",
+  "intro5Body": "El menú de la esquina superior derecha de la pantalla de inicio te permite volver a ver esta guía y enviarnos tu opinión. En Ajustes, dentro de ese menú, puedes poner un recordatorio diario y decidir si compartes estadísticas de uso anónimas. Tus sugerencias nos ayudan a mejorar la app.",
   "introMeihuaTitle": "Flor de Ciruelo",
   "introMeihuaBody": "Haz la tirada con este momento, dos números o una frase y lee la situación a través de las imágenes de los trigramas, el yo y lo otro, y los hexagramas nuclear y cambiado, con una tendencia de cinco niveles, un margen de tiempo aproximado y qué puedes hacer. Una tirada por hora al día es gratis.",
   "introCrossTitle": "Lectura doble",
@@ -312,5 +312,10 @@
   "meihuaPaywallLessonNote": "La lección 1 es gratis. Hazte Premium para abrir las 12 lecciones: consulta, Ti y Yong, las cinco fases y tres ejemplos.",
   "meihuaPaywallMethodNote": "Consultar por números o palabras es Premium; por hora es gratis una vez al día.",
   "meihuaPaywallJournalNote": "Guardar consultas Flor de Ciruelo en tu diario es Premium.",
-  "meihuaPaywallLimitNote": "Ya usaste la consulta Flor de Ciruelo de hoy. Una al día, con calma; con Premium no hay límite y tienes todos los métodos."
+  "meihuaPaywallLimitNote": "Ya usaste la consulta Flor de Ciruelo de hoy. Una al día, con calma; con Premium no hay límite y tienes todos los métodos.",
+  "drawOtherMethods": "Otras formas de consultar",
+  "homeFreeLeft": "{count, plural, =1{Hoy te queda 1 consulta gratuita} other{Hoy te quedan {count} consultas gratuitas}}",
+  "homeLastEntry": "Última entrada: {title}",
+  "readingMoreTitle": "Verlo desde otro ángulo",
+  "menuSettings": "Ajustes"
 }

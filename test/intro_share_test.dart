@@ -94,7 +94,7 @@ void main() {
         tester.view.physicalSize = const Size(360 * 3, 640 * 3);
         tester.view.devicePixelRatio = 3;
         addTearDown(tester.view.reset);
-        await tester.pumpWidget(app(const IntroPage()));
+        await tester.pumpWidget(app(const IntroPage(full: true)));
         for (var i = 0; i < 9; i++) {
           await tester.pumpAndSettle();
           expect(tester.takeException(), isNull);
@@ -132,7 +132,7 @@ void main() {
                         info: HexagramTable.byNumber(15), title: 'W' * 30, image: 'W ' * 200),
                     child: const Text('share'),
                   ),
-                  TextButton(onPressed: () => showIntro(Navigator.of(context)), child: const Text('intro')),
+                  TextButton(onPressed: () => showIntro(Navigator.of(context), full: true), child: const Text('intro')),
                 ]),
               ),
             ),

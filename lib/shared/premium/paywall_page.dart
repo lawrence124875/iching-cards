@@ -2,7 +2,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-import '../../app/home_page.dart' show privacyPolicyUrl, termsOfServiceUrl;
+import '../../app/settings_page.dart' show privacyPolicyUrl, termsOfServiceUrl;
 import '../../app/services.dart';
 import '../../app/theme.dart';
 import '../../core/events/event_bus.dart';

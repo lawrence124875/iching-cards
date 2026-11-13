@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../../app/feature_registry.dart';
 import '../../app/services.dart';
 import '../../app/theme.dart';
 import '../../core/iching/cast_result.dart';
@@ -95,10 +96,28 @@ class _DrawPageState extends State<DrawPage> {
         ),
       ),
     );
+    // 0.8.0：三枚銅錢、蓍草從首頁移到這裡（其他起卦方式），換頁後返回鍵回首頁
+    final alt = activeFeatures(AppServices.of(context).flags)
+        .where((f) => f.placement == FeaturePlacement.altCast && f.builder != null)
+        .toList();
     final buttons = [
-      if (cast == null)
-        FilledButton(onPressed: _draw, child: Text(l.drawFlip))
-      else ...[
+      if (cast == null) ...[
+        FilledButton(onPressed: _draw, child: Text(l.drawFlip)),
+        if (alt.isNotEmpty) ...[
+          const SizedBox(height: 12),
+          Text(l.drawOtherMethods, style: t.bodySmall?.copyWith(color: QianColors.textSub)),
+          Wrap(
+            alignment: WrapAlignment.center,
+            children: [
+              for (final f in alt)
+                TextButton(
+                  onPressed: () => Navigator.of(context).pushReplacement(MaterialPageRoute<void>(builder: f.builder!)),
+                  child: Text(f.label(l)),
+                ),
+            ],
+          ),
+        ],
+      ] else ...[
         FilledButton(
           onPressed: () => _openReading(cast),
           child: Text(l.viewReading),

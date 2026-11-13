@@ -568,7 +568,7 @@
   "introNext": "Berikutnya",
   "introStart": "Mulai",
   "intro1Title": "Ambil satu heksagram, baca saat ini",
-  "intro1Body": "Simpan satu hal di benakmu, lalu ketuk Ambil Satu Kartu di beranda, atau pilih Lempar Tiga Koin atau Batang Yarrow. Setiap heksagram punya teks putusan dan garis, tiga bacaan, satu langkah kecil, dan satu pertanyaan untuk membantumu berpikir jernih.",
+  "intro1Body": "Simpan satu hal di benakmu, lalu ketuk Ambil Satu Kartu di beranda; di halaman itu kamu juga bisa memilih Lempar Tiga Koin atau Batang Yarrow. Setiap heksagram punya teks putusan dan garis, tiga bacaan, satu langkah kecil, dan satu pertanyaan untuk membantumu berpikir jernih.",
   "intro2Title": "Jurnal: catat, lalu tinjau",
   "intro2Body": "Simpan pertanyaan dan heksagrammu ke jurnal; hasil Bunga Plum, Bacaan ganda, Zi Wei, dan Bazi juga bisa disimpan. Pasang pengingat untuk melihat kembali pikiranmu saat itu dan perkembangannya. Jurnal bisa dicadangkan ke file dan dipulihkan di ponsel baru.",
   "intro3Title": "Bernapas bersama heksagram",
@@ -576,7 +576,7 @@
   "intro4Title": "Berbagi dan keanggotaan",
   "intro4Body": "Jadikan heksagram favoritmu kartu untuk dibagikan. Teks dan bacaan selalu gratis; versi gratis memberi satu kali per hari, dan satu lagi setelah iklan singkat. Anggota bebas iklan, membuat heksagram dan jurnal tanpa batas, serta mendapat Bacaan ganda lengkap, semua kursus, latihan napas lebih panjang, dan ketukan binaural.",
   "intro5Title": "Sampaikan pendapatmu",
-  "intro5Body": "Menu di kanan atas beranda bisa dipakai untuk memasang pengingat harian, membuka lagi panduan ini, mengirim masukan, dan memilih apakah ingin berbagi statistik penggunaan anonim. Saranmu membantu aplikasi ini menjadi lebih baik.",
+  "intro5Body": "Menu di kanan atas beranda bisa dipakai untuk membuka lagi panduan ini dan mengirim masukan. Di Setelan dalam menu itu, kamu bisa memasang pengingat harian dan memilih apakah ingin berbagi statistik penggunaan anonim. Saranmu membantu aplikasi ini menjadi lebih baik.",
   "introMeihuaTitle": "Bunga Plum",
   "introMeihuaBody": "Buat heksagram dari saat ini, dua angka, atau satu kalimat, lalu baca keadaanmu lewat gambaran trigram atas dan bawah, diri dan hal yang dihadapi, serta heksagram inti dan heksagram berubah, dengan arah lima tingkat dan hal yang bisa dilakukan sebagai bahan renungan. Satu kali membuat heksagram dari waktu per hari gratis.",
   "introCrossTitle": "Bacaan ganda",
@@ -667,5 +667,10 @@
   "meihuaPaywallLessonNote": "Pelajaran 1 gratis. Jadi Premium untuk membuka 12 pelajaran: menyusun, Ti dan Yong, lima unsur, dan tiga contoh.",
   "meihuaPaywallMethodNote": "Menyusun dari angka atau kata adalah fitur Premium; dari waktu gratis sekali sehari.",
   "meihuaPaywallJournalNote": "Menyimpan hasil Bunga Plum ke jurnal adalah fitur Premium.",
-  "meihuaPaywallLimitNote": "Kesempatan Bunga Plum hari ini sudah dipakai. Sekali sehari, direnungkan dengan tenang; Premium tanpa batas dan semua cara."
+  "meihuaPaywallLimitNote": "Kesempatan Bunga Plum hari ini sudah dipakai. Sekali sehari, direnungkan dengan tenang; Premium tanpa batas dan semua cara.",
+  "drawOtherMethods": "Cara lain",
+  "homeFreeLeft": "{count, plural, other{Kesempatan gratis hari ini tinggal {count}}}",
+  "homeLastEntry": "Catatan terakhir: {title}",
+  "readingMoreTitle": "Lihat dari sudut lain",
+  "menuSettings": "Setelan"
 }

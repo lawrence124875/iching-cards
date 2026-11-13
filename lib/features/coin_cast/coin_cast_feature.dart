@@ -5,7 +5,7 @@ import '../../shared/cast/stepwise_cast_page.dart';
 final coinCastFeature = AppFeature(
   id: 'coin_cast',
   label: (l) => l.featureCoins,
-  placement: FeaturePlacement.secondary,
+  placement: FeaturePlacement.altCast,
   builder: (_) => StepwiseCastPage(
     method: const ThreeCoins(),
     instructions: (l) => l.coinsInstructions,

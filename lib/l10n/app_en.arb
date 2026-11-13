@@ -568,7 +568,7 @@
   "introNext": "Next",
   "introStart": "Get started",
   "intro1Title": "Draw a hexagram, read the moment",
-  "intro1Body": "Hold one matter in mind and tap Draw a Card on the home screen, or choose Cast with Three Coins or Cast with Yarrow Stalks. Each hexagram comes with its judgment and line texts, three readings, a small action and a question to help you think things through.",
+  "intro1Body": "Hold one matter in mind and tap Draw a Card on the home screen; on that page you can also choose Cast with Three Coins or Cast with Yarrow Stalks. Each hexagram comes with its judgment and line texts, three readings, a small action and a question to help you think things through.",
   "intro2Title": "Journal: note it, look back",
   "intro2Body": "Save your question and hexagram to the journal; Plum Blossom, Dual Reading, Zi Wei and Bazi results can be saved too. Set a reminder and come back later to see what you thought and how things turned out. You can also back up the journal to a file and restore it on a new phone.",
   "intro3Title": "Breathe with the hexagram",
@@ -576,7 +576,7 @@
   "intro4Title": "Sharing and membership",
   "intro4Body": "Turn a hexagram you like into a card and share it with friends. The texts and readings are always free; the free version gives one cast a day, plus one more after a short ad. Members get no ads, unlimited casts and journal entries, the full Dual Reading, all courses, longer breathing sessions and binaural beats.",
   "intro5Title": "Tell us what you think",
-  "intro5Body": "The menu at the top right of the home screen lets you set a daily reminder, replay this tour, send us feedback, and choose whether to share anonymous usage stats. Your suggestions help make the app better.",
+  "intro5Body": "The menu at the top right of the home screen lets you replay this tour and send us feedback. Under Settings in that menu you can set a daily reminder and choose whether to share anonymous usage stats. Your suggestions help make the app better.",
   "introMeihuaTitle": "Plum Blossom",
   "introMeihuaBody": "Cast from this moment, two numbers or a sentence, then read the situation through the trigram images, self and other, and the nuclear and changed hexagrams, with a five-level trend, a rough time window and ways forward. One time cast a day is free.",
   "introCrossTitle": "Dual Reading",
@@ -667,5 +667,10 @@
   "meihuaPaywallLessonNote": "Lesson 1 is free. Go Premium to unlock all 12 lessons: casting, Ti and Yong, the Five Phases and three worked examples.",
   "meihuaPaywallMethodNote": "Casting by numbers or words is a Premium feature; casting by time is free once a day.",
   "meihuaPaywallJournalNote": "Saving Plum Blossom casts to your journal is a Premium feature.",
-  "meihuaPaywallLimitNote": "You have used today’s Plum Blossom cast. One a day, reflected on quietly; go Premium for unlimited casts and every method."
+  "meihuaPaywallLimitNote": "You have used today’s Plum Blossom cast. One a day, reflected on quietly; go Premium for unlimited casts and every method.",
+  "drawOtherMethods": "Other ways to cast",
+  "homeFreeLeft": "{count, plural, =1{1 free cast left today} other{{count} free casts left today}}",
+  "homeLastEntry": "Last entry: {title}",
+  "readingMoreTitle": "See It from Another Angle",
+  "menuSettings": "Settings"
 }

@@ -151,8 +151,8 @@ void main() {
       nav().popUntil((r) => r.isFirst);
       await _settle(tester, frames: 3);
       debugDisableShadows = true;
-      debugDisableShadows = true;
       FlutterError.onError = prevOnError;
+      return;
     }
 
     // 8 首頁（最後輸出，但先截：之後都從首頁進入）

@@ -6,6 +6,7 @@ import '../../core/guying/guying.dart';
 import '../../l10n/l10n.dart';
 import '../../reading/section.dart';
 import 'guying_about_page.dart';
+import 'guying_viewer.dart';
 
 /// 解讀頁與卦庫詳解的「古圖」區塊（預設關閉）。關閉時只顯示一行入口，點了就打開（同設定開關）；
 /// 打開時區塊底部可收起。
@@ -67,16 +68,7 @@ class _GuyingBodyState extends State<_GuyingBody> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              ClipRRect(
-                borderRadius: BorderRadius.circular(6),
-                child: InteractiveViewer(
-                  maxScale: 4,
-                  child: Image.asset(GuyingSource.imagePath(widget.number),
-                      fit: BoxFit.fitWidth,
-                      semanticLabel: item.title,
-                      errorBuilder: (_, __, ___) => const SizedBox.shrink()),
-                ),
-              ),
+              GuyingThumb(number: widget.number, label: item.title),
               const SizedBox(height: 6),
               Text(l.guyingCredit, style: t.bodySmall?.copyWith(color: QianColors.textSub)),
               const SizedBox(height: 12),

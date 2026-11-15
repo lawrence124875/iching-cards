@@ -6,6 +6,7 @@ import '../../core/guying/guying.dart';
 import '../../l10n/l10n.dart';
 import '../../reading/section.dart';
 import '../../shared/widgets/adaptive_layout.dart';
+import 'guying_viewer.dart';
 
 /// 原書在 Wikimedia Commons 的頁面（哈佛燕京圖書館藏本，Public domain）。
 const guyingSourceUrl = 'https://commons.wikimedia.org/wiki/Category:%E6%96%B7%E6%98%93%E5%A4%A9%E6%A9%9F';
@@ -37,11 +38,7 @@ class GuyingAboutPage extends StatelessWidget {
                   onChanged: pref.set,
                 ),
               ),
-              ClipRRect(
-                borderRadius: BorderRadius.circular(6),
-                child: Image.asset(GuyingSource.imagePath(15),
-                    fit: BoxFit.fitWidth, errorBuilder: (_, __, ___) => const SizedBox.shrink()),
-              ),
+              const GuyingThumb(number: 15),
               if (c != null)
                 for (final s in c.about) Section(title: s.heading, child: Text(s.body)),
               const SizedBox(height: 16),

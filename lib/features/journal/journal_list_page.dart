@@ -243,15 +243,25 @@ class _JournalListPageState extends State<JournalListPage> {
     final present = {for (final e in open) e.category};
     String label(String c) => journalCategoryLabel(l, c);
     final cats = [for (final c in JournalEntry.categories) if (present.contains(c) || _filter.category == c) c];
+    // 文字置中：不限高度（之前固定 52 高把晶片壓扁、字偏下），行高固定、上下均分。
+    const labelStyle = TextStyle(fontSize: 14, height: 1.2, leadingDistribution: TextLeadingDistribution.even);
     Widget chip(String text, bool on, VoidCallback tap, {Widget? avatar}) => Padding(
           padding: const EdgeInsets.only(right: 8),
-          child: FilterChip(label: Text(text), selected: on, onSelected: (_) => tap(), avatar: avatar, showCheckmark: false),
+          child: FilterChip(
+            label: Text(text, style: labelStyle),
+            selected: on,
+            onSelected: (_) => tap(),
+            avatar: avatar,
+            showCheckmark: false,
+            materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+            visualDensity: VisualDensity.compact,
+          ),
         );
-    return SizedBox(
-      height: 52,
-      child: ListView(
-        scrollDirection: Axis.horizontal,
-        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+    return SingleChildScrollView(
+      scrollDirection: Axis.horizontal,
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           chip(l.journalFilterAll, _filter.category == null && !_filter.starredOnly,
               () => _setFilter(_copy(category: null, starredOnly: false))),
@@ -263,7 +273,9 @@ class _JournalListPageState extends State<JournalListPage> {
             Padding(
               padding: const EdgeInsets.only(right: 8),
               child: InputChip(
-                label: Text('${formatDate(_filter.from!)} – ${formatDate(_filter.to!)}'),
+                materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                visualDensity: VisualDensity.compact,
+                label: Text('${formatDate(_filter.from!)} – ${formatDate(_filter.to!)}', style: labelStyle),
                 onPressed: _pickDates,
                 onDeleted: () => _setFilter(_copy(from: null, to: null)),
               ),

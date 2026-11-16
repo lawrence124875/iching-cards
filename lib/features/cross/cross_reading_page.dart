@@ -115,6 +115,20 @@ class _CrossReadingPageState extends State<CrossReadingPage> {
   bool _saved = false;
   bool _useEastern = true;
 
+  /// 免費版第一次使用雙卦交叉：完整看一次（2026-11-16 Lawrence），之後只看標題。記號存 `cross_free_trial.txt`。
+  bool _freeTrial = false;
+
+  Future<bool> _takeFreeTrial() async {
+    try {
+      final f = File('${(await getApplicationDocumentsDirectory()).path}/cross_free_trial.txt');
+      if (await f.exists()) return false;
+      await f.writeAsString('1');
+      return true;
+    } catch (_) {
+      return false;
+    }
+  }
+
   Future<_Data?> _load() async {
     final folder = L10n.language.contentFolder;
     final cc = await crossSource.load(folder);
@@ -140,6 +154,7 @@ class _CrossReadingPageState extends State<CrossReadingPage> {
         ? (widget.eastern == null ? null : BirthProfile.fromJson(widget.eastern!.birth))
         : await BirthStore.load();
     if (!widget.review) _useEastern = await CrossEasternPref.load();
+    if (!widget.review && !_services.isPremium) _freeTrial = await _takeFreeTrial();
     final chart = profile?.ziwei();
     final y = ziweiYearAt(widget.at ?? DateTime.now());
     return _Data(cc, mc, result, focus, texts,
@@ -236,9 +251,16 @@ class _CrossReadingPageState extends State<CrossReadingPage> {
                         style: Theme.of(context).textTheme.bodySmall?.copyWith(color: QianColors.textSub)),
                   ),
                 _VerdictTitle(cc: d.cc, verdict: d.result.verdict),
-                if (premium) ..._full(context, d) else ..._locked(context, d.cc),
+                if (!premium && _freeTrial)
+                  Padding(
+                    padding: const EdgeInsets.only(top: 12),
+                    child: Text(l.crossFreeTrialNote,
+                        textAlign: TextAlign.center,
+                        style: Theme.of(context).textTheme.bodySmall?.copyWith(color: QianColors.earth)),
+                  ),
+                if (premium || _freeTrial) ..._full(context, d) else ..._locked(context, d.cc),
                 const SizedBox(height: 28),
-                if (widget.solarCity != null && premium) ...[
+                if (widget.solarCity != null && (premium || _freeTrial)) ...[
                   Text(l.meihuaSolarOn(widget.solarCity!),
                       textAlign: TextAlign.center,
                       style: Theme.of(context).textTheme.bodySmall?.copyWith(color: QianColors.textSub)),
@@ -370,7 +392,7 @@ class _CrossReadingPageState extends State<CrossReadingPage> {
             ],
           ]),
         ),
-      if (!widget.review && _services.journal != null && _services.flags.featureEnabled('journal')) ...[
+      if (!widget.review && _services.isPremium && _services.journal != null && _services.flags.featureEnabled('journal')) ...[
         const SizedBox(height: 32),
         Center(
           child: _saved

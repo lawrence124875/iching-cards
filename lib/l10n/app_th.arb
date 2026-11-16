@@ -389,5 +389,6 @@
   "journalStatsYes": "ตรง",
   "journalStatsPartly": "ตรงบางส่วน",
   "journalStatsNo": "ไม่ตรง",
-  "journalStatsFreeNote": "เวอร์ชันฟรีนับเฉพาะ {days} วันล่าสุด"
+  "journalStatsFreeNote": "เวอร์ชันฟรีนับเฉพาะ {days} วันล่าสุด",
+  "crossFreeTrialNote": "ครั้งนี้ดูได้ครบฟรี ครั้งต่อไปเวอร์ชันฟรีจะแสดงเฉพาะหัวข้อ"
 }

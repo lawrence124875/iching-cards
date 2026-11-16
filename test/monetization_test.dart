@@ -19,7 +19,7 @@ void main() {
       const l = FreeLimits();
       expect(l.castsPerDay, 1);
       expect(l.rewardedPerDay, 1);
-      expect(l.journalMax, 10);
+      expect(l.journalMax, 1000);
       expect(l.journalDays, 30);
     });
 

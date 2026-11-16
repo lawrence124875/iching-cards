@@ -389,5 +389,6 @@
   "journalStatsYes": "맞았음",
   "journalStatsPartly": "일부 맞음",
   "journalStatsNo": "맞지 않음",
-  "journalStatsFreeNote": "무료 버전은 최근 {days}일의 기록만 집계합니다."
+  "journalStatsFreeNote": "무료 버전은 최근 {days}일의 기록만 집계합니다.",
+  "crossFreeTrialNote": "이번에는 무료로 전체 내용을 볼 수 있습니다. 다음부터 무료 버전은 제목만 표시됩니다."
 }

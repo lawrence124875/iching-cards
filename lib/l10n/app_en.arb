@@ -744,5 +744,6 @@
   "journalStatsYes": "Came true",
   "journalStatsPartly": "Partly",
   "journalStatsNo": "Did not",
-  "journalStatsFreeNote": "The free version counts only the last {days} days."
+  "journalStatsFreeNote": "The free version counts only the last {days} days.",
+  "crossFreeTrialNote": "This one is a free full preview. After this, the free version shows only the headline."
 }

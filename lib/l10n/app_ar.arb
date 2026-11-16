@@ -389,5 +389,6 @@
   "journalStatsYes": "تحقّق",
   "journalStatsPartly": "تحقّق جزئيًّا",
   "journalStatsNo": "لم يتحقّق",
-  "journalStatsFreeNote": "تحسب النسخة المجانية آخر {days} يومًا فقط."
+  "journalStatsFreeNote": "تحسب النسخة المجانية آخر {days} يومًا فقط.",
+  "crossFreeTrialNote": "يمكنك هذه المرّة رؤية القراءة كاملة مجانًا. بعد ذلك تعرض النسخة المجانية العنوان فقط."
 }

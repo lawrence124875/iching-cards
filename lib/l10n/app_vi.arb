@@ -389,5 +389,6 @@
   "journalStatsYes": "Đúng",
   "journalStatsPartly": "Đúng một phần",
   "journalStatsNo": "Không đúng",
-  "journalStatsFreeNote": "Bản miễn phí chỉ thống kê {days} ngày gần nhất."
+  "journalStatsFreeNote": "Bản miễn phí chỉ thống kê {days} ngày gần nhất.",
+  "crossFreeTrialNote": "Lần này bạn được xem đầy đủ miễn phí. Từ lần sau, bản miễn phí chỉ hiện tiêu đề."
 }

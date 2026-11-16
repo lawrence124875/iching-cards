@@ -389,5 +389,6 @@
   "journalStatsYes": "Se cumplió",
   "journalStatsPartly": "En parte",
   "journalStatsNo": "No se cumplió",
-  "journalStatsFreeNote": "La versión gratuita solo cuenta los últimos {days} días."
+  "journalStatsFreeNote": "La versión gratuita solo cuenta los últimos {days} días.",
+  "crossFreeTrialNote": "Esta vez la ves completa gratis. Después, la versión gratuita solo muestra el titular."
 }

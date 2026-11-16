@@ -390,5 +390,10 @@
   "journalStatsPartly": "일부 맞음",
   "journalStatsNo": "맞지 않음",
   "journalStatsFreeNote": "무료 버전은 최근 {days}일의 기록만 집계합니다.",
-  "crossFreeTrialNote": "이번에는 무료로 전체 내용을 볼 수 있습니다. 다음부터 무료 버전은 제목만 표시됩니다."
+  "crossFreeTrialNote": "이번에는 무료로 전체 내용을 볼 수 있습니다. 다음부터 무료 버전은 제목만 표시됩니다.",
+  "otherAppsTitle": "LC Lab의 다른 앱",
+  "otherAppTarotName": "AuraSpica Tarot",
+  "otherAppTarotDesc": "타로・르노르망・룬, 입문 강좌 포함",
+  "otherAppEnglishName": "English Words Audio Cruise",
+  "otherAppEnglishDesc": "들으며 외우는 영어 단어, 화면이 꺼져도 재생"
 }

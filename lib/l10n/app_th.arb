@@ -390,5 +390,10 @@
   "journalStatsPartly": "ตรงบางส่วน",
   "journalStatsNo": "ไม่ตรง",
   "journalStatsFreeNote": "เวอร์ชันฟรีนับเฉพาะ {days} วันล่าสุด",
-  "crossFreeTrialNote": "ครั้งนี้ดูได้ครบฟรี ครั้งต่อไปเวอร์ชันฟรีจะแสดงเฉพาะหัวข้อ"
+  "crossFreeTrialNote": "ครั้งนี้ดูได้ครบฟรี ครั้งต่อไปเวอร์ชันฟรีจะแสดงเฉพาะหัวข้อ",
+  "otherAppsTitle": "แอปอื่นจาก LC Lab",
+  "otherAppTarotName": "AuraSpica Tarot",
+  "otherAppTarotDesc": "ไพ่ทาโรต์ เลอนอร์มองด์ และรูน พร้อมคอร์สเริ่มต้น",
+  "otherAppEnglishName": "English Words Audio Cruise",
+  "otherAppEnglishDesc": "จำศัพท์ภาษาอังกฤษด้วยการฟัง เล่นได้แม้ล็อกหน้าจอ"
 }

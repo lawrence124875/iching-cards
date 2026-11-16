@@ -390,5 +390,10 @@
   "journalStatsPartly": "Em parte",
   "journalStatsNo": "Não aconteceu",
   "journalStatsFreeNote": "A versão gratuita conta só os últimos {days} dias.",
-  "crossFreeTrialNote": "Desta vez você vê tudo de graça. Depois, a versão gratuita mostra só o título."
+  "crossFreeTrialNote": "Desta vez você vê tudo de graça. Depois, a versão gratuita mostra só o título.",
+  "otherAppsTitle": "Mais apps da LC Lab",
+  "otherAppTarotName": "AuraSpica Tarot",
+  "otherAppTarotDesc": "Tarô, Lenormand e runas, com cursos para iniciantes",
+  "otherAppEnglishName": "English Words Audio Cruise",
+  "otherAppEnglishDesc": "Aprenda palavras em inglês ouvindo, mesmo com a tela bloqueada"
 }

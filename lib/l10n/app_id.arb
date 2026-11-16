@@ -745,5 +745,10 @@
   "journalStatsPartly": "Sebagian",
   "journalStatsNo": "Tidak sesuai",
   "journalStatsFreeNote": "Versi gratis hanya menghitung {days} hari terakhir.",
-  "crossFreeTrialNote": "Kali ini Anda bisa melihat semuanya gratis. Setelah ini, versi gratis hanya menampilkan judul."
+  "crossFreeTrialNote": "Kali ini Anda bisa melihat semuanya gratis. Setelah ini, versi gratis hanya menampilkan judul.",
+  "otherAppsTitle": "Aplikasi LC Lab lainnya",
+  "otherAppTarotName": "AuraSpica Tarot",
+  "otherAppTarotDesc": "Tarot, Lenormand, dan rune, dengan kursus pemula",
+  "otherAppEnglishName": "English Words Audio Cruise",
+  "otherAppEnglishDesc": "Hafal kosakata bahasa Inggris dengan mendengar, bahkan saat layar terkunci"
 }

@@ -191,7 +191,7 @@
   "castLimitBody": "短い広告を見ると、もう一卦立てられます。メンバーになると回数無制限・広告なしです。",
   "castInterstitialPause": "少し心を静めて。まもなく解読が表示されます",
   "paywallCastLimitNote": "今日の回数を使い切りました。一日一卦、静かに思いを巡らせて。今日の卦を心に置き、また明日どうぞ。いつでも卦を立てたいときは、メンバーになれます。",
-  "journalLimitBody": "保存済みの記録はすべて残ります。広告を見てこの一件を保存するか、メンバーになれば件数無制限です。",
+  "journalLimitBody": "保存済みの記録はそのまま残ります。メンバーになると件数の制限がなくなります。",
   "planTrialYearly": "{days}日間無料、その後 {price}/年",
   "planTrialMonthly": "{days}日間無料、その後 {price}/月",
   "planPerMonth": "月あたり約 {price}",
@@ -376,5 +376,18 @@
   "journalLockedTitle": "{count, plural, other{{days} 日より前の記録があと {count} 件あります}}",
   "journalLockedBody": "無料版では最近 {days} 日の記録を表示します。それより前の記録もスマートフォンに保存されています。メンバーになるとすべて見られます。",
   "journalBackupSettingsNote": "外観、古図、生年月日、都市などの設定と卦の練習の進み具合も一緒にバックアップします。サブスクリプションはファイルに含まれません。新しい端末で同じアカウントを使い、購読ページの「購入を復元」を押してください。",
-  "journalRestoreSettings": "設定を復元しました。次にアプリを開いたときに反映されます。"
+  "journalRestoreSettings": "設定も復元しました。",
+  "menuBackupMove": "バックアップと機種変更",
+  "menuBackupMoveHint": "記録と設定を書き出し、新しい端末で読み込みます",
+  "journalStats": "記録の統計",
+  "journalStatsTotal": "{count, plural, other{記録 {count} 件}}",
+  "journalStatsReviewed": "{count, plural, other{うち {count} 件にふり返りあり}}",
+  "journalStatsTypes": "立て方",
+  "journalStatsTopHex": "よく出る卦",
+  "journalStatsTimes": "{count, plural, other{{count} 回}}",
+  "journalStatsVerified": "二卦の対照のふり返り",
+  "journalStatsYes": "当たった",
+  "journalStatsPartly": "一部当たった",
+  "journalStatsNo": "当たらなかった",
+  "journalStatsFreeNote": "無料版は最近 {days} 日の記録だけを集計します。"
 }

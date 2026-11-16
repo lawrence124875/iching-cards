@@ -191,7 +191,7 @@
   "castLimitBody": "Mira un anuncio breve para una consulta más, o hazte Premium para consultas ilimitadas y sin anuncios.",
   "castInterstitialPause": "Un momento de calma. Tu lectura está por aparecer.",
   "paywallCastLimitNote": "Ya usaste las consultas de hoy. Un hexagrama al día, con calma: deja que la imagen de hoy repose en ti y vuelve mañana. Hazte Premium para consultar cuando quieras.",
-  "journalLimitBody": "Todo lo que guardaste se conserva. Mira un anuncio para guardar esta, o hazte Premium para añadir entradas sin límite.",
+  "journalLimitBody": "Tus entradas guardadas se conservan. Hazte miembro para guardar sin límite.",
   "planTrialYearly": "Gratis {days} días, luego {price}/año",
   "planTrialMonthly": "Gratis {days} días, luego {price}/mes",
   "planPerMonth": "Aprox. {price}/mes",
@@ -376,5 +376,18 @@
   "journalLockedTitle": "{count, plural, =1{1 entrada más de hace más de {days} días} other{{count} entradas más de hace más de {days} días}}",
   "journalLockedBody": "La versión gratuita muestra los últimos {days} días. Las entradas anteriores siguen guardadas en tu teléfono; hazte miembro para verlas todas.",
   "journalBackupSettingsNote": "También se incluyen tus ajustes (apariencia, láminas antiguas, datos de nacimiento, ciudad) y tu progreso de práctica. La suscripción no va en el archivo: en tu nuevo teléfono, toca «Restaurar compras» en la página de suscripción con la misma cuenta.",
-  "journalRestoreSettings": "Ajustes restaurados. Se aplicarán la próxima vez que abras la app."
+  "journalRestoreSettings": "También se restauraron los ajustes.",
+  "menuBackupMove": "Copia y cambio de teléfono",
+  "menuBackupMoveHint": "Exporta tu diario y ajustes, e impórtalos en el nuevo teléfono",
+  "journalStats": "Estadísticas del diario",
+  "journalStatsTotal": "{count, plural, =1{1 entrada} other{{count} entradas}}",
+  "journalStatsReviewed": "{count, plural, =1{1 con notas} other{{count} con notas}}",
+  "journalStatsTypes": "Métodos",
+  "journalStatsTopHex": "Hexagramas más frecuentes",
+  "journalStatsTimes": "{count, plural, =1{1 vez} other{{count} veces}}",
+  "journalStatsVerified": "Seguimiento de lecturas dobles",
+  "journalStatsYes": "Se cumplió",
+  "journalStatsPartly": "En parte",
+  "journalStatsNo": "No se cumplió",
+  "journalStatsFreeNote": "La versión gratuita solo cuenta los últimos {days} días."
 }

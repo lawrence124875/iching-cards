@@ -1,4 +1,7 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
+import 'package:path_provider/path_provider.dart';
 
 import '../../app/services.dart';
 import '../../app/theme.dart';
@@ -74,6 +77,33 @@ class _Data {
 
   /// 本次重點各段的文字（使用者語言）。
   final List<String> texts;
+
+  /// 使用者關掉「紫微・八字」時：只看易經×梅花。
+  _Data withoutEastern() => _Data(cc, mc, result, focus, texts);
+}
+
+/// 雙卦交叉是否加入紫微・八字（有出生資料時；預設開，記住上次選擇）。存 `cross_eastern.txt`（'0' 為關）。
+class CrossEasternPref {
+  CrossEasternPref._();
+
+  static const fileName = 'cross_eastern.txt';
+
+  static Future<File> _file() async => File('${(await getApplicationDocumentsDirectory()).path}/$fileName');
+
+  static Future<bool> load() async {
+    try {
+      final f = await _file();
+      return !(await f.exists()) || (await f.readAsString()).trim() != '0';
+    } catch (_) {
+      return true;
+    }
+  }
+
+  static Future<void> save(bool on) async {
+    try {
+      await (await _file()).writeAsString(on ? '1' : '0');
+    } catch (_) {}
+  }
 }
 
 /// 阿拉伯文、印尼文不顯示應期（2026-11-01 文化審查：避免「何時發生」的預測）。
@@ -83,6 +113,7 @@ class _CrossReadingPageState extends State<CrossReadingPage> {
   late final Services _services = AppServices.of(context);
   late final Future<_Data?> _data = _load();
   bool _saved = false;
+  bool _useEastern = true;
 
   Future<_Data?> _load() async {
     final folder = L10n.language.contentFolder;
@@ -108,6 +139,7 @@ class _CrossReadingPageState extends State<CrossReadingPage> {
     final BirthProfile? profile = widget.review
         ? (widget.eastern == null ? null : BirthProfile.fromJson(widget.eastern!.birth))
         : await BirthStore.load();
+    if (!widget.review) _useEastern = await CrossEasternPref.load();
     final chart = profile?.ziwei();
     final y = ziweiYearAt(widget.at ?? DateTime.now());
     return _Data(cc, mc, result, focus, texts,
@@ -163,8 +195,10 @@ class _CrossReadingPageState extends State<CrossReadingPage> {
         future: _data,
         builder: (context, snap) {
           if (snap.connectionState != ConnectionState.done) return const Center(child: CircularProgressIndicator());
-          final d = snap.data;
-          if (d == null) return Center(child: Text(l.learnMissing));
+          final full = snap.data;
+          if (full == null) return Center(child: Text(l.learnMissing));
+          final canToggle = !widget.review && full.profile != null;
+          final d = canToggle && !_useEastern ? full.withoutEastern() : full;
           _easternRecord = d.profile == null
               ? null
               : EasternRecord(birth: d.profile!.toJson(), systems: [if (d.zyear != null) 'ziwei', 'bazi']);
@@ -181,7 +215,20 @@ class _CrossReadingPageState extends State<CrossReadingPage> {
                   ),
                 _Glyphs(iching: widget.iching, meihua: widget.meihua, cc: d.cc),
                 const SizedBox(height: 20),
-                if (d.profile != null)
+                if (canToggle)
+                  SwitchListTile(
+                    contentPadding: EdgeInsets.zero,
+                    title: Text(l.featureEastern),
+                    subtitle: Text(_useEastern ? (d.zyear != null ? l.methodCross4 : l.methodCross3) : l.methodCross),
+                    value: _useEastern,
+                    onChanged: _saved
+                        ? null
+                        : (v) {
+                            setState(() => _useEastern = v);
+                            CrossEasternPref.save(v);
+                          },
+                  )
+                else if (d.profile != null)
                   Padding(
                     padding: const EdgeInsets.only(bottom: 8),
                     child: Text(d.zyear != null ? l.methodCross4 : l.methodCross3,

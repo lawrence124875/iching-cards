@@ -8,6 +8,8 @@ import '../../core/iching/cast_result.dart';
 import '../../core/iching/hexagram_table.dart';
 import '../../core/journal/journal_entry.dart';
 import '../../core/journal/journal_reminders.dart';
+import '../../core/journal/journal_filter.dart';
+import '../../shared/premium/paywall_page.dart';
 import '../../core/meihua/lunar_moment.dart';
 import '../../core/meihua/meihua_cast.dart';
 import '../../l10n/l10n.dart';
@@ -113,6 +115,35 @@ class _JournalEntryPageState extends State<JournalEntryPage> {
     }
   }
 
+  /// 免費版：超過 [FreeLimits.journalDays] 天的卦記上鎖（例如從回顧提醒的通知點進來）。
+  bool _locked(JournalEntry e) =>
+      !_services.isPremium &&
+      e.createdAt.isBefore(JournalFilter.freeCutoff(DateTime.now(), _services.limits.journalDays));
+
+  Widget _lockedBody(BuildContext context) {
+    final l = context.l10n;
+    final t = Theme.of(context).textTheme;
+    final days = _services.limits.journalDays;
+    return Center(
+      child: Padding(
+        padding: const EdgeInsets.all(32),
+        child: Column(mainAxisSize: MainAxisSize.min, children: [
+          Icon(Icons.lock_outline, size: 40, color: QianColors.earth),
+          const SizedBox(height: 16),
+          Text(l.journalLockedBody(days), textAlign: TextAlign.center, style: t.bodyMedium),
+          const SizedBox(height: 20),
+          FilledButton(
+            onPressed: () async {
+              await openPaywall(context, source: 'journal_history');
+              if (mounted) setState(() {});
+            },
+            child: Text(l.menuPremium),
+          ),
+        ]),
+      ),
+    );
+  }
+
   Future<void> _delete() async {
     final l = context.l10n;
     final yes = await showDialog<bool>(
@@ -153,7 +184,9 @@ class _JournalEntryPageState extends State<JournalEntryPage> {
           ? const Center(child: CircularProgressIndicator())
           : e == null
               ? Center(child: Text(l.journalNotFound))
-              : _body(context, e),
+              : _locked(e)
+                  ? _lockedBody(context)
+                  : _body(context, e),
     );
   }
 

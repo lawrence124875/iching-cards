@@ -191,7 +191,7 @@
   "castLimitBody": "Xem một quảng cáo ngắn để gieo thêm một quẻ, hoặc trở thành thành viên để không giới hạn lượt và không có quảng cáo.",
   "castInterstitialPause": "Lắng lòng một chút, lời giải sắp hiện ra",
   "paywallCastLimitNote": "Bạn đã dùng hết lượt hôm nay. Mỗi ngày một quẻ, lắng lòng suy ngẫm: giữ hình ảnh quẻ hôm nay trong lòng và quay lại vào ngày mai. Trở thành thành viên để gieo quẻ bất cứ lúc nào.",
-  "journalLimitBody": "Mọi ghi chép đã lưu vẫn được giữ nguyên. Xem một quảng cáo để lưu mục này, hoặc trở thành thành viên để lưu không giới hạn.",
+  "journalLimitBody": "Các ghi chép đã lưu vẫn được giữ. Trở thành thành viên để lưu không giới hạn.",
   "planTrialYearly": "Dùng thử miễn phí {days} ngày, sau đó {price}/năm",
   "planTrialMonthly": "Dùng thử miễn phí {days} ngày, sau đó {price}/tháng",
   "planPerMonth": "Khoảng {price}/tháng",
@@ -376,5 +376,18 @@
   "journalLockedTitle": "{count, plural, other{Còn {count} ghi chép cũ hơn {days} ngày}}",
   "journalLockedBody": "Bản miễn phí hiển thị {days} ngày gần nhất. Các ghi chép cũ hơn vẫn được lưu trên điện thoại; trở thành thành viên để xem tất cả.",
   "journalBackupSettingsNote": "Cài đặt (giao diện, tranh cổ, thông tin ngày sinh, thành phố) và tiến độ luyện tập cũng được sao lưu. Gói đăng ký không nằm trong tệp: trên điện thoại mới, dùng cùng tài khoản và nhấn “Khôi phục giao dịch mua” ở trang đăng ký.",
-  "journalRestoreSettings": "Đã khôi phục cài đặt. Cài đặt có hiệu lực khi mở lại ứng dụng."
+  "journalRestoreSettings": "Cài đặt cũng đã được khôi phục.",
+  "menuBackupMove": "Sao lưu & đổi điện thoại",
+  "menuBackupMoveHint": "Xuất nhật ký và cài đặt, rồi nhập vào điện thoại mới",
+  "journalStats": "Thống kê nhật ký",
+  "journalStatsTotal": "{count, plural, other{{count} ghi chép}}",
+  "journalStatsReviewed": "{count, plural, other{{count} ghi chép đã nhìn lại}}",
+  "journalStatsTypes": "Cách lập quẻ",
+  "journalStatsTopHex": "Quẻ xuất hiện nhiều nhất",
+  "journalStatsTimes": "{count, plural, other{{count} lần}}",
+  "journalStatsVerified": "Phản hồi đối chiếu hai quẻ",
+  "journalStatsYes": "Đúng",
+  "journalStatsPartly": "Đúng một phần",
+  "journalStatsNo": "Không đúng",
+  "journalStatsFreeNote": "Bản miễn phí chỉ thống kê {days} ngày gần nhất."
 }

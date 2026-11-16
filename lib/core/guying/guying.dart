@@ -21,6 +21,9 @@ class GuyingPref {
     if (v is bool) enabled.value = v;
   }
 
+  /// 重新讀檔（從備份還原設定後立即套用）。
+  Future<void> reload() => _load();
+
   Future<void> set(bool value) async {
     enabled.value = value;
     await _storage.write({'enabled': value});

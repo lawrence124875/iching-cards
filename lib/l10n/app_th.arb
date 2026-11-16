@@ -191,7 +191,7 @@
   "castLimitBody": "ดูโฆษณาสั้น ๆ เพื่อรับอีกหนึ่งครั้ง หรือสมัคร Premium เพื่อใช้ได้ไม่จำกัดและไม่มีโฆษณา",
   "castInterstitialPause": "สงบใจสักครู่ คำอธิบายกำลังจะปรากฏ",
   "paywallCastLimitNote": "คุณใช้สิทธิ์ของวันนี้หมดแล้ว วันละหนึ่งครั้ง ใคร่ครวญอย่างสงบ เก็บภาพของวันนี้ไว้ในใจแล้วกลับมาใหม่พรุ่งนี้ สมัคร Premium เพื่อใช้ได้ทุกเมื่อ",
-  "journalLimitBody": "ทุกอย่างที่บันทึกไว้ยังอยู่ครบ ดูโฆษณาเพื่อบันทึกรายการนี้ หรือสมัคร Premium เพื่อเพิ่มบันทึกได้ไม่จำกัด",
+  "journalLimitBody": "บันทึกที่เก็บไว้ยังอยู่ครบ สมัครสมาชิกเพื่อบันทึกได้ไม่จำกัด",
   "planTrialYearly": "ทดลองใช้ฟรี {days} วัน จากนั้น {price}/ปี",
   "planTrialMonthly": "ทดลองใช้ฟรี {days} วัน จากนั้น {price}/เดือน",
   "planPerMonth": "ประมาณ {price}/เดือน",
@@ -376,5 +376,18 @@
   "journalLockedTitle": "{count, plural, other{ยังมีอีก {count} บันทึกที่เก่ากว่า {days} วัน}}",
   "journalLockedBody": "เวอร์ชันฟรีแสดงบันทึก {days} วันล่าสุด บันทึกที่เก่ากว่ายังเก็บอยู่ในโทรศัพท์ สมัครสมาชิกเพื่อดูทั้งหมด",
   "journalBackupSettingsNote": "สำรองการตั้งค่า (ธีม ภาพโบราณ ข้อมูลวันเกิด เมือง) และความคืบหน้าการฝึกไปด้วย การสมัครสมาชิกไม่อยู่ในไฟล์ ในโทรศัพท์เครื่องใหม่ ให้ใช้บัญชีเดิมแล้วแตะ “กู้คืนการซื้อ” ในหน้าสมัครสมาชิก",
-  "journalRestoreSettings": "กู้คืนการตั้งค่าแล้ว จะมีผลเมื่อเปิดแอปครั้งถัดไป"
+  "journalRestoreSettings": "กู้คืนการตั้งค่าแล้วด้วย",
+  "menuBackupMove": "สำรองและย้ายเครื่อง",
+  "menuBackupMoveHint": "ส่งออกบันทึกและการตั้งค่า แล้วนำเข้าในเครื่องใหม่",
+  "journalStats": "สถิติบันทึก",
+  "journalStatsTotal": "{count, plural, other{{count} บันทึก}}",
+  "journalStatsReviewed": "{count, plural, other{มีบันทึกย้อนดู {count} รายการ}}",
+  "journalStatsTypes": "วิธีตั้งฉั่ว",
+  "journalStatsTopHex": "ฉั่วที่ออกบ่อยที่สุด",
+  "journalStatsTimes": "{count, plural, other{{count} ครั้ง}}",
+  "journalStatsVerified": "ผลย้อนดูการอ่านคู่",
+  "journalStatsYes": "ตรง",
+  "journalStatsPartly": "ตรงบางส่วน",
+  "journalStatsNo": "ไม่ตรง",
+  "journalStatsFreeNote": "เวอร์ชันฟรีนับเฉพาะ {days} วันล่าสุด"
 }

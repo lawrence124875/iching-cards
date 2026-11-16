@@ -191,7 +191,7 @@
   "castLimitBody": "짧은 광고를 보면 한 괘를 더 세울 수 있습니다. 멤버가 되면 횟수 제한도 광고도 없습니다.",
   "castInterstitialPause": "잠시 마음을 가라앉히세요. 곧 풀이가 나타납니다",
   "paywallCastLimitNote": "오늘의 횟수를 모두 썼습니다. 하루 한 괘, 조용히 생각해 보세요. 오늘의 괘를 마음에 두고 내일 다시 오세요. 언제든 괘를 세우고 싶다면 멤버가 될 수 있습니다.",
-  "journalLimitBody": "저장된 기록은 모두 그대로 남습니다. 광고를 보고 이 한 건을 저장하거나, 멤버가 되면 개수 제한이 없습니다.",
+  "journalLimitBody": "저장한 기록은 그대로 남습니다. 멤버십에 가입하면 개수 제한이 없습니다.",
   "planTrialYearly": "{days}일 무료 체험, 이후 연 {price}",
   "planTrialMonthly": "{days}일 무료 체험, 이후 월 {price}",
   "planPerMonth": "월 약 {price}",
@@ -376,5 +376,18 @@
   "journalLockedTitle": "{count, plural, other{{days}일이 지난 기록이 {count}개 더 있습니다}}",
   "journalLockedBody": "무료 버전은 최근 {days}일의 기록만 보여 줍니다. 이전 기록도 휴대폰에 그대로 저장되어 있으며, 멤버십에 가입하면 모두 볼 수 있습니다.",
   "journalBackupSettingsNote": "화면 모드, 옛 그림, 출생 정보, 도시 등의 설정과 괘 연습 진행 상황도 함께 백업합니다. 구독은 파일에 포함되지 않습니다. 새 휴대폰에서 같은 계정으로 구독 페이지의 \"구매 복원\"을 누르세요.",
-  "journalRestoreSettings": "설정을 복원했습니다. 앱을 다시 열면 적용됩니다."
+  "journalRestoreSettings": "설정도 복원했습니다.",
+  "menuBackupMove": "백업 및 휴대폰 변경",
+  "menuBackupMoveHint": "기록과 설정을 내보내고 새 휴대폰에서 가져오기",
+  "journalStats": "기록 통계",
+  "journalStatsTotal": "{count, plural, other{기록 {count}개}}",
+  "journalStatsReviewed": "{count, plural, other{그중 {count}개에 돌아보기 있음}}",
+  "journalStatsTypes": "괘 세우는 방법",
+  "journalStatsTopHex": "자주 나온 괘",
+  "journalStatsTimes": "{count, plural, other{{count}회}}",
+  "journalStatsVerified": "두 괘 대조 돌아보기",
+  "journalStatsYes": "맞았음",
+  "journalStatsPartly": "일부 맞음",
+  "journalStatsNo": "맞지 않음",
+  "journalStatsFreeNote": "무료 버전은 최근 {days}일의 기록만 집계합니다."
 }

@@ -5,7 +5,9 @@ import '../app/theme.dart';
 import '../core/iching/cast_result.dart';
 import '../core/journal/journal_entry.dart';
 import '../core/journal/journal_reminders.dart';
+import '../core/events/event_bus.dart';
 import '../l10n/l10n.dart';
+import '../shared/premium/paywall_page.dart';
 import '../shared/widgets/reminder_picker.dart';
 
 /// 「記下這一卦」：填寫（或修改）想問的事、選擇幾天後提醒回顧。
@@ -18,26 +20,53 @@ Future<JournalEntry?> showSaveReadingSheet(
   CrossRecord? cross,
   EasternRecord? eastern,
   bool daily = false,
-}) =>
-    showModalBottomSheet<JournalEntry>(
-      context: context,
-      isScrollControlled: true,
-      backgroundColor: QianColors.inkCard,
-      builder: (_) => _SaveSheet(cast: cast, question: question, readingIndex: readingIndex, cross: cross, eastern: eastern, daily: daily),
-    );
+}) async {
+  if (!await journalHasRoom(context) || !context.mounted) return null;
+  return showModalBottomSheet<JournalEntry>(
+    context: context,
+    isScrollControlled: true,
+    backgroundColor: QianColors.inkCard,
+    builder: (_) => _SaveSheet(cast: cast, question: question, readingIndex: readingIndex, cross: cross, eastern: eastern, daily: daily),
+  );
+}
+
+/// 免費版卦記上限（HANDOFF §2.1）：已存的不刪，只是不能再新增；滿了先說明，成為會員才繼續。所有存卦記的入口共用。
+Future<bool> journalHasRoom(BuildContext context) async {
+  final s = AppServices.of(context);
+  final journal = s.journal;
+  if (s.isPremium || journal == null || (await journal.all()).length < s.limits.journalMax) return true;
+  if (!context.mounted) return false;
+  final l = context.l10n;
+  s.events.emit(const HitFreeLimit(type: 'journal'));
+  final choice = await showDialog<String>(
+    context: context,
+    builder: (ctx) => AlertDialog(
+      title: Text(l.journalLimitTitle(s.limits.journalMax)),
+      content: Text(l.journalLimitBody),
+      actions: [
+        TextButton(onPressed: () => Navigator.pop(ctx), child: Text(l.notNow)),
+        FilledButton(onPressed: () => Navigator.pop(ctx, 'premium'), child: Text(l.menuPremium)),
+      ],
+    ),
+  );
+  if (!context.mounted || choice != 'premium') return false;
+  return openPaywall(context, source: 'journal_limit');
+}
 
 /// 存命理卡片（紫微年度卡、八字本月卡）：沒有六爻、不設回顧提醒。
 Future<JournalEntry?> showSaveCardSheet(
   BuildContext context, {
   required String methodId,
   required EasternRecord eastern,
-}) =>
-    showModalBottomSheet<JournalEntry>(
-      context: context,
-      isScrollControlled: true,
-      backgroundColor: QianColors.inkCard,
-      builder: (_) => _SaveSheet(cast: null, question: '', readingIndex: null, eastern: eastern, cardMethod: methodId),
-    );
+}) async {
+  if (!await journalHasRoom(context) || !context.mounted) return null;
+  return showModalBottomSheet<JournalEntry>(
+    context: context,
+    isScrollControlled: true,
+    backgroundColor: QianColors.inkCard,
+    builder: (_) => _SaveSheet(cast: null, question: '', readingIndex: null, eastern: eastern, cardMethod: methodId),
+  );
+}
 
 class _SaveSheet extends StatefulWidget {
   const _SaveSheet({required this.cast, required this.question, required this.readingIndex, this.cross, this.eastern, this.cardMethod, this.daily = false});

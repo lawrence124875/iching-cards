@@ -191,7 +191,7 @@
   "castLimitBody": "看一支短广告，可以再起一卦；或成为会员，不限次数、没有广告。",
   "castInterstitialPause": "静心片刻，解读即将呈现",
   "paywallCastLimitNote": "今天的起卦已用完。一日一卦，静心思考：把今天的卦象放在心上，慢慢体会，明天再来。若想随时起卦，可以成为会员。",
-  "journalLimitBody": "已记下的卦记都会保留。可以看一支广告存下这一则，或成为会员，不限则数。",
+  "journalLimitBody": "已记下的卦记都会保留。成为会员就不限则数。",
   "planTrialYearly": "免费试用 {days} 天，之后 {price}/年",
   "planTrialMonthly": "免费试用 {days} 天，之后 {price}/月",
   "planPerMonth": "每月约 {price}",
@@ -376,5 +376,18 @@
   "journalLockedTitle": "{count, plural, other{还有 {count} 则超过 {days} 天的卦记}}",
   "journalLockedBody": "免费版显示最近 {days} 天的卦记。较早的都还保存在手机上，成为会员就能全部查看。",
   "journalBackupSettingsNote": "也会一并备份外观、古图、出生资料、城市等设置与认卦进度。订阅不在备份文件里：到新手机用同一个账号在订阅页点「恢复购买」即可。",
-  "journalRestoreSettings": "设置已恢复，重新打开 App 后生效。"
+  "journalRestoreSettings": "设置也已恢复。",
+  "menuBackupMove": "备份与换手机",
+  "menuBackupMoveHint": "导出卦记与设置，到新手机再导入",
+  "journalStats": "卦记统计",
+  "journalStatsTotal": "{count, plural, other{共 {count} 则卦记}}",
+  "journalStatsReviewed": "{count, plural, other{其中 {count} 则写过回顾}}",
+  "journalStatsTypes": "起卦方式",
+  "journalStatsTopHex": "最常出现的卦",
+  "journalStatsTimes": "{count, plural, other{{count} 次}}",
+  "journalStatsVerified": "双卦交叉的事后反馈",
+  "journalStatsYes": "应验",
+  "journalStatsPartly": "部分应验",
+  "journalStatsNo": "没有应验",
+  "journalStatsFreeNote": "免费版只统计最近 {days} 天的卦记。"
 }

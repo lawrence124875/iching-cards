@@ -546,7 +546,7 @@
   "castLimitBody": "Tonton iklan singkat untuk satu kesempatan lagi, atau pilih Premium untuk kesempatan tanpa batas dan tanpa iklan.",
   "castInterstitialPause": "Tenangkan hati sejenak. Ulasanmu segera muncul.",
   "paywallCastLimitNote": "Kesempatan hari ini sudah habis. Sekali sehari, direnungkan dengan tenang: simpan gambaran hari ini di hati dan kembali besok. Pilih Premium agar bisa kapan saja.",
-  "journalLimitBody": "Semua yang sudah kamu simpan tetap ada. Tonton iklan untuk menyimpan yang ini, atau pilih Premium untuk menambah catatan tanpa batas.",
+  "journalLimitBody": "Catatan yang tersimpan tetap ada. Jadilah anggota untuk menyimpan tanpa batas.",
   "planTrialYearly": "Gratis {days} hari, lalu {price}/tahun",
   "planTrialMonthly": "Gratis {days} hari, lalu {price}/bulan",
   "planPerMonth": "Sekitar {price}/bulan",
@@ -731,5 +731,18 @@
   "journalLockedTitle": "{count, plural, other{Masih ada {count} catatan yang lebih dari {days} hari}}",
   "journalLockedBody": "Versi gratis menampilkan {days} hari terakhir. Catatan yang lebih lama tetap tersimpan di ponsel Anda; jadilah anggota untuk melihat semuanya.",
   "journalBackupSettingsNote": "Pengaturan (tampilan, gambar kuno, data lahir, kota) dan kemajuan latihan juga ikut dicadangkan. Langganan tidak ada di file: di ponsel baru, ketuk “Pulihkan pembelian” di halaman langganan dengan akun yang sama.",
-  "journalRestoreSettings": "Pengaturan dipulihkan. Berlaku saat aplikasi dibuka lagi."
+  "journalRestoreSettings": "Pengaturan juga dipulihkan.",
+  "menuBackupMove": "Cadangan & ganti ponsel",
+  "menuBackupMoveHint": "Ekspor jurnal dan pengaturan, lalu impor di ponsel baru",
+  "journalStats": "Statistik jurnal",
+  "journalStatsTotal": "{count, plural, other{{count} catatan}}",
+  "journalStatsReviewed": "{count, plural, other{{count} dengan catatan tindak lanjut}}",
+  "journalStatsTypes": "Cara",
+  "journalStatsTopHex": "Heksagram yang paling sering",
+  "journalStatsTimes": "{count, plural, other{{count} kali}}",
+  "journalStatsVerified": "Umpan balik bacaan ganda",
+  "journalStatsYes": "Sesuai",
+  "journalStatsPartly": "Sebagian",
+  "journalStatsNo": "Tidak sesuai",
+  "journalStatsFreeNote": "Versi gratis hanya menghitung {days} hari terakhir."
 }

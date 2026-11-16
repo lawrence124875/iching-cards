@@ -26,7 +26,7 @@ class JournalBackupMenu extends StatelessWidget {
     final l = context.l10n;
     return PopupMenuButton<_Action>(
       icon: const Icon(Icons.more_vert),
-      onSelected: (a) => a == _Action.backup ? _backup(context) : _restore(context),
+      onSelected: (a) => a == _Action.backup ? backup(context) : restore(context),
       itemBuilder: (_) => [
         PopupMenuItem(value: _Action.backup, child: Text(l.journalMenuBackup)),
         PopupMenuItem(value: _Action.restore, child: Text(l.journalMenuRestore)),
@@ -37,7 +37,8 @@ class JournalBackupMenu extends StatelessWidget {
   static void _snack(BuildContext context, String text) =>
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(text)));
 
-  Future<void> _backup(BuildContext context) async {
+  /// 匯出卦記與設定（卦記列表選單、設定頁「備份與換手機」共用）。
+  static Future<void> backup(BuildContext context) async {
     final l = context.l10n;
     final store = AppServices.of(context).journal;
     final box = context.findRenderObject() as RenderBox?;
@@ -73,7 +74,8 @@ class JournalBackupMenu extends StatelessWidget {
     }
   }
 
-  Future<void> _restore(BuildContext context) async {
+  /// 從備份還原卦記與設定。
+  static Future<void> restore(BuildContext context) async {
     final l = context.l10n;
     final services = AppServices.of(context);
     final store = services.journal;
@@ -99,6 +101,11 @@ class JournalBackupMenu extends StatelessWidget {
         } catch (_) {}
       }
       final restoredSettings = settings.isEmpty ? 0 : await SettingsFiles.restore(settings);
+      if (restoredSettings > 0) {
+        // 立即套用（其餘設定每次使用時才讀檔，不用重開）。
+        await services.theme.reload();
+        await services.guying.reload();
+      }
       if (!context.mounted) return;
       final msg = added.isEmpty ? l.journalRestoreNone : l.journalRestoreDone(added.length);
       _snack(context, restoredSettings > 0 ? '$msg\n${l.journalRestoreSettings}' : msg);

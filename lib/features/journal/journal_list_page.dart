@@ -15,6 +15,7 @@ import '../../shared/premium/paywall_page.dart';
 import '../../shared/widgets/hexagram_glyph.dart';
 import 'journal_backup_menu.dart';
 import 'journal_entry_page.dart';
+import 'journal_stats_page.dart';
 import '../../shared/widgets/adaptive_layout.dart';
 
 /// 卦記列表：由新到舊、依月份分組；分類／收藏／日期區間篩選、關鍵字搜尋；左滑刪除可復原、長按多選。
@@ -219,6 +220,11 @@ class _JournalListPageState extends State<JournalListPage> {
               }
             }),
           ),
+          IconButton(
+            tooltip: l.journalStats,
+            icon: const Icon(Icons.insights_outlined),
+            onPressed: () => Navigator.of(context).push(MaterialPageRoute<void>(builder: (_) => const JournalStatsPage())),
+          ),
           IconButton(tooltip: l.journalDateRange, icon: const Icon(Icons.date_range_outlined), onPressed: _pickDates),
           const JournalBackupMenu(),
         ],
@@ -235,13 +241,7 @@ class _JournalListPageState extends State<JournalListPage> {
 
   Widget _chips(AppLocalizations l, List<JournalEntry> open) {
     final present = {for (final e in open) e.category};
-    String label(String c) => switch (c) {
-          'iching' => l.journalFilterIching,
-          'meihua' => l.featureMeihua,
-          'cross' => l.featureCross,
-          'daily' => l.dailyTitle,
-          _ => l.featureEastern,
-        };
+    String label(String c) => journalCategoryLabel(l, c);
     final cats = [for (final c in JournalEntry.categories) if (present.contains(c) || _filter.category == c) c];
     Widget chip(String text, bool on, VoidCallback tap, {Widget? avatar}) => Padding(
           padding: const EdgeInsets.only(right: 8),
@@ -332,6 +332,15 @@ class _JournalListPageState extends State<JournalListPage> {
 }
 
 const _keep = Object();
+
+/// 卦記分類的顯示名稱（[JournalEntry.categories]）。
+String journalCategoryLabel(AppLocalizations l, String c) => switch (c) {
+      'iching' => l.journalFilterIching,
+      'meihua' => l.featureMeihua,
+      'cross' => l.featureCross,
+      'daily' => l.dailyTitle,
+      _ => l.featureEastern,
+    };
 
 class _Tile extends StatelessWidget {
   const _Tile({required this.entry, required this.onTap, required this.onLongPress, this.onStar, this.selected});

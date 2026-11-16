@@ -25,6 +25,9 @@ class ThemePref {
     }
   }
 
+  /// 重新讀檔（從備份還原設定後立即套用）。
+  Future<void> reload() => _load();
+
   Future<void> set(ThemeMode value) async {
     mode.value = value;
     await _storage.write({'mode': value.name});

@@ -72,7 +72,9 @@
   "drawAgain": "重新抽",
   "coinsInstructions": "陽面 3、陰面 2，三枚相加得一爻；由下往上擲六次，6 與 9 為變爻。",
   "crossCastNote": "易經看「事情的本質與道理」，梅花看「當下時機與趨勢」。擲完卦看解讀時，會自動以當下時間起梅花卦，不必另外操作。",
-  "@crossCastNote": {"description": "雙卦交叉擲卦頁說明：兩卦各看什麼、梅花卦自動取時間"},
+  "@crossCastNote": {
+    "description": "雙卦交叉擲卦頁說明：兩卦各看什麼、梅花卦自動取時間"
+  },
   "coinsToss": "擲第 {n} 次",
   "@coinsToss": {
     "placeholders": {
@@ -600,7 +602,7 @@
   "castLimitBody": "看一支短廣告，可以再起一卦；或成為會員，不限次數、沒有廣告。",
   "castInterstitialPause": "靜心片刻，解讀即將呈現",
   "paywallCastLimitNote": "今天的起卦已用完。一日一卦，靜心思考：把今天的卦象放在心上，慢慢體會，明天再來。若想隨時起卦，可以成為會員。",
-  "journalLimitBody": "已記下的卦記都會保留。可以看一支廣告存下這一則，或成為會員，不限則數。",
+  "journalLimitBody": "已記下的卦記都會保留。成為會員就不限則數。",
   "planTrialYearly": "免費試用 {days} 天，之後 {price}/年",
   "@planTrialYearly": {
     "placeholders": {
@@ -784,7 +786,9 @@
   "meihuaSolarOn": "已依{city}真太陽時校正",
   "@meihuaSolarOn": {
     "placeholders": {
-      "city": {"type": "String"}
+      "city": {
+        "type": "String"
+      }
     }
   },
   "meihuaSolarHint": "選用：選擇你所在（或最近）的城市，依太陽實際位置校正時辰，不會取用位置權限。",
@@ -850,9 +854,21 @@
   "meihuaPaywallLimitNote": "今天的梅花起卦已用完。一日一卦，靜心思考；成為會員即可不限次數，並使用全部起卦法。",
   "drawOtherMethods": "其他起卦方式",
   "homeFreeLeft": "{count, plural, other{今天還可免費起卦 {count} 次}}",
-  "@homeFreeLeft": {"placeholders": {"count": {"type": "int"}}},
+  "@homeFreeLeft": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
   "homeLastEntry": "上一筆卦記：{title}",
-  "@homeLastEntry": {"placeholders": {"title": {"type": "String"}}},
+  "@homeLastEntry": {
+    "placeholders": {
+      "title": {
+        "type": "String"
+      }
+    }
+  },
   "readingMoreTitle": "換個角度再看",
   "menuSettings": "設定",
   "navToday": "今日",
@@ -864,7 +880,13 @@
   "dailyNotCounted": "今日一卦不計入每日起卦次數",
   "homeTodayDrawn": "今天的卦",
   "homeStreak": "{count, plural, other{連續 {count} 天}}",
-  "@homeStreak": {"placeholders": {"count": {"type": "int"}}},
+  "@homeStreak": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
   "homePremiumDesc": "無廣告、起卦不限次數、完整雙卦交叉與全部課程",
   "descDraw": "靜下心抽一張，讀當下的象",
   "descCoins": "擲六次銅錢，看本卦、變爻與之卦",
@@ -873,7 +895,13 @@
   "descCross": "易經與梅花各起一卦，對照著看",
   "descEastern": "紫微看今年，八字看本月",
   "learnLessonCount": "{count, plural, other{共 {count} 課}}",
-  "@learnLessonCount": {"placeholders": {"count": {"type": "int"}}},
+  "@learnLessonCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
   "libraryTitle": "六十四卦",
   "libraryDesc": "逐卦看卦象、卦辭、爻辭與解讀",
   "quizTitle": "認卦練習",
@@ -882,11 +910,35 @@
   "quizNext": "下一題",
   "quizAgain": "再練一輪",
   "quizProgress": "第 {current}／{total} 題",
-  "@quizProgress": {"placeholders": {"current": {"type": "int"}, "total": {"type": "int"}}},
+  "@quizProgress": {
+    "placeholders": {
+      "current": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
+    }
+  },
   "quizDone": "答對 {correct}／{total} 題",
-  "@quizDone": {"placeholders": {"correct": {"type": "int"}, "total": {"type": "int"}}},
+  "@quizDone": {
+    "placeholders": {
+      "correct": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
+    }
+  },
   "quizMastered": "{count, plural, other{已熟悉 {count}／64 卦}}",
-  "@quizMastered": {"placeholders": {"count": {"type": "int"}}},
+  "@quizMastered": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
   "guyingSection": "古圖",
   "guyingToggle": "顯示古圖（斷易天機）",
   "guyingToggleHint": "在解讀與卦庫加上明代木刻卦影，學著看圖讀象",
@@ -900,7 +952,16 @@
   "guyingOriginal": "原書文字",
   "guyingAbout": "關於古圖",
   "guyingViewSource": "查看原書掃描（Wikimedia Commons）",
-  "@guyingSymbolLine": {"placeholders": {"see": {"type": "String"}, "means": {"type": "String"}}},
+  "@guyingSymbolLine": {
+    "placeholders": {
+      "see": {
+        "type": "String"
+      },
+      "means": {
+        "type": "String"
+      }
+    }
+  },
   "guyingShowHere": "看這一卦的古圖（斷易天機）",
   "guyingHide": "收起古圖",
   "journalSearchHint": "搜尋問題、回顧、卦名",
@@ -910,19 +971,93 @@
   "journalUnstar": "取消收藏",
   "journalDateRange": "日期區間",
   "journalDeletedCount": "{count, plural, other{已刪除 {count} 則卦記}}",
-  "@journalDeletedCount": {"placeholders": {"count": {"type": "int"}}},
+  "@journalDeletedCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
   "undo": "復原",
   "journalSelectedCount": "{count, plural, other{已選 {count} 則}}",
-  "@journalSelectedCount": {"placeholders": {"count": {"type": "int"}}},
+  "@journalSelectedCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
   "journalSelectAll": "全選",
   "journalSelectMonth": "選這個月",
   "journalDeleteManyTitle": "{count, plural, other{刪除 {count} 則卦記？}}",
-  "@journalDeleteManyTitle": {"placeholders": {"count": {"type": "int"}}},
+  "@journalDeleteManyTitle": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
   "journalNoMatch": "沒有符合條件的卦記。",
   "journalLockedTitle": "{count, plural, other{還有 {count} 則超過 {days} 天的卦記}}",
-  "@journalLockedTitle": {"placeholders": {"count": {"type": "int"}, "days": {"type": "int"}}},
+  "@journalLockedTitle": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      },
+      "days": {
+        "type": "int"
+      }
+    }
+  },
   "journalLockedBody": "免費版顯示最近 {days} 天的卦記。較早的都還保存在手機上，成為會員就能全部查看。",
-  "@journalLockedBody": {"placeholders": {"days": {"type": "int"}}},
+  "@journalLockedBody": {
+    "placeholders": {
+      "days": {
+        "type": "int"
+      }
+    }
+  },
   "journalBackupSettingsNote": "也會一併備份外觀、古圖、出生資料、城市等設定與認卦進度。訂閱不在備份檔裡：到新手機用同一個帳號在訂閱頁按「恢復購買」即可。",
-  "journalRestoreSettings": "設定已還原，重新開啟 App 後套用。"
+  "journalRestoreSettings": "設定也已還原。",
+  "menuBackupMove": "備份與換手機",
+  "menuBackupMoveHint": "匯出卦記與設定，到新手機再匯入",
+  "journalStats": "卦記統計",
+  "journalStatsTotal": "{count, plural, other{共 {count} 則卦記}}",
+  "@journalStatsTotal": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "journalStatsReviewed": "{count, plural, other{其中 {count} 則寫過回顧}}",
+  "@journalStatsReviewed": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "journalStatsTypes": "起卦方式",
+  "journalStatsTopHex": "最常出現的卦",
+  "journalStatsTimes": "{count, plural, other{{count} 次}}",
+  "@journalStatsTimes": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "journalStatsVerified": "雙卦交叉的事後回饋",
+  "journalStatsYes": "應驗",
+  "journalStatsPartly": "部分應驗",
+  "journalStatsNo": "沒有應驗",
+  "journalStatsFreeNote": "免費版只統計最近 {days} 天的卦記。",
+  "@journalStatsFreeNote": {
+    "placeholders": {
+      "days": {
+        "type": "int"
+      }
+    }
+  }
 }

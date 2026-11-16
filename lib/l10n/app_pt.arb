@@ -191,7 +191,7 @@
   "castLimitBody": "Assista a um anúncio curto para mais uma consulta, ou assine o Premium para consultas ilimitadas e sem anúncios.",
   "castInterstitialPause": "Um momento de calma. Sua leitura já vai aparecer.",
   "paywallCastLimitNote": "Você já usou as consultas de hoje. Um hexagrama por dia, com calma: deixe a imagem de hoje assentar e volte amanhã. Assine o Premium para consultar quando quiser.",
-  "journalLimitBody": "Tudo o que você salvou continua guardado. Assista a um anúncio para salvar este, ou assine o Premium para adicionar registros sem limite.",
+  "journalLimitBody": "Seus registros salvos são mantidos. Torne-se membro para salvar sem limite.",
   "planTrialYearly": "Grátis por {days} dias, depois {price}/ano",
   "planTrialMonthly": "Grátis por {days} dias, depois {price}/mês",
   "planPerMonth": "Cerca de {price}/mês",
@@ -376,5 +376,18 @@
   "journalLockedTitle": "{count, plural, =1{Mais 1 registro com mais de {days} dias} other{Mais {count} registros com mais de {days} dias}}",
   "journalLockedBody": "A versão gratuita mostra os últimos {days} dias. Os registros mais antigos continuam salvos no seu celular; torne-se membro para ver todos.",
   "journalBackupSettingsNote": "Suas configurações (aparência, gravuras antigas, dados de nascimento, cidade) e o progresso da prática também são incluídos. A assinatura não fica no arquivo: no novo celular, toque em “Restaurar compras” na página de assinatura com a mesma conta.",
-  "journalRestoreSettings": "Configurações restauradas. Elas valem a partir da próxima vez que você abrir o app."
+  "journalRestoreSettings": "As configurações também foram restauradas.",
+  "menuBackupMove": "Backup e troca de celular",
+  "menuBackupMoveHint": "Exporte o diário e as configurações e importe no novo celular",
+  "journalStats": "Estatísticas do diário",
+  "journalStatsTotal": "{count, plural, =1{1 registro} other{{count} registros}}",
+  "journalStatsReviewed": "{count, plural, =1{1 com notas} other{{count} com notas}}",
+  "journalStatsTypes": "Métodos",
+  "journalStatsTopHex": "Hexagramas mais frequentes",
+  "journalStatsTimes": "{count, plural, =1{1 vez} other{{count} vezes}}",
+  "journalStatsVerified": "Retorno das leituras duplas",
+  "journalStatsYes": "Aconteceu",
+  "journalStatsPartly": "Em parte",
+  "journalStatsNo": "Não aconteceu",
+  "journalStatsFreeNote": "A versão gratuita conta só os últimos {days} dias."
 }

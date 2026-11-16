@@ -4,6 +4,7 @@ import 'package:url_launcher/url_launcher.dart';
 import '../features/feedback/feedback_page.dart';
 import '../features/guying/guying_about_page.dart';
 import '../features/intro/intro_page.dart';
+import '../features/journal/journal_backup_menu.dart';
 import '../features/share/share.dart';
 import '../l10n/l10n.dart';
 import '../shared/premium/paywall_page.dart';
@@ -41,6 +42,12 @@ class SettingsPage extends StatelessWidget {
               title: Text(l.menuPremium),
               onTap: () => openPaywall(context, source: 'menu'),
             ),
+          ListTile(
+            leading: const Icon(Icons.phonelink_setup_outlined),
+            title: Text(l.menuBackupMove),
+            subtitle: Text(l.menuBackupMoveHint),
+            onTap: () => _backupSheet(context),
+          ),
           ListTile(
             leading: Icon(Icons.info_outline, color: QianColors.earth),
             title: Text(l.menuIntro),
@@ -151,4 +158,32 @@ class SettingsPage extends StatelessWidget {
     );
     if (picked != null && picked != current) await s.theme.set(picked);
   }
+}
+
+/// 備份與換手機：匯出／還原卦記與設定（與卦記列表選單同一套）。
+void _backupSheet(BuildContext context) {
+  final l = context.l10n;
+  showModalBottomSheet<void>(
+    context: context,
+    builder: (sheet) => SafeArea(
+      child: Column(mainAxisSize: MainAxisSize.min, children: [
+        ListTile(
+          leading: const Icon(Icons.upload_file_outlined),
+          title: Text(l.journalMenuBackup),
+          onTap: () {
+            Navigator.pop(sheet);
+            JournalBackupMenu.backup(context);
+          },
+        ),
+        ListTile(
+          leading: const Icon(Icons.download_outlined),
+          title: Text(l.journalMenuRestore),
+          onTap: () {
+            Navigator.pop(sheet);
+            JournalBackupMenu.restore(context);
+          },
+        ),
+      ]),
+    ),
+  );
 }

@@ -546,7 +546,7 @@
   "castLimitBody": "Watch a short ad for one more cast, or go Premium for unlimited casts and no ads.",
   "castInterstitialPause": "Take a quiet moment. Your reading is on its way.",
   "paywallCastLimitNote": "You’ve used today’s casts. One hexagram a day, held quietly: let today’s image settle, reflect on it, and come back tomorrow. Go Premium to cast whenever you like.",
-  "journalLimitBody": "Everything you’ve saved stays. Watch an ad to save this one, or go Premium to add entries without limit.",
+  "journalLimitBody": "Your saved entries are kept. Become a member for unlimited entries.",
   "planTrialYearly": "Free for {days} days, then {price}/year",
   "planTrialMonthly": "Free for {days} days, then {price}/month",
   "planPerMonth": "About {price}/month",
@@ -731,5 +731,18 @@
   "journalLockedTitle": "{count, plural, =1{1 more entry older than {days} days} other{{count} more entries older than {days} days}}",
   "journalLockedBody": "The free version shows the last {days} days. Older entries are still saved on your phone; become a member to see them all.",
   "journalBackupSettingsNote": "Your settings (appearance, ancient art, birth details, city) and practice progress are included too. Subscriptions are not in the file: on your new phone, tap “Restore purchases” on the subscription page with the same account.",
-  "journalRestoreSettings": "Settings restored. They take effect the next time you open the app."
+  "journalRestoreSettings": "Settings restored too.",
+  "menuBackupMove": "Backup & new phone",
+  "menuBackupMoveHint": "Export your journal and settings, then import them on your new phone",
+  "journalStats": "Journal stats",
+  "journalStatsTotal": "{count, plural, =1{1 entry} other{{count} entries}}",
+  "journalStatsReviewed": "{count, plural, =1{1 with notes} other{{count} with notes}}",
+  "journalStatsTypes": "Methods",
+  "journalStatsTopHex": "Most frequent hexagrams",
+  "journalStatsTimes": "{count, plural, =1{1 time} other{{count} times}}",
+  "journalStatsVerified": "Dual reading feedback",
+  "journalStatsYes": "Came true",
+  "journalStatsPartly": "Partly",
+  "journalStatsNo": "Did not",
+  "journalStatsFreeNote": "The free version counts only the last {days} days."
 }

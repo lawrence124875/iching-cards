@@ -7,6 +7,7 @@ import 'package:iching_cards/core/journal/journal_entry.dart';
 import 'package:iching_cards/core/journal/journal_filter.dart';
 import 'package:iching_cards/core/journal/journal_reminders.dart';
 import 'package:iching_cards/core/journal/journal_store.dart';
+import 'package:iching_cards/features/journal/journal_stats_page.dart';
 
 void main() {
   final cast = CastResult(methodId: 'coins', lines: [
@@ -185,5 +186,16 @@ void main() {
     await store.save(b);
     await store.deleteMany([a.id, b.id]);
     expect(await store.all(), isEmpty);
+  });
+
+  test('卦記統計', () {
+    final now = DateTime(2026, 11, 1);
+    final a = JournalEntry.fromCast(cast: cast, now: now).copyWith(followUps: [FollowUp(at: now, text: 'x')]);
+    final b = JournalEntry.fromCast(cast: cast, now: now.add(const Duration(hours: 1)), daily: true);
+    final st = JournalStats.of([a, b]);
+    expect(st.reviewed, 1);
+    expect(st.byCategory, {'iching': 1, 'daily': 1});
+    expect(st.topHexagrams.single.count, 2);
+    expect(st.verified, isEmpty);
   });
 }

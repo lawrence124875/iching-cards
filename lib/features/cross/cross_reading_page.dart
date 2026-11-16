@@ -25,6 +25,8 @@ import '../../reading/reading_page.dart';
 import '../../reading/save_reading_sheet.dart';
 import '../../reading/section.dart';
 import '../../shared/premium/paywall_page.dart';
+import '../../shared/widgets/card_face.dart';
+import '../guying/guying_section.dart';
 import '../../shared/widgets/adaptive_layout.dart';
 import '../../shared/widgets/hexagram_glyph.dart';
 import '../eastern/birth_setup_page.dart';
@@ -349,6 +351,8 @@ class _CrossReadingPageState extends State<CrossReadingPage> {
             )),
             child: Text(l.meihuaFullReading(l.hexName(meihuaPrimary))),
           ),
+          // 古圖：與一般解讀頁相同，設定開啟時顯示（可收起），關閉時顯示「看這一卦的古圖」。
+          GuyingSection(number: meihuaPrimary.number),
         ]),
       ),
       Section(
@@ -373,6 +377,7 @@ class _CrossReadingPageState extends State<CrossReadingPage> {
             )),
             child: Text(l.meihuaFullReading(l.hexName(primary))),
           ),
+          GuyingSection(number: primary.number),
         ]),
       ),
       if (actions.isNotEmpty || questions.isNotEmpty)
@@ -563,6 +568,14 @@ class _Glyphs extends StatelessWidget {
         child: Column(children: [
           Text(label, style: t.bodySmall?.copyWith(color: QianColors.textSub)),
           const SizedBox(height: 6),
+          // 卡面照一般大小排版再縮小，小尺寸不會擠壞文字。
+          SizedBox(
+            width: 130,
+            child: FittedBox(
+              child: SizedBox(width: 240, height: 240 / 0.62, child: CardFace(info: h, zoomable: true)),
+            ),
+          ),
+          const SizedBox(height: 8),
           HexagramGlyph(lines: h.lines, changing: changing, width: 44),
           const SizedBox(height: 6),
           Text(l.hexFullName(h), textAlign: TextAlign.center, style: t.titleSmall),

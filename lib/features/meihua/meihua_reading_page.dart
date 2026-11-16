@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../../shared/widgets/card_face.dart';
+import '../guying/guying_section.dart';
 import '../../app/services.dart';
 import '../../app/theme.dart';
 import '../../core/content/hexagram_content.dart';
@@ -80,6 +82,14 @@ class _MeihuaReadingPageState extends State<MeihuaReadingPage> {
                   child: Text(l.questionShown(widget.question),
                       textAlign: TextAlign.center, style: Theme.of(context).textTheme.bodyMedium),
                 ),
+              Center(
+                child: SizedBox(
+                  width: 200,
+                  child: AspectRatio(
+                      aspectRatio: 0.62, child: CardFace(info: HexagramTable.byNumber(cast.primary), zoomable: true)),
+                ),
+              ),
+              const SizedBox(height: 16),
               _GlyphRow(cast: cast),
               ..._sections(context, mc, hc),
               if (!widget.review && _services.journal != null && _services.flags.featureEnabled('journal')) ...[
@@ -133,6 +143,8 @@ class _MeihuaReadingPageState extends State<MeihuaReadingPage> {
     final args = {'ti': mc.element(c.tiElement.name), 'yong': mc.element(c.yongElement.name)};
     return [
       Section(title: mc.heading('scene'), child: Text(mc.scene(c.primary), style: t.bodyLarge)),
+      // 古圖：與一般解讀頁相同（設定開啟時顯示可收起，關閉時可點開）。
+      GuyingSection(number: c.primary),
       Section(
         title: mc.heading('tiyong'),
         child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [

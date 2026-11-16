@@ -88,6 +88,7 @@ extension IchingTerms on AppLocalizations {
         'cross4' => methodCross4,
         'ziwei' => methodZiwei,
         'bazi' => methodBazi,
+        'daily' => dailyTitle,
         _ => methodDraw,
       };
 

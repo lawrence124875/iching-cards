@@ -20,6 +20,7 @@ void main() {
       expect(l.castsPerDay, 1);
       expect(l.rewardedPerDay, 1);
       expect(l.journalMax, 10);
+      expect(l.journalDays, 30);
     });
 
     test('免費 1 次 → 需要獎勵 → 獎勵 1 次後用完', () async {

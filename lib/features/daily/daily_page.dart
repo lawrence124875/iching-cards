@@ -121,6 +121,7 @@ class _DailyPageState extends State<DailyPage> {
                   builder: (_) => ReadingPage(
                     cast: DailyHexagramStore.castOf(info.number),
                     readingIndex: reading == null ? null : index,
+                    daily: true,
                   ),
                 )),
                 child: Text(l.viewReading),

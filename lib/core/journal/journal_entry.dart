@@ -92,6 +92,8 @@ class JournalEntry {
     List<FollowUp> followUps = const [],
     this.cross,
     this.eastern,
+    this.daily = false,
+    this.starred = false,
   })  : lineValues = List.unmodifiable(lineValues),
         followUps = List.unmodifiable(followUps);
 
@@ -103,6 +105,7 @@ class JournalEntry {
     DateTime? reminderAt,
     CrossRecord? cross,
     EasternRecord? eastern,
+    bool daily = false,
   }) =>
       JournalEntry(
         id: now.microsecondsSinceEpoch.toRadixString(36),
@@ -114,6 +117,7 @@ class JournalEntry {
         reminderAt: reminderAt,
         cross: cross,
         eastern: eastern,
+        daily: daily,
       );
 
   /// 命理卡片（紫微年度卡、八字本月卡）：沒有六爻。
@@ -138,11 +142,29 @@ class JournalEntry {
   /// 東方命理紀錄；沒用到紫微／八字為 null。
   final EasternRecord? eastern;
 
+  /// 從「今日一卦」存下的（methodId 仍是 `simple`）。
+  final bool daily;
+
+  /// 使用者收藏。
+  final bool starred;
+
+  /// 卦記篩選分類：`daily`、`meihua`、`cross`、`eastern`、`iching`（抽一卦、銅錢、蓍草）。
+  String get category {
+    if (daily) return 'daily';
+    if (methodId.startsWith('meihua_')) return 'meihua';
+    if (methodId == 'cross') return 'cross';
+    if (isCard) return 'eastern';
+    return 'iching';
+  }
+
+  static const categories = ['iching', 'meihua', 'cross', 'daily', 'eastern'];
+
   /// 命理卡片（沒有六爻，[cast] 不可用）。
   bool get isCard => cardMethods.contains(methodId);
 
-  /// 卦記標示用的種類鍵：`ziwei`、`bazi`、`cross3`、`cross4`，其他照 methodId。
+  /// 卦記標示用的種類鍵：`daily`、`ziwei`、`bazi`、`cross3`、`cross4`，其他照 methodId。
   String get labelKey {
+    if (daily) return 'daily';
     if (methodId == 'cross' && eastern != null && eastern!.systems.isNotEmpty) {
       return eastern!.systems.length >= 2 ? 'cross4' : 'cross3';
     }
@@ -161,6 +183,7 @@ class JournalEntry {
     bool clearReminder = false,
     List<FollowUp>? followUps,
     CrossRecord? cross,
+    bool? starred,
   }) =>
       JournalEntry(
         id: id,
@@ -173,6 +196,8 @@ class JournalEntry {
         followUps: followUps ?? this.followUps,
         cross: cross ?? this.cross,
         eastern: eastern,
+        daily: daily,
+        starred: starred ?? this.starred,
       );
 
   Map<String, dynamic> toJson() => {
@@ -186,6 +211,8 @@ class JournalEntry {
         'followUps': [for (final f in followUps) f.toJson()],
         if (cross != null) 'cross': cross!.toJson(),
         if (eastern != null) 'eastern': eastern!.toJson(),
+        if (daily) 'daily': true,
+        if (starred) 'starred': true,
       };
 
   /// 寬鬆解析：欄位缺漏給預設值，六爻不合法時回傳 null（略過該筆）。
@@ -211,6 +238,8 @@ class JournalEntry {
       ],
       cross: CrossRecord.tryFromJson(j['cross']),
       eastern: eastern,
+      daily: j['daily'] == true,
+      starred: j['starred'] == true,
     );
   }
 }

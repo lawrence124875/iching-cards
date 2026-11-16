@@ -359,5 +359,22 @@
   "guyingAbout": "عن النقوش القديمة",
   "guyingViewSource": "عرض المسح الأصلي (Wikimedia Commons)",
   "guyingShowHere": "اعرض الرسم القديم لهذا السداسيّ (Duanyi Tianji)",
-  "guyingHide": "إخفاء الرسوم القديمة"
+  "guyingHide": "إخفاء الرسوم القديمة",
+  "journalSearchHint": "ابحث في الأسئلة والملاحظات وأسماء السداسيّات",
+  "journalFilterAll": "الكلّ",
+  "journalFilterIching": "آي تشينغ",
+  "journalFilterStarred": "المفضّلة",
+  "journalUnstar": "إزالة من المفضّلة",
+  "journalDateRange": "نطاق التاريخ",
+  "journalDeletedCount": "{count, plural, other{تمّ الحذف: {count}}}",
+  "undo": "تراجع",
+  "journalSelectedCount": "{count, plural, other{المحدَّد: {count}}}",
+  "journalSelectAll": "تحديد الكلّ",
+  "journalSelectMonth": "تحديد هذا الشهر",
+  "journalDeleteManyTitle": "{count, plural, other{حذف المدوّنات المحدَّدة ({count})؟}}",
+  "journalNoMatch": "لا توجد مدوّنات مطابقة.",
+  "journalLockedTitle": "{count, plural, other{مدوّنات أقدم من {days} يومًا: {count}}}",
+  "journalLockedBody": "تعرض النسخة المجانية آخر {days} يومًا. المدوّنات الأقدم ما زالت محفوظة على هاتفك؛ اشترك لرؤيتها كلّها.",
+  "journalBackupSettingsNote": "تُنسخ أيضًا الإعدادات (المظهر، الرسوم القديمة، بيانات الميلاد، المدينة) وتقدّم التدريب. الاشتراك ليس في الملفّ: على الهاتف الجديد، اضغط «استعادة المشتريات» في صفحة الاشتراك بالحساب نفسه.",
+  "journalRestoreSettings": "تمّت استعادة الإعدادات. ستُطبَّق عند فتح التطبيق مرّة أخرى."
 }

@@ -359,5 +359,22 @@
   "guyingAbout": "关于古图",
   "guyingViewSource": "查看原书扫描（Wikimedia Commons）",
   "guyingShowHere": "看这一卦的古图（断易天机）",
-  "guyingHide": "收起古图"
+  "guyingHide": "收起古图",
+  "journalSearchHint": "搜索问题、回顾、卦名",
+  "journalFilterAll": "全部",
+  "journalFilterIching": "易经",
+  "journalFilterStarred": "收藏",
+  "journalUnstar": "取消收藏",
+  "journalDateRange": "日期范围",
+  "journalDeletedCount": "{count, plural, other{已删除 {count} 则卦记}}",
+  "undo": "撤销",
+  "journalSelectedCount": "{count, plural, other{已选 {count} 则}}",
+  "journalSelectAll": "全选",
+  "journalSelectMonth": "选这个月",
+  "journalDeleteManyTitle": "{count, plural, other{删除 {count} 则卦记？}}",
+  "journalNoMatch": "没有符合条件的卦记。",
+  "journalLockedTitle": "{count, plural, other{还有 {count} 则超过 {days} 天的卦记}}",
+  "journalLockedBody": "免费版显示最近 {days} 天的卦记。较早的都还保存在手机上，成为会员就能全部查看。",
+  "journalBackupSettingsNote": "也会一并备份外观、古图、出生资料、城市等设置与认卦进度。订阅不在备份文件里：到新手机用同一个账号在订阅页点「恢复购买」即可。",
+  "journalRestoreSettings": "设置已恢复，重新打开 App 后生效。"
 }

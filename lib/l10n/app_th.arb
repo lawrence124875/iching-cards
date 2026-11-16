@@ -359,5 +359,22 @@
   "guyingAbout": "เกี่ยวกับภาพโบราณ",
   "guyingViewSource": "ดูภาพสแกนต้นฉบับ (Wikimedia Commons)",
   "guyingShowHere": "ดูภาพโบราณของฉั่วนี้ (Duanyi Tianji)",
-  "guyingHide": "ซ่อนภาพโบราณ"
+  "guyingHide": "ซ่อนภาพโบราณ",
+  "journalSearchHint": "ค้นหาคำถาม บันทึก ชื่อเฮกซะแกรม",
+  "journalFilterAll": "ทั้งหมด",
+  "journalFilterIching": "อี้จิง",
+  "journalFilterStarred": "รายการโปรด",
+  "journalUnstar": "เอาออกจากรายการโปรด",
+  "journalDateRange": "ช่วงวันที่",
+  "journalDeletedCount": "{count, plural, other{ลบแล้ว {count} บันทึก}}",
+  "undo": "เลิกทำ",
+  "journalSelectedCount": "{count, plural, other{เลือกแล้ว {count}}}",
+  "journalSelectAll": "เลือกทั้งหมด",
+  "journalSelectMonth": "เลือกเดือนนี้",
+  "journalDeleteManyTitle": "{count, plural, other{ลบ {count} บันทึกใช่ไหม}}",
+  "journalNoMatch": "ไม่มีบันทึกที่ตรงกัน",
+  "journalLockedTitle": "{count, plural, other{ยังมีอีก {count} บันทึกที่เก่ากว่า {days} วัน}}",
+  "journalLockedBody": "เวอร์ชันฟรีแสดงบันทึก {days} วันล่าสุด บันทึกที่เก่ากว่ายังเก็บอยู่ในโทรศัพท์ สมัครสมาชิกเพื่อดูทั้งหมด",
+  "journalBackupSettingsNote": "สำรองการตั้งค่า (ธีม ภาพโบราณ ข้อมูลวันเกิด เมือง) และความคืบหน้าการฝึกไปด้วย การสมัครสมาชิกไม่อยู่ในไฟล์ ในโทรศัพท์เครื่องใหม่ ให้ใช้บัญชีเดิมแล้วแตะ “กู้คืนการซื้อ” ในหน้าสมัครสมาชิก",
+  "journalRestoreSettings": "กู้คืนการตั้งค่าแล้ว จะมีผลเมื่อเปิดแอปครั้งถัดไป"
 }

@@ -8,6 +8,7 @@ import 'package:share_plus/share_plus.dart';
 
 import '../../app/services.dart';
 import '../../core/journal/journal_backup.dart';
+import '../../core/journal/settings_files.dart';
 import '../../core/journal/journal_entry.dart';
 import '../../core/journal/journal_reminders.dart';
 import '../../l10n/l10n.dart';
@@ -42,13 +43,14 @@ class JournalBackupMenu extends StatelessWidget {
     final box = context.findRenderObject() as RenderBox?;
     final origin = box == null ? null : box.localToGlobal(Offset.zero) & box.size;
     final entries = await store?.all() ?? const [];
+    final settings = await SettingsFiles.collect();
     if (!context.mounted) return;
-    if (entries.isEmpty) return _snack(context, l.journalBackupEmpty);
+    if (entries.isEmpty && settings.isEmpty) return _snack(context, l.journalBackupEmpty);
     final go = await showDialog<bool>(
       context: context,
       builder: (context) => AlertDialog(
         title: Text(l.journalMenuBackup),
-        content: Text(l.journalBackupBody),
+        content: SingleChildScrollView(child: Text('${l.journalBackupBody}\n\n${l.journalBackupSettingsNote}')),
         actions: [
           TextButton(onPressed: () => Navigator.pop(context, false), child: Text(l.cancel)),
           TextButton(onPressed: () => Navigator.pop(context, true), child: Text(l.journalBackupContinue)),
@@ -60,7 +62,7 @@ class JournalBackupMenu extends StatelessWidget {
       final now = DateTime.now();
       final dir = await getTemporaryDirectory();
       final file = File('${dir.path}/${JournalBackup.fileName(now)}');
-      await file.writeAsString(JournalBackup.encode(entries, now));
+      await file.writeAsString(JournalBackup.encode(entries, now, settings: settings));
       await SharePlus.instance.share(ShareParams(
         files: [XFile(file.path, mimeType: 'application/json')],
         subject: l.journalBackupSubject(formatDate(now)),
@@ -77,10 +79,13 @@ class JournalBackupMenu extends StatelessWidget {
     final store = services.journal;
     if (store == null) return;
     final List<JournalEntry> entries;
+    final Map<String, String> settings;
     try {
       final file = await FilePicker.pickFile();
       if (file == null) return; // 使用者取消
-      entries = JournalBackup.decode(utf8.decode(await file.readAsBytes()));
+      final text = utf8.decode(await file.readAsBytes());
+      entries = JournalBackup.decode(text);
+      settings = JournalBackup.decodeSettings(text);
     } catch (_) {
       if (context.mounted) _snack(context, l.journalRestoreFailed);
       return;
@@ -93,8 +98,10 @@ class JournalBackupMenu extends StatelessWidget {
           await JournalReminders.apply(services.reminders, e, l.reviewMessage);
         } catch (_) {}
       }
+      final restoredSettings = settings.isEmpty ? 0 : await SettingsFiles.restore(settings);
       if (!context.mounted) return;
-      _snack(context, added.isEmpty ? l.journalRestoreNone : l.journalRestoreDone(added.length));
+      final msg = added.isEmpty ? l.journalRestoreNone : l.journalRestoreDone(added.length);
+      _snack(context, restoredSettings > 0 ? '$msg\n${l.journalRestoreSettings}' : msg);
     } catch (_) {
       if (context.mounted) _snack(context, l.journalRestoreFailed);
     }

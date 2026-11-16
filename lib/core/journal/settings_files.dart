@@ -15,6 +15,7 @@ class SettingsFiles {
     'meihua_city.txt', // 梅花城市／經度
     'hexagram_quiz.json', // 認卦練習進度
     'daily_hexagram.json', // 今日一卦連續天數
+    'cross_eastern.txt', // 雙卦交叉是否加入紫微・八字
   ];
 
   static Future<Directory> _dir() => getApplicationDocumentsDirectory();

@@ -359,5 +359,22 @@
   "guyingAbout": "Sobre as gravuras",
   "guyingViewSource": "Ver as digitalizações originais (Wikimedia Commons)",
   "guyingShowHere": "Ver a xilogravura deste hexagrama (Duanyi Tianji)",
-  "guyingHide": "Ocultar xilogravuras"
+  "guyingHide": "Ocultar xilogravuras",
+  "journalSearchHint": "Buscar perguntas, notas, hexagramas",
+  "journalFilterAll": "Todos",
+  "journalFilterIching": "I Ching",
+  "journalFilterStarred": "Favoritos",
+  "journalUnstar": "Remover dos favoritos",
+  "journalDateRange": "Período",
+  "journalDeletedCount": "{count, plural, =1{1 registro excluído} other{{count} registros excluídos}}",
+  "undo": "Desfazer",
+  "journalSelectedCount": "{count, plural, =1{1 selecionado} other{{count} selecionados}}",
+  "journalSelectAll": "Selecionar tudo",
+  "journalSelectMonth": "Selecionar mês",
+  "journalDeleteManyTitle": "{count, plural, =1{Excluir 1 registro?} other{Excluir {count} registros?}}",
+  "journalNoMatch": "Nenhum registro encontrado.",
+  "journalLockedTitle": "{count, plural, =1{Mais 1 registro com mais de {days} dias} other{Mais {count} registros com mais de {days} dias}}",
+  "journalLockedBody": "A versão gratuita mostra os últimos {days} dias. Os registros mais antigos continuam salvos no seu celular; torne-se membro para ver todos.",
+  "journalBackupSettingsNote": "Suas configurações (aparência, gravuras antigas, dados de nascimento, cidade) e o progresso da prática também são incluídos. A assinatura não fica no arquivo: no novo celular, toque em “Restaurar compras” na página de assinatura com a mesma conta.",
+  "journalRestoreSettings": "Configurações restauradas. Elas valem a partir da próxima vez que você abrir o app."
 }

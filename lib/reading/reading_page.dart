@@ -31,12 +31,16 @@ class ReadingPage extends StatefulWidget {
     this.question = '',
     this.readingIndex,
     this.review = false,
+    this.daily = false,
   });
 
   final CastResult cast;
   final String question;
   final int? readingIndex;
   final bool review;
+
+  /// 從「今日一卦」打開：存卦記時標為今日一卦。
+  final bool daily;
 
   @override
   State<ReadingPage> createState() => _ReadingPageState();
@@ -248,6 +252,7 @@ class _ReadingPageState extends State<ReadingPage> {
       cast: widget.cast,
       question: widget.question,
       readingIndex: index,
+      daily: widget.daily,
     );
     if (entry == null) return;
     _services.events.emit(JournalSaved(hasReminder: entry.reminderAt != null));

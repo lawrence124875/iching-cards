@@ -10,13 +10,27 @@ class JournalBackup {
   static const format = 'qiangua-journal';
   static const schemaVersion = 1;
 
-  static String encode(List<JournalEntry> entries, DateTime exportedAt) =>
+  /// [settings]：一併備份的設定檔（檔名 → 內容，見 SettingsFiles）；舊版 App 讀到會忽略。
+  static String encode(List<JournalEntry> entries, DateTime exportedAt, {Map<String, String> settings = const {}}) =>
       const JsonEncoder.withIndent(' ').convert({
         'format': format,
         'schemaVersion': schemaVersion,
         'exportedAt': exportedAt.toIso8601String(),
         'entries': [for (final e in entries) e.toJson()],
+        if (settings.isNotEmpty) 'settings': settings,
       });
+
+  /// 備份檔裡的設定（沒有或格式不對回傳空）。
+  static Map<String, String> decodeSettings(String text) {
+    try {
+      final data = jsonDecode(text);
+      final s = data is Map ? data['settings'] : null;
+      if (s is! Map) return const {};
+      return {for (final e in s.entries) if (e.key is String && e.value is String) e.key as String: e.value as String};
+    } catch (_) {
+      return const {};
+    }
+  }
 
   /// 解析備份檔。也接受 App 私有的 journal.json（沒有 format 標記）。
   /// 不是卦記備份時丟 [FormatException]；個別不合法的紀錄略過。

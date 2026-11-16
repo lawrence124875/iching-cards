@@ -359,5 +359,22 @@
   "guyingAbout": "古図について",
   "guyingViewSource": "原書のスキャンを見る（Wikimedia Commons）",
   "guyingShowHere": "この卦の古図を見る（断易天機）",
-  "guyingHide": "古図をしまう"
+  "guyingHide": "古図をしまう",
+  "journalSearchHint": "問い・ふり返り・卦名で検索",
+  "journalFilterAll": "すべて",
+  "journalFilterIching": "易経",
+  "journalFilterStarred": "お気に入り",
+  "journalUnstar": "お気に入りを外す",
+  "journalDateRange": "期間",
+  "journalDeletedCount": "{count, plural, other{{count} 件の記録を削除しました}}",
+  "undo": "元に戻す",
+  "journalSelectedCount": "{count, plural, other{{count} 件選択}}",
+  "journalSelectAll": "すべて選択",
+  "journalSelectMonth": "この月を選択",
+  "journalDeleteManyTitle": "{count, plural, other{{count} 件の記録を削除しますか？}}",
+  "journalNoMatch": "条件に合う記録はありません。",
+  "journalLockedTitle": "{count, plural, other{{days} 日より前の記録があと {count} 件あります}}",
+  "journalLockedBody": "無料版では最近 {days} 日の記録を表示します。それより前の記録もスマートフォンに保存されています。メンバーになるとすべて見られます。",
+  "journalBackupSettingsNote": "外観、古図、生年月日、都市などの設定と卦の練習の進み具合も一緒にバックアップします。サブスクリプションはファイルに含まれません。新しい端末で同じアカウントを使い、購読ページの「購入を復元」を押してください。",
+  "journalRestoreSettings": "設定を復元しました。次にアプリを開いたときに反映されます。"
 }

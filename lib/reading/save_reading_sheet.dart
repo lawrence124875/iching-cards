@@ -17,12 +17,13 @@ Future<JournalEntry?> showSaveReadingSheet(
   required int? readingIndex,
   CrossRecord? cross,
   EasternRecord? eastern,
+  bool daily = false,
 }) =>
     showModalBottomSheet<JournalEntry>(
       context: context,
       isScrollControlled: true,
       backgroundColor: QianColors.inkCard,
-      builder: (_) => _SaveSheet(cast: cast, question: question, readingIndex: readingIndex, cross: cross, eastern: eastern),
+      builder: (_) => _SaveSheet(cast: cast, question: question, readingIndex: readingIndex, cross: cross, eastern: eastern, daily: daily),
     );
 
 /// 存命理卡片（紫微年度卡、八字本月卡）：沒有六爻、不設回顧提醒。
@@ -39,7 +40,10 @@ Future<JournalEntry?> showSaveCardSheet(
     );
 
 class _SaveSheet extends StatefulWidget {
-  const _SaveSheet({required this.cast, required this.question, required this.readingIndex, this.cross, this.eastern, this.cardMethod});
+  const _SaveSheet({required this.cast, required this.question, required this.readingIndex, this.cross, this.eastern, this.cardMethod, this.daily = false});
+
+  /// 今日一卦。
+  final bool daily;
 
   final CastResult? cast;
 
@@ -93,6 +97,7 @@ class _SaveSheetState extends State<_SaveSheet> {
       reminderAt: _days == null ? null : JournalReminders.reviewTime(now, _days!),
       cross: widget.cross,
       eastern: widget.eastern,
+      daily: widget.daily,
     );
     await store.save(entry);
     var reminderOk = true;

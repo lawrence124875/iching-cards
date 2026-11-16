@@ -714,5 +714,22 @@
   "guyingAbout": "About the woodcuts",
   "guyingViewSource": "View the original scans (Wikimedia Commons)",
   "guyingShowHere": "See this hexagram's woodcut (Duanyi Tianji)",
-  "guyingHide": "Hide woodcuts"
+  "guyingHide": "Hide woodcuts",
+  "journalSearchHint": "Search questions, notes, hexagrams",
+  "journalFilterAll": "All",
+  "journalFilterIching": "I Ching",
+  "journalFilterStarred": "Starred",
+  "journalUnstar": "Unstar",
+  "journalDateRange": "Date range",
+  "journalDeletedCount": "{count, plural, =1{Deleted 1 entry} other{Deleted {count} entries}}",
+  "undo": "Undo",
+  "journalSelectedCount": "{count, plural, =1{1 selected} other{{count} selected}}",
+  "journalSelectAll": "Select all",
+  "journalSelectMonth": "Select month",
+  "journalDeleteManyTitle": "{count, plural, =1{Delete 1 entry?} other{Delete {count} entries?}}",
+  "journalNoMatch": "No entries match.",
+  "journalLockedTitle": "{count, plural, =1{1 more entry older than {days} days} other{{count} more entries older than {days} days}}",
+  "journalLockedBody": "The free version shows the last {days} days. Older entries are still saved on your phone; become a member to see them all.",
+  "journalBackupSettingsNote": "Your settings (appearance, ancient art, birth details, city) and practice progress are included too. Subscriptions are not in the file: on your new phone, tap “Restore purchases” on the subscription page with the same account.",
+  "journalRestoreSettings": "Settings restored. They take effect the next time you open the app."
 }

@@ -714,5 +714,22 @@
   "guyingAbout": "Tentang gambar kuno",
   "guyingViewSource": "Lihat pindaian asli (Wikimedia Commons)",
   "guyingShowHere": "Lihat gambar kuno heksagram ini (Duanyi Tianji)",
-  "guyingHide": "Sembunyikan gambar kuno"
+  "guyingHide": "Sembunyikan gambar kuno",
+  "journalSearchHint": "Cari pertanyaan, catatan, heksagram",
+  "journalFilterAll": "Semua",
+  "journalFilterIching": "I Ching",
+  "journalFilterStarred": "Favorit",
+  "journalUnstar": "Hapus dari favorit",
+  "journalDateRange": "Rentang tanggal",
+  "journalDeletedCount": "{count, plural, other{{count} catatan dihapus}}",
+  "undo": "Urungkan",
+  "journalSelectedCount": "{count, plural, other{{count} dipilih}}",
+  "journalSelectAll": "Pilih semua",
+  "journalSelectMonth": "Pilih bulan ini",
+  "journalDeleteManyTitle": "{count, plural, other{Hapus {count} catatan?}}",
+  "journalNoMatch": "Tidak ada catatan yang cocok.",
+  "journalLockedTitle": "{count, plural, other{Masih ada {count} catatan yang lebih dari {days} hari}}",
+  "journalLockedBody": "Versi gratis menampilkan {days} hari terakhir. Catatan yang lebih lama tetap tersimpan di ponsel Anda; jadilah anggota untuk melihat semuanya.",
+  "journalBackupSettingsNote": "Pengaturan (tampilan, gambar kuno, data lahir, kota) dan kemajuan latihan juga ikut dicadangkan. Langganan tidak ada di file: di ponsel baru, ketuk “Pulihkan pembelian” di halaman langganan dengan akun yang sama.",
+  "journalRestoreSettings": "Pengaturan dipulihkan. Berlaku saat aplikasi dibuka lagi."
 }

@@ -140,6 +140,12 @@ class _JournalEntryPageState extends State<JournalEntryPage> {
       appBar: AppBar(
         title: Text(l.featureJournal),
         actions: [
+          if (e != null)
+            IconButton(
+              onPressed: () => _update(e.copyWith(starred: !e.starred)),
+              icon: Icon(e.starred ? Icons.star : Icons.star_border),
+              tooltip: e.starred ? l.journalUnstar : l.journalFilterStarred,
+            ),
           if (e != null) IconButton(onPressed: _delete, icon: const Icon(Icons.delete_outline), tooltip: l.delete),
         ],
       ),

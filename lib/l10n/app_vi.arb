@@ -359,5 +359,22 @@
   "guyingAbout": "Về tranh cổ",
   "guyingViewSource": "Xem bản quét gốc (Wikimedia Commons)",
   "guyingShowHere": "Xem tranh cổ của quẻ này (Đoán Dịch Thiên Cơ)",
-  "guyingHide": "Ẩn tranh cổ"
+  "guyingHide": "Ẩn tranh cổ",
+  "journalSearchHint": "Tìm câu hỏi, ghi chú, tên quẻ",
+  "journalFilterAll": "Tất cả",
+  "journalFilterIching": "Kinh Dịch",
+  "journalFilterStarred": "Yêu thích",
+  "journalUnstar": "Bỏ yêu thích",
+  "journalDateRange": "Khoảng ngày",
+  "journalDeletedCount": "{count, plural, other{Đã xóa {count} ghi chép}}",
+  "undo": "Hoàn tác",
+  "journalSelectedCount": "{count, plural, other{Đã chọn {count}}}",
+  "journalSelectAll": "Chọn tất cả",
+  "journalSelectMonth": "Chọn tháng này",
+  "journalDeleteManyTitle": "{count, plural, other{Xóa {count} ghi chép?}}",
+  "journalNoMatch": "Không có ghi chép phù hợp.",
+  "journalLockedTitle": "{count, plural, other{Còn {count} ghi chép cũ hơn {days} ngày}}",
+  "journalLockedBody": "Bản miễn phí hiển thị {days} ngày gần nhất. Các ghi chép cũ hơn vẫn được lưu trên điện thoại; trở thành thành viên để xem tất cả.",
+  "journalBackupSettingsNote": "Cài đặt (giao diện, tranh cổ, thông tin ngày sinh, thành phố) và tiến độ luyện tập cũng được sao lưu. Gói đăng ký không nằm trong tệp: trên điện thoại mới, dùng cùng tài khoản và nhấn “Khôi phục giao dịch mua” ở trang đăng ký.",
+  "journalRestoreSettings": "Đã khôi phục cài đặt. Cài đặt có hiệu lực khi mở lại ứng dụng."
 }

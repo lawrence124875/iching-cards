@@ -359,5 +359,22 @@
   "guyingAbout": "Sobre los grabados",
   "guyingViewSource": "Ver los escaneos originales (Wikimedia Commons)",
   "guyingShowHere": "Ver el grabado de este hexagrama (Duanyi Tianji)",
-  "guyingHide": "Ocultar grabados"
+  "guyingHide": "Ocultar grabados",
+  "journalSearchHint": "Buscar preguntas, notas, hexagramas",
+  "journalFilterAll": "Todo",
+  "journalFilterIching": "I Ching",
+  "journalFilterStarred": "Favoritos",
+  "journalUnstar": "Quitar de favoritos",
+  "journalDateRange": "Rango de fechas",
+  "journalDeletedCount": "{count, plural, =1{Se eliminó 1 entrada} other{Se eliminaron {count} entradas}}",
+  "undo": "Deshacer",
+  "journalSelectedCount": "{count, plural, =1{1 seleccionada} other{{count} seleccionadas}}",
+  "journalSelectAll": "Seleccionar todo",
+  "journalSelectMonth": "Seleccionar mes",
+  "journalDeleteManyTitle": "{count, plural, =1{¿Eliminar 1 entrada?} other{¿Eliminar {count} entradas?}}",
+  "journalNoMatch": "Ninguna entrada coincide.",
+  "journalLockedTitle": "{count, plural, =1{1 entrada más de hace más de {days} días} other{{count} entradas más de hace más de {days} días}}",
+  "journalLockedBody": "La versión gratuita muestra los últimos {days} días. Las entradas anteriores siguen guardadas en tu teléfono; hazte miembro para verlas todas.",
+  "journalBackupSettingsNote": "También se incluyen tus ajustes (apariencia, láminas antiguas, datos de nacimiento, ciudad) y tu progreso de práctica. La suscripción no va en el archivo: en tu nuevo teléfono, toca «Restaurar compras» en la página de suscripción con la misma cuenta.",
+  "journalRestoreSettings": "Ajustes restaurados. Se aplicarán la próxima vez que abras la app."
 }

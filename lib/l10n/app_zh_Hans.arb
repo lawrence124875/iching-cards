@@ -390,5 +390,10 @@
   "journalStatsPartly": "部分应验",
   "journalStatsNo": "没有应验",
   "journalStatsFreeNote": "免费版只统计最近 {days} 天的卦记。",
-  "crossFreeTrialNote": "这是免费的完整体验，下次起免费版只显示标题。"
+  "crossFreeTrialNote": "这是免费的完整体验，下次起免费版只显示标题。",
+  "otherAppsTitle": "LC Lab 其他 App",
+  "otherAppTarotName": "光穗塔罗",
+  "otherAppTarotDesc": "塔罗、雷诺曼、符文，含入门课程",
+  "otherAppEnglishName": "智慧听觉巡航",
+  "otherAppEnglishDesc": "用听的背英文单词，锁屏也能播放"
 }

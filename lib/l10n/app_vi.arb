@@ -390,5 +390,10 @@
   "journalStatsPartly": "Đúng một phần",
   "journalStatsNo": "Không đúng",
   "journalStatsFreeNote": "Bản miễn phí chỉ thống kê {days} ngày gần nhất.",
-  "crossFreeTrialNote": "Lần này bạn được xem đầy đủ miễn phí. Từ lần sau, bản miễn phí chỉ hiện tiêu đề."
+  "crossFreeTrialNote": "Lần này bạn được xem đầy đủ miễn phí. Từ lần sau, bản miễn phí chỉ hiện tiêu đề.",
+  "otherAppsTitle": "Ứng dụng khác của LC Lab",
+  "otherAppTarotName": "AuraSpica Tarot",
+  "otherAppTarotDesc": "Tarot, Lenormand và rune, kèm khóa học nhập môn",
+  "otherAppEnglishName": "English Words Audio Cruise",
+  "otherAppEnglishDesc": "Học từ vựng tiếng Anh bằng cách nghe, phát được cả khi khóa màn hình"
 }

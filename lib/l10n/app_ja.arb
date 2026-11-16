@@ -390,5 +390,10 @@
   "journalStatsPartly": "一部当たった",
   "journalStatsNo": "当たらなかった",
   "journalStatsFreeNote": "無料版は最近 {days} 日の記録だけを集計します。",
-  "crossFreeTrialNote": "今回は無料で全文をお試しいただけます。次回から無料版は見出しのみになります。"
+  "crossFreeTrialNote": "今回は無料で全文をお試しいただけます。次回から無料版は見出しのみになります。",
+  "otherAppsTitle": "LC Lab のほかのアプリ",
+  "otherAppTarotName": "AuraSpica Tarot",
+  "otherAppTarotDesc": "タロット・ルノルマン・ルーン、入門講座付き",
+  "otherAppEnglishName": "English Words Audio Cruise",
+  "otherAppEnglishDesc": "聞いて覚える英単語、画面ロック中も再生"
 }

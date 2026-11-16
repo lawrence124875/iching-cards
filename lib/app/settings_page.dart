@@ -124,6 +124,24 @@ class SettingsPage extends StatelessWidget {
             trailing: const Icon(Icons.open_in_new, size: 18),
             onTap: () => launchUrl(Uri.parse(termsOfServiceUrl), mode: LaunchMode.externalApplication),
           ),
+          // LC Lab 其他 App：圖示在 assets/other_apps（不連網抓），以外部應用程式開 Play 商店頁；不加權限、不追蹤。
+          Padding(
+            padding: const EdgeInsets.fromLTRB(16, 24, 16, 4),
+            child: Text(l.otherAppsTitle,
+                style: Theme.of(context).textTheme.titleSmall?.copyWith(color: QianColors.earth)),
+          ),
+          _OtherApp(
+            icon: 'assets/other_apps/tarot.png',
+            name: l.otherAppTarotName,
+            desc: l.otherAppTarotDesc,
+            url: 'https://play.google.com/store/apps/details?id=com.lclab.tarot',
+          ),
+          _OtherApp(
+            icon: 'assets/other_apps/english.png',
+            name: l.otherAppEnglishName,
+            desc: l.otherAppEnglishDesc,
+            url: 'https://play.google.com/store/apps/details?id=tw.bcc.englishapp',
+          ),
         ],
       ),
     );
@@ -186,4 +204,26 @@ void _backupSheet(BuildContext context) {
       ]),
     ),
   );
+}
+
+/// 設定頁「LC Lab 其他 App」的一列：圖示、名稱、一句說明。
+class _OtherApp extends StatelessWidget {
+  const _OtherApp({required this.icon, required this.name, required this.desc, required this.url});
+
+  final String icon;
+  final String name;
+  final String desc;
+  final String url;
+
+  @override
+  Widget build(BuildContext context) => ListTile(
+        leading: ClipRRect(
+          borderRadius: BorderRadius.circular(10),
+          child: Image.asset(icon, width: 44, height: 44),
+        ),
+        title: Text(name),
+        subtitle: Text(desc),
+        trailing: const Icon(Icons.open_in_new, size: 18),
+        onTap: () => launchUrl(Uri.parse(url), mode: LaunchMode.externalApplication),
+      );
 }

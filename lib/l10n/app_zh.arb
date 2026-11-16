@@ -1060,5 +1060,10 @@
       }
     }
   },
-  "crossFreeTrialNote": "這是免費的完整體驗，下次起免費版只顯示標題。"
+  "crossFreeTrialNote": "這是免費的完整體驗，下次起免費版只顯示標題。",
+  "otherAppsTitle": "LC Lab 其他 App",
+  "otherAppTarotName": "光穗塔羅",
+  "otherAppTarotDesc": "塔羅、雷諾曼、符文，含入門課程",
+  "otherAppEnglishName": "智慧聽覺巡航",
+  "otherAppEnglishDesc": "用聽的背英文單字，鎖螢幕也能播"
 }

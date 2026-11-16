@@ -389,5 +389,6 @@
   "journalStatsYes": "当たった",
   "journalStatsPartly": "一部当たった",
   "journalStatsNo": "当たらなかった",
-  "journalStatsFreeNote": "無料版は最近 {days} 日の記録だけを集計します。"
+  "journalStatsFreeNote": "無料版は最近 {days} 日の記録だけを集計します。",
+  "crossFreeTrialNote": "今回は無料で全文をお試しいただけます。次回から無料版は見出しのみになります。"
 }

@@ -744,5 +744,6 @@
   "journalStatsYes": "Sesuai",
   "journalStatsPartly": "Sebagian",
   "journalStatsNo": "Tidak sesuai",
-  "journalStatsFreeNote": "Versi gratis hanya menghitung {days} hari terakhir."
+  "journalStatsFreeNote": "Versi gratis hanya menghitung {days} hari terakhir.",
+  "crossFreeTrialNote": "Kali ini Anda bisa melihat semuanya gratis. Setelah ini, versi gratis hanya menampilkan judul."
 }

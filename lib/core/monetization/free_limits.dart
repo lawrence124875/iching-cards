@@ -4,7 +4,7 @@ class FreeLimits {
   const FreeLimits({
     this.castsPerDay = 1,
     this.rewardedPerDay = 1,
-    this.journalMax = 10,
+    this.journalMax = 1000,
     this.journalDays = 30,
     this.freeBreathMinutes = const {1, 2},
     this.meihuaCastsPerDay = 1,
@@ -19,7 +19,7 @@ class FreeLimits {
   /// 每天最多可用獎勵廣告換幾次額外起卦。
   final int rewardedPerDay;
 
-  /// 免費版卦記上限（已存的不會被刪，只是不能再新增）。
+  /// 免費版卦記上限（已存的不會被刪，只是不能再新增）。2026-11-16 起預設 1000（實際上不限），改由「只看最近 30 天」區分。
   final int journalMax;
 
   /// 免費版卦記只顯示最近幾天（2026-11-16 Lawrence 定案，與 10 則上限並行）：較早的保留在手機上但上鎖，訂閱後全部顯示。
@@ -43,7 +43,7 @@ class FreeLimits {
   static const remoteDefaults = <String, int>{
     'qg_free_casts_per_day': 1,
     'qg_free_rewarded_per_day': 1,
-    'qg_free_journal_max': 10,
+    'qg_free_journal_max': 1000,
     'qg_free_journal_days': 30,
     'qg_meihua_free_casts_per_day': 1,
     'qg_meihua_free_rewarded_per_day': 1,
@@ -62,7 +62,7 @@ class FreeLimits {
     return FreeLimits(
       castsPerDay: v('qg_free_casts_per_day', min: 1),
       rewardedPerDay: v('qg_free_rewarded_per_day'),
-      journalMax: v('qg_free_journal_max', min: 1),
+      journalMax: v('qg_free_journal_max', min: 1, max: 100000),
       journalDays: v('qg_free_journal_days', min: 1, max: 3650),
       meihuaCastsPerDay: v('qg_meihua_free_casts_per_day', min: 1),
       meihuaRewardedPerDay: v('qg_meihua_free_rewarded_per_day'),

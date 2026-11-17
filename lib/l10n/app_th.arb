@@ -395,5 +395,7 @@
   "otherAppTarotName": "AuraSpica Tarot",
   "otherAppTarotDesc": "ไพ่ทาโรต์ เลอนอร์มองด์ และรูน พร้อมคอร์สเริ่มต้น",
   "otherAppEnglishName": "English Words Audio Cruise",
-  "otherAppEnglishDesc": "จำศัพท์ภาษาอังกฤษด้วยการฟัง เล่นได้แม้ล็อกหน้าจอ"
+  "otherAppEnglishDesc": "จำศัพท์ภาษาอังกฤษด้วยการฟัง เล่นได้แม้ล็อกหน้าจอ",
+  "otherAppQimenName": "Qimen Compass",
+  "otherAppQimenDesc": "ผังฉีเหมินตุ้นเจี่ยรายชั่วยาม เข็มทิศทิศมงคล และเวลามงคลในการเดินทาง"
 }

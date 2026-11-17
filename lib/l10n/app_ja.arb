@@ -395,5 +395,7 @@
   "otherAppTarotName": "AuraSpica Tarot",
   "otherAppTarotDesc": "タロット・ルノルマン・ルーン、入門講座付き",
   "otherAppEnglishName": "English Words Audio Cruise",
-  "otherAppEnglishDesc": "聞いて覚える英単語、画面ロック中も再生"
+  "otherAppEnglishDesc": "聞いて覚える英単語、画面ロック中も再生",
+  "otherAppQimenName": "奇門羅盤",
+  "otherAppQimenDesc": "奇門遁甲の時盤、吉方位コンパス、外出の吉時"
 }

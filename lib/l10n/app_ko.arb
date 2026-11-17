@@ -395,5 +395,7 @@
   "otherAppTarotName": "AuraSpica Tarot",
   "otherAppTarotDesc": "타로・르노르망・룬, 입문 강좌 포함",
   "otherAppEnglishName": "English Words Audio Cruise",
-  "otherAppEnglishDesc": "들으며 외우는 영어 단어, 화면이 꺼져도 재생"
+  "otherAppEnglishDesc": "들으며 외우는 영어 단어, 화면이 꺼져도 재생",
+  "otherAppQimenName": "기문나침반",
+  "otherAppQimenDesc": "기문둔갑 시반, 길방 나침반, 외출 길시"
 }

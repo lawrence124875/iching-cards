@@ -395,5 +395,7 @@
   "otherAppTarotName": "AuraSpica Tarot",
   "otherAppTarotDesc": "Tarot, Lenormand y runas, con cursos para principiantes",
   "otherAppEnglishName": "English Words Audio Cruise",
-  "otherAppEnglishDesc": "Aprende palabras en inglés escuchando, incluso con la pantalla bloqueada"
+  "otherAppEnglishDesc": "Aprende palabras en inglés escuchando, incluso con la pantalla bloqueada",
+  "otherAppQimenName": "Qimen Compass",
+  "otherAppQimenDesc": "Cartas horarias Qimen Dunjia, brújula de direcciones y horas favorables para salir"
 }

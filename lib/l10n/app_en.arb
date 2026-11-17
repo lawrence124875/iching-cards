@@ -750,5 +750,7 @@
   "otherAppTarotName": "AuraSpica Tarot",
   "otherAppTarotDesc": "Tarot, Lenormand and runes, with beginner courses",
   "otherAppEnglishName": "English Words Audio Cruise",
-  "otherAppEnglishDesc": "Learn English words by listening, even with the screen locked"
+  "otherAppEnglishDesc": "Learn English words by listening, even with the screen locked",
+  "otherAppQimenName": "Qimen Compass",
+  "otherAppQimenDesc": "Qimen Dunjia hour charts, a direction compass and favorable travel times"
 }

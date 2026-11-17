@@ -142,6 +142,14 @@ class SettingsPage extends StatelessWidget {
             desc: l.otherAppEnglishDesc,
             url: 'https://play.google.com/store/apps/details?id=tw.bcc.englishapp',
           ),
+          // 奇門羅盤：上架後在 Remote Config 把 qg_other_app_qimen 設為 1 才顯示（預設不顯示，避免商店頁還沒開）
+          if (s.flags.intValue('qg_other_app_qimen', 0) == 1)
+            _OtherApp(
+              icon: 'assets/other_apps/qimen.png',
+              name: l.otherAppQimenName,
+              desc: l.otherAppQimenDesc,
+              url: 'https://play.google.com/store/apps/details?id=com.lclab.qimen',
+            ),
         ],
       ),
     );

@@ -162,7 +162,7 @@ void main() {
     await tester.tap(find.text(en.featureDraw));
     await _settle(tester);
     await tester.tap(find.widgetWithText(FilledButton, en.drawFlip));
-    await _settle(tester, frames: 40);
+    await _settle(tester, frames: 120);
     await shot(1);
 
     // 2–3 解讀頁：「View Reading」→ 依序捲到各段落
@@ -232,6 +232,8 @@ Future<void> _loadFonts() async {
     if (f != null) family = f.group(1);
     if (a != null && family != null) (families[family] ??= []).add(a.group(1)!);
   }
+  // 按鈕 textStyle 沒指定字族時用 Roboto（手機有系統字型；測試環境沒有會變方框），借拉丁子集代替
+  families['Roboto'] = ['assets/fonts/NotoSansLatin-400.ttf', 'assets/fonts/NotoSansLatin-500.ttf'];
   families['MaterialIcons'] = [
     '${Platform.environment['FLUTTER_ROOT']}/bin/cache/artifacts/material_fonts/MaterialIcons-Regular.otf',
   ];

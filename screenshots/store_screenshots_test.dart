@@ -242,9 +242,29 @@ Future<void> _loadFonts() async {
     for (final p in e.value) {
       if (!File(p).existsSync()) throw StateError('缺少字型 $p（先依 screenshots/README.md 產生字型子集）');
       loader.addFont(file(p));
+      // 按鈕用 w600：手機會找最接近的字重，測試環境找不到就畫成方框；把 500 複製一份標成 600、700
+      if (p.endsWith('-500.ttf')) {
+        for (final w in [600, 700]) {
+          loader.addFont(Future.value(_withWeight(File(p).readAsBytesSync(), w)));
+        }
+      }
     }
     await loader.load();
   }
+}
+
+/// 改 OS/2 表的 usWeightClass（表內第 4 位元組），讓同一個字型檔以別的字重註冊。
+ByteData _withWeight(Uint8List bytes, int weight) {
+  final data = ByteData.sublistView(Uint8List.fromList(bytes));
+  final tables = data.getUint16(4);
+  for (var i = 0; i < tables; i++) {
+    final rec = 12 + 16 * i;
+    if (String.fromCharCodes(bytes.sublist(rec, rec + 4)) == 'OS/2') {
+      data.setUint16(data.getUint32(rec + 8) + 4, weight);
+      break;
+    }
+  }
+  return data;
 }
 
 /// 讓資產讀取、圖片解碼（真實非同步）與動畫都跑完。

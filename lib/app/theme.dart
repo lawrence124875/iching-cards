@@ -86,12 +86,18 @@ class AppFonts {
       'NotoNaskhArabic', 'NotoSansArabic', ['NotoSerifTC', 'NotoSerifSC'], ['NotoSansTC', 'NotoSansSC'],
       tracking: false);
 
+  /// 德、法、義、土、波（2026-11-23）：思源的拉丁字形缺土耳其文 ı ş ğ，’ « » 又是全形寬度，
+  /// 改用 Noto Sans／Serif 拉丁子集；卦名漢字由 TC 補。
+  static const latin =
+      AppFonts._('NotoSerifLatin', 'NotoSansLatin', ['NotoSerifTC', 'NotoSerifSC'], ['NotoSansTC', 'NotoSansSC']);
+
   /// 語言代碼（Locale.languageCode）→ 字族組合。
   static AppFonts forLanguage(String languageCode) => switch (languageCode) {
         'ja' => japanese,
         'ko' => korean,
         'th' => thai,
         'ar' => arabic,
+        'de' || 'fr' || 'it' || 'tr' || 'pl' => latin,
         _ => chinese,
       };
 

@@ -5,7 +5,7 @@ set -euo pipefail
 src="${1:?用法：import_content.sh <iching-content 路徑>}"
 
 # 語言資料夾：新增語言時加在這裡，並同步 build_android.yml 的 sparse-checkout 與 pubspec.yaml assets。
-LANGS="zh-Hant en zh-Hans ja ko vi es pt-BR id th ar"
+LANGS="zh-Hant en zh-Hans ja ko vi es pt-BR id th ar de fr it tr pl"
 mkdir -p assets/cards
 summary=""
 n_lesson=0

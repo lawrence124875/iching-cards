@@ -162,7 +162,7 @@ void main() {
     await tester.tap(find.text(en.featureDraw));
     await _settle(tester);
     await tester.tap(find.widgetWithText(FilledButton, en.drawFlip));
-    await _settle(tester, frames: 40);
+    await _settle(tester, frames: 120);
     await shot(1);
 
     // 2–3 解讀頁：「View Reading」→ 依序捲到各段落
@@ -185,7 +185,7 @@ void main() {
     await _settle(tester);
     await tester.tap(find.text(en.featureDraw)); // 0.8.0：銅錢在抽一卦頁「其他起卦方式」
     await _settle(tester);
-    await tester.tap(find.text(en.featureCoins));
+    await tester.tap(find.text(en.featureCoins).first); // pl 的 featureCoins 與 methodCoins 同字
     await _settle(tester);
     for (var i = 1; i <= 6; i++) {
       await tester.tap(find.widgetWithText(FilledButton, en.coinsToss(i)));
@@ -232,6 +232,8 @@ Future<void> _loadFonts() async {
     if (f != null) family = f.group(1);
     if (a != null && family != null) (families[family] ??= []).add(a.group(1)!);
   }
+  // 按鈕 textStyle 沒指定字族時用 Roboto（手機有系統字型；測試環境沒有會變方框），借拉丁子集代替
+  families['Roboto'] = ['assets/fonts/NotoSansLatin-400.ttf', 'assets/fonts/NotoSansLatin-500.ttf'];
   families['MaterialIcons'] = [
     '${Platform.environment['FLUTTER_ROOT']}/bin/cache/artifacts/material_fonts/MaterialIcons-Regular.otf',
   ];
@@ -268,6 +270,7 @@ Future<void> _settle(WidgetTester tester, {int frames = 20}) async {
 Future<void> _scrollTo(WidgetTester tester, Finder target, {double top = 0}) async {
   await tester.scrollUntilVisible(target, 400, scrollable: find.byType(Scrollable).last);
   await _settle(tester, frames: 3);
+  target = target.first; // 部分語言（pl）同一段文字出現兩次
   final scrollable = Scrollable.of(tester.element(target));
   final box = tester.renderObject<RenderBox>(target);
   final viewport = scrollable.context.findRenderObject()! as RenderBox;
@@ -312,6 +315,26 @@ const _sampleText = {
   'pt-BR': (
     'Devo aceitar o novo projeto no trabalho ou continuar consolidando o que já faço?',
     'No fim aceitei, mas começando por algo pequeno. Nas duas primeiras semanas avancei devagar e em silêncio, como uma semente debaixo da terra. Ao ver que a linha mutável levava à Modéstia, lembrei a mim mesmo de não ter pressa em buscar reconhecimento.',
+  ),
+  'de': (
+    'Soll ich das neue Projekt bei der Arbeit übernehmen oder lieber festigen, was ich schon habe?',
+    'Ich habe zugesagt, aber klein angefangen. Die ersten zwei Wochen waren wie ein Samenkorn unter der Erde: langsamer, stiller Fortschritt. Die wandelnde Linie hin zu Bescheidenheit erinnerte mich daran, nicht nach Anerkennung zu drängen.',
+  ),
+  'fr': (
+    'Dois-je accepter le nouveau projet au travail ou continuer à consolider ce que je fais déjà\u00a0?',
+    'J’ai finalement accepté, mais en commençant petit. Les deux premières semaines ressemblaient à une graine sous la terre\u00a0: des progrès lents et discrets. La ligne mutante menant à Modestie m’a rappelé de ne pas courir après la reconnaissance.',
+  ),
+  'it': (
+    'Devo accettare il nuovo progetto al lavoro o continuare a consolidare quello che già faccio?',
+    'Alla fine ho accettato, ma partendo in piccolo. Le prime due settimane sono state come un seme sotto terra: progressi lenti e silenziosi. La linea mutevole verso Modestia mi ha ricordato di non avere fretta di cercare riconoscimento.',
+  ),
+  'tr': (
+    'İşteki yeni projeyi üstlenmeli miyim, yoksa elimdekini sağlamlaştırmaya devam mı etmeliyim?',
+    'Sonunda kabul ettim ama küçük başladım. İlk iki hafta toprağın altındaki bir tohum gibiydi: yavaş ve sessiz bir ilerleme. Alçakgönüllülük’e giden değişen çizgi, takdir görmek için acele etmemeyi hatırlattı.',
+  ),
+  'pl': (
+    'Czy przyjąć nowy projekt w pracy, czy dalej umacniać to, co już robię?',
+    'W końcu się zgodziłem, ale zacząłem od małego kroku. Pierwsze dwa tygodnie były jak ziarno pod ziemią: powolny, cichy postęp. Linia zmienna prowadząca do Skromności przypomniała mi, żeby nie spieszyć się po uznanie.',
   ),
   'th': (
     'ฉันควรรับโปรเจกต์ใหม่ที่ทำงาน หรือทำสิ่งที่ทำอยู่ให้มั่นคงขึ้นต่อไป?',

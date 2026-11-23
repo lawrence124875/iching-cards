@@ -17,7 +17,7 @@ set_str CFBundleDisplayName "謙卦"
 $PB -c "Delete :CFBundleLocalizations" "$PLIST" 2>/dev/null || true
 $PB -c "Add :CFBundleLocalizations array" "$PLIST"
 i=0
-for lang in zh-Hant zh-Hans en ja ko vi es pt-BR id th ar; do
+for lang in zh-Hant zh-Hans en ja ko vi es pt-BR id th ar de fr it tr pl; do
   $PB -c "Add :CFBundleLocalizations:$i string $lang" "$PLIST"; i=$((i + 1))
 done
 

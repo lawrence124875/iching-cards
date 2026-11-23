@@ -266,6 +266,7 @@ Future<void> _settle(WidgetTester tester, {int frames = 20}) async {
 
 /// 把 [target] 捲到畫面頂端（AppBar 下方 [top] 邏輯像素）。
 Future<void> _scrollTo(WidgetTester tester, Finder target, {double top = 0}) async {
+  target = target.first; // 部分語言（pl）同一段文字出現兩次
   await tester.scrollUntilVisible(target, 400, scrollable: find.byType(Scrollable).last);
   await _settle(tester, frames: 3);
   final scrollable = Scrollable.of(tester.element(target));

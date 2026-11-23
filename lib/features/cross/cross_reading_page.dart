@@ -108,8 +108,8 @@ class CrossEasternPref {
   }
 }
 
-/// 阿拉伯文、印尼文不顯示應期（2026-11-01 文化審查：避免「何時發生」的預測）。
-bool get crossShowsTiming => !const {'ar', 'id'}.contains(L10n.language.contentFolder);
+/// 阿拉伯文、印尼文、土耳其文不顯示應期（2026-11-01／2026-11-23 文化審查：避免「何時發生」的預測）。
+bool get crossShowsTiming => !const {'ar', 'id', 'tr'}.contains(L10n.language.contentFolder);
 
 class _CrossReadingPageState extends State<CrossReadingPage> {
   late final Services _services = AppServices.of(context);

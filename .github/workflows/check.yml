@@ -51,6 +51,11 @@ jobs:
             id
             th
             ar
+            de
+            fr
+            it
+            tr
+            pl
             glossary
             cross
             eastern

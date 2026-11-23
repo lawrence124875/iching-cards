@@ -41,6 +41,11 @@ jobs:
             id
             th
             ar
+            de
+            fr
+            it
+            tr
+            pl
             images/webp
             glossary
             cross

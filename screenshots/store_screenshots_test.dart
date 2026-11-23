@@ -313,6 +313,26 @@ const _sampleText = {
     'Devo aceitar o novo projeto no trabalho ou continuar consolidando o que já faço?',
     'No fim aceitei, mas começando por algo pequeno. Nas duas primeiras semanas avancei devagar e em silêncio, como uma semente debaixo da terra. Ao ver que a linha mutável levava à Modéstia, lembrei a mim mesmo de não ter pressa em buscar reconhecimento.',
   ),
+  'de': (
+    'Soll ich das neue Projekt bei der Arbeit übernehmen oder lieber festigen, was ich schon habe?',
+    'Ich habe zugesagt, aber klein angefangen. Die ersten zwei Wochen waren wie ein Samenkorn unter der Erde: langsamer, stiller Fortschritt. Die wandelnde Linie hin zu Bescheidenheit erinnerte mich daran, nicht nach Anerkennung zu drängen.',
+  ),
+  'fr': (
+    'Dois-je accepter le nouveau projet au travail ou continuer à consolider ce que je fais déjà\u00a0?',
+    'J’ai finalement accepté, mais en commençant petit. Les deux premières semaines ressemblaient à une graine sous la terre\u00a0: des progrès lents et discrets. La ligne mutante menant à Modestie m’a rappelé de ne pas courir après la reconnaissance.',
+  ),
+  'it': (
+    'Devo accettare il nuovo progetto al lavoro o continuare a consolidare quello che già faccio?',
+    'Alla fine ho accettato, ma partendo in piccolo. Le prime due settimane sono state come un seme sotto terra: progressi lenti e silenziosi. La linea mutevole verso Modestia mi ha ricordato di non avere fretta di cercare riconoscimento.',
+  ),
+  'tr': (
+    'İşteki yeni projeyi üstlenmeli miyim, yoksa elimdekini sağlamlaştırmaya devam mı etmeliyim?',
+    'Sonunda kabul ettim ama küçük başladım. İlk iki hafta toprağın altındaki bir tohum gibiydi: yavaş ve sessiz bir ilerleme. Alçakgönüllülük’e giden değişen çizgi, takdir görmek için acele etmemeyi hatırlattı.',
+  ),
+  'pl': (
+    'Czy przyjąć nowy projekt w pracy, czy dalej umacniać to, co już robię?',
+    'W końcu się zgodziłem, ale zacząłem od małego kroku. Pierwsze dwa tygodnie były jak ziarno pod ziemią: powolny, cichy postęp. Linia zmienna prowadząca do Skromności przypomniała mi, żeby nie spieszyć się po uznanie.',
+  ),
   'th': (
     'ฉันควรรับโปรเจกต์ใหม่ที่ทำงาน หรือทำสิ่งที่ทำอยู่ให้มั่นคงขึ้นต่อไป?',
     'สุดท้ายฉันรับไว้ แต่เริ่มจากเรื่องเล็ก ๆ ก่อน สองสัปดาห์แรกค่อย ๆ ก้าวไปอย่างเงียบ ๆ เหมือนเมล็ดพันธุ์ใต้ดิน เมื่อเห็นว่าเส้นที่แปรเปลี่ยนนำไปสู่ความถ่อมตน ฉันจึงเตือนตัวเองว่าไม่ต้องรีบแสวงหาการยอมรับ',

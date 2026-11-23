@@ -122,7 +122,7 @@ class AppLanguages {
     code: 'fr',
     locale: Locale('fr'),
     contentFolder: 'fr',
-    contentReady: false, // 2026-11-23 內容完成；等 5 語一起上線
+    contentReady: true, // 2026-11-23 內容完成，0.13.0+93 五語一起上線（iching-content docs/NEW-LANGS.md）
   );
 
   /// 土耳其文：比照 ar/id 文化審查（/mnt/project-files/reviews/cultural-tr.md）。
@@ -130,25 +130,33 @@ class AppLanguages {
     code: 'tr',
     locale: Locale('tr'),
     contentFolder: 'tr',
-    contentReady: false, // 2026-11-23 內容完成；等 5 語一起上線
+    contentReady: true, // 2026-11-23 內容完成，0.13.0+93 五語一起上線（iching-content docs/NEW-LANGS.md）
   );
 
   static const de = AppLanguage(
     code: 'de',
     locale: Locale('de'),
     contentFolder: 'de',
-    contentReady: false, // 2026-11-23 內容完成；等 5 語一起上線
+    contentReady: true, // 2026-11-23 內容完成，0.13.0+93 五語一起上線（iching-content docs/NEW-LANGS.md）
+  );
+
+  /// 波蘭文：複數 one/few/many/other。
+  static const pl = AppLanguage(
+    code: 'pl',
+    locale: Locale('pl'),
+    contentFolder: 'pl',
+    contentReady: true, // 2026-11-23 內容完成，0.13.0+93 五語一起上線（iching-content docs/NEW-LANGS.md）
   );
 
   static const it = AppLanguage(
     code: 'it',
     locale: Locale('it'),
     contentFolder: 'it',
-    contentReady: false, // 2026-11-23 內容完成；等 5 語一起上線
+    contentReady: true, // 2026-11-23 內容完成，0.13.0+93 五語一起上線（iching-content docs/NEW-LANGS.md）
   );
 
   /// 已有介面翻譯（ARB）的語言。順序無意義。
-  static const all = [zhHant, en, zhHans, ja, ko, vi, es, pt, id, th, ar, fr, it, tr, de];
+  static const all = [zhHant, en, zhHans, ja, ko, vi, es, pt, id, th, ar, fr, it, tr, de, pl];
 
   /// 只看介面不開放內容的測試用開關：建置時加 --dart-define=FORCE_LANG=en，
   /// 不論手機語言一律用該語言介面（內容仍退回繁中）。正式版不加。

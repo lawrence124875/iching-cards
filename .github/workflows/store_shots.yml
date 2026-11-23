@@ -50,6 +50,11 @@ jobs:
             id
             th
             ar
+            de
+            fr
+            it
+            tr
+            pl
             glossary
             cross
             eastern
@@ -103,10 +108,18 @@ jobs:
       - name: 安裝套件
         run: flutter pub get
 
-      - name: 渲染 11 語
+      # 2026-11-23 新增 5 語（de fr it tr pl）：沒有舊截圖，先渲染完整 8 張（raw-01…08）；失敗只警告，Play 會沿用預設語言截圖。
+      - name: 渲染新語言完整 8 張
+        run: |
+          for l in de fr it tr pl; do
+            SCREENSHOT_OUT=/tmp/shots/$l SCREENSHOT_LANG=$l flutter test --no-pub screenshots/store_screenshots_test.dart > /tmp/full-$l.log 2>&1 \
+              || { echo "::warning::$l 完整截圖失敗"; grep -E "Error|Exception|Expected|Bad state" /tmp/full-$l.log | head -5 | while IFS= read -r line; do echo "::warning::$l $line"; done; }
+          done
+
+      - name: 渲染 16 語古圖
         run: |
           set -euo pipefail
-          for l in zh-Hant zh-Hans en ja ko vi es pt-BR id th ar; do
+          for l in zh-Hant zh-Hans en ja ko vi es pt-BR id th ar de fr it tr pl; do
             SCREENSHOT_ONLY=guying SCREENSHOT_OUT=/tmp/shots/$l SCREENSHOT_LANG=$l flutter test --no-pub screenshots/store_screenshots_test.dart > /tmp/shot-$l.log 2>&1 \
               || { tail -40 /tmp/shot-$l.log; grep -E "Error|Exception|Expected" /tmp/shot-$l.log | head -10 | while IFS= read -r line; do echo "::error::$l $line"; done; exit 1; }
             if [ ! -s /tmp/shots/$l/raw-09.png ]; then
@@ -130,7 +143,7 @@ jobs:
           sudo apt-get install -y -qq libraqm0 libfribidi0 > /dev/null
           pip install --quiet pillow
           python3 - <<'PY'
-          import importlib.util, os, shutil, tempfile
+          import importlib.util, os, shutil, tempfile, glob
           T={'zh-Hant':('搭配明代古圖學看象','《斷易天機》1597 木刻原圖'),
              'zh-Hans':('搭配明代古图学看象','《断易天机》1597 木刻原图'),
              'en':('Learn from Ming Woodcuts','Original 1597 prints from the Duanyi Tianji'),
@@ -141,10 +154,24 @@ jobs:
              'pt-BR':('Aprenda com xilogravuras Ming','Gravuras originais do Duanyi Tianji, 1597'),
              'id':('Belajar dari gambar kuno Ming','Cetakan kayu asli Duanyi Tianji, 1597'),
              'th':('เรียนดูภาพจากภาพโบราณสมัยหมิง','ภาพแกะไม้ต้นฉบับ Duanyi Tianji ปี 1597'),
-             'ar':('تعلّم من رسوم عهد مينغ','رسوم خشبية أصلية من Duanyi Tianji، 1597')}
+             'ar':('تعلّم من رسوم عهد مينغ','رسوم خشبية أصلية من Duanyi Tianji، 1597'),
+             'de':('Lernen mit Ming-Holzschnitten','Originaldrucke aus dem Duanyi Tianji, 1597'),
+             'fr':('Apprendre avec les gravures Ming','Gravures originales du Duanyi Tianji, 1597'),
+             'it':('Impara dalle xilografie Ming','Stampe originali del Duanyi Tianji, 1597'),
+             'tr':('Ming gravürleriyle öğren','Duanyi Tianji’nin 1597 tarihli özgün baskıları'),
+             'pl':('Ucz się z drzeworytów Ming','Oryginalne odbitki z Duanyi Tianji, 1597')}
+          NEW={'de','fr','it','tr','pl'}
           for l,(t1,t2) in T.items():
               d=f'_cw/store/screenshots-{l}'
               spec=importlib.util.spec_from_file_location(f'mk_{l.replace("-","_")}',f'{d}/make.py')
+              m=importlib.util.module_from_spec(spec); spec.loader.exec_module(m)
+              tmp=tempfile.mkdtemp(); m.HERE=tmp
+              raws=sorted(glob.glob(f'/tmp/shots/{l}/raw-0[1-8].png'))
+              if l in NEW and len(raws)==8:
+                  m.main(raws)
+                  for f in sorted(glob.glob(f'{tmp}/screenshot-0*.png')): shutil.copy(f,d)
+                  print('full',l)
+              spec=importlib.util.spec_from_file_location(f'mk2_{l.replace("-","_")}',f'{d}/make.py')
               m=importlib.util.module_from_spec(spec); spec.loader.exec_module(m)
               tmp=tempfile.mkdtemp(); m.HERE=tmp
               m.ITEMS=[(t1,t2,'',100,2210)]
@@ -155,6 +182,6 @@ jobs:
           cd _cw
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add store/screenshots-*/screenshot-guying.png
-          git commit -m "商店截圖：古圖（11 語） [skip ci]" || exit 0
+          git add store/screenshots-*/screenshot-*.png
+          git commit -m "商店截圖：古圖 16 語＋新 5 語完整截圖 [skip ci]" || exit 0
           git push

@@ -9,8 +9,8 @@ void main() {
   final zh = lookupAppLocalizations(AppLanguages.zhHant.locale);
   final en = lookupAppLocalizations(AppLanguages.en.locale);
 
-  test('術語表含 11 語，App 已登記的語言都在裡面', () {
-    expect(Glossary.languages.length, 11);
+  test('術語表含 16 語，App 已登記的語言都在裡面', () {
+    expect(Glossary.languages.length, 16);
     for (final lang in AppLanguages.all) {
       expect(Glossary.languages, contains(lang.code));
     }

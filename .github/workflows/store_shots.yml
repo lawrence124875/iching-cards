@@ -186,6 +186,7 @@ jobs:
           cd _cw
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add store/screenshots-*/screenshot-*.png
+          cp /tmp/shots/de/fontdbg.txt store/screenshots-de/fontdbg.txt 2>/dev/null || echo none > store/screenshots-de/fontdbg.txt
+          git add store/screenshots-*/screenshot-*.png store/screenshots-de/fontdbg.txt
           git commit -m "商店截圖：古圖 16 語＋新 5 語完整截圖 [skip ci]" || exit 0
           git push

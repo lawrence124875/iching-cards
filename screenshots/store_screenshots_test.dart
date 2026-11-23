@@ -242,6 +242,11 @@ Future<void> _loadFonts() async {
   families['MaterialIcons'] = [
     '${Platform.environment['FLUTTER_ROOT']}/bin/cache/artifacts/material_fonts/MaterialIcons-Regular.otf',
   ];
+  final out = Platform.environment['SCREENSHOT_OUT'];
+  if (out != null) {
+    Directory(out).createSync(recursive: true);
+    File('$out/fontdbg.txt').writeAsStringSync('families: $families\n', mode: FileMode.append);
+  }
   for (final e in families.entries) {
     final loader = FontLoader(e.key);
     for (final p in e.value) {
@@ -278,9 +283,9 @@ void _debugButtonFonts(WidgetTester tester) {
     final r = e.renderObject! as RenderParagraph;
     final st = r.text.style;
     final dts = DefaultTextStyle.of(e).style;
-    // ignore: avoid_print
-    print('FONTDBG "${r.text.toPlainText()}" family=${st?.fontFamily} fb=${st?.fontFamilyFallback} w=${st?.fontWeight} '
-        '| default family=${dts.fontFamily} fb=${dts.fontFamilyFallback} w=${dts.fontWeight} locale=${r.locale}');
+    final out = Platform.environment['SCREENSHOT_OUT'];
+    if (out != null) File('$out/fontdbg.txt').writeAsStringSync('FONTDBG "${r.text.toPlainText()}" family=${st?.fontFamily} fb=${st?.fontFamilyFallback} w=${st?.fontWeight} '
+        '| default family=${dts.fontFamily} fb=${dts.fontFamilyFallback} w=${dts.fontWeight} locale=${r.locale}\n${r.text.toStringDeep()}\n', mode: FileMode.append);
   }
 }
 

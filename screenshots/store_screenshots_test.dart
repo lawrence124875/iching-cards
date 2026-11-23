@@ -185,7 +185,7 @@ void main() {
     await _settle(tester);
     await tester.tap(find.text(en.featureDraw)); // 0.8.0：銅錢在抽一卦頁「其他起卦方式」
     await _settle(tester);
-    await tester.tap(find.text(en.featureCoins));
+    await tester.tap(find.text(en.featureCoins).first); // pl 的 featureCoins 與 methodCoins 同字
     await _settle(tester);
     for (var i = 1; i <= 6; i++) {
       await tester.tap(find.widgetWithText(FilledButton, en.coinsToss(i)));

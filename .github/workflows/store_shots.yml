@@ -113,7 +113,7 @@ jobs:
         run: |
           for l in de fr it tr pl; do
             SCREENSHOT_OUT=/tmp/shots/$l SCREENSHOT_LANG=$l flutter test --no-pub screenshots/store_screenshots_test.dart > /tmp/full-$l.log 2>&1 \
-              || { echo "::warning::$l 完整截圖失敗"; grep -E "Error|Exception|Expected|Bad state" /tmp/full-$l.log | head -5 | while IFS= read -r line; do echo "::warning::$l $line"; done; }
+              || { echo "::warning::$l 完整截圖失敗"; grep -E "Error|Exception|Expected|Bad state|store_screenshots_test.dart:" /tmp/full-$l.log | head -8 | while IFS= read -r line; do echo "::warning::$l $line"; done; }
           done
 
       - name: 渲染 16 語古圖

@@ -109,6 +109,15 @@ flutter:
       fonts:
         - asset: assets/fonts/NotoSerifKR-400.ttf
     # 泰文介面的主字型（REFERENCE §15）
+    # 德、法、義、土、波的主字型（Noto Sans／Serif 拉丁子集，2026-11-23）
+    - family: NotoSansLatin
+      fonts:
+        - asset: assets/fonts/NotoSansLatin-400.ttf
+        - asset: assets/fonts/NotoSansLatin-500.ttf
+          weight: 500
+    - family: NotoSerifLatin
+      fonts:
+        - asset: assets/fonts/NotoSerifLatin-400.ttf
     - family: NotoSansThai
       fonts:
         - asset: assets/fonts/NotoSansThai-400.ttf

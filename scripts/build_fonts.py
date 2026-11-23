@@ -80,6 +80,16 @@ TH_WEIGHTS = [
 ]
 # 阿拉伯文介面的主字型（2026-10-07）：theme.dart 的 AppFonts.arabic 以 Noto Sans Arabic（介面）／Noto Naskh Arabic（內文）為主。
 # 同泰文只固定字重、不做子集（阿拉伯字母的連寫與字形變化靠 GSUB／GPOS，保留全部字形）。
+# 德、法、義、土、波（2026-11-23）：思源的拉丁字形缺土耳其文 ı ş ğ 等字，’ « » 也是全形寬度；
+# 改用 Noto Sans／Noto Serif 的拉丁子集當主字型，漢字由 TC／SC 補。
+LATIN_WEIGHTS = [
+    ("NotoSans[wdth,wght].ttf", "NotoSansLatin", 400),
+    ("NotoSans[wdth,wght].ttf", "NotoSansLatin", 500),
+    ("NotoSerif[wdth,wght].ttf", "NotoSerifLatin", 400),
+]
+LATIN_RANGES = [(0x20, 0x7E), (0xA0, 0x24F), (0x300, 0x36F), (0x1E00, 0x1EFF), (0x2000, 0x206F),
+                (0x20A0, 0x20CF), (0x2100, 0x214F), (0x2190, 0x21FF), (0x2212, 0x2212)]
+
 AR_WEIGHTS = [
     ("NotoSansArabic[wdth,wght].ttf", "NotoSansArabic", 400),
     ("NotoSansArabic[wdth,wght].ttf", "NotoSansArabic", 500),
@@ -204,6 +214,7 @@ def main() -> None:
     subset_primary(src, out, cache, KR_WEIGHTS, ksx1001_hangul() | used_chars_ko(root), ranges)
     instance_only(src, out, cache, TH_WEIGHTS)
     instance_only(src, out, cache, AR_WEIGHTS)
+    latin_subset(src, out, cache)
 
 
 def instance_only(src, out, cache, weights) -> None:
@@ -216,6 +227,30 @@ def instance_only(src, out, cache, weights) -> None:
         axes = {a.axisTag for a in cache[fname]["fvar"].axes}
         limits = {"wght": wght, **({"wdth": 100} if "wdth" in axes else {})}
         font = instancer.instantiateVariableFont(cache[fname], limits, inplace=False)
+        path = out / f"{family}-{wght}.ttf"
+        font.save(path)
+        print(f"{path.name}：{path.stat().st_size / 1e6:.2f} MB")
+
+
+def latin_subset(src, out, cache) -> None:
+    """德、法、義、土、波的主字型：Noto Sans／Serif 固定字重（wdth 100），只留拉丁字母與標點。"""
+    codepoints = {c for a, b in LATIN_RANGES for c in range(a, b + 1)}
+    for fname, family, wght in LATIN_WEIGHTS:
+        if not (src / fname).exists():
+            raise SystemExit(f"缺少 {fname}")
+        if fname not in cache:
+            cache[fname] = TTFont(src / fname)
+        axes = {a.axisTag for a in cache[fname]["fvar"].axes}
+        limits = {"wght": wght, **({"wdth": 100} if "wdth" in axes else {})}
+        font = instancer.instantiateVariableFont(cache[fname], limits, inplace=False)
+        opts = subset.Options()
+        opts.layout_features = ["*"]
+        opts.name_IDs = ["*"]
+        opts.notdef_outline = True
+        opts.hinting = False
+        sub = subset.Subsetter(opts)
+        sub.populate(unicodes=codepoints)
+        sub.subset(font)
         path = out / f"{family}-{wght}.ttf"
         font.save(path)
         print(f"{path.name}：{path.stat().st_size / 1e6:.2f} MB")

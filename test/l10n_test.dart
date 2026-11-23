@@ -187,6 +187,13 @@ void main() {
     expect(AppFonts.forLanguage('ar'), AppFonts.arabic);
   });
 
+  test('德、法、義、土、波用拉丁字型（含土耳其文 ı ş ğ）', () {
+    for (final c in ['de', 'fr', 'it', 'tr', 'pl']) {
+      expect(AppFonts.forLanguage(c), AppFonts.latin, reason: c);
+    }
+    expect(AppFonts.forLanguage('en'), AppFonts.chinese);
+  });
+
   test('阿拉伯文內容：«…» 內的外文原文以 LRI／PDI 隔離，阿拉伯文引文不動', () {
     const note = 'ترجمة LC Lab عن الأصل الألماني: «Ich bin also der Meinung.» و«نص عربي».';
     final out = AssetContentSource.isolateForeignQuotes('ar', note);

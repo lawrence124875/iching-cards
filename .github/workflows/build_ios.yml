@@ -97,6 +97,8 @@ jobs:
           [ -s "_fonts_src/NotoSansKR[wght].ttf" ] || curl -fsSL -o "_fonts_src/NotoSansKR[wght].ttf" "${base}/notosanskr/NotoSansKR%5Bwght%5D.ttf"
           [ -s "_fonts_src/NotoSerifKR[wght].ttf" ] || curl -fsSL -o "_fonts_src/NotoSerifKR[wght].ttf" "${base}/notoserifkr/NotoSerifKR%5Bwght%5D.ttf"
           [ -s "_fonts_src/NotoSansThai[wdth,wght].ttf" ] || curl -fsSL -o "_fonts_src/NotoSansThai[wdth,wght].ttf" "${base}/notosansthai/NotoSansThai%5Bwdth%2Cwght%5D.ttf"
+          [ -s "_fonts_src/NotoSans[wdth,wght].ttf" ] || curl -fsSL -o "_fonts_src/NotoSans[wdth,wght].ttf" "${base}/notosans/NotoSans%5Bwdth%2Cwght%5D.ttf"
+          [ -s "_fonts_src/NotoSerif[wdth,wght].ttf" ] || curl -fsSL -o "_fonts_src/NotoSerif[wdth,wght].ttf" "${base}/notoserif/NotoSerif%5Bwdth%2Cwght%5D.ttf"
           [ -s "_fonts_src/NotoSerifThai[wdth,wght].ttf" ] || curl -fsSL -o "_fonts_src/NotoSerifThai[wdth,wght].ttf" "${base}/notoserifthai/NotoSerifThai%5Bwdth%2Cwght%5D.ttf"
           [ -s "_fonts_src/NotoSansArabic[wdth,wght].ttf" ] || curl -fsSL -o "_fonts_src/NotoSansArabic[wdth,wght].ttf" "${base}/notosansarabic/NotoSansArabic%5Bwdth%2Cwght%5D.ttf"
           [ -s "_fonts_src/NotoNaskhArabic[wght].ttf" ] || curl -fsSL -o "_fonts_src/NotoNaskhArabic[wght].ttf" "${base}/notonaskharabic/NotoNaskhArabic%5Bwght%5D.ttf"

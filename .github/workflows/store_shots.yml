@@ -118,6 +118,7 @@ jobs:
             SCREENSHOT_OUT=/tmp/shots/$l SCREENSHOT_LANG=$l flutter test --no-pub screenshots/store_screenshots_test.dart > /tmp/full-$l.log 2>&1 \
               || { echo "::warning::$l 完整截圖失敗"; grep -E "Error|Exception|Expected|Bad state|store_screenshots_test.dart:" /tmp/full-$l.log | head -8 | while IFS= read -r line; do echo "::warning::$l $line"; done; }
           done
+          grep -h "FONTDBG" /tmp/full-de.log | sort -u | head -6 | while IFS= read -r line; do echo "::notice::$line"; done
 
       - name: 渲染 16 語古圖
         run: |

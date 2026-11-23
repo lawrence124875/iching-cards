@@ -269,6 +269,19 @@ Future<void> _settle(WidgetTester tester, {int frames = 20}) async {
   for (var i = 0; i < 3; i++) {
     await tester.pump(const Duration(milliseconds: 50));
   }
+  _debugButtonFonts(tester);
+}
+
+/// 暫時診斷：印出主按鈕文字實際用的字型（FONTDBG，工作流程會轉成 notice）。
+void _debugButtonFonts(WidgetTester tester) {
+  for (final e in find.descendant(of: find.byType(FilledButton), matching: find.byType(RichText)).evaluate()) {
+    final r = e.renderObject! as RenderParagraph;
+    final st = r.text.style;
+    final dts = DefaultTextStyle.of(e).style;
+    // ignore: avoid_print
+    print('FONTDBG "${r.text.toPlainText()}" family=${st?.fontFamily} fb=${st?.fontFamilyFallback} w=${st?.fontWeight} '
+        '| default family=${dts.fontFamily} fb=${dts.fontFamilyFallback} w=${dts.fontWeight} locale=${r.locale}');
+  }
 }
 
 /// 把 [target] 捲到畫面頂端（AppBar 下方 [top] 邏輯像素）。

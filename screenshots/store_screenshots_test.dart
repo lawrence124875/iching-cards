@@ -25,7 +25,6 @@ import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:iching_cards/app/app.dart';
 import 'package:iching_cards/app/services.dart';
-import 'package:iching_cards/app/theme.dart';
 import 'package:iching_cards/core/audio/audio_playback.dart';
 import 'package:iching_cards/core/audio/screen_awake.dart';
 import 'package:iching_cards/core/content/asset_content_source.dart';
@@ -235,26 +234,37 @@ Future<void> _loadFonts() async {
   }
   // 按鈕 textStyle 沒指定字族時用 Roboto（手機有系統字型；測試環境沒有會變方框），借拉丁子集代替
   families['Roboto'] = ['assets/fonts/NotoSansLatin-400.ttf', 'assets/fonts/NotoSansLatin-500.ttf'];
-  // 測試環境沒指定字族的文字（主按鈕的 textStyle）用 FlutterTest 字型，每個字都畫成方框；
-  // 手機上是系統字型。這裡借該語言的介面字型頂替。
-  final lang = (Platform.environment['SCREENSHOT_LANG'] ?? 'en').split('-').first;
-  families['FlutterTest'] = families[AppFonts.forLanguage(lang).sans]!;
   families['MaterialIcons'] = [
     '${Platform.environment['FLUTTER_ROOT']}/bin/cache/artifacts/material_fonts/MaterialIcons-Regular.otf',
   ];
-  final out = Platform.environment['SCREENSHOT_OUT'];
-  if (out != null) {
-    Directory(out).createSync(recursive: true);
-    File('$out/fontdbg.txt').writeAsStringSync('families: $families\n', mode: FileMode.append);
-  }
   for (final e in families.entries) {
     final loader = FontLoader(e.key);
     for (final p in e.value) {
       if (!File(p).existsSync()) throw StateError('缺少字型 $p（先依 screenshots/README.md 產生字型子集）');
       loader.addFont(file(p));
+      // 按鈕用 w600：手機會找最接近的字重，測試環境找不到就畫成方框；把 500 複製一份標成 600、700
+      if (p.endsWith('-500.ttf')) {
+        for (final w in [600, 700]) {
+          loader.addFont(Future.value(_withWeight(File(p).readAsBytesSync(), w)));
+        }
+      }
     }
     await loader.load();
   }
+}
+
+/// 改 OS/2 表的 usWeightClass（表內第 4 位元組），讓同一個字型檔以別的字重註冊。
+ByteData _withWeight(Uint8List bytes, int weight) {
+  final data = ByteData.sublistView(Uint8List.fromList(bytes));
+  final tables = data.getUint16(4);
+  for (var i = 0; i < tables; i++) {
+    final rec = 12 + 16 * i;
+    if (String.fromCharCodes(bytes.sublist(rec, rec + 4)) == 'OS/2') {
+      data.setUint16(data.getUint32(rec + 8) + 4, weight);
+      break;
+    }
+  }
+  return data;
 }
 
 /// 讓資產讀取、圖片解碼（真實非同步）與動畫都跑完。
@@ -273,19 +283,6 @@ Future<void> _settle(WidgetTester tester, {int frames = 20}) async {
   });
   for (var i = 0; i < 3; i++) {
     await tester.pump(const Duration(milliseconds: 50));
-  }
-  _debugButtonFonts(tester);
-}
-
-/// 暫時診斷：印出主按鈕文字實際用的字型（FONTDBG，工作流程會轉成 notice）。
-void _debugButtonFonts(WidgetTester tester) {
-  for (final e in find.descendant(of: find.byType(FilledButton), matching: find.byType(RichText)).evaluate()) {
-    final r = e.renderObject! as RenderParagraph;
-    final st = r.text.style;
-    final dts = DefaultTextStyle.of(e).style;
-    final out = Platform.environment['SCREENSHOT_OUT'];
-    if (out != null) File('$out/fontdbg.txt').writeAsStringSync('FONTDBG "${r.text.toPlainText()}" family=${st?.fontFamily} fb=${st?.fontFamilyFallback} w=${st?.fontWeight} '
-        '| default family=${dts.fontFamily} fb=${dts.fontFamilyFallback} w=${dts.fontWeight} locale=${r.locale}\n${r.text.toStringDeep()}\n', mode: FileMode.append);
   }
 }
 

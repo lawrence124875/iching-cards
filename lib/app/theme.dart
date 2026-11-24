@@ -184,7 +184,9 @@ ThemeData buildTheme([AppFonts fonts = AppFonts.chinese]) {
         elevation: 0,
         minimumSize: const Size(200, 52),
         shape: const StadiumBorder(),
-        textStyle: TextStyle(fontSize: 16, letterSpacing: ls(2), fontWeight: FontWeight.w600),
+        textStyle: TextStyle(
+            fontFamily: fonts.sans, fontFamilyFallback: fonts.sansFallback,
+            fontSize: 16, letterSpacing: ls(2), fontWeight: FontWeight.w600),
       ).copyWith(
         backgroundBuilder: (context, states, child) => DecoratedBox(
           decoration: qianPrimaryButtonDecoration(enabled: !states.contains(WidgetState.disabled)),
@@ -200,7 +202,9 @@ ThemeData buildTheme([AppFonts fonts = AppFonts.chinese]) {
         side: BorderSide(color: QianColors.earth.withValues(alpha: 0.55)),
         minimumSize: const Size(160, 48),
         shape: const StadiumBorder(),
-        textStyle: TextStyle(fontSize: 16, letterSpacing: ls(2), fontWeight: FontWeight.w500),
+        textStyle: TextStyle(
+            fontFamily: fonts.sans, fontFamilyFallback: fonts.sansFallback,
+            fontSize: 16, letterSpacing: ls(2), fontWeight: FontWeight.w500),
       ).copyWith(
         side: WidgetStateProperty.resolveWith((states) => BorderSide(
             color: QianColors.earth.withValues(alpha: states.contains(WidgetState.disabled) ? 0.25 : 0.55))),

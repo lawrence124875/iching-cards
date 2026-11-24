@@ -55,6 +55,7 @@ jobs:
             it
             tr
             pl
+            images/webp
             glossary
             cross
             eastern
